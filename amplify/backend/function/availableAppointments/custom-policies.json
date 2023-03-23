@@ -1,0 +1,6 @@
+[
+  {
+    "Action": ["dynamodb:Scan"],
+    "Resource": ["arn:aws:dynamodb:eu-central-1:837397013660:table/Appointment-yahn64dzuvb4xjqd24ndqxbnzi-staging"]
+  }
+]
