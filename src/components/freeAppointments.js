@@ -2,7 +2,8 @@ import {API} from "aws-amplify";
 import React, {useEffect, useState} from "react";
 import FieldDetails from "./fieldDetails";
 import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup} from "@mui/material";
-import {Divider, Heading} from "@aws-amplify/ui-react";
+import {Divider, Heading, Text} from "@aws-amplify/ui-react";
+import {BiSad} from "react-icons/bi";
 
 const FreeAppointments = (fieldId) => {
     const [appointments, setAppointments] = useState();
@@ -35,6 +36,26 @@ const FreeAppointments = (fieldId) => {
         }
     }
 
+    function getFieldDetails(duration: string, items: []) {
+        if (items.length === 0) {
+            return (
+                <div>
+                    <Heading level={4}> {duration}</Heading>
+                    <Text><BiSad/> Nema više termina...</Text>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <Heading level={4}>{duration}</Heading>
+                    <FieldDetails items={items}></FieldDetails>
+                    <Divider orientation="horizontal"/>
+                </div>
+
+            );
+        }
+    }
+
     return (
         <div>
             <h2>Rezerviraj termin</h2>
@@ -52,15 +73,10 @@ const FreeAppointments = (fieldId) => {
                                       label="Prekosutra"/>
                 </RadioGroup>
             </FormControl>
-            <Heading level={4}>1h</Heading>
-            <FieldDetails items={displayAppointments.oneHour}></FieldDetails>
-            <Divider orientation="horizontal"/>
-            <Heading>1.5h</Heading>
-            <FieldDetails items={displayAppointments.oneAndHalfHour}></FieldDetails>
-            <Divider orientation="horizontal"/>
-            <Heading>2h</Heading>
-            <FieldDetails items={displayAppointments.twoHour}></FieldDetails>
-            <Divider orientation="horizontal"/>
+            {getFieldDetails('1h', displayAppointments.oneHour)}
+            {getFieldDetails('1.5h', displayAppointments.oneAndHalfHour)}
+            {getFieldDetails('2h', displayAppointments.twoHour)}
+
         </div>
     )
 }
