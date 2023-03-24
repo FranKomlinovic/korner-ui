@@ -1,0 +1,33 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-terminihr-staging-160454-authRole",
+      "UnauthRoleArn": "arn:aws:iam::837397013660:role/amplify-terminihr-staging-160454-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::837397013660:role/amplify-terminihr-staging-160454-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-terminihr-staging-160454-deployment",
+      "UnauthRoleName": "amplify-terminihr-staging-160454-unauthRole",
+      "StackName": "amplify-terminihr-staging-160454",
+      "StackId": "arn:aws:cloudformation:eu-central-1:837397013660:stack/amplify-terminihr-staging-160454/a3b55e70-b781-11ed-9643-02dbb5c6ed4e",
+      "AmplifyAppId": "dgjx5uo9usegy"
+    },
+    "categories": {
+      "auth": {
+        "Terminihr": {}
+      },
+      "storage": {
+        "s3kornerfieldpictures": {}
+      },
+      "api": {
+        "Terminihr": {},
+        "availableAppointments": {}
+      },
+      "function": {
+        "availableAppointments": {
+          "deploymentBucketName": "amplify-terminihr-staging-160454-deployment",
+          "s3Key": "amplify-builds/availableAppointments-363334484c7843595665-build.zip"
+        }
+      }
+    }
+  }
+}

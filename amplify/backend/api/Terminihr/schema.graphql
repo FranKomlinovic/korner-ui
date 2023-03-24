@@ -1,0 +1,63 @@
+type ReccuringAppointment @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  bookerId: ID
+  dayOfTheWeek: Int!
+  start: AWSTime!
+  end: AWSTime!
+  fieldsID: ID! @index(name: "byFields")
+}
+
+enum Cities {
+  PETRINJA
+  ZAGREB
+}
+
+enum Sport {
+  FUTSAL
+  TENNIS
+  BASKETBALL
+}
+
+enum Surface {
+  ARTIFICIAL_GRASS
+  RUBBER
+  CONCRETE
+  WOOD
+}
+
+type Response @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  playerID: ID
+  accepted: Boolean
+  reserve: Boolean
+  appointmentID: ID! @index(name: "byAppointment")
+  playerName: String!
+}
+
+type Appointment @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  start: AWSTime
+  end: AWSTime
+  fieldsID: ID! @index(name: "byFields")
+  Responses: [Response] @hasMany(indexName: "byAppointment", fields: ["id"])
+  date: AWSDate
+  confirmed: Boolean
+  bookerID: ID
+}
+
+type Fields @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  address: String
+  width: Float
+  length: Float
+  price: Float
+  minPlayers: Int
+  Appointments: [Appointment] @hasMany(indexName: "byFields", fields: ["id"])
+  surface: Surface
+  photo: AWSURL
+  sports: [Sport]
+  city: Cities
+  ReccuringAppointments: [ReccuringAppointment] @hasMany(indexName: "byFields", fields: ["id"])
+}
+ 

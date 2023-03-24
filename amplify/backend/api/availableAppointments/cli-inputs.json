@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/appointments/available/{fieldId}": {
+      "name": "/appointments/available/{fieldId}",
+      "lambdaFunction": "availableAppointments",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
