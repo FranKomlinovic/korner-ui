@@ -17,7 +17,7 @@ export default function KornerAppointmentInfo(props) {
       width="unset"
       height="unset"
       justifyContent="flex-start"
-      alignItems="center"
+      alignItems="flex-start"
       position="relative"
       padding="0px 0px 0px 0px"
       backgroundColor="rgba(255,255,255,1)"
@@ -47,7 +47,7 @@ export default function KornerAppointmentInfo(props) {
         alignItems="flex-start"
         shrink="0"
         position="relative"
-        padding="10px 16px 0px 16px"
+        padding="10px 16px 13px 16px"
         {...getOverrideProps(overrides, "Card Area")}
       >
         <Flex
