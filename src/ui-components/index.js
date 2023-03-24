@@ -24,6 +24,7 @@ export { default as KornerCreateResponse } from "./KornerCreateResponse";
 export { default as SideBar } from "./SideBar";
 export { default as StandardCard } from "./StandardCard";
 export { default as FAQItem } from "./FAQItem";
+export { default as KornerFieldInfo } from "./KornerFieldInfo";
 export { default as KornerAppointmentInfo } from "./KornerAppointmentInfo";
 export { default as KornerResponseUser } from "./KornerResponseUser";
 export { default as EditProfile } from "./EditProfile";

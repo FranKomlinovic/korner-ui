@@ -17,11 +17,9 @@ Amplify.configure(awsExports);
 function App({signOut, user}) {
     return (
         <>
-            <Menu>
-                <MenuItem id="home" className="menu-item" href="/">Home</MenuItem>
-                <MenuItem id="about" className="menu-item" href="/about">About</MenuItem>
-                <MenuItem id="contact" className="menu-item" href="/contact">Contact</MenuItem>
-            </Menu>
+            {/*<Menu className={"am"}>*/}
+            {/*    <MenuItem id="home" className="menu-item" href="/">Home</MenuItem>*/}
+            {/*</Menu>*/}
             <Routes>
                 <Route path="/" element={<FieldListView/>}/>
                 <Route path="/fields/:id" element={<FieldDetailWrapper/>}/>

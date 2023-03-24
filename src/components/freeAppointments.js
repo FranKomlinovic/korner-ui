@@ -1,8 +1,7 @@
 import {API} from "aws-amplify";
 import React, {useEffect, useState} from "react";
 import FieldDetails from "./fieldDetails";
-import {FormControl, FormControlLabel, FormLabel, Radio, RadioGroup} from "@mui/material";
-import {Divider, Heading, Text} from "@aws-amplify/ui-react";
+import {Flex, Heading, SelectField, TabItem, Tabs, Text} from "@aws-amplify/ui-react";
 import {BiSad} from "react-icons/bi";
 
 const FreeAppointments = (fieldId) => {
@@ -24,10 +23,10 @@ const FreeAppointments = (fieldId) => {
 
     function displayDay(test: number) {
         switch (test) {
-            case 1:
+            case "tomorrow":
                 setDisplayAppointments(appointments.tomorrow);
                 return;
-            case 2:
+            case "dayAfter":
                 setDisplayAppointments(appointments.dayAfter);
                 return;
             default:
@@ -38,46 +37,40 @@ const FreeAppointments = (fieldId) => {
 
     function getFieldDetails(duration: string, items: []) {
         if (items.length === 0) {
-            return (
-                <div>
-                    <Heading level={4}> {duration}</Heading>
-                    <Text><BiSad/> Nema više termina...</Text>
-                </div>
-            );
+            return (<Text padding={"10px"}><BiSad/> Nema raspoloživih termina...</Text>);
         } else {
             return (
-                <div>
-                    <Heading level={4}>{duration}</Heading>
+                <Flex paddingTop={"10px"}>
                     <FieldDetails items={items}></FieldDetails>
-                    <Divider orientation="horizontal"/>
-                </div>
-
-            );
+                </Flex>);
         }
     }
 
     return (
-        <div>
-            <h2>Rezerviraj termin</h2>
-            <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Odaberi dan</FormLabel>
-                <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="today"
-                    name="radio-buttons-group"
-                    row
-                >
-                    <FormControlLabel value="today" onClick={() => displayDay(0)} control={<Radio/>} label="Danas"/>
-                    <FormControlLabel value="tomorrow" onClick={() => displayDay(1)} control={<Radio/>} label="Sutra"/>
-                    <FormControlLabel value="dayAfter" onClick={() => displayDay(2)} control={<Radio/>}
-                                      label="Prekosutra"/>
-                </RadioGroup>
-            </FormControl>
-            {getFieldDetails('1h', displayAppointments.oneHour)}
-            {getFieldDetails('1.5h', displayAppointments.oneAndHalfHour)}
-            {getFieldDetails('2h', displayAppointments.twoHour)}
+        <Flex direction={"column"} paddingLeft={"10px"}>
+            <Heading level={5}>Rezerviraj termin:</Heading>
+            <SelectField label="Odaberi datum" onChange={(e) => displayDay(e.target.value)}>
+                <option value="today">Petak 24.3. (danas)</option>
+                <option value="tomorrow">Subota 25.3. (sutra)</option>
+                <option value="dayAfter">Nedjelja 26.3. (prekosutra)</option>
+            </SelectField>
 
-        </div>
+            <Flex direction={"column"}>
+                <label className={"amplify-label"}>Trajanje termina</label>
+                <Tabs>
+                    <TabItem title="1h">
+                        {getFieldDetails('1h', displayAppointments.oneHour)}
+                    </TabItem>
+                    <TabItem title="1.5h">
+                        {getFieldDetails('1.5h', displayAppointments.oneAndHalfHour)}
+                    </TabItem>
+                    <TabItem title="2h">
+                        {getFieldDetails('2h', displayAppointments.twoHour)}
+                    </TabItem>
+                </Tabs>
+            </Flex>
+
+        </Flex>
     )
 }
 

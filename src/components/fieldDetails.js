@@ -3,13 +3,13 @@ import Modal from "react-modal";
 import {CreateAppointment} from "../ui-components";
 import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Fields} from "../models";
-import {Button} from "@aws-amplify/ui-react";
+import {Button, Flex, Grid, View} from "@aws-amplify/ui-react";
 import {GrFormClose} from "react-icons/gr";
 import {useNavigate} from "react-router-dom";
+import {getDayOfWeek} from "./converters";
 
 
 const FieldDetails = (items) => {
-    const daysOfWeek = ["Nedjelja", "Ponedjeljak", "Utorak", "Srijeda", "Četvrtak", "Petak", "Subota"]
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modelToShow, setModelToShow] = useState(null);
     const [modelToSave, setModelToSave] = useState(null);
@@ -47,7 +47,7 @@ const FieldDetails = (items) => {
 
     function ModalBody() {
         let date = new Date(modelToShow.date);
-        let toWrite = daysOfWeek[date.getDay()] + ' ' + date.toLocaleDateString('de-DE');
+        let toWrite = getDayOfWeek(date) + ' ' + date.toLocaleDateString('de-DE');
 
         return (
             <>
@@ -66,22 +66,27 @@ const FieldDetails = (items) => {
     }
 
     return (
-        <>
-            <div>
+        <Flex>
+            <Grid templateColumns="1fr 1fr">
                 {items.items.map((item, key) =>
                     (
-                        <Button key={key} margin={"5px"} variation={test(item.confirmed)}
-                                onClick={() => openConfirm(item)}>{item.start} - {item.end}</Button>
+                        <View>
+                            <Button key={key} variation={test(item.confirmed)}
+                                    onClick={() => openConfirm(item)}>{item.start} - {item.end}</Button>
+                        </View>
+
                     )
                 )}
-            </div>
+            </Grid>
+
             <Modal ariaHideApp={false} isOpen={modalIsOpen} onRequestClose={closeModal}>
                 <Button onClick={closeModal}><GrFormClose/></Button>
                 {modelToSave != null && <ModalBody/>}
-                <Button backgroundColor={"#009933"} variation="primary" onClick={createAppointment}>Predloži termin suigračima</Button>
+                <Button backgroundColor={"#009933"} variation="primary" onClick={createAppointment}>Predloži termin
+                    suigračima</Button>
                 <p>* Teren će automatski biti rezerviran kada barem 10 igrača odgovori pozitivno na ovaj poziv</p>
             </Modal>
-        </>
+        </Flex>
 
 
     );
