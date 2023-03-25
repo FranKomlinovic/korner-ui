@@ -11,7 +11,6 @@ import awsconfig from './aws-exports';
 import "@aws-amplify/ui-react/styles.css";
 import {studioTheme} from "./ui-components";
 import {BrowserRouter} from 'react-router-dom';
-import * as AWS from "aws-sdk";
 
 Amplify.configure(awsconfig);
 

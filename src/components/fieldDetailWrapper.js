@@ -25,8 +25,8 @@ const FieldDetailWrapper = () => {
 
 
     return (
-        <Flex direction={"column"} alignContent={"center"}>
-            <KornerFieldInfo width={"100%"} height={"auto"} fields={value} sports={sports} surface={surface}/>
+        <Flex>
+            <KornerFieldInfo fields={value} sports={sports} surface={surface}/>
             <Divider/>
             <FreeAppointments fieldId={id}/>
         </Flex>

@@ -1,12 +1,13 @@
-import {GetFields} from "../ui-components";
+import {KornerFieldCollection} from "../ui-components";
 import React from "react";
+import {Flex} from "@aws-amplify/ui-react";
 
 const FieldListView = () => {
 
     return (
-        <div className="amplify-card">
-            <GetFields/>
-        </div>
+        <Flex direction={"column"} alignItems={"center"}>
+            <KornerFieldCollection/>
+        </Flex>
     );
 
 
