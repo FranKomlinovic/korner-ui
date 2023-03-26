@@ -51,6 +51,7 @@ export default function KornerFieldCollection(props) {
       {(item, index) => (
         <KornerFieldShort
           fields={item}
+          margin="0 0 0 0px"
           key={item.id}
           {...(overrideItems && overrideItems({ item, index }))}
         ></KornerFieldShort>

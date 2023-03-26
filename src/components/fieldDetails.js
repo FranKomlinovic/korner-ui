@@ -82,7 +82,7 @@ const FieldDetails = (items) => {
             <Modal ariaHideApp={false} isOpen={modalIsOpen} onRequestClose={closeModal}>
                 <Button onClick={closeModal}><GrFormClose/></Button>
                 {modelToSave != null && <ModalBody/>}
-                <Button backgroundColor={"#009933"} variation="primary" onClick={createAppointment}>Predloži termin
+                <Button variation="primary" onClick={createAppointment}>Predloži termin
                     suigračima</Button>
                 <p>* Teren će automatski biti rezerviran kada barem 10 igrača odgovori pozitivno na ovaj poziv</p>
             </Modal>

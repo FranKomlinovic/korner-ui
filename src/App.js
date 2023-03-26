@@ -20,8 +20,7 @@ function App({signOut, user}) {
     return (
         <Flex justifyContent={"flex-start"} direction={"column"}>
             <Flex direction={"row"} alignItems={"center"} margin={"10px"} justifyContent={"space-between"}>
-                <Image height={"40px"} objectFit={"cover"} src={"korner-logo.png"}/>
-                <Heading level={"3"}>Korner.hr</Heading>
+                <Heading level={"4"}>Korner.hr</Heading>
 
                 <Menu marginRight={"10px"}>
                     <MenuItem id="home" className="menu-item" onClick={() => navigate("/")}>Home</MenuItem>

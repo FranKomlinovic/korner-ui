@@ -160,11 +160,11 @@ export default createTheme({
           borderColor: { value: "{colors.border.tertiary.value}" },
         },
         primary: {
-          borderColor: { value: "transparent" },
+          borderColor: { value: "{colors.border.primary.value}" },
           borderWidth: { value: "{borderWidths.small.value}" },
           borderStyle: { value: "solid" },
-          backgroundColor: { value: "{colors.brand.primary.80.value}" },
-          color: { value: "{colors.font.inverse.value}" },
+          backgroundColor: { value: "{colors.brand.primary.40.value}" },
+          color: { value: "{colors.font.primary.value}" },
           _disabled: {
             borderColor: { value: "transparent" },
             backgroundColor: { value: "{colors.background.disabled.value}" },
@@ -618,23 +618,23 @@ export default createTheme({
       heading: {
         1: {
           fontSize: { value: "{fontSizes.xxxxl.value}" },
-          fontWeight: { value: "{fontWeights.light.value}" },
+          fontWeight: { value: "{fontWeights.extrabold.value}" },
         },
         2: {
           fontSize: { value: "{fontSizes.xxxl.value}" },
-          fontWeight: { value: "{fontWeights.normal.value}" },
+          fontWeight: { value: "{fontWeights.extrabold.value}" },
         },
         3: {
           fontSize: { value: "{fontSizes.xxl.value}" },
-          fontWeight: { value: "{fontWeights.medium.value}" },
+          fontWeight: { value: "{fontWeights.extrabold.value}" },
         },
         4: {
           fontSize: { value: "{fontSizes.xl.value}" },
-          fontWeight: { value: "{fontWeights.semibold.value}" },
+          fontWeight: { value: "{fontWeights.extrabold.value}" },
         },
         5: {
           fontSize: { value: "{fontSizes.large.value}" },
-          fontWeight: { value: "{fontWeights.bold.value}" },
+          fontWeight: { value: "{fontWeights.extrabold.value}" },
         },
         6: {
           fontSize: { value: "{fontSizes.medium.value}" },
@@ -1175,12 +1175,12 @@ export default createTheme({
         100: { value: "hsl(60, 100%, 15%)" },
       },
       green: {
-        10: { value: "hsl(130, 60%, 95%)" },
-        20: { value: "hsl(130, 60%, 90%)" },
-        40: { value: "hsl(130, 44%, 63%)" },
-        60: { value: "hsl(130, 43%, 46%)" },
-        80: { value: "hsl(130, 33%, 37%)" },
-        90: { value: "hsl(130, 27%, 29%)" },
+        10: { value: "#C7EFCA" },
+        20: { value: "#9AE2A1" },
+        40: { value: "#4CCB68" },
+        60: { value: "#44AF5B" },
+        80: { value: "#31703D" },
+        90: { value: "#224226" },
         100: { value: "hsl(130, 22%, 23%)" },
       },
       teal: {
@@ -1230,22 +1230,22 @@ export default createTheme({
       },
       brand: {
         primary: {
-          10: { value: "{colors.teal.10.value}" },
-          20: { value: "{colors.teal.20.value}" },
-          40: { value: "{colors.teal.40.value}" },
-          60: { value: "{colors.teal.60.value}" },
-          80: { value: "{colors.teal.80.value}" },
-          90: { value: "{colors.teal.90.value}" },
-          100: { value: "{colors.teal.100.value}" },
+          10: { value: "{colors.green.10.value}" },
+          20: { value: "{colors.green.20.value}" },
+          40: { value: "{colors.green.40.value}" },
+          60: { value: "{colors.green.60.value}" },
+          80: { value: "{colors.green.80.value}" },
+          90: { value: "{colors.green.90.value}" },
+          100: { value: "{colors.green.100.value}" },
         },
         secondary: {
-          10: { value: "{colors.purple.10.value}" },
-          20: { value: "{colors.purple.20.value}" },
-          40: { value: "{colors.purple.40.value}" },
-          60: { value: "{colors.purple.60.value}" },
-          80: { value: "{colors.purple.80.value}" },
-          90: { value: "{colors.purple.90.value}" },
-          100: { value: "{colors.purple.100.value}" },
+          10: { value: "{colors.green.10.value}" },
+          20: { value: "{colors.green.20.value}" },
+          40: { value: "{colors.green.40.value}" },
+          60: { value: "{colors.green.60.value}" },
+          80: { value: "{colors.green.80.value}" },
+          90: { value: "{colors.green.90.value}" },
+          100: { value: "{colors.green.100.value}" },
         },
       },
       font: {
@@ -1274,7 +1274,7 @@ export default createTheme({
         success: { value: "{colors.green.20.value}" },
       },
       border: {
-        primary: { value: "{colors.neutral.60.value}" },
+        primary: { value: "black" },
         secondary: { value: "{colors.neutral.40.value}" },
         tertiary: { value: "{colors.neutral.20.value}" },
         disabled: { value: "{colors.border.tertiary.value}" },
