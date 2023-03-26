@@ -2,7 +2,7 @@ import './App.css';
 
 import {Amplify} from 'aws-amplify';
 
-import {Menu, MenuItem, withAuthenticator} from '@aws-amplify/ui-react';
+import {Flex, Heading, Image, Menu, MenuItem, withAuthenticator} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
@@ -16,17 +16,24 @@ Amplify.configure(awsExports);
 
 function App({signOut, user}) {
     return (
-        <>
-            {/*<Menu className={"am"}>*/}
-            {/*    <MenuItem id="home" className="menu-item" href="/">Home</MenuItem>*/}
-            {/*</Menu>*/}
+        <Flex  justifyContent={"flex-start"} direction={"column"}>
+            <Flex direction={"row"} alignItems={"center"} margin={"10px"} justifyContent={"space-between"}>
+                <Image height={"40px"} objectFit={"cover"} src={"korner-logo.png"}/>
+                <Heading level={"3"}>Korner.hr</Heading>
+
+                <Menu marginRight={"10px"}>
+                    <MenuItem id="home" className="menu-item" href="/">Home</MenuItem>
+                </Menu>
+            </Flex>
+
+
             <Routes>
                 <Route path="/" element={<FieldListView/>}/>
                 <Route path="/fields/:id" element={<FieldDetailWrapper/>}/>
                 <Route path="/appointment/:id" element={<AppointmentView/>}/>
                 <Route path="/createResponse/:appointmentId" element={<CreateResponseWrapper/>}/>
             </Routes>
-        </>
+        </Flex>
 
     );
 }
