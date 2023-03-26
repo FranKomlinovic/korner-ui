@@ -43,6 +43,8 @@ type Appointment @model @auth(rules: [{allow: public}]) {
   date: AWSDate
   confirmed: Boolean
   bookerID: ID
+  bookerName: String
+  sport: Sport
 }
 
 type Fields @model @auth(rules: [{allow: public}]) {

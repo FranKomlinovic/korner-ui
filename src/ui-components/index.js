@@ -16,6 +16,7 @@ export { default as ContactUs } from "./ContactUs";
 export { default as HeroLayout4 } from "./HeroLayout4";
 export { default as MarketingPricing } from "./MarketingPricing";
 export { default as MarketingFooter } from "./MarketingFooter";
+export { default as KornerAppointmentInfoUpdated } from "./KornerAppointmentInfoUpdated";
 export { default as ActionCard } from "./ActionCard";
 export { default as Features2x2 } from "./Features2x2";
 export { default as KornerFieldCollection } from "./KornerFieldCollection";

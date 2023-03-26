@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import FieldDetails from "./fieldDetails";
 import {Flex, Heading, SelectField, TabItem, Tabs, Text} from "@aws-amplify/ui-react";
 import {BiSad} from "react-icons/bi";
+import {getDateInString} from "./converters";
 
 const FreeAppointments = (fieldId) => {
     const [appointments, setAppointments] = useState();
@@ -46,13 +47,17 @@ const FreeAppointments = (fieldId) => {
         }
     }
 
+    const now = new Date();
+    const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    const dayAfter = new Date(now.getTime() + 48 * 60 * 60 * 1000);
     return (
         <Flex direction={"column"} paddingLeft={"10px"}>
             <Heading level={5}>Rezerviraj termin:</Heading>
             <SelectField label="Odaberi datum" onChange={(e) => displayDay(e.target.value)}>
-                <option value="today">Petak 24.3. (danas)</option>
-                <option value="tomorrow">Subota 25.3. (sutra)</option>
-                <option value="dayAfter">Nedjelja 26.3. (prekosutra)</option>
+                <option value="today">{getDateInString(now)} (danas)</option>
+                <option value="tomorrow">{getDateInString(tomorrow)} (sutra)</option>
+                <option value="dayAfter">{getDateInString(dayAfter)} (prekosutra)</option>
+
             </SelectField>
 
             <Flex direction={"column"}>

@@ -260,6 +260,22 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "bookerName": {
+                    "name": "bookerName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "sport": {
+                    "name": "sport",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Sport"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -501,5 +517,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.3.6",
-    "version": "9a6c1ffd1d21e9ab4002fbe20d6a1496"
+    "version": "16c02fcefecc5da7b406ae7ccbe90c2d"
 };

@@ -107,6 +107,8 @@ type EagerAppointment = {
   readonly date?: string | null;
   readonly confirmed?: boolean | null;
   readonly bookerID?: string | null;
+  readonly bookerName?: string | null;
+  readonly sport?: Sport | keyof typeof Sport | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -124,6 +126,8 @@ type LazyAppointment = {
   readonly date?: string | null;
   readonly confirmed?: boolean | null;
   readonly bookerID?: string | null;
+  readonly bookerName?: string | null;
+  readonly sport?: Sport | keyof typeof Sport | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
