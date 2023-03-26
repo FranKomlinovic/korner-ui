@@ -1,62 +1,35 @@
 import React, {useEffect, useState} from "react";
-import Modal from "react-modal";
-import {CreateAppointment} from "../ui-components";
 import {Auth, DataStore} from "aws-amplify";
-import {Appointment, Fields} from "../models";
-import {Button, Flex, Grid, View} from "@aws-amplify/ui-react";
-import {GrFormClose} from "react-icons/gr";
-import {useNavigate} from "react-router-dom";
-import {getDayOfWeek} from "./converters";
+import {Fields, Sport} from "../models";
+import {Button, Divider, Flex, Grid, View} from "@aws-amplify/ui-react";
+import ConfirmAppointmentReservation from "./confirmAppointmentReservation";
 
 
 const FieldDetails = (items) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [modelToShow, setModelToShow] = useState(null);
-    const [modelToSave, setModelToSave] = useState(null);
-    const [fieldToShow, setFieldToShow] = useState(null);
-    const navigate = useNavigate();
+    const [field, setField] = useState(null);
+    const [user, setUser] = useState(null);
+    const [appointment, setAppointment] = useState(null);
 
     useEffect(() => {
         DataStore.query(Fields, items.items[0].fieldsID).then((a) => {
-                setFieldToShow(a);
+                setField(a);
             }
         );
 
+        Auth.currentSession().then(usr => {
+            setUser(usr.getIdToken().payload);
+        });
 
     }, [items.items]);
 
     function openConfirm(object) {
-        setModelToSave(object);
-        setModelToShow(object);
-        setModalIsOpen(true);
+        object.bookerName = user.given_name + ' ' + user.family_name;
+        object.bookerID = user.sub;
+        object.sport = Sport.FUTSAL;
+        setAppointment(object);
     }
 
-    function closeModal() {
-        setModalIsOpen(false);
-    }
-
-    function createAppointment() {
-        Auth.currentSession().then(user => {
-            modelToSave.bookerID = user.getIdToken().payload.sub;
-            DataStore.save(new Appointment(modelToSave)).then(appointment => {
-                navigate('/createResponse/' + appointment.id)
-            });
-        });
-
-    }
-
-    function ModalBody() {
-        let date = new Date(modelToShow.date);
-        let toWrite = getDayOfWeek(date) + ' ' + date.toLocaleDateString('de-DE');
-
-        return (
-            <>
-                <h2>Želite li predložiti ovaj termin suigračima?</h2>
-                <CreateAppointment day={toWrite} appointment={modelToShow}
-                                   field={fieldToShow}/>
-            </>);
-
-    }
 
     function test(bol: boolean): string {
         if (bol) {
@@ -66,7 +39,7 @@ const FieldDetails = (items) => {
     }
 
     return (
-        <Flex>
+        <Flex direction={"column"}>
             <Grid templateColumns="1fr 1fr">
                 {items.items.map((item, key) =>
                     (
@@ -79,13 +52,8 @@ const FieldDetails = (items) => {
                 )}
             </Grid>
 
-            <Modal ariaHideApp={false} isOpen={modalIsOpen} onRequestClose={closeModal}>
-                <Button onClick={closeModal}><GrFormClose/></Button>
-                {modelToSave != null && <ModalBody/>}
-                <Button variation="primary" onClick={createAppointment}>Predloži termin
-                    suigračima</Button>
-                <p>* Teren će automatski biti rezerviran kada barem 10 igrača odgovori pozitivno na ovaj poziv</p>
-            </Modal>
+            <Divider/>
+            {appointment != null && <ConfirmAppointmentReservation field={field} appointment={appointment}/>}
         </Flex>
 
 
