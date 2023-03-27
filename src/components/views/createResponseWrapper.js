@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
-import {Appointment, Fields, Response} from "../models";
-import {KornerAppointmentInfo, KornerCreateResponse, KornerResponseUserCollection} from "../ui-components";
+import {Appointment, Fields, Response} from "../../models";
+import {KornerAppointmentInfo, KornerCreateResponse, KornerResponseUserCollection} from "../../ui-components";
 import {FaCheck, FaFan, FaMinusCircle, FaQuestion} from "react-icons/fa";
 import {Heading} from "@aws-amplify/ui-react";
 

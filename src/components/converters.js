@@ -21,8 +21,18 @@ export function getDayOfWeek(date: Date) {
     return daysOfWeek[date.getDay()];
 }
 
+export function getTimeFromTimestamp(timestamp) {
+    let date = new Date(timestamp);
+    return date.getHours() + ":" + date.getMinutes();
+}
+
 export function getDateInString(date: Date) {
     return getDayOfWeek(date) + ' ' + date.getDate() + '.' + date.getMonth() + '.';
+}
+
+export function getCurrentDateInDynamoDbString(plusDays: number) {
+    let newDate = new Date(Date.now() + plusDays * 24 * 60 * 60 * 1000);
+    return newDate.toISOString().split('T')[0]
 }
 
 export function getDateTimeFromAppointment(appointment: Appointment) {

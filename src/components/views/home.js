@@ -1,8 +1,8 @@
-import {KornerFieldCollection} from "../ui-components";
+import {KornerFieldCollection} from "../../ui-components";
 import React from "react";
 import {Flex} from "@aws-amplify/ui-react";
 
-const FieldListView = () => {
+const Home = () => {
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
@@ -13,4 +13,4 @@ const FieldListView = () => {
 
 }
 
-export default FieldListView;
+export default Home;

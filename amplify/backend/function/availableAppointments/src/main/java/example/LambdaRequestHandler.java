@@ -24,6 +24,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -43,25 +44,20 @@ public class LambdaRequestHandler implements RequestHandler<APIGatewayProxyReque
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         fieldId = request.getPathParameters().get("fieldId");
         List<Appointment> listOfAppointments = getListOfAppointments(fieldId);
-        ResponseDto responseDto = new ResponseDto();
-        responseDto.setToday(getAppointmentsForDay(dateNow, listOfAppointments));
-        responseDto.setTomorrow(getAppointmentsForDay(dateNow.plusDays(1), listOfAppointments));
-        responseDto.setDayAfter(getAppointmentsForDay(dateNow.plusDays(2), listOfAppointments));
+        List<LocalDate> dates = List.of(LambdaRequestHandler.dateNow, dateNow.plusDays(1), dateNow.plusDays(2));
+        List<AvailableAppointmentsDto> appointments = dates.stream().map(a -> getAppointmentsForDay(a, listOfAppointments)).flatMap(Collection::stream).collect(Collectors.toList());
 
         return new APIGatewayProxyResponseEvent().withStatusCode(200)
-                .withHeaders(HEADERS).withBody(GSON.toJson(responseDto));
+                .withHeaders(HEADERS).withBody(GSON.toJson(appointments));
     }
 
-    private AppointmentsByLengthDto getAppointmentsForDay(LocalDate localDate, List<Appointment> appointments) {
+    private List<AvailableAppointmentsDto> getAppointmentsForDay(LocalDate localDate, List<Appointment> appointments) {
         LocalTime worktimeStart = LocalTime.parse("16:00");
         LocalTime worktimeEnd = LocalTime.parse("23:00");
-        AppointmentsByLengthDto appointmentsByLengthDto = new AppointmentsByLengthDto();
-
+        List<Integer> integers = List.of(60, 90, 120);
         List<Appointment> scheduledAppointments = getAppointmentsForDate(localDate, appointments);
-        appointmentsByLengthDto.setOneHour(getAllAvailableAppointmentsForLength(worktimeStart, worktimeEnd, 60, localDate, scheduledAppointments));
-        appointmentsByLengthDto.setOneAndHalfHour(getAllAvailableAppointmentsForLength(worktimeStart, worktimeEnd, 90, localDate, scheduledAppointments));
-        appointmentsByLengthDto.setTwoHour(getAllAvailableAppointmentsForLength(worktimeStart, worktimeEnd, 120, localDate, scheduledAppointments));
-        return appointmentsByLengthDto;
+        return integers.stream().map(duration -> getAllAvailableAppointmentsForLength(worktimeStart, worktimeEnd, duration, localDate, scheduledAppointments)).flatMap(Collection::stream).collect(Collectors.toList());
+
     }
 
     private List<AvailableAppointmentsDto> getAllAvailableAppointmentsForLength(LocalTime worktimeStart, LocalTime worktimeEnd, int durationInMinutes, LocalDate localDate, List<Appointment> scheduledAppointments) {
@@ -84,8 +80,9 @@ public class LambdaRequestHandler implements RequestHandler<APIGatewayProxyReque
                 availableAppointmentsDto.setFieldsID(fieldId);
                 availableAppointmentsDto.setStart(start);
                 availableAppointmentsDto.setEnd(end);
-                availableAppointmentsDto.setConfirmed(intervalFree[1]);
+                availableAppointmentsDto.setOverlaping(intervalFree[1]);
                 availableAppointmentsDto.setDate(localDate);
+                availableAppointmentsDto.setDuration(durationInMinutes);
                 availableAppointmentsDtos.add(availableAppointmentsDto);
             }
 

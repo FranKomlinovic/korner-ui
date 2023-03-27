@@ -2,15 +2,15 @@ import './App.css';
 
 import {Amplify} from 'aws-amplify';
 
-import {Flex, Heading, Image, Menu, MenuItem, withAuthenticator} from '@aws-amplify/ui-react';
+import {Flex, Heading, Menu, MenuItem, withAuthenticator} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
 import {Route, Routes, useNavigate} from "react-router-dom";
-import FieldListView from "./components/fieldListView";
-import FieldDetailWrapper from "./components/fieldDetailWrapper";
-import AppointmentView from "./components/appointmentView";
-import CreateResponseWrapper from "./components/createResponseWrapper";
+import Home from "./components/views/home";
+import FieldById from "./components/views/fieldById";
+import AppointmentView from "./components/views/appointmentView";
+import CreateResponseWrapper from "./components/views/createResponseWrapper";
 
 Amplify.configure(awsExports);
 
@@ -29,9 +29,9 @@ function App({signOut, user}) {
 
 
             <Routes>
-                <Route path="/" element={<FieldListView/>}/>
-                <Route path="/fields/:id" element={<FieldDetailWrapper/>}/>
-                <Route path="/appointment/:id" element={<AppointmentView/>}/>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/fields/:fieldId" element={<FieldById/>}/>
+                <Route path="/appointment/:appointmentId" element={<AppointmentView/>}/>
                 <Route path="/createResponse/:appointmentId" element={<CreateResponseWrapper/>}/>
             </Routes>
         </Flex>

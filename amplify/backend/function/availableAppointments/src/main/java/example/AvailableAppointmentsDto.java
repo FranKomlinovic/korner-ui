@@ -4,18 +4,27 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class AvailableAppointmentsDto {
-    private boolean confirmed;
+    private boolean overlaping;
     private LocalTime start;
     private LocalTime end;
     private String fieldsID;
     private LocalDate date;
+    private int duration;
 
-    public boolean isConfirmed() {
-        return confirmed;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public boolean isOverlaping() {
+        return overlaping;
+    }
+
+    public void setOverlaping(boolean overlaping) {
+        this.overlaping = overlaping;
     }
 
     public LocalTime getStart() {
@@ -53,7 +62,7 @@ public class AvailableAppointmentsDto {
     @Override
     public String toString() {
         return "AvailableAppointmentsDto{" +
-                "confirmed=" + confirmed +
+                "overlaping=" + overlaping +
                 ", start=" + start +
                 ", end=" + end +
                 ", fieldsID='" + fieldsID + '\'' +
