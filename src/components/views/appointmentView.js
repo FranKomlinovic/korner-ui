@@ -1,18 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Fields, Response} from "../../models";
 
 
-import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
-import {KornerAppointmentInfoUpdated, KornerResponseUser} from "../../ui-components";
-import {
-    calculateDurationFromAppointment,
-    convertSportsEnumToString,
-    getDateTimeFromAppointment,
-    getTimeFromTimestamp
-} from "../converters";
-import {FaCheck, FaCrop, FaQuestion} from "react-icons/fa";
+import {Badge, Button, Divider, Flex} from "@aws-amplify/ui-react";
+import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
+import ReservationForm from "../components/reservationForm";
+import ListUsersForAppointment from "../components/listUsersForAppointment";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -21,95 +16,83 @@ const AppointmentView = () => {
     const [responses, setResponses] = useState(null);
     const [userId, setUserId] = useState(null);
     const [userName, setUsername] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
-        DataStore.query(Appointment, appointmentId).then((appointment) => {
+        const fetchData = async () => {
+            try {
+                const appointment = await DataStore.query(Appointment, appointmentId);
                 setAppointment(appointment);
-                console.log(appointment);
-                DataStore.query(Fields, appointment.fieldsID).then((field) => {
-                    setField(field)
-                });
+                const field = await DataStore.query(Fields, appointment.fieldsID);
+                setField(field);
+                const {
+                    given_name,
+                    family_name,
+                    sub
+                } = await Auth.currentSession().then((usr) => usr.getIdToken().payload);
+                setUsername(`${given_name} ${family_name}`);
+                setUserId(sub);
+                const res = await DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]));
+                setResponses(res);
+            } catch (err) {
+                console.log("Error fetching data: ", err);
             }
-        );
-
-        DataStore.query(Response, (c) => c.and(c => [
-            c.appointmentID.eq(appointmentId)
-        ])).then(a => {
-            setResponses(a)
-        });
-
-        Auth.currentSession().then(usr => {
-            let payload = usr.getIdToken().payload;
-            setUsername(payload.given_name + ' ' + payload.family_name)
-            setUserId(payload.sub);
-        });
+        };
+        fetchData();
     }, [appointmentId]);
 
-    function mapResponseToComponent(res: Response) {
-        let time = getTimeFromTimestamp(res.updatedAt);
-        let icon = <FaCrop/>
-        if (res.accepted) {
-            if (res.reserve) {
-                icon = <FaQuestion/>
-            }
-            icon = <FaCheck/>
-        }
-        return (<KornerResponseUser name={res.playerName} time={time} icon={icon}/>)
-    }
 
-    function createResponse(reserve, accepted) {
-        let response = new Response({
-            playerID: userId,
-            accepted: accepted,
-            reserve: reserve,
-            appointmentID: appointmentId,
-            playerName: userName
-        });
-
-        DataStore.save(response).then(a => {
-            DataStore.query(Response, (c) => c.and(c => [
-                c.appointmentID.eq(a.appointmentID)
-            ])).then(a => {
-                setResponses(a)
-            });
-        });
-    }
-
-    function createForm() {
-        if (responses.find(a => a.playerID === userId)) {
-            return <Heading>Odgovorili ste</Heading>
-        } else {
-            return <Flex direction={"column"}>
-                <TextField label={"Ime i prezime"} onChange={(a) => setUsername(a.currentTarget.value)}
-                           defaultValue={userName}/>
-                <Flex>
-                    <Button variation={"primary"} onClick={() => createResponse(false, true)}>Dolazim</Button>
-                    <Button onClick={() => createResponse(true, true)}>Ako fali</Button>
-                    <Button onClick={() => createResponse(false, false)} variation={"warning"}>Ne Dolazim</Button>
-                </Flex>
-            </Flex>
+    function checkIfAvailableForReservation() {
+        let disabled = true;
+        if (responses != null && field != null) {
+            disabled = responses.filter(a => a.accepted === true).length < field.minPlayers;
         }
 
+        return disabled;
 
     }
 
-    return (
-        <Flex direction={"column"} alignItems={"center"}>
-            {field != null && appointment != null &&
-                <KornerAppointmentInfoUpdated fields={field} time={getDateTimeFromAppointment(appointment)}
-                                              pricePerPerson={field.price / field.minPlayers} acceptedNumber={0}
-                                              duration={calculateDurationFromAppointment(appointment)}
-                                              sport={convertSportsEnumToString(appointment.sport)}/>
-            }
-            {responses != null && userId != null && createForm()}
-            <Heading> Dolaze: </Heading>
-            {responses != null && responses.map(r => mapResponseToComponent(r))}
+    function confirmAppointment() {
+        DataStore.save(Appointment.copyOf(appointment, (item) => {
+            item.confirmed = true;
+        })).then(a => setAppointment(a))
+    }
 
+    function buttonOrBadge() {
+        if (appointment === null) {
+            return;
+        }
+        if (appointment.confirmed) {
+            return <Badge variation={"success"}>Teren je rezerviran</Badge>;
+        }
+        return <Button variation={"primary"} isDisabled={checkIfAvailableForReservation()}
+                       onClick={() => confirmAppointment()}>Potvrdi
+            termin</Button>;
+    }
+
+    const renderKornerAppointmentInfo = (
+        <Flex direction={"column"}>
+            <KornerAppointmentInfoUpdatedWrapper
+                appointment={appointment}
+                field={field}
+                responses={responses}
+            />
+            {buttonOrBadge()}
         </Flex>
-
     );
 
+    // const renderGuestForm = createGuestForm();
+
+    return (
+        <Flex direction="column" alignItems="center">
+            {renderKornerAppointmentInfo}
+            <Divider/>
+            <ReservationForm userName={userName} userId={userId} responses={responses} appointmentId={appointmentId}
+                             functionTest={(a) => setResponses(a)}/>
+            <Divider/>
+            <ListUsersForAppointment responses={responses}/>
+            {/*{renderGuestForm}*/}
+        </Flex>
+    );
 
 }
 

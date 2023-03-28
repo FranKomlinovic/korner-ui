@@ -20,6 +20,7 @@ export declare type KornerResponseUserProps = React.PropsWithChildren<Partial<Fl
     icon?: React.ReactNode;
     name?: String;
     time?: String;
+    id?: String;
 } & {
     overrides?: KornerResponseUserOverridesProps | undefined | null;
 }>;
