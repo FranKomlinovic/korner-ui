@@ -8,6 +8,7 @@ import {Badge, Button, Divider, Flex} from "@aws-amplify/ui-react";
 import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../components/reservationForm";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
+import AddGuestForm from "../components/addGuestForm";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -16,6 +17,7 @@ const AppointmentView = () => {
     const [responses, setResponses] = useState(null);
     const [userId, setUserId] = useState(null);
     const [userName, setUsername] = useState(null);
+    const [isOwner, setIsOwner] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +33,7 @@ const AppointmentView = () => {
                 } = await Auth.currentSession().then((usr) => usr.getIdToken().payload);
                 setUsername(`${given_name} ${family_name}`);
                 setUserId(sub);
+                setIsOwner(appointment.bookerID === sub);
                 const res = await DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]));
                 setResponses(res);
             } catch (err) {
@@ -65,8 +68,7 @@ const AppointmentView = () => {
             return <Badge variation={"success"}>Teren je rezerviran</Badge>;
         }
         return <Button variation={"primary"} isDisabled={checkIfAvailableForReservation()}
-                       onClick={() => confirmAppointment()}>Potvrdi
-            termin</Button>;
+                       onClick={() => confirmAppointment()}>Potvrdi termin</Button>;
     }
 
     const renderKornerAppointmentInfo = (
@@ -76,21 +78,20 @@ const AppointmentView = () => {
                 field={field}
                 responses={responses}
             />
-            {buttonOrBadge()}
+            {isOwner && buttonOrBadge()}
         </Flex>
     );
 
-    // const renderGuestForm = createGuestForm();
-
     return (
-        <Flex direction="column" alignItems="center">
+        <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {renderKornerAppointmentInfo}
             <Divider/>
             <ReservationForm userName={userName} userId={userId} responses={responses} appointmentId={appointmentId}
                              functionTest={(a) => setResponses(a)}/>
-            <Divider/>
+            <Divider size={"small"}/>
             <ListUsersForAppointment responses={responses}/>
-            {/*{renderGuestForm}*/}
+            {isOwner && <Divider size={"small"}/>}
+            {isOwner && <AddGuestForm appointmentId={appointmentId} functionTest={(a) => setResponses(a)}/>}
         </Flex>
     );
 

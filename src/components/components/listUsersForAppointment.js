@@ -24,7 +24,8 @@ const ListUsersForAppointment = ({responses}) => {
 
     return (
         <Flex direction={"column"}>
-            <Heading level={5}>Odgovori:</Heading>
+            <Heading level={5}>Igrači:</Heading>
+            {renderResponses}
             <Flex justifyContent={"space-evenly"} alignItems={"center"}>
                 <Flex alignItems={"center"} gap={"0.2rem"}>
                     <FaCheck/>
@@ -41,7 +42,6 @@ const ListUsersForAppointment = ({responses}) => {
                     <Heading>Ne dolazi</Heading>
                 </Flex>
             </Flex>
-            {renderResponses}
         </Flex>
     )
 

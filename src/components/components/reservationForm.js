@@ -58,7 +58,7 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
 
     const commingAsReserve = (
         <Button size={"small"} onClick={() => updateResponse(true, true)}>
-            Kao rezerva
+            Dolazim ako fali
         </Button>
     )
 
@@ -73,7 +73,8 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
             if (responseToUpdate.reserve) {
                 return (
                     <Flex alignItems={"center"} direction={"column"}>
-                        <Heading level={3}>Rezerva ste</Heading>
+                        <Heading level={3}>Dolazite ako fali</Heading>
+                        <Heading level={6}>Promijeni odgovor:</Heading>
                         <Flex>
                             {commingButton}
                             {notComming}
@@ -83,7 +84,8 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
             return (
                 <Flex alignItems={"center"} direction={"column"}>
                     <Heading color={"green"} level={3}>Dolazite</Heading>
-                    <Flex>
+                    <Flex alignItems={"center"} justifyContent={"center"}>
+                        <Heading level={6}>Promijeni odgovor:</Heading>
                         {commingAsReserve}
                         {notComming}
                     </Flex>
@@ -92,7 +94,7 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
             return (
                 <Flex alignItems={"center"} direction={"column"}>
                     <Heading color={"red"} level={3}>Odbili ste termin</Heading>
-
+                    <Heading level={6}>Promijeni odgovor:</Heading>
                     <Flex>
                         {commingButton}
                         {commingAsReserve}
@@ -124,9 +126,13 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
     }
 
     return (
-        <Flex>
-            {responseToUpdate && alreadyAnsweredView()}
-            {!responseToUpdate && createForm(userName)}
+        <Flex direction={"column"}>
+                <Heading level={5}>Vaš odgovor:</Heading>
+            <Flex>
+                {responseToUpdate && alreadyAnsweredView()}
+                {!responseToUpdate && createForm(userName)}
+            </Flex>
+
         </Flex>
 
     )
