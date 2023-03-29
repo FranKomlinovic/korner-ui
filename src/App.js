@@ -26,14 +26,14 @@ function App({signOut, user}) {
                     <MenuItem id="home" className="menu-item" onClick={() => navigate("/")}>Home</MenuItem>
                 </Menu>
             </Flex>
-
-
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/fields/:fieldId" element={<FieldById/>}/>
                 <Route path="/appointment/:appointmentId" element={<AppointmentView/>}/>
                 <Route path="/createResponse/:appointmentId" element={<CreateResponseWrapper/>}/>
             </Routes>
+            <br/>
+            <br/>
         </Flex>
 
     );

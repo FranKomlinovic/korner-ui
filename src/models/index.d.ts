@@ -66,7 +66,6 @@ type EagerResponse = {
   readonly id: string;
   readonly playerID?: string | null;
   readonly accepted?: boolean | null;
-  readonly reserve?: boolean | null;
   readonly appointmentID: string;
   readonly playerName: string;
   readonly createdAt?: string | null;
@@ -81,7 +80,6 @@ type LazyResponse = {
   readonly id: string;
   readonly playerID?: string | null;
   readonly accepted?: boolean | null;
-  readonly reserve?: boolean | null;
   readonly appointmentID: string;
   readonly playerName: string;
   readonly createdAt?: string | null;

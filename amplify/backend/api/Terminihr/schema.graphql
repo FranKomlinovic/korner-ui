@@ -29,7 +29,6 @@ type Response @model @auth(rules: [{allow: public}]) {
   id: ID!
   playerID: ID
   accepted: Boolean
-  reserve: Boolean
   appointmentID: ID! @index(name: "byAppointment")
   playerName: String!
 }

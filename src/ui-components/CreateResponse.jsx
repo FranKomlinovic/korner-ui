@@ -108,7 +108,11 @@ export default function CreateResponse(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Response(modelFields));
+          const modelFieldsToSave = {
+            playerName: modelFields.playerName,
+            accepted: modelFields.accepted,
+          };
+          await DataStore.save(new Response(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -189,9 +193,8 @@ export default function CreateResponse(props) {
       </RadioGroupField>
       <CheckboxField
         label="ako vam bude falilo"
-        name="reserve"
-        value="reserve"
-        isDisabled={false}
+        name="fieldName"
+        value="fieldName"
         checked={reserve}
         onChange={(e) => {
           let value = e.target.checked;

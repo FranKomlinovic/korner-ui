@@ -1,10 +1,11 @@
 import React from "react";
-import {Button, Flex} from "@aws-amplify/ui-react";
+import {Button, Flex, Heading} from "@aws-amplify/ui-react";
 import {KornerAppointmentInfoUpdated} from "../../ui-components";
 import {calculateDurationFromAppointment, convertSportsEnumToString, getDateTimeFromAppointment} from "../converters";
 import {DataStore} from "aws-amplify";
 import {Appointment} from "../../models";
 import {useNavigate} from "react-router-dom";
+import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 
 // Ovo je komponenta koja prikazuje i stvara button da se kreira termin
 const ConfirmAppointmentReservation = ({field, appointment}) => {
@@ -20,11 +21,9 @@ const ConfirmAppointmentReservation = ({field, appointment}) => {
 
     return (
         <Flex direction={"column"}>
-            <KornerAppointmentInfoUpdated fields={field} time={getDateTimeFromAppointment(appointment)}
-                                          pricePerPerson={field.price / field.minPlayers} acceptedNumber={0}
-                                          duration={calculateDurationFromAppointment(appointment)}
-                                          sport={convertSportsEnumToString(appointment.sport)}/>
-            <Button variation={"primary"} onClick={createAppointment}>Predloži termin suigračima</Button>
+            {/*<KornerAppointmentInfoUpdatedWrapper field={field} appointment={appointment} responses={null}/>*/}
+            <Heading level={4}>{getDateTimeFromAppointment(appointment)}</Heading>
+            <Button variation={"primary"} onClick={createAppointment}>Rezerviraj</Button>
         </Flex>
     );
 

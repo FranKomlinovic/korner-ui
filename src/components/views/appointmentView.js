@@ -4,11 +4,12 @@ import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Fields, Response} from "../../models";
 
 
-import {Badge, Button, Divider, Flex} from "@aws-amplify/ui-react";
+import {Badge, Button, Divider, Flex, Heading} from "@aws-amplify/ui-react";
 import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../components/reservationForm";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
 import AddGuestForm from "../components/addGuestForm";
+import {FaLink, FaLock} from "react-icons/fa";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -41,7 +42,7 @@ const AppointmentView = () => {
             }
         };
         fetchData();
-    }, [appointmentId]);
+    }, [appointmentId, appointment]);
 
 
     function checkIfAvailableForReservation() {
@@ -60,6 +61,13 @@ const AppointmentView = () => {
         })).then(a => setAppointment(a))
     }
 
+    function getNumberOfPeople() {
+        if (responses != null && field != null) {
+            return (responses.length + "/" + field.minPlayers + " ");
+        }
+
+    }
+
     function buttonOrBadge() {
         if (appointment === null) {
             return;
@@ -67,8 +75,12 @@ const AppointmentView = () => {
         if (appointment.confirmed) {
             return <Badge variation={"success"}>Teren je rezerviran</Badge>;
         }
-        return <Button variation={"primary"} isDisabled={checkIfAvailableForReservation()}
-                       onClick={() => confirmAppointment()}>Potvrdi termin</Button>;
+        if (checkIfAvailableForReservation()) {
+            return (
+                <Button variation={"primary"} isDisabled={true}><FaLock/>{getNumberOfPeople()}Potvrdi termin</Button>);
+        }
+        return (<Button variation={"primary"} onClick={() => confirmAppointment()}>Potvrdi termin</Button>)
+
     }
 
     const renderKornerAppointmentInfo = (
@@ -79,6 +91,11 @@ const AppointmentView = () => {
                 responses={responses}
             />
             {isOwner && buttonOrBadge()}
+            {isOwner &&
+                <Button onClick={() => {navigator.clipboard.writeText(window.location.href)}}>
+                    <FaLink/> Pozovi prijatelje
+                </Button>
+            }
         </Flex>
     );
 
@@ -86,6 +103,7 @@ const AppointmentView = () => {
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {renderKornerAppointmentInfo}
             <Divider/>
+            <Heading width={"80%"} level={5}>Vaš odgovor:</Heading>
             <ReservationForm userName={userName} userId={userId} responses={responses} appointmentId={appointmentId}
                              functionTest={(a) => setResponses(a)}/>
             <Divider size={"small"}/>

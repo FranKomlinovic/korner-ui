@@ -106,7 +106,11 @@ export default function Test(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Response(modelFields));
+          const modelFieldsToSave = {
+            playerName: modelFields.playerName,
+            accepted: modelFields.accepted,
+          };
+          await DataStore.save(new Response(modelFieldsToSave));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -177,7 +181,6 @@ export default function Test(props) {
       <SwitchField
         label="Želim biti rezerva"
         defaultChecked={false}
-        isDisabled={false}
         isChecked={reserve}
         onChange={(e) => {
           let value = e.target.checked;

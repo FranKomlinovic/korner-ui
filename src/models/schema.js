@@ -120,13 +120,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "reserve": {
-                    "name": "reserve",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "appointmentID": {
                     "name": "appointmentID",
                     "isArray": false,
@@ -517,5 +510,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.3.6",
-    "version": "16c02fcefecc5da7b406ae7ccbe90c2d"
+    "version": "d2960768fd8d1c100bf189d9c594f713"
 };

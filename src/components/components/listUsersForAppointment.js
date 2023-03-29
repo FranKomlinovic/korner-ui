@@ -31,13 +31,8 @@ const ListUsersForAppointment = ({responses}) => {
                     <FaCheck/>
                     <Heading>Dolazi</Heading>
                 </Flex>
-                <Flex alignItems={"center"} gap={"0.2rem"}>
-                    <FaCheckCircle/>
-                    <Heading>Ako fali</Heading>
-                </Flex>
 
                 <Flex alignItems={"center"} gap={"0.2rem"}>
-
                     <FaMinus/>
                     <Heading>Ne dolazi</Heading>
                 </Flex>

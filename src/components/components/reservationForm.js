@@ -22,15 +22,14 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
     }
 
 
-    const createResponse = (reserve, accepted) => {
-        saveResp(reserve, accepted, name, userId);
+    const createResponse = (accepted) => {
+        saveResp(accepted, name, userId);
     };
 
-    const saveResp = (reserve, accepted, nm, playerId) => {
+    const saveResp = (accepted, nm, playerId) => {
         const response = new Response({
             playerID: playerId,
             accepted: accepted,
-            reserve: reserve,
             appointmentID: appointmentId,
             playerName: nm,
         });
@@ -40,10 +39,9 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
         });
     };
 
-    const updateResponse = (accepted, reserve) => {
+    const updateResponse = (accepted) => {
         DataStore.save(Response.copyOf(responseToUpdate, (item) => {
             item.accepted = accepted;
-            item.reserve = reserve;
         })).then((a) => {
             DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]))
                 .then((a) => functionTest(a));
@@ -51,57 +49,39 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
     };
 
     const commingButton = (
-        <Button size={"small"} onClick={() => updateResponse(true, false)} variation={"primary"}>
-            Ipak dolazim
-        </Button>
-    )
-
-    const commingAsReserve = (
-        <Button size={"small"} onClick={() => updateResponse(true, true)}>
-            Dolazim ako fali
+        <Button size={"small"} onClick={() => updateResponse(true)} variation={"primary"}>
+            Dolazim
         </Button>
     )
 
     const notComming = (
-        <Button size={"small"} onClick={() => updateResponse(false, false)} variation={"warning"}>
-            Ipak ne mogu doći
+        <Button size={"small"} onClick={() => updateResponse(false)} variation={"warning"}>
+            Ne dolazim
         </Button>
     )
 
     const alreadyAnsweredView = () => {
         if (responseToUpdate.accepted) {
-            if (responseToUpdate.reserve) {
-                return (
-                    <Flex alignItems={"center"} direction={"column"}>
-                        <Heading level={3}>Dolazite ako fali</Heading>
-                        <Heading level={6}>Promijeni odgovor:</Heading>
-                        <Flex>
-                            {commingButton}
-                            {notComming}
-                        </Flex>
-                    </Flex>);
-            }
             return (
-                <Flex alignItems={"center"} direction={"column"}>
-                    <Heading color={"green"} level={3}>Dolazite</Heading>
-                    <Flex alignItems={"center"} justifyContent={"center"}>
-                        <Heading level={6}>Promijeni odgovor:</Heading>
-                        {commingAsReserve}
-                        {notComming}
-                    </Flex>
-                </Flex>);
-        } else {
-            return (
-                <Flex alignItems={"center"} direction={"column"}>
-                    <Heading color={"red"} level={3}>Odbili ste termin</Heading>
+                <Flex alignItems={"center"} direction={"column"} >
+                    <Heading color={"green"} level={3}>Dolazim</Heading>
                     <Heading level={6}>Promijeni odgovor:</Heading>
                     <Flex>
-                        {commingButton}
-                        {commingAsReserve}
+                        {notComming}
                     </Flex>
                 </Flex>
             );
         }
+        return (
+            <Flex alignItems={"center"} direction={"column"}>
+                <Heading color={"red"} level={3}>Ne dolazim</Heading>
+                <Heading level={6}>Promijeni odgovor:</Heading>
+                <Flex>
+                    {commingButton}
+                </Flex>
+            </Flex>
+        );
+
     }
 
     const createForm = (defaultValue) => {
@@ -113,11 +93,10 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
                     defaultValue={defaultValue}
                 />
                 <Flex>
-                    <Button variation={"primary"} onClick={() => createResponse(false, true)}>
+                    <Button variation={"primary"} onClick={() => createResponse(true)}>
                         Dolazim
                     </Button>
-                    <Button onClick={() => createResponse(true, true)}>Ako fali</Button>
-                    <Button onClick={() => createResponse(false, false)} variation={"warning"}>
+                    <Button onClick={() => createResponse(false)} variation={"warning"}>
                         Ne Dolazim
                     </Button>
                 </Flex>
@@ -127,7 +106,6 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
 
     return (
         <Flex direction={"column"}>
-                <Heading level={5}>Vaš odgovor:</Heading>
             <Flex>
                 {responseToUpdate && alreadyAnsweredView()}
                 {!responseToUpdate && createForm(userName)}
