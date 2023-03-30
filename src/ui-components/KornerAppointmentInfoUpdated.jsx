@@ -385,7 +385,7 @@ export default function KornerAppointmentInfoUpdated(props) {
               position="relative"
               padding="0px 0px 0px 0px"
               whiteSpace="pre-wrap"
-              children={duration}
+              children={`${duration}${"h"}`}
               {...getOverrideProps(overrides, "duration")}
             ></Text>
           </Flex>

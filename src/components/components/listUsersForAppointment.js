@@ -1,13 +1,13 @@
 import React from "react";
 import {getTimeFromTimestamp} from "../converters";
-import {FaCheck, FaCheckCircle, FaMinus, FaTrash} from "react-icons/fa";
+import {FaMinus, FaPlus, FaTrash} from "react-icons/fa";
 import {KornerResponseUser} from "../../ui-components";
 import {Flex, Heading} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-const ListUsersForAppointment = ({responses}) => {
+const ListUsersForAppointment = ({responses, isOwner}) => {
     if (responses == null) {
         return;
     }
@@ -32,11 +32,11 @@ const ListUsersForAppointment = ({responses}) => {
         const time = getTimeFromTimestamp(res.updatedAt);
         let icon = <FaMinus/>;
         if (res.accepted) {
-            icon = res.reserve ? <FaCheckCircle/> : <FaCheck/>;
+            icon = <FaPlus/>
         }
         return (<Flex alignItems={"center"}>
             <KornerResponseUser name={res.playerName} time={time} icon={icon} id={res.id}/>
-            <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>
+            {isOwner && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
         </Flex>);
     };
 
@@ -50,17 +50,6 @@ const ListUsersForAppointment = ({responses}) => {
     return (
         <Flex direction={"column"}>
             {renderResponses}
-            <Flex justifyContent={"space-evenly"} alignItems={"center"}>
-                <Flex alignItems={"center"} gap={"0.2rem"}>
-                    <FaCheck/>
-                    <Heading>Dolazi</Heading>
-                </Flex>
-
-                <Flex alignItems={"center"} gap={"0.2rem"}>
-                    <FaMinus/>
-                    <Heading>Ne dolazi</Heading>
-                </Flex>
-            </Flex>
         </Flex>
     )
 

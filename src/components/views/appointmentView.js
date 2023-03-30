@@ -56,7 +56,7 @@ const AppointmentView = () => {
                 {
                     label: 'Da',
                     onClick: () => {
-                        DataStore.delete(appointment).then(()=> navigate("/"));
+                        DataStore.delete(appointment).then(() => navigate("/"));
                     }
                 },
                 {
@@ -99,13 +99,13 @@ const AppointmentView = () => {
         if (checkIfAvailableForReservation()) {
             return (
                 <>
-                    <Button variation={"primary"} isDisabled={true}><FaLock/>{getNumberOfPeople()}Potvrdi
+                    <Button variation={"primary"} isDisabled={true}><FaLock/>{getNumberOfPeople()}Rezerviraj
                         termin*</Button>
-                    <Text variation={"warning"} fontSize={"small"}>*Moguće rezervirati tek kada
-                        skupite {field.minPlayers} igrača</Text>
+                    <Text variation={"warning"} fontSize={"small"}>*Moguće rezervirati kada
+                        skupite dovoljno igrača</Text>
                 </>);
         }
-        return (<Button variation={"primary"} onClick={() => confirmAppointment()}>Potvrdi termin</Button>)
+        return (<Button variation={"primary"} onClick={() => confirmAppointment()}>Rezerviraj termin</Button>)
 
     }
 
@@ -122,9 +122,10 @@ const AppointmentView = () => {
                 field={field}
                 responses={responses}
             />
-            {isOwner && buttonOrBadge()}
+            {buttonOrBadge()}
             {isOwner &&
-                <Tooltip onClose={() => setOpen(false)} open={open} leaveTouchDelay={1200} title={"Link kopiran"}><Button
+                <Tooltip onClose={() => setOpen(false)} open={open} leaveTouchDelay={1200}
+                         title={"Link kopiran"}><Button
                     onClick={() => copyLink()}>
                     <FaLink/> Pozovi prijatelje
                 </Button></Tooltip>
@@ -141,12 +142,14 @@ const AppointmentView = () => {
                              functionTest={(a) => setResponses(a)}/>
             <Divider size={"small"}/>
             <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Igrači:</Heading>
-            <ListUsersForAppointment responses={responses}/>
+            <ListUsersForAppointment isOwner={isOwner} responses={responses}/>
             {isOwner && <Divider size={"small"}/>}
-            <Heading alignSelf={"self-start"} marginLeft={"10px"}  level={5}>Dodaj goste:</Heading>
+            {isOwner && <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Dodaj goste:</Heading>}
             {isOwner && <AddGuestForm appointmentId={appointmentId} functionTest={(a) => setResponses(a)}/>}
             <Divider size={"small"}/>
-            {isOwner && !appointment.confirmed && <Button variation={"destructive"} onClick={() => deleteAppointment()}><FaTrash/> Obriši rezervaciju</Button>}
+            {isOwner && !appointment.confirmed &&
+                <Button variation={"destructive"} onClick={() => deleteAppointment()}><FaTrash/> Obriši
+                    rezervaciju</Button>}
         </Flex>
     );
 

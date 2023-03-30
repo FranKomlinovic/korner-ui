@@ -19,12 +19,13 @@ const Home = () => {
                 .then((resp) => {
                     let ids = resp.map(a => a.appointmentID);
                     DataStore.query(Appointment, b => b.or(
-                        b => [
-                            b.id.contains(ids),
-                            b.bookerID.eq(payload.sub)
+                        c => [
+                            c.id.contains(ids),
+                            c.bookerID.contains(payload.sub)
                         ]), {
                         sort: (sort) => sort.date(SortDirection.DESCENDING)
                     }).then((app) => {
+                        console.log(app)
                         setAppointment(app)
                     });
                 });

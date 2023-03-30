@@ -53,7 +53,7 @@ function App({signOut, user}) {
                 </Button>
                 <Button onClick={() => navigate("/fields")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaPlus size={"20px"}/><Text>Dogovori</Text>
+                        <FaPlus size={"20px"}/><Text>Rezerviraj</Text>
                     </Flex>
                 </Button>
                 <Button border={"none"}>
