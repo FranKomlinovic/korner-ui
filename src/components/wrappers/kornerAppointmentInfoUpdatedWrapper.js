@@ -4,21 +4,17 @@ import {calculateDurationFromAppointment, convertSportsEnumToString, getDateTime
 
 const KornerAppointmentInfoUpdatedWrapper = ({field, appointment, responses}) => {
 
-    const somethingMissing = field === null || appointment === null;
+    const somethingMissing = field === null || appointment === null || responses === null;
 
     if (somethingMissing) {
         return;
-    }
-    let test = 0;
-    if (responses != null) {
-        test = responses.filter(a => a.accepted === true).length
     }
 
     return (
         <KornerAppointmentInfoUpdated fields={field} time={getDateTimeFromAppointment(appointment)}
                                       appointment={appointment}
                                       pricePerPerson={field.price / field.minPlayers}
-                                      acceptedNumber={test}
+                                      acceptedNumber={responses.filter(a => a.accepted === true).length}
                                       duration={calculateDurationFromAppointment(appointment)}
                                       sport={convertSportsEnumToString(appointment.sport)}/>
     );

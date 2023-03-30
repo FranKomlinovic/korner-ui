@@ -10,7 +10,6 @@ import {Route, Routes, useNavigate} from "react-router-dom";
 import Home from "./components/views/home";
 import FieldById from "./components/views/fieldById";
 import AppointmentView from "./components/views/appointmentView";
-import CreateResponseWrapper from "./components/views/createResponseWrapper";
 
 Amplify.configure(awsExports);
 
@@ -30,7 +29,6 @@ function App({signOut, user}) {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/fields/:fieldId" element={<FieldById/>}/>
                 <Route path="/appointment/:appointmentId" element={<AppointmentView/>}/>
-                <Route path="/createResponse/:appointmentId" element={<CreateResponseWrapper/>}/>
             </Routes>
             <br/>
             <br/>

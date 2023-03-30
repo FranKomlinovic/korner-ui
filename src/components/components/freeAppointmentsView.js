@@ -91,7 +91,7 @@ const FreeAppointmentsView = (field) => {
         <Flex direction={"column"}>
             <Heading level={5}>Rezerviraj termin:</Heading>
             {appointmentToCreate != null && field != null &&
-                <ConfirmAppointmentReservation appointment={appointmentToCreate} field={field.field}/>}
+                <ConfirmAppointmentReservation appointment={appointmentToCreate}/>}
 
             <Flex>
                 <SelectField label="Odaberi datum" onChange={(e) => filterByDate(e.target.value)}>
