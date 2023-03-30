@@ -41,6 +41,8 @@ const FreeAppointmentsView = (field) => {
         object.bookerName = user.given_name + ' ' + user.family_name;
         object.bookerID = user.sub;
         object.fieldsID = field.field.id;
+        object.fieldName = field.field.name;
+        object.fieldPhoto = field.field.photo;
         object.confirmed = false;
         //TODO: Change
         object.sport = Sport.FUTSAL;

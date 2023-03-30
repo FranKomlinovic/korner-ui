@@ -10,6 +10,7 @@ import {Route, Routes, useNavigate} from "react-router-dom";
 import Home from "./components/views/home";
 import FieldById from "./components/views/fieldById";
 import AppointmentView from "./components/views/appointmentView";
+import FieldView from "./components/views/fieldView";
 
 Amplify.configure(awsExports);
 
@@ -19,16 +20,18 @@ function App({signOut, user}) {
     return (
         <Flex justifyContent={"flex-start"} direction={"column"}>
             <Flex direction={"row"} alignItems={"center"} margin={"10px"} justifyContent={"space-between"}>
-                <Heading level={"4"}>Korner.hr</Heading>
+                <Heading level={"4"} onClick={() => navigate("/")}>Korner.hr</Heading>
 
                 <Menu marginRight={"10px"}>
                     <MenuItem id="home" className="menu-item" onClick={() => navigate("/")}>Home</MenuItem>
+                    <MenuItem id="field" className="menu-item" onClick={() => navigate("/fields")}>Dogovori termin</MenuItem>
                 </Menu>
             </Flex>
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/fields/:fieldId" element={<FieldById/>}/>
                 <Route path="/appointment/:appointmentId" element={<AppointmentView/>}/>
+                <Route path="/fields" element={<FieldView/>}/>
             </Routes>
             <br/>
             <br/>

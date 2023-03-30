@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Fields, Response} from "../../models";
 
@@ -9,8 +9,9 @@ import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentIn
 import ReservationForm from "../components/reservationForm";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
 import AddGuestForm from "../components/addGuestForm";
-import {FaLink, FaLock} from "react-icons/fa";
+import {FaLink, FaLock, FaTrash} from "react-icons/fa";
 import {Tooltip} from "@mui/material";
+import {confirmAlert} from "react-confirm-alert";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -21,6 +22,7 @@ const AppointmentView = () => {
     const [userName, setUsername] = useState(null);
     const [isOwner, setIsOwner] = useState(false);
     const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,6 +48,23 @@ const AppointmentView = () => {
         fetchData();
     }, [appointmentId, appointment]);
 
+    const deleteAppointment = () => {
+        confirmAlert({
+            title: 'Potvrdi brisanje',
+            message: 'Želite li obrisati ovu rezervaciju?',
+            buttons: [
+                {
+                    label: 'Da',
+                    onClick: () => {
+                        DataStore.delete(appointment).then(()=> navigate("/"));
+                    }
+                },
+                {
+                    label: 'Ne'
+                }
+            ]
+        });
+    };
 
     function checkIfAvailableForReservation() {
         let disabled = true;
@@ -117,13 +136,17 @@ const AppointmentView = () => {
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {renderKornerAppointmentInfo}
             <Divider size={"small"}/>
-            <Heading width={"80%"} level={5}>Vaš odgovor:</Heading>
+            <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Vaš odgovor:</Heading>
             <ReservationForm userName={userName} userId={userId} responses={responses} appointmentId={appointmentId}
                              functionTest={(a) => setResponses(a)}/>
             <Divider size={"small"}/>
+            <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Igrači:</Heading>
             <ListUsersForAppointment responses={responses}/>
             {isOwner && <Divider size={"small"}/>}
+            <Heading alignSelf={"self-start"} marginLeft={"10px"}  level={5}>Dodaj goste:</Heading>
             {isOwner && <AddGuestForm appointmentId={appointmentId} functionTest={(a) => setResponses(a)}/>}
+            <Divider size={"small"}/>
+            {isOwner && !appointment.confirmed && <Button variation={"destructive"} onClick={() => deleteAppointment()}><FaTrash/> Obriši rezervaciju</Button>}
         </Flex>
     );
 

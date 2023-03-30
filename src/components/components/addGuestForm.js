@@ -29,7 +29,6 @@ const AddGuestForm = ({appointmentId, functionTest}) => {
 
     return (
         <Flex direction={"column"}>
-            <Heading level={5}>Dodaj goste:</Heading>
             <Flex alignContent={"flex-end"}>
                 <TextField
                     label={"Ime i prezime"}
