@@ -16,13 +16,17 @@ const Home = () => {
             let payload = usr.getIdToken().payload;
             setUser(payload);
             DataStore.query(Response, (c) => c.playerID.eq(payload.sub))
-                .then((a) => {
-                    DataStore.query(Appointment, a.appointmentID, {
-                        sort: (s) => s.date(SortDirection.DESCENDING)
-                    })
-                        .then((a) => {
-                            setAppointment(a)
-                        });
+                .then((resp) => {
+                    let ids = resp.map(a => a.appointmentID);
+                    DataStore.query(Appointment, b => b.or(
+                        b => [
+                            b.id.contains(ids),
+                            b.bookerID.eq(payload.sub)
+                        ]), {
+                        sort: (sort) => sort.date(SortDirection.DESCENDING)
+                    }).then((app) => {
+                        setAppointment(app)
+                    });
                 });
         });
 
@@ -50,10 +54,10 @@ const Home = () => {
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            <Heading level={4} alignSelf={"start"} marginLeft={"10px"}>Rezervirano:</Heading>
+            <Heading level={4} alignSelf={"start"}>Rezervirano:</Heading>
             {getReserved()}
-            <Divider size={"small"}/>
-            <Heading level={4} alignSelf={"start"} marginLeft={"10px"}>Skupljate se:</Heading>
+            <Divider color={"#224226"} size={"small"}/>
+            <Heading level={4} alignSelf={"start"}>Skupljate se:</Heading>
             {getNotReserved()}
         </Flex>
     )

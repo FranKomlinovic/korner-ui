@@ -19,7 +19,7 @@ const ConfirmAppointmentReservation = ({appointment}) => {
     return (
         <Flex direction={"column"}>
             <Heading level={4}>{getDateTimeFromAppointment(appointment)}</Heading>
-            <Button variation={"primary"} onClick={createAppointment}>Rezerviraj</Button>
+            <Button variation={"primary"} onClick={createAppointment}>Skupi ekipu</Button>
         </Flex>
     );
 

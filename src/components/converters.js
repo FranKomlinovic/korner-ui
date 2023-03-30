@@ -1,6 +1,4 @@
 import {Appointment} from "../models";
-import {FaCheck, FaQuestion} from "react-icons/fa";
-import {Flex, Heading} from "@aws-amplify/ui-react";
 
 const surfaces = new Map(
     [
