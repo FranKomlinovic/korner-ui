@@ -4,12 +4,13 @@ import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Fields, Response} from "../../models";
 
 
-import {Badge, Button, Divider, Flex, Heading} from "@aws-amplify/ui-react";
+import {Badge, Button, Divider, Flex, Heading, Text} from "@aws-amplify/ui-react";
 import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../components/reservationForm";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
 import AddGuestForm from "../components/addGuestForm";
 import {FaLink, FaLock} from "react-icons/fa";
+import {Tooltip} from "@mui/material";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -19,6 +20,7 @@ const AppointmentView = () => {
     const [userId, setUserId] = useState(null);
     const [userName, setUsername] = useState(null);
     const [isOwner, setIsOwner] = useState(false);
+    const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -73,13 +75,24 @@ const AppointmentView = () => {
             return;
         }
         if (appointment.confirmed) {
-            return <Badge variation={"success"}>Teren je rezerviran</Badge>;
+            return <Badge textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je rezerviran</Badge>;
         }
         if (checkIfAvailableForReservation()) {
             return (
-                <Button variation={"primary"} isDisabled={true}><FaLock/>{getNumberOfPeople()}Potvrdi termin</Button>);
+                <>
+                    <Button variation={"primary"} isDisabled={true}><FaLock/>{getNumberOfPeople()}Potvrdi
+                        termin*</Button>
+                    <Text variation={"warning"} fontSize={"small"}>*Moguće rezervirati tek kada
+                        skupite {field.minPlayers} igrača</Text>
+                </>);
         }
         return (<Button variation={"primary"} onClick={() => confirmAppointment()}>Potvrdi termin</Button>)
+
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        setOpen(true);
 
     }
 
@@ -92,9 +105,10 @@ const AppointmentView = () => {
             />
             {isOwner && buttonOrBadge()}
             {isOwner &&
-                <Button onClick={() => {navigator.clipboard.writeText(window.location.href)}}>
+                <Tooltip onClose={() => setOpen(false)} open={open} leaveTouchDelay={1200} title={"Link kopiran"}><Button
+                    onClick={() => copyLink()}>
                     <FaLink/> Pozovi prijatelje
-                </Button>
+                </Button></Tooltip>
             }
         </Flex>
     );
@@ -102,7 +116,7 @@ const AppointmentView = () => {
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {renderKornerAppointmentInfo}
-            <Divider/>
+            <Divider size={"small"}/>
             <Heading width={"80%"} level={5}>Vaš odgovor:</Heading>
             <ReservationForm userName={userName} userId={userId} responses={responses} appointmentId={appointmentId}
                              functionTest={(a) => setResponses(a)}/>
