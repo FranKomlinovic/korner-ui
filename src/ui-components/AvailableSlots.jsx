@@ -34,11 +34,7 @@ export default function AvailableSlots(props) {
         size="small"
         isDisabled={false}
         variation="default"
-        backgroundColor={
-          appointment?.confirmed && appointment?.confirmed == true
-            ? "yellow"
-            : "green"
-        }
+        backgroundColor={appointment?.confirmed == true ? "yellow" : "green"}
         children={`${appointment?.start}${" - "}${appointment?.end}`}
         {...getOverrideProps(overrides, "Button")}
       ></Button>

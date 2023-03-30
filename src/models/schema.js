@@ -269,6 +269,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "fieldName": {
+                    "name": "fieldName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "fieldPhoto": {
+                    "name": "fieldPhoto",
+                    "isArray": false,
+                    "type": "AWSURL",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -509,6 +523,6 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "codegenVersion": "3.3.6",
-    "version": "d2960768fd8d1c100bf189d9c594f713"
+    "codegenVersion": "3.4.0",
+    "version": "1d0d80ae7e9fc0fb408349c08b78fd22"
 };

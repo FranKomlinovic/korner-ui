@@ -78,11 +78,7 @@ export default function PlayerCard(props) {
           position="relative"
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
-          children={
-            response?.accepted && response?.accepted == true
-              ? "Prihvatio"
-              : "Odbio"
-          }
+          children={response?.accepted == true ? "Prihvatio" : "Odbio"}
           {...getOverrideProps(overrides, "time")}
         ></Text>
       </Flex>

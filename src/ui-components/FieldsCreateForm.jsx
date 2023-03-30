@@ -199,10 +199,10 @@ export default function FieldsCreateForm(props) {
     length: "",
     price: "",
     minPlayers: "",
-    surface: undefined,
+    surface: "",
     photo: "",
     sports: [],
-    city: undefined,
+    city: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
@@ -225,11 +225,11 @@ export default function FieldsCreateForm(props) {
     setSurface(initialValues.surface);
     setPhoto(initialValues.photo);
     setSports(initialValues.sports);
-    setCurrentSportsValue(undefined);
+    setCurrentSportsValue("");
     setCity(initialValues.city);
     setErrors({});
   };
-  const [currentSportsValue, setCurrentSportsValue] = React.useState(undefined);
+  const [currentSportsValue, setCurrentSportsValue] = React.useState("");
   const sportsRef = React.createRef();
   const getDisplayValue = {
     sports: (r) => {
@@ -668,7 +668,7 @@ export default function FieldsCreateForm(props) {
             values = result?.sports ?? values;
           }
           setSports(values);
-          setCurrentSportsValue(undefined);
+          setCurrentSportsValue("");
         }}
         currentFieldValue={currentSportsValue}
         label={"Sports"}
@@ -678,7 +678,7 @@ export default function FieldsCreateForm(props) {
         getBadgeText={getDisplayValue.sports}
         setFieldValue={setCurrentSportsValue}
         inputFieldRef={sportsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={""}
       >
         <SelectField
           label="Sports"

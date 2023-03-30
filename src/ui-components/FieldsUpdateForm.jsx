@@ -184,7 +184,7 @@ function ArrayField({
 export default function FieldsUpdateForm(props) {
   const {
     id: idProp,
-    fields,
+    fields: fieldsModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -200,10 +200,10 @@ export default function FieldsUpdateForm(props) {
     length: "",
     price: "",
     minPlayers: "",
-    surface: undefined,
+    surface: "",
     photo: "",
     sports: [],
-    city: undefined,
+    city: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
@@ -229,20 +229,22 @@ export default function FieldsUpdateForm(props) {
     setSurface(cleanValues.surface);
     setPhoto(cleanValues.photo);
     setSports(cleanValues.sports ?? []);
-    setCurrentSportsValue(undefined);
+    setCurrentSportsValue("");
     setCity(cleanValues.city);
     setErrors({});
   };
-  const [fieldsRecord, setFieldsRecord] = React.useState(fields);
+  const [fieldsRecord, setFieldsRecord] = React.useState(fieldsModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Fields, idProp) : fields;
+      const record = idProp
+        ? await DataStore.query(Fields, idProp)
+        : fieldsModelProp;
       setFieldsRecord(record);
     };
     queryData();
-  }, [idProp, fields]);
+  }, [idProp, fieldsModelProp]);
   React.useEffect(resetStateValues, [fieldsRecord]);
-  const [currentSportsValue, setCurrentSportsValue] = React.useState(undefined);
+  const [currentSportsValue, setCurrentSportsValue] = React.useState("");
   const sportsRef = React.createRef();
   const getDisplayValue = {
     sports: (r) => {
@@ -669,7 +671,7 @@ export default function FieldsUpdateForm(props) {
             values = result?.sports ?? values;
           }
           setSports(values);
-          setCurrentSportsValue(undefined);
+          setCurrentSportsValue("");
         }}
         currentFieldValue={currentSportsValue}
         label={"Sports"}
@@ -679,7 +681,7 @@ export default function FieldsUpdateForm(props) {
         getBadgeText={getDisplayValue.sports}
         setFieldValue={setCurrentSportsValue}
         inputFieldRef={sportsRef}
-        defaultFieldValue={undefined}
+        defaultFieldValue={""}
       >
         <SelectField
           label="Sports"
@@ -772,7 +774,7 @@ export default function FieldsUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || fields)}
+          isDisabled={!(idProp || fieldsModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -784,7 +786,7 @@ export default function FieldsUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || fields) ||
+              !(idProp || fieldsModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

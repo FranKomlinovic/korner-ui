@@ -61,7 +61,7 @@ export default function KornerFieldShort(props) {
         top="98px"
         left="0px"
         padding="0px 0px 0px 10px"
-        backgroundColor="rgba(34,66,38,0.5)"
+        backgroundColor="rgba(34,66,38,0.7)"
         {...getOverrideProps(overrides, "details")}
       >
         <Text

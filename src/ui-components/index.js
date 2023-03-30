@@ -11,8 +11,10 @@ export { default as AvailableSlotsCollection } from "./AvailableSlotsCollection"
 export { default as Ampligram } from "./Ampligram";
 export { default as FeaturesText2x2 } from "./FeaturesText2x2";
 export { default as HeroLayout3 } from "./HeroLayout3";
+export { default as KornerAppointmentCollection } from "./KornerAppointmentCollection";
 export { default as ProductDetail } from "./ProductDetail";
 export { default as ContactUs } from "./ContactUs";
+export { default as KornerAppointmentShort } from "./KornerAppointmentShort";
 export { default as HeroLayout4 } from "./HeroLayout4";
 export { default as MarketingPricing } from "./MarketingPricing";
 export { default as MarketingFooter } from "./MarketingFooter";

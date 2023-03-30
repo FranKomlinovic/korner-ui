@@ -1,4 +1,6 @@
 import {Appointment} from "../models";
+import {FaCheck, FaQuestion} from "react-icons/fa";
+import {Flex, Heading} from "@aws-amplify/ui-react";
 
 const surfaces = new Map(
     [
@@ -37,6 +39,12 @@ export function getCurrentDateInDynamoDbString(plusDays: number) {
 
 export function getDateTimeFromAppointment(appointment: Appointment) {
     return getDayOfWeek(new Date(appointment.date)) + ' ' + appointment.start + ' - ' + appointment.end;
+}
+
+
+export function getDayAndDateFromAppointment(date) {
+    let parsedDate = new Date(date);
+    return getDateInString(parsedDate) + parsedDate.getFullYear() + ".";
 }
 
 export function calculateDurationFromAppointment(appointment: Appointment) {

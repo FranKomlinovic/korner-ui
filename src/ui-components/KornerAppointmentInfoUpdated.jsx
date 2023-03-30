@@ -129,7 +129,7 @@ export default function KornerAppointmentInfoUpdated(props) {
         top="0px"
         left="0px"
         padding="5px 0px 30px 10px"
-        backgroundColor="rgba(34,66,38,0.5)"
+        backgroundColor="rgba(34,66,38,0.7)"
         {...getOverrideProps(overrides, "details")}
       >
         <Text
@@ -138,7 +138,7 @@ export default function KornerAppointmentInfoUpdated(props) {
           fontWeight="500"
           color="rgba(255,255,255,1)"
           lineHeight="40px"
-          textAlign="left"
+          textAlign="center"
           display="block"
           direction="column"
           justifyContent="unset"

@@ -44,6 +44,8 @@ type Appointment @model @auth(rules: [{allow: public}]) {
   bookerID: ID
   bookerName: String
   sport: Sport
+  fieldName: String
+  fieldPhoto: AWSURL
 }
 
 type Fields @model @auth(rules: [{allow: public}]) {
