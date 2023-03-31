@@ -78,7 +78,8 @@ const FreeAppointmentsView = (field) => {
             return <Grid templateColumns="1fr 1fr" alignContent={"center"}>
                 {appointmentss.map((item, key) => (
                     <View>
-                        <Button key={key} variation={setButtonColor(item.confirmed)}
+                        {console.log(item)};
+                        <Button key={key} variation={setButtonColor(item.isOverlaping)}
                                 onClick={() => openConfirm(item)}
 
                         >{item.start} - {item.end}</Button>

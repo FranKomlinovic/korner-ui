@@ -7,15 +7,21 @@ public class AvailableAppointmentsDto {
     private boolean overlaping;
     private LocalTime start;
     private LocalTime end;
-    private String fieldsID;
     private LocalDate date;
-    private int duration;
+    private long duration;
 
-    public int getDuration() {
+    public AvailableAppointmentsDto(LocalTime start, LocalTime end, LocalDate date, long duration) {
+        this.start = start;
+        this.end = end;
+        this.date = date;
+        this.duration = duration;
+    }
+
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
@@ -43,14 +49,6 @@ public class AvailableAppointmentsDto {
         this.end = end;
     }
 
-    public String getFieldsID() {
-        return fieldsID;
-    }
-
-    public void setFieldsID(String fieldsID) {
-        this.fieldsID = fieldsID;
-    }
-
     public LocalDate getDate() {
         return date;
     }
@@ -59,14 +57,19 @@ public class AvailableAppointmentsDto {
         this.date = date;
     }
 
+    public boolean overlapsWith(Appointment other) {
+        return this.getStart().isBefore(other.getEnd()) &&
+                other.getStart().isBefore(this.getEnd());
+    }
+
     @Override
     public String toString() {
         return "AvailableAppointmentsDto{" +
                 "overlaping=" + overlaping +
                 ", start=" + start +
                 ", end=" + end +
-                ", fieldsID='" + fieldsID + '\'' +
                 ", date=" + date +
+                ", duration=" + duration +
                 '}';
     }
 }
