@@ -28,7 +28,7 @@ public class Main {
         // generate all possible time slots of the given durations
         for (Duration duration : durations) {
             LocalTime slotStart = startTime;
-            while (slotStart.plus(duration).isBefore(endTime) || slotStart.plus(duration).equals(endTime)) {
+            while (slotStart.isBefore(slotStart.plus(duration)) && (slotStart.plus(duration).isBefore(endTime) || slotStart.plus(duration).equals(endTime))) {
                 AvailableAppointmentsDto timeSlot = new AvailableAppointmentsDto(slotStart, slotStart.plus(duration), date, duration.toMinutes());
                 boolean[] slotAvailable = isSlotAvailable(timeSlot, bookedSlots);
                 if (slotAvailable[0]) {

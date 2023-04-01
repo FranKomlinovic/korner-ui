@@ -53,7 +53,7 @@ public class TestClass {
         LocalTime upcoming30Minutes;
 
         if (currentMinute >= 30) {
-            upcoming30Minutes = now.truncatedTo(ChronoUnit.HOURS).plusMinutes(60).plusMinutes(30);
+            upcoming30Minutes = now.truncatedTo(ChronoUnit.HOURS).plusMinutes(60);
         } else {
             upcoming30Minutes = now.truncatedTo(ChronoUnit.HOURS).plusMinutes(30);
         }
