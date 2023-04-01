@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Response} from "../../models";
 import {KornerAppointmentShort} from "../../ui-components";
@@ -7,14 +7,12 @@ import {Divider, Flex, Heading} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 
 const Home = () => {
-    const [user, setUser] = useState(null);
-    const [appointment, setAppointment] = useState([]);
+   const [appointment, setAppointment] = useState([]);
 
 
     useEffect(() => {
         Auth.currentSession().then(usr => {
             let payload = usr.getIdToken().payload;
-            setUser(payload);
             DataStore.query(Response, (c) => c.playerID.eq(payload.sub))
                 .then((resp) => {
                     let ids = resp.map(a => a.appointmentID);
@@ -25,7 +23,6 @@ const Home = () => {
                         ]), {
                         sort: (sort) => sort.date(SortDirection.DESCENDING)
                     }).then((app) => {
-                        console.log(app)
                         setAppointment(app)
                     });
                 });
@@ -33,7 +30,7 @@ const Home = () => {
 
     }, []);
 
-    function getReserved() {
+    const reserved = useMemo(() => {
         let filter = appointment.filter(a => a.confirmed);
         if (filter.length === 0) {
             return <Heading>Nema potvrđenih termina</Heading>
@@ -41,9 +38,9 @@ const Home = () => {
         return filter.map(a => <KornerAppointmentShort
             date={getDayAndDateFromAppointment(a.date)}
             appointment={a}/>);
-    }
+    }, [appointment]);
 
-    function getNotReserved() {
+    const notReserved = useMemo(() => {
         let filter = appointment.filter(a => !a.confirmed);
         if (filter.length === 0) {
             return <Heading>Nema nepotvrđenih termina</Heading>
@@ -51,15 +48,15 @@ const Home = () => {
         return filter.map(a => <KornerAppointmentShort
             date={getDayAndDateFromAppointment(a.date)}
             appointment={a}/>);
-    }
+    }, [appointment]);
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
             <Heading level={4} alignSelf={"start"}>Rezervirano:</Heading>
-            {getReserved()}
+            {reserved}
             <Divider color={"#224226"} size={"small"}/>
             <Heading level={4} alignSelf={"start"}>Skupljate se:</Heading>
-            {getNotReserved()}
+            {notReserved}
         </Flex>
     )
 }

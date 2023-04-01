@@ -84,7 +84,7 @@ const AppointmentView = () => {
 
     function getNumberOfPeople() {
         if (responses != null && field != null) {
-            return (responses.length + "/" + field.minPlayers + " ");
+            return (responses.filter(a => a.accepted === true).length + "/" + field.minPlayers + " ");
         }
 
     }

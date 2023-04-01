@@ -10,7 +10,9 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ public class TestClass {
     private static final LocalTime WORKTIME_START = LocalTime.parse("16:00");
     private static final LocalTime WORKTIME_END = LocalTime.parse("23:00");
     private static final LocalTime TIME_NOW = LocalTime.now(ZoneId.of("CET"));
+    private static final int NUMBER_OF_DAYS = 7;
     private static final DynamoDBMapper DYNAMO_DB_MAPPER = new DynamoDBMapper(AmazonDynamoDBClientBuilder.standard().build());
 
     public List<AvailableAppointmentsDto> getTest(String fieldId) {
@@ -30,8 +33,19 @@ public class TestClass {
         if(WORKTIME_START.isAfter(TIME_NOW)) {
             time = WORKTIME_START;
         }
-        return Main.main(listOfAppointments.stream().filter(a -> a.getDate().equals(DATE_NOW)).collect(Collectors.toList()),
-                DATE_NOW, time, WORKTIME_END);
+        List<AvailableAppointmentsDto> firstDay = Main.main(listOfAppointments.stream().filter(a -> a.getDate().equals(DATE_NOW)).collect(Collectors.toList()),
+                List.of(DATE_NOW), time, WORKTIME_END);
+
+        final List<LocalDate> allWeek = new ArrayList<>();
+        int i = 1;
+        while (i < NUMBER_OF_DAYS) {
+            allWeek.add(DATE_NOW.plusDays(i));
+            i++;
+        }
+        firstDay.addAll(Main.main(listOfAppointments.stream().filter(a -> !a.getDate().equals(DATE_NOW)).collect(Collectors.toList()),
+                allWeek, WORKTIME_START, WORKTIME_END));
+
+        return firstDay;
     }
 
     public LocalTime getUpcomingHalfHour(LocalTime now) {

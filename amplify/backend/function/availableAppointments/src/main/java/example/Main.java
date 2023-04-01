@@ -3,18 +3,21 @@ package example;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
     private static final List<Duration> DURATIONS = List.of(Duration.ofHours(1), Duration.ofMinutes(90), Duration.ofHours(2));
     private static final Duration OFFSET_IN_MINUTES = Duration.ofMinutes(30);
 
-    public static List<AvailableAppointmentsDto> main(List<Appointment> bookedSlots, LocalDate date, LocalTime start, LocalTime end) {
+    public static List<AvailableAppointmentsDto> main(List<Appointment> bookedSlots, List<LocalDate> date, LocalTime start, LocalTime end) {
 
-        return generateAvailableTimeSlots(start, end, date, OFFSET_IN_MINUTES, bookedSlots, DURATIONS);
-
+        return date.stream()
+                .flatMap(a ->
+                        generateAvailableTimeSlots(start, end, a, OFFSET_IN_MINUTES, bookedSlots, DURATIONS)
+                                .stream())
+                .collect(Collectors.toList());
     }
 
     public static List<AvailableAppointmentsDto> generateAvailableTimeSlots(LocalTime startTime, LocalTime endTime,
