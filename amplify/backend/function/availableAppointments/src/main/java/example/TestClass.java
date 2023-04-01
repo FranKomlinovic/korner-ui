@@ -26,12 +26,15 @@ public class TestClass {
 
     public List<AvailableAppointmentsDto> getTest(String fieldId) {
         List<Appointment> listOfAppointments = databaseQuery(fieldId);
-        return Main.main(listOfAppointments.stream().filter(a -> a.getDate().equals(LocalDate.now())).collect(Collectors.toList()),
-                DATE_NOW, getUpcomingHalfHour(), WORKTIME_END);
+        LocalTime time = getUpcomingHalfHour(TIME_NOW);
+        if(WORKTIME_START.isAfter(TIME_NOW)) {
+            time = WORKTIME_START;
+        }
+        return Main.main(listOfAppointments.stream().filter(a -> a.getDate().equals(DATE_NOW)).collect(Collectors.toList()),
+                DATE_NOW, time, WORKTIME_END);
     }
 
-    public LocalTime getUpcomingHalfHour() {
-        LocalTime now = TIME_NOW;
+    public LocalTime getUpcomingHalfHour(LocalTime now) {
         int currentMinute = now.getMinute();
         LocalTime upcoming30Minutes;
 
