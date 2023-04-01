@@ -25,7 +25,7 @@
       "function": {
         "availableAppointments": {
           "deploymentBucketName": "amplify-terminihr-staging-160454-deployment",
-          "s3Key": "amplify-builds/availableAppointments-4c457859464461733350-build.zip"
+          "s3Key": "amplify-builds/availableAppointments-484e5252387943314148-build.zip"
         }
       },
       "hosting": {
