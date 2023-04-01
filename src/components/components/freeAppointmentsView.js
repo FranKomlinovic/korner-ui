@@ -19,6 +19,8 @@ const FreeAppointmentsView = (field) => {
             a => {
                 setAppointments(a);
                 setDisplayAppointments(a.filter(appointment => {
+                    {console.log(appointment.start + ' ' +appointment.overlaping)}
+
                     return appointment.date === getCurrentDateInDynamoDbString(0)
                         && appointment.duration === 60
                 }));
@@ -78,8 +80,7 @@ const FreeAppointmentsView = (field) => {
             return <Grid templateColumns="1fr 1fr" alignContent={"center"}>
                 {appointmentss.map((item, key) => (
                     <View>
-                        {console.log(item)};
-                        <Button key={key} variation={setButtonColor(item.isOverlaping)}
+                        <Button key={key} variation={setButtonColor(item.overlaping)}
                                 onClick={() => openConfirm(item)}
 
                         >{item.start} - {item.end}</Button>
