@@ -28,7 +28,7 @@ const FieldById = () => {
         <Flex direction={"column"} alignItems={"center"}>
             <KornerFieldInfo fields={field} sports={sports} surface={surface}/>
             <Divider/>
-            { fieldId != null && <FreeAppointmentsView field={field}/>}
+            { field != null && <FreeAppointmentsView field={field}/>}
         </Flex>
     );
 

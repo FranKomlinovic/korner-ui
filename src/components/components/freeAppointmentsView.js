@@ -1,6 +1,6 @@
 import {API, Auth} from "aws-amplify";
 import React, {useEffect, useState} from "react";
-import {Button, Flex, Grid, Heading, SelectField, View} from "@aws-amplify/ui-react";
+import {Button, Flex, Grid, Heading, Loader, SelectField, Text, View} from "@aws-amplify/ui-react";
 import {getCurrentDateInDynamoDbString, getDateInString} from "../converters";
 import {Sport} from "../../models";
 import ConfirmAppointmentReservation from "./confirmAppointmentReservation";
@@ -15,11 +15,11 @@ const FreeAppointmentsView = (field) => {
 
 
     useEffect(() => {
-        API.get('availableAppointments', '/appointments/available/' + field.id).then(
+        API.get('availableAppointments', '/appointments/available/' + field.field.id).then(
             a => {
                 setAppointments(a);
+                setDisplayAppointments(a);
                 setDisplayAppointments(a.filter(appointment => {
-                    {console.log(appointment.start + ' ' +appointment.overlaping)}
 
                     return appointment.date === getCurrentDateInDynamoDbString(0)
                         && appointment.duration === 60
@@ -30,7 +30,7 @@ const FreeAppointmentsView = (field) => {
         Auth.currentSession().then(usr => {
             setUser(usr.getIdToken().payload);
         });
-    }, [field]);
+    }, [field.field]);
 
     useEffect(() => {
         setDisplayAppointments(appointments.filter(appointment => {
@@ -50,10 +50,6 @@ const FreeAppointmentsView = (field) => {
         object.sport = Sport.FUTSAL;
 
         setAppointmentToCreate(object);
-    }
-
-    if (!displayAppointments) {
-        return <div>Loading...</div>;
     }
 
     function filterByDate(offset: number) {
@@ -91,6 +87,17 @@ const FreeAppointmentsView = (field) => {
         }
     }
 
+    function loader() {
+        if (displayAppointments === null || displayAppointments.length === 0) {
+            //TODO rijesiti logiku (ak  je prazan mozda je stvarno prazan)
+            return<Flex direction={"column"}>
+                <Text>Učitavam slobodne termine...</Text>
+                <Loader variation="linear"/>;
+
+            </Flex>
+        }
+    }
+
     return (
         <Flex direction={"column"}>
             <Heading level={5}>Rezerviraj termin:</Heading>
@@ -109,6 +116,7 @@ const FreeAppointmentsView = (field) => {
                     <option value={120}>2:00h</option>
                 </SelectField>
             </Flex>
+            {loader()}
             {getButtons(displayAppointments)}
 
 
