@@ -27,7 +27,8 @@ export function getTimeFromTimestamp(timestamp) {
 }
 
 export function getDateInString(date: Date) {
-    return getDayOfWeek(date) + ' ' + date.getDate() + '.' + date.getMonth() + '.';
+    let month = date.getMonth()+1;
+    return getDayOfWeek(date) + ' ' + date.getDate() + '.' + month + '.';
 }
 
 export function getCurrentDateInDynamoDbString(plusDays: number) {

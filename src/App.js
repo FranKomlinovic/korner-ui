@@ -2,7 +2,7 @@ import './App.css';
 
 import {Amplify, Auth} from 'aws-amplify';
 
-import {Button, Divider, Flex, Heading, Image, Text} from '@aws-amplify/ui-react';
+import {Authenticator, Button, Divider, Flex, Heading, Image, Text} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
@@ -11,26 +11,32 @@ import Home from "./components/views/home";
 import FieldById from "./components/views/fieldById";
 import AppointmentView from "./components/views/appointmentView";
 import FieldView from "./components/views/fieldView";
-import {FaPlus, FaRunning, FaSignOutAlt, FaUser, FaUsers} from "react-icons/fa";
+import {FaPlus, FaRunning, FaSignInAlt, FaSignOutAlt, FaUser, FaUsers} from "react-icons/fa";
 import {useEffect, useState} from "react";
 
 Amplify.configure(awsExports);
 
 function App() {
     const navigate = useNavigate();
-    const [user, setUser] = useState();
+    const [user, setUser] = useState(null);
+    const [openSignIn, setOpenSignIn] = useState(false);
 
-    async function signOut() {
-        try {
-            await Auth.signOut();
-        } catch (error) {
-            console.log('error signing out: ', error);
-        }
+    function signOut() {
+        Auth.signOut().then(a => {
+            window.location.reload()
+        }).catch(a => {
+        });
+    }
+
+    function signIn() {
+        setOpenSignIn(true);
     }
 
     useEffect(() => {
         Auth.currentSession().then(a => {
             setUser(a.getIdToken().payload);
+        }).catch(a => {
+            setUser(null)
         });
 
     }, []);
@@ -48,7 +54,13 @@ function App() {
                     <FaSignOutAlt onClick={() => signOut()} size={"30px"} color={"darkred"}/>
                 </Flex>}
 
+                {!user && <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
+                    <Heading alignSelf={"center"}><FaSignInAlt onClick={() => signIn()}
+                                                               size={"30px"}/></Heading></Flex>}
+
             </Flex>
+            {openSignIn && <Authenticator/>}
+
             <Divider size={"large"}/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
@@ -56,32 +68,31 @@ function App() {
                 <Route path="/appointment/:appointmentId" element={<AppointmentView/>}/>
                 <Route path="/fields" element={<FieldView/>}/>
             </Routes>
-            <Flex backgroundColor={"white"} position={"sticky"} bottom={"0px"} justifyContent={"space-between"}
-                  gap={"0.5rem"}>
-                <Button border={"none"}>
-                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaUser size={"20px"}/><Text>Profil</Text>
-                    </Flex>
-                </Button>
-                <Button onClick={() => navigate("/")} border={"none"}>
-                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaRunning size={"20px"}/><Text>Termini</Text>
-                    </Flex>
-                </Button>
-                <Button onClick={() => navigate("/fields")} border={"none"}>
-                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaPlus size={"20px"}/><Text>Rezerviraj</Text>
-                    </Flex>
-                </Button>
-                <Button border={"none"}>
-                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaUsers size={"20px"}/><Text>Prijatelji</Text>
-                    </Flex>
-                </Button>
-            </Flex>
-        </Flex>
-
-    );
+            {user &&
+                <Flex backgroundColor={"white"} position={"sticky"} bottom={"0px"} justifyContent={"space-between"}
+                      gap={"0.5rem"}>
+                    <Button disabled={true} border={"none"}>
+                        <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
+                            <FaUser size={"20px"}/><Text>Profil</Text>
+                        </Flex>
+                    </Button>
+                    <Button onClick={() => navigate("/")} border={"none"}>
+                        <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
+                            <FaRunning size={"20px"}/><Text>Termini</Text>
+                        </Flex>
+                    </Button>
+                    <Button onClick={() => navigate("/fields")} border={"none"}>
+                        <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
+                            <FaPlus size={"20px"}/><Text>Rezerviraj</Text>
+                        </Flex>
+                    </Button>
+                    <Button disabled={true} border={"none"}>
+                        <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
+                            <FaUsers size={"20px"}/><Text>Prijatelji</Text>
+                        </Flex>
+                    </Button>
+                </Flex>}
+        </Flex>);
 }
 
 export default App;

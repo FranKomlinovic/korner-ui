@@ -34,7 +34,7 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
         if (res.accepted) {
             icon = <FaPlus/>
         }
-        return (<Flex alignItems={"center"}>
+        return (<Flex key={res.id} alignItems={"center"}>
             <KornerResponseUser name={res.playerName} time={time} icon={icon} id={res.id}/>
             {isOwner && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
         </Flex>);
