@@ -5,10 +5,10 @@ import {useParams} from "react-router-dom";
 import {KornerFieldInfo} from "../../ui-components";
 import FreeAppointmentsView from "../components/freeAppointmentsView";
 import {convertSportsEnumListToString, convertSurfaceEnumToString} from "../converters";
-import {Divider, Flex} from "@aws-amplify/ui-react";
+import {Divider, Flex, withAuthenticator} from "@aws-amplify/ui-react";
 
 
-const FieldById = () => {
+const FieldById = ({user}) => {
     const {fieldId} = useParams();
     const [field, setField] = useState(null)
     const [sports, setSports] = useState(null)
@@ -28,7 +28,7 @@ const FieldById = () => {
         <Flex direction={"column"} alignItems={"center"}>
             <KornerFieldInfo fields={field} sports={sports} surface={surface}/>
             <Divider/>
-            <FreeAppointmentsView field={field}/>
+            <FreeAppointmentsView field={field} user={user}/>
         </Flex>
     );
 
@@ -36,5 +36,5 @@ const FieldById = () => {
 }
 
 
-export default FieldById;
+export default withAuthenticator(FieldById);
 

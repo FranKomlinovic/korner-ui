@@ -1,6 +1,6 @@
 import {KornerFieldCollection} from "../../ui-components";
 import React from "react";
-import {Flex} from "@aws-amplify/ui-react";
+import {Flex, withAuthenticator} from "@aws-amplify/ui-react";
 
 const FieldView = () => {
 
@@ -13,4 +13,4 @@ const FieldView = () => {
 
 }
 
-export default FieldView;
+export default withAuthenticator(FieldView);

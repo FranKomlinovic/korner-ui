@@ -1,21 +1,19 @@
-import {API, Auth} from "aws-amplify";
+import {API} from "aws-amplify";
 import React, {useEffect, useState} from "react";
 import {Button, Flex, Grid, Heading, Loader, SelectField, Text, View} from "@aws-amplify/ui-react";
 import {getCurrentDateInDynamoDbString, getDateInString} from "../converters";
 import {Sport} from "../../models";
 import ConfirmAppointmentReservation from "./confirmAppointmentReservation";
 
-const FreeAppointmentsView = ({field}) => {
+const FreeAppointmentsView = ({field, user}) => {
     const [appointments, setAppointments] = useState([]);
     const [duration, setDuration] = useState(60);
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
     const [displayAppointments, setDisplayAppointments] = useState(null);
     const [appointmentToCreate, setAppointmentToCreate] = useState(null);
-    const [user, setUser] = useState(null);
-
 
     useEffect(() => {
-       field && API.get('availableAppointments', '/appointments/available/' + field.id).then(
+        field && API.get('availableAppointments', '/appointments/available/' + field.id).then(
             a => {
                 setAppointments(a);
                 setDisplayAppointments(a);
@@ -26,22 +24,18 @@ const FreeAppointmentsView = ({field}) => {
                 }));
             }
         )
-
-        Auth.currentSession().then(usr => {
-            setUser(usr.getIdToken().payload);
-        });
-    }, [field]);
+    }, [field, user]);
 
     useEffect(() => {
         setDisplayAppointments(appointments.filter(appointment => {
             return appointment.date === date
                 && appointment.duration === duration
         }));
-    }, [date, duration]);
+    }, [date, duration, appointments]);
 
     function openConfirm(object) {
-        object.bookerName = user.given_name + ' ' + user.family_name;
-        object.bookerID = user.sub;
+        object.bookerName = user.attributes.given_name + ' ' + user.attributes.family_name;
+        object.bookerID = user.attributes.sub;
         object.fieldsID = field.id;
         object.fieldName = field.name;
         object.fieldPhoto = field.photo;
@@ -86,7 +80,7 @@ const FreeAppointmentsView = ({field}) => {
                 {appointmentss.map((item, key) => (
                     <View>
                         <Button key={key} backgroundColor={setButtonColor(item.overlaping)}
-                               color={"black"} onClick={() => openConfirm(item)}
+                                color={"black"} onClick={() => openConfirm(item)}
 
                         >{getButtonText(item)}</Button>
                     </View>))}
@@ -99,7 +93,7 @@ const FreeAppointmentsView = ({field}) => {
     function loader() {
         if (displayAppointments === null || displayAppointments.length === 0) {
             //TODO rijesiti logiku (ak  je prazan mozda je stvarno prazan)
-            return<Flex direction={"column"}>
+            return <Flex direction={"column"}>
                 <Text>Učitavam slobodne termine...</Text>
                 <Loader variation="linear"/>
 
@@ -128,7 +122,6 @@ const FreeAppointmentsView = ({field}) => {
             {loader()}
             {getButtons(displayAppointments)}
             <Text>*Za termine označene žuto već se skupljaju ekipe</Text>
-
 
 
         </Flex>

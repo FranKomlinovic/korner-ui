@@ -1,8 +1,8 @@
 import './App.css';
 
-import {Amplify} from 'aws-amplify';
+import {Amplify, Auth} from 'aws-amplify';
 
-import {Button, Divider, Flex, Heading, Image, Text, withAuthenticator} from '@aws-amplify/ui-react';
+import {Button, Divider, Flex, Heading, Image, Text} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
@@ -12,13 +12,29 @@ import FieldById from "./components/views/fieldById";
 import AppointmentView from "./components/views/appointmentView";
 import FieldView from "./components/views/fieldView";
 import {FaPlus, FaRunning, FaSignOutAlt, FaUser, FaUsers} from "react-icons/fa";
+import {useEffect, useState} from "react";
 
 Amplify.configure(awsExports);
 
-function App({signOut, user}) {
+function App() {
     const navigate = useNavigate();
+    const [user, setUser] = useState();
 
-    console.log(user)
+    async function signOut() {
+        try {
+            await Auth.signOut();
+        } catch (error) {
+            console.log('error signing out: ', error);
+        }
+    }
+
+    useEffect(() => {
+        Auth.currentSession().then(a => {
+            setUser(a.getIdToken().payload);
+        });
+
+    }, []);
+
     return (
         <Flex margin={"5px"} direction={"column"} justifyContent={"space-between"}>
             <Flex justifyContent={"space-between"}>
@@ -26,10 +42,11 @@ function App({signOut, user}) {
                     <Image height={"40px"} alt={"/images/logo.png"} src={"/korner-logo.png"}></Image>
                     <Heading color={"#224226"} level={"4"} onClick={() => navigate("/")}>Korner.hr</Heading>
                 </Flex>
-                <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-                    <Heading alignSelf={"center"}>{user.attributes.given_name + " " + user.attributes.family_name}</Heading>
+                {user && <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
+                    <Heading
+                        alignSelf={"center"}>{user.given_name + " " + user.family_name}</Heading>
                     <FaSignOutAlt onClick={() => signOut()} size={"30px"} color={"darkred"}/>
-                </Flex>
+                </Flex>}
 
             </Flex>
             <Divider size={"large"}/>
@@ -67,4 +84,4 @@ function App({signOut, user}) {
     );
 }
 
-export default withAuthenticator(App);
+export default App;

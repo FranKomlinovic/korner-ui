@@ -12,6 +12,7 @@ import AddGuestForm from "../components/addGuestForm";
 import {FaLink, FaLock, FaTrash} from "react-icons/fa";
 import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
+import UnauthorizedReservationForm from "../components/unauthorizedReservationForm";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -21,32 +22,42 @@ const AppointmentView = () => {
     const [userId, setUserId] = useState(null);
     const [userName, setUsername] = useState(null);
     const [isOwner, setIsOwner] = useState(false);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const appointment = await DataStore.query(Appointment, appointmentId);
-                setAppointment(appointment);
-                const field = await DataStore.query(Fields, appointment.fieldsID);
-                setField(field);
-                const {
-                    given_name,
-                    family_name,
-                    sub
-                } = await Auth.currentSession().then((usr) => usr.getIdToken().payload);
-                setUsername(`${given_name} ${family_name}`);
-                setUserId(sub);
-                setIsOwner(appointment.bookerID === sub);
-                const res = await DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]));
-                setResponses(res);
-            } catch (err) {
-                console.log("Error fetching data: ", err);
-            }
-        };
-        fetchData();
-    }, [appointmentId, appointment]);
+        appointment && Auth.currentSession().then((u) => {
+            let payload = u.getIdToken().payload;
+            setUsername(payload.given_name + " " + payload.family_name);
+            setUserId(payload.sub);
+            setIsOwner(appointment.bookerID === payload.sub);
+        });
+    }, [appointment]);
+
+    useEffect(() => {
+        DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)])).then(r => {
+            setResponses(r);
+        })
+
+    }, [appointmentId]);
+
+
+    useEffect(() => {
+        appointment &&
+        DataStore.query(Fields, appointment.fieldsID).then(f => {
+            setField(f);
+        })
+
+    }, [appointment]);
+
+
+    useEffect(() => {
+        DataStore.query(Appointment, appointmentId).then(a => {
+            setAppointment(a);
+        })
+
+    }, [appointmentId]);
+
 
     const deleteAppointment = () => {
         confirmAlert({
@@ -89,12 +100,12 @@ const AppointmentView = () => {
 
     }
 
-    function buttonOrBadge() {
+    function getButton() {
         if (appointment === null) {
             return;
         }
-        if (appointment.confirmed) {
-            return <Badge textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je rezerviran</Badge>;
+        if (!isOwner) {
+           return;
         }
         if (checkIfAvailableForReservation()) {
             return (
@@ -106,6 +117,16 @@ const AppointmentView = () => {
                 </>);
         }
         return (<Button variation={"primary"} onClick={() => confirmAppointment()}>Rezerviraj termin</Button>)
+
+    }
+
+    function getBadge() {
+        if (appointment === null) {
+            return;
+        }
+        if (appointment.confirmed) {
+            return <Badge textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je rezerviran</Badge>;
+        }
 
     }
 
@@ -122,7 +143,8 @@ const AppointmentView = () => {
                 field={field}
                 responses={responses}
             />
-            {buttonOrBadge()}
+            {getButton()}
+            {getBadge()}
             {isOwner &&
                 <Tooltip onClose={() => setOpen(false)} open={open} leaveTouchDelay={1200}
                          title={"Link kopiran"}><Button
@@ -138,8 +160,11 @@ const AppointmentView = () => {
             {renderKornerAppointmentInfo}
             <Divider size={"small"}/>
             <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Vaš odgovor:</Heading>
-            <ReservationForm userName={userName} userId={userId} responses={responses} appointmentId={appointmentId}
-                             functionTest={(a) => setResponses(a)}/>
+            {userId &&
+                <ReservationForm userName={userName} userId={userId} responses={responses} appointmentId={appointmentId}
+                                 functionTest={(a) => setResponses(a)}/>}
+            {!userId && <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}
+                                                     functionTest={(a) => setResponses(a)}/>}
             <Divider size={"small"}/>
             <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Igrači:</Heading>
             <ListUsersForAppointment isOwner={isOwner} responses={responses}/>

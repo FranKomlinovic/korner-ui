@@ -5,22 +5,15 @@ import {DataStore} from "aws-amplify";
 
 const ReservationForm = ({userId, userName, responses, appointmentId, functionTest}) => {
     const [name, setName] = useState();
-    const [responseToUpdate, setResponseToUpdate] = useState(undefined);
+    const [responseToUpdate, setResponseToUpdate] = useState();
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (responses !== null) {
-                setResponseToUpdate(responses.find((response) => response.playerID === userId));
-            }
-            setName(userName)
-        };
-        fetchData();
-    }, [responses, userId, userName]);
+        responses && userId && setResponseToUpdate(responses.find((response) => response.playerID === userId));
+    }, [responses, userId]);
 
-    if (responses === null || userId === null || userName === null || appointmentId === null) {
-        return;
-    }
-
+    useEffect(() => {
+        userName && setName(userName);
+    }, [userName]);
 
     const createResponse = (accepted) => {
         saveResp(accepted, name, userId);
@@ -63,7 +56,7 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
     const alreadyAnsweredView = () => {
         if (responseToUpdate.accepted) {
             return (
-                <Flex alignItems={"center"} direction={"column"} >
+                <Flex alignItems={"center"} direction={"column"}>
                     <Heading color={"green"} level={3}>Dolazim</Heading>
                     <Heading level={6}>Promijeni odgovor:</Heading>
                     <Flex>

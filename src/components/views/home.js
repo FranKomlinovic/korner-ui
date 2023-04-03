@@ -1,34 +1,31 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {Auth, DataStore} from "aws-amplify";
+import {DataStore} from "aws-amplify";
 import {Appointment, Response} from "../../models";
 import {KornerAppointmentShort} from "../../ui-components";
 import {getDayAndDateFromAppointment} from "../converters";
-import {Divider, Flex, Heading} from "@aws-amplify/ui-react";
+import {Divider, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 
-const Home = () => {
-   const [appointment, setAppointment] = useState([]);
-
+const Home = ({user}) => {
+    const [appointment, setAppointment] = useState([]);
 
     useEffect(() => {
-        Auth.currentSession().then(usr => {
-            let payload = usr.getIdToken().payload;
-            DataStore.query(Response, (c) => c.playerID.eq(payload.sub))
-                .then((resp) => {
-                    let ids = resp.map(a => a.appointmentID);
-                    DataStore.query(Appointment, b => b.or(
-                        c => [
-                            c.id.contains(ids),
-                            c.bookerID.contains(payload.sub)
-                        ]), {
-                        sort: (sort) => sort.date(SortDirection.DESCENDING)
-                    }).then((app) => {
-                        setAppointment(app)
-                    });
+        let payload = user.attributes;
+        DataStore.query(Response, (c) => c.playerID.eq(payload.sub))
+            .then((resp) => {
+                let ids = resp.map(a => a.appointmentID);
+                DataStore.query(Appointment, b => b.or(
+                    c => [
+                        c.id.contains(ids),
+                        c.bookerID.contains(payload.sub)
+                    ]), {
+                    sort: (sort) => sort.date(SortDirection.DESCENDING)
+                }).then((app) => {
+                    setAppointment(app)
                 });
-        });
+            });
 
-    }, []);
+    }, [user]);
 
     const reserved = useMemo(() => {
         let filter = appointment.filter(a => a.confirmed);
@@ -61,4 +58,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default withAuthenticator(Home);
