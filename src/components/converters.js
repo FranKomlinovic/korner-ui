@@ -27,8 +27,19 @@ export function getTimeFromTimestamp(timestamp) {
 }
 
 export function getDateInString(date: Date) {
-    let month = date.getMonth()+1;
+    let month = date.getMonth() + 1;
     return getDayOfWeek(date) + ' ' + date.getDate() + '.' + month + '.';
+}
+
+export function checkIfOwner(user) {
+    if (!user) {
+        return false;
+    }
+    let payloadElement = user.getSignInUserSession().getAccessToken().payload['cognito:groups'];
+    if (!payloadElement) {
+       return false
+    }
+    return payloadElement.includes("owners");
 }
 
 export function getCurrentDateInDynamoDbString(plusDays: number) {

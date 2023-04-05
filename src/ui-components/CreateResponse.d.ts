@@ -16,11 +16,13 @@ export declare type CreateResponseInputValues = {
     playerName?: string;
     accepted?: boolean;
     reserve?: boolean;
+    playerPhoto?: string;
 };
 export declare type CreateResponseValidationValues = {
     playerName?: ValidationFunction<string>;
     accepted?: ValidationFunction<boolean>;
     reserve?: ValidationFunction<boolean>;
+    playerPhoto?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CreateResponseOverridesProps = {
@@ -28,6 +30,7 @@ export declare type CreateResponseOverridesProps = {
     playerName?: PrimitiveOverrideProps<TextFieldProps>;
     accepted?: PrimitiveOverrideProps<RadioGroupFieldProps>;
     reserve?: PrimitiveOverrideProps<CheckboxFieldProps>;
+    playerPhoto?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CreateResponseProps = React.PropsWithChildren<{
     overrides?: CreateResponseOverridesProps | undefined | null;

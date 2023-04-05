@@ -9,7 +9,7 @@ import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Divider, Flex, Icon, Image, Text, View } from "@aws-amplify/ui-react";
 export default function FieldDetails(props) {
-  const { data, overrides, ...rest } = props;
+  const { data, photo, overrides, ...rest } = props;
   return (
     <Flex
       gap="11px"

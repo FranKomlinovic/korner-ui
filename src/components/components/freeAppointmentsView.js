@@ -5,7 +5,7 @@ import {getCurrentDateInDynamoDbString, getDateInString} from "../converters";
 import {Sport} from "../../models";
 import ConfirmAppointmentReservation from "./confirmAppointmentReservation";
 
-const FreeAppointmentsView = ({field, user}) => {
+const FreeAppointmentsView = ({field, user, isOwner}) => {
     const [appointments, setAppointments] = useState([]);
     const [duration, setDuration] = useState(60);
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
@@ -39,7 +39,7 @@ const FreeAppointmentsView = ({field, user}) => {
         object.fieldsID = field.id;
         object.fieldName = field.name;
         object.fieldPhoto = field.photo;
-        object.confirmed = false;
+        object.confirmed = isOwner;
         //TODO: Change
         object.sport = Sport.FUTSAL;
 
@@ -78,7 +78,7 @@ const FreeAppointmentsView = ({field, user}) => {
         if (appointmentss != null) {
             return <Grid templateColumns="1fr 1fr" gap={"1rem"} alignContent={"center"}>
                 {appointmentss.map((item, key) => (
-                    <View>
+                    <View key={key}>
                         <Button key={key} backgroundColor={setButtonColor(item.overlaping)}
                                 color={"black"} onClick={() => openConfirm(item)}
 
@@ -105,7 +105,7 @@ const FreeAppointmentsView = ({field, user}) => {
         <Flex direction={"column"} margin={"10px"}>
             <Heading level={5}>Rezerviraj termin:</Heading>
             {appointmentToCreate != null && field != null &&
-                <ConfirmAppointmentReservation appointment={appointmentToCreate}/>}
+                <ConfirmAppointmentReservation isOwner={isOwner} appointment={appointmentToCreate}/>}
 
             <Flex>
                 <SelectField label="Odaberi datum" onChange={(e) => filterByDate(e.target.value)}>

@@ -33,6 +33,7 @@ type EagerReccuringAppointment = {
   readonly start: string;
   readonly end: string;
   readonly fieldsID: string;
+  readonly active?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -48,6 +49,7 @@ type LazyReccuringAppointment = {
   readonly start: string;
   readonly end: string;
   readonly fieldsID: string;
+  readonly active?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -68,6 +70,7 @@ type EagerResponse = {
   readonly accepted?: boolean | null;
   readonly appointmentID: string;
   readonly playerName: string;
+  readonly playerPhoto?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -82,6 +85,7 @@ type LazyResponse = {
   readonly accepted?: boolean | null;
   readonly appointmentID: string;
   readonly playerName: string;
+  readonly playerPhoto?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -158,6 +162,7 @@ type EagerFields = {
   readonly sports?: (Sport | null)[] | keyof typeof Sport | null;
   readonly city?: Cities | keyof typeof Cities | null;
   readonly ReccuringAppointments?: (ReccuringAppointment | null)[] | null;
+  readonly ownerID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -180,6 +185,7 @@ type LazyFields = {
   readonly sports?: (Sport | null)[] | keyof typeof Sport | null;
   readonly city?: Cities | keyof typeof Cities | null;
   readonly ReccuringAppointments: AsyncCollection<ReccuringAppointment>;
+  readonly ownerID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

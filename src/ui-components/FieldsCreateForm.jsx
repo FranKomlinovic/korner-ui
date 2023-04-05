@@ -203,6 +203,7 @@ export default function FieldsCreateForm(props) {
     photo: "",
     sports: [],
     city: "",
+    ownerID: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
@@ -214,6 +215,7 @@ export default function FieldsCreateForm(props) {
   const [photo, setPhoto] = React.useState(initialValues.photo);
   const [sports, setSports] = React.useState(initialValues.sports);
   const [city, setCity] = React.useState(initialValues.city);
+  const [ownerID, setOwnerID] = React.useState(initialValues.ownerID);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -227,6 +229,7 @@ export default function FieldsCreateForm(props) {
     setSports(initialValues.sports);
     setCurrentSportsValue("");
     setCity(initialValues.city);
+    setOwnerID(initialValues.ownerID);
     setErrors({});
   };
   const [currentSportsValue, setCurrentSportsValue] = React.useState("");
@@ -259,6 +262,7 @@ export default function FieldsCreateForm(props) {
     photo: [{ type: "URL" }],
     sports: [],
     city: [],
+    ownerID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -296,6 +300,7 @@ export default function FieldsCreateForm(props) {
           photo,
           sports,
           city,
+          ownerID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -361,6 +366,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -395,6 +401,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -433,6 +440,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.width ?? value;
@@ -471,6 +479,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.length ?? value;
@@ -509,6 +518,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -547,6 +557,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.minPlayers ?? value;
@@ -580,6 +591,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.surface ?? value;
@@ -634,6 +646,7 @@ export default function FieldsCreateForm(props) {
               photo: value,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.photo ?? value;
@@ -663,6 +676,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports: values,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             values = result?.sports ?? values;
@@ -735,6 +749,7 @@ export default function FieldsCreateForm(props) {
               photo,
               sports,
               city: value,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -760,6 +775,40 @@ export default function FieldsCreateForm(props) {
           {...getOverrideProps(overrides, "cityoption1")}
         ></option>
       </SelectField>
+      <TextField
+        label="Owner id"
+        isRequired={false}
+        isReadOnly={false}
+        value={ownerID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              address,
+              width,
+              length,
+              price,
+              minPlayers,
+              surface,
+              photo,
+              sports,
+              city,
+              ownerID: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.ownerID ?? value;
+          }
+          if (errors.ownerID?.hasError) {
+            runValidationTasks("ownerID", value);
+          }
+          setOwnerID(value);
+        }}
+        onBlur={() => runValidationTasks("ownerID", ownerID)}
+        errorMessage={errors.ownerID?.errorMessage}
+        hasError={errors.ownerID?.hasError}
+        {...getOverrideProps(overrides, "ownerID")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

@@ -32,21 +32,27 @@ export default function Test(props) {
     playerName: "",
     accepted: false,
     reserve: false,
+    playerPhoto: "",
   };
   const [playerName, setPlayerName] = React.useState(initialValues.playerName);
   const [accepted, setAccepted] = React.useState(initialValues.accepted);
   const [reserve, setReserve] = React.useState(initialValues.reserve);
+  const [playerPhoto, setPlayerPhoto] = React.useState(
+    initialValues.playerPhoto
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setPlayerName(initialValues.playerName);
     setAccepted(initialValues.accepted);
     setReserve(initialValues.reserve);
+    setPlayerPhoto(initialValues.playerPhoto);
     setErrors({});
   };
   const validations = {
     playerName: [{ type: "Required" }],
     accepted: [],
     reserve: [],
+    playerPhoto: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -77,6 +83,7 @@ export default function Test(props) {
           playerName,
           accepted,
           reserve,
+          playerPhoto,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -109,6 +116,7 @@ export default function Test(props) {
           const modelFieldsToSave = {
             playerName: modelFields.playerName,
             accepted: modelFields.accepted,
+            playerPhoto: modelFields.playerPhoto,
           };
           await DataStore.save(new Response(modelFieldsToSave));
           if (onSuccess) {
@@ -138,6 +146,7 @@ export default function Test(props) {
               playerName: value,
               accepted,
               reserve,
+              playerPhoto,
             };
             const result = onChange(modelFields);
             value = result?.playerName ?? value;
@@ -164,6 +173,7 @@ export default function Test(props) {
               playerName,
               accepted: value,
               reserve,
+              playerPhoto,
             };
             const result = onChange(modelFields);
             value = result?.accepted ?? value;
@@ -189,6 +199,7 @@ export default function Test(props) {
               playerName,
               accepted,
               reserve: value,
+              playerPhoto,
             };
             const result = onChange(modelFields);
             value = result?.reserve ?? value;
@@ -203,6 +214,33 @@ export default function Test(props) {
         hasError={errors.reserve?.hasError}
         {...getOverrideProps(overrides, "reserve")}
       ></SwitchField>
+      <TextField
+        label="Player photo"
+        isRequired={false}
+        isReadOnly={false}
+        value={playerPhoto}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              playerName,
+              accepted,
+              reserve,
+              playerPhoto: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.playerPhoto ?? value;
+          }
+          if (errors.playerPhoto?.hasError) {
+            runValidationTasks("playerPhoto", value);
+          }
+          setPlayerPhoto(value);
+        }}
+        onBlur={() => runValidationTasks("playerPhoto", playerPhoto)}
+        errorMessage={errors.playerPhoto?.errorMessage}
+        hasError={errors.playerPhoto?.hasError}
+        {...getOverrideProps(overrides, "playerPhoto")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

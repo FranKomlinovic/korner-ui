@@ -1,34 +1,66 @@
 import React, {useEffect, useState} from "react";
-import {DataStore} from "aws-amplify";
+import {DataStore, Storage} from "aws-amplify";
 import {Fields} from "../../models";
 import {useParams} from "react-router-dom";
 import {KornerFieldInfo} from "../../ui-components";
 import FreeAppointmentsView from "../components/freeAppointmentsView";
-import {convertSportsEnumListToString, convertSurfaceEnumToString} from "../converters";
-import {Divider, Flex, withAuthenticator} from "@aws-amplify/ui-react";
+import {checkIfOwner, convertSportsEnumListToString, convertSurfaceEnumToString} from "../converters";
+import {Button, Divider, FileUploader, Flex, withAuthenticator} from "@aws-amplify/ui-react";
 
 
 const FieldById = ({user}) => {
     const {fieldId} = useParams();
     const [field, setField] = useState(null)
     const [sports, setSports] = useState(null)
+    const [photo, setPhoto] = useState(null)
     const [surface, setSurface] = useState(null)
+    const [isOwner, setIsOwner] = useState(false)
 
     useEffect(() => {
         DataStore.query(Fields, fieldId).then((a) => {
-                setField(a);
-                setSports(convertSportsEnumListToString(a.sports));
-                setSurface(convertSurfaceEnumToString(a.surface));
-            }
-        );
-    }, [fieldId]);
+            setField(a);
+        });
+    }, [fieldId, user]);
 
+    useEffect(() => {
+        if (!field) {
+           return;
+        }
+        setSports(convertSportsEnumListToString(field.sports));
+        setSurface(convertSurfaceEnumToString(field.surface));
+        setIsOwner(checkIfOwner(user) && field.ownerID === user.attributes.sub);
+        Storage.get(field.photo).then(b => {
+            setPhoto(b);
+        }).catch((c) => {
+            setPhoto("https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg")
+        })
+
+    }, [field]);
+
+
+    const addPhotoToField = (photo) => {
+        DataStore.save(Fields.copyOf(field, (item) => {
+            item.photo = photo.key;
+        })).then((a) => {
+            setField(a);
+        });
+    };
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            <KornerFieldInfo fields={field} sports={sports} surface={surface}/>
+            <KornerFieldInfo fields={field} sports={sports} surface={surface} photo={photo}/>
+            {isOwner && <FileUploader
+                variation={"button"}
+                shouldAutoProceed={true}
+                onSuccess={(a) => addPhotoToField(a)}
+                hasMultipleFiles={false}
+                acceptedFileTypes={['image/*']}
+                accessLevel="public"
+
+            /> &&
+            <Button>Uredi igralište</Button>}
             <Divider/>
-            <FreeAppointmentsView field={field} user={user}/>
+            <FreeAppointmentsView field={field} user={user} isOwner={isOwner}/>
         </Flex>
     );
 

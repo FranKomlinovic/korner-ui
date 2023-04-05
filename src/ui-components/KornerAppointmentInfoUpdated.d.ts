@@ -53,6 +53,7 @@ export declare type KornerAppointmentInfoUpdatedProps = React.PropsWithChildren<
     sport?: String;
     appointment?: Appointment;
     duration?: String;
+    photo?: String;
 } & {
     overrides?: KornerAppointmentInfoUpdatedOverridesProps | undefined | null;
 }>;

@@ -39,6 +39,7 @@ export declare type KornerFieldInfoProps = React.PropsWithChildren<Partial<FlexP
     fields?: Fields;
     sports?: String;
     surface?: String;
+    photo?: String;
 } & {
     overrides?: KornerFieldInfoOverridesProps | undefined | null;
 }>;

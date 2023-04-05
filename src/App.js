@@ -13,6 +13,7 @@ import AppointmentView from "./components/views/appointmentView";
 import FieldView from "./components/views/fieldView";
 import {FaPlus, FaRunning, FaSignInAlt, FaSignOutAlt, FaUser, FaUsers} from "react-icons/fa";
 import {useEffect, useState} from "react";
+import FieldOwnerView from "./components/views/owner/fieldOwnerView";
 
 Amplify.configure(awsExports);
 
@@ -67,6 +68,7 @@ function App() {
                 <Route path="/fields/:fieldId" element={<FieldById/>}/>
                 <Route path="/appointment/:appointmentId" element={<AppointmentView/>}/>
                 <Route path="/fields" element={<FieldView/>}/>
+                <Route path="/owner/fields" element={<FieldOwnerView/>}/>
             </Routes>
             {user &&
                 <Flex backgroundColor={"white"} position={"sticky"} bottom={"0px"} justifyContent={"space-between"}

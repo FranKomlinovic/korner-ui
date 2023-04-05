@@ -17,6 +17,7 @@ export default function KornerAppointmentInfoUpdated(props) {
     sport,
     appointment,
     duration,
+    photo,
     overrides,
     ...rest
   } = props;
@@ -47,7 +48,7 @@ export default function KornerAppointmentInfoUpdated(props) {
         left="0px"
         padding="0px 0px 0px 0px"
         objectFit="cover"
-        src={fields?.photo}
+        src={photo}
         {...getOverrideProps(overrides, "image")}
       ></Image>
       <Flex

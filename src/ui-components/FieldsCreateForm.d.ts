@@ -23,6 +23,7 @@ export declare type FieldsCreateFormInputValues = {
     photo?: string;
     sports?: string[];
     city?: string;
+    ownerID?: string;
 };
 export declare type FieldsCreateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -35,6 +36,7 @@ export declare type FieldsCreateFormValidationValues = {
     photo?: ValidationFunction<string>;
     sports?: ValidationFunction<string>;
     city?: ValidationFunction<string>;
+    ownerID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FieldsCreateFormOverridesProps = {
@@ -49,6 +51,7 @@ export declare type FieldsCreateFormOverridesProps = {
     photo?: PrimitiveOverrideProps<TextFieldProps>;
     sports?: PrimitiveOverrideProps<SelectFieldProps>;
     city?: PrimitiveOverrideProps<SelectFieldProps>;
+    ownerID?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type FieldsCreateFormProps = React.PropsWithChildren<{
     overrides?: FieldsCreateFormOverridesProps | undefined | null;

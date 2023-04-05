@@ -24,6 +24,7 @@ export declare type FieldsUpdateFormInputValues = {
     photo?: string;
     sports?: string[];
     city?: string;
+    ownerID?: string;
 };
 export declare type FieldsUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -36,6 +37,7 @@ export declare type FieldsUpdateFormValidationValues = {
     photo?: ValidationFunction<string>;
     sports?: ValidationFunction<string>;
     city?: ValidationFunction<string>;
+    ownerID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FieldsUpdateFormOverridesProps = {
@@ -50,6 +52,7 @@ export declare type FieldsUpdateFormOverridesProps = {
     photo?: PrimitiveOverrideProps<TextFieldProps>;
     sports?: PrimitiveOverrideProps<SelectFieldProps>;
     city?: PrimitiveOverrideProps<SelectFieldProps>;
+    ownerID?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type FieldsUpdateFormProps = React.PropsWithChildren<{
     overrides?: FieldsUpdateFormOverridesProps | undefined | null;

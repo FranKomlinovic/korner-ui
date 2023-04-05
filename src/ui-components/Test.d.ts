@@ -16,11 +16,13 @@ export declare type TestInputValues = {
     playerName?: string;
     accepted?: boolean;
     reserve?: boolean;
+    playerPhoto?: string;
 };
 export declare type TestValidationValues = {
     playerName?: ValidationFunction<string>;
     accepted?: ValidationFunction<boolean>;
     reserve?: ValidationFunction<boolean>;
+    playerPhoto?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TestOverridesProps = {
@@ -28,6 +30,7 @@ export declare type TestOverridesProps = {
     playerName?: PrimitiveOverrideProps<TextFieldProps>;
     accepted?: PrimitiveOverrideProps<SwitchFieldProps>;
     reserve?: PrimitiveOverrideProps<SwitchFieldProps>;
+    playerPhoto?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TestProps = React.PropsWithChildren<{
     overrides?: TestOverridesProps | undefined | null;

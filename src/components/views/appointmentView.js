@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Auth, DataStore, Hub} from "aws-amplify";
+import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Fields, Response} from "../../models";
 
 
@@ -31,7 +31,8 @@ const AppointmentView = () => {
             setUsername(payload.given_name + " " + payload.family_name);
             setUserId(payload.sub);
             setIsOwner(appointment.bookerID === payload.sub);
-        }).catch(a => {});
+        }).catch(a => {
+        });
     }, [appointment]);
 
     useEffect(() => {

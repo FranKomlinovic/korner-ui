@@ -204,6 +204,7 @@ export default function FieldsUpdateForm(props) {
     photo: "",
     sports: [],
     city: "",
+    ownerID: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
@@ -215,6 +216,7 @@ export default function FieldsUpdateForm(props) {
   const [photo, setPhoto] = React.useState(initialValues.photo);
   const [sports, setSports] = React.useState(initialValues.sports);
   const [city, setCity] = React.useState(initialValues.city);
+  const [ownerID, setOwnerID] = React.useState(initialValues.ownerID);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = fieldsRecord
@@ -231,6 +233,7 @@ export default function FieldsUpdateForm(props) {
     setSports(cleanValues.sports ?? []);
     setCurrentSportsValue("");
     setCity(cleanValues.city);
+    setOwnerID(cleanValues.ownerID);
     setErrors({});
   };
   const [fieldsRecord, setFieldsRecord] = React.useState(fieldsModelProp);
@@ -264,9 +267,10 @@ export default function FieldsUpdateForm(props) {
     price: [],
     minPlayers: [],
     surface: [],
-    photo: [{ type: "URL" }],
+    photo: [],
     sports: [],
     city: [],
+    ownerID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -304,6 +308,7 @@ export default function FieldsUpdateForm(props) {
           photo,
           sports,
           city,
+          ownerID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -369,6 +374,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -402,6 +408,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -439,6 +446,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.width ?? value;
@@ -476,6 +484,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.length ?? value;
@@ -513,6 +522,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -550,6 +560,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.minPlayers ?? value;
@@ -583,6 +594,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.surface ?? value;
@@ -637,6 +649,7 @@ export default function FieldsUpdateForm(props) {
               photo: value,
               sports,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.photo ?? value;
@@ -666,6 +679,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports: values,
               city,
+              ownerID,
             };
             const result = onChange(modelFields);
             values = result?.sports ?? values;
@@ -738,6 +752,7 @@ export default function FieldsUpdateForm(props) {
               photo,
               sports,
               city: value,
+              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -763,6 +778,40 @@ export default function FieldsUpdateForm(props) {
           {...getOverrideProps(overrides, "cityoption1")}
         ></option>
       </SelectField>
+      <TextField
+        label="Owner id"
+        isRequired={false}
+        isReadOnly={false}
+        value={ownerID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              address,
+              width,
+              length,
+              price,
+              minPlayers,
+              surface,
+              photo,
+              sports,
+              city,
+              ownerID: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.ownerID ?? value;
+          }
+          if (errors.ownerID?.hasError) {
+            runValidationTasks("ownerID", value);
+          }
+          setOwnerID(value);
+        }}
+        onBlur={() => runValidationTasks("ownerID", ownerID)}
+        errorMessage={errors.ownerID?.errorMessage}
+        hasError={errors.ownerID?.hasError}
+        {...getOverrideProps(overrides, "ownerID")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

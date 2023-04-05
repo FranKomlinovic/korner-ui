@@ -38,6 +38,7 @@ export declare type FieldDetailsOverridesProps = {
 } & EscapeHatchProps;
 export declare type FieldDetailsProps = React.PropsWithChildren<Partial<FlexProps> & {
     data?: Fields;
+    photo?: String;
 } & {
     overrides?: FieldDetailsOverridesProps | undefined | null;
 }>;

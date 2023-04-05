@@ -9,7 +9,7 @@ import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Flex, Icon, Image, Text } from "@aws-amplify/ui-react";
 export default function KornerFieldInfo(props) {
-  const { fields, sports, surface, overrides, ...rest } = props;
+  const { fields, sports, surface, photo, overrides, ...rest } = props;
   return (
     <Flex
       gap="15px"
@@ -39,7 +39,7 @@ export default function KornerFieldInfo(props) {
         position="relative"
         padding="0px 0px 0px 0px"
         objectFit="cover"
-        src={fields?.photo}
+        src={photo}
         {...getOverrideProps(overrides, "image")}
       ></Image>
       <Flex
