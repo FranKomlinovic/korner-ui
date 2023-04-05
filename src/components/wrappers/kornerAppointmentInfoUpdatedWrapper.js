@@ -3,14 +3,14 @@ import React, {useEffect, useState} from "react";
 import {calculateDurationFromAppointment, convertSportsEnumToString, getDateTimeFromAppointment} from "../converters";
 import {Storage} from "aws-amplify";
 
-const KornerAppointmentInfoUpdatedWrapper = ({field, appointment, responses}) => {
+const KornerAppointmentInfoUpdatedWrapper = ({appointment, responses}) => {
 
     const [photo, setPhoto] = useState(null);
 
-    const somethingMissing = field === null || appointment === null || responses === null || photo === null;
+    const somethingMissing = appointment === null || responses === null || photo === null;
 
     useEffect(() => {
-        if (appointment === null) {
+        if (!appointment) {
             return;
         }
 
@@ -28,9 +28,9 @@ const KornerAppointmentInfoUpdatedWrapper = ({field, appointment, responses}) =>
 
 
     return (
-        <KornerAppointmentInfoUpdated fields={field} time={getDateTimeFromAppointment(appointment)}
+        <KornerAppointmentInfoUpdated time={getDateTimeFromAppointment(appointment)}
                                       appointment={appointment}
-                                      pricePerPerson={field.price / field.minPlayers}
+                                      pricePerPerson={appointment.price / appointment.minPlayers}
                                       photo={photo}
                                       acceptedNumber={responses.filter(a => a.accepted === true).length}
                                       duration={calculateDurationFromAppointment(appointment)}

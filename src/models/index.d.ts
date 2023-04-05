@@ -102,17 +102,20 @@ type EagerAppointment = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly start?: string | null;
-  readonly end?: string | null;
+  readonly start: string;
+  readonly end: string;
   readonly fieldsID: string;
   readonly Responses?: (Response | null)[] | null;
-  readonly date?: string | null;
+  readonly date: string;
   readonly confirmed?: boolean | null;
   readonly bookerID?: string | null;
   readonly bookerName?: string | null;
   readonly sport?: Sport | keyof typeof Sport | null;
   readonly fieldName?: string | null;
   readonly fieldPhoto?: string | null;
+  readonly minPlayers?: number | null;
+  readonly address?: string | null;
+  readonly price?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -123,17 +126,20 @@ type LazyAppointment = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly start?: string | null;
-  readonly end?: string | null;
+  readonly start: string;
+  readonly end: string;
   readonly fieldsID: string;
   readonly Responses: AsyncCollection<Response>;
-  readonly date?: string | null;
+  readonly date: string;
   readonly confirmed?: boolean | null;
   readonly bookerID?: string | null;
   readonly bookerName?: string | null;
   readonly sport?: Sport | keyof typeof Sport | null;
   readonly fieldName?: string | null;
   readonly fieldPhoto?: string | null;
+  readonly minPlayers?: number | null;
+  readonly address?: string | null;
+  readonly price?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
-import {Appointment, Fields, Response} from "../../models";
+import {Appointment, Response} from "../../models";
 
 
 import {Badge, Button, Divider, Flex, Heading, Text} from "@aws-amplify/ui-react";
@@ -17,7 +17,6 @@ import UnauthorizedReservationForm from "../components/unauthorizedReservationFo
 const AppointmentView = () => {
     const {appointmentId} = useParams();
     const [appointment, setAppointment] = useState(null);
-    const [field, setField] = useState(null);
     const [responses, setResponses] = useState(null);
     const [userId, setUserId] = useState(null);
     const [userName, setUsername] = useState(null);
@@ -41,16 +40,6 @@ const AppointmentView = () => {
         })
 
     }, [appointmentId]);
-
-
-    useEffect(() => {
-        appointment &&
-        DataStore.query(Fields, appointment.fieldsID).then(f => {
-            setField(f);
-        })
-
-    }, [appointment]);
-
 
     useEffect(() => {
         DataStore.query(Appointment, appointmentId).then(a => {
@@ -80,8 +69,8 @@ const AppointmentView = () => {
 
     function checkIfAvailableForReservation() {
         let disabled = true;
-        if (responses != null && field != null) {
-            disabled = responses.filter(a => a.accepted === true).length < field.minPlayers;
+        if (responses != null && appointment != null) {
+            disabled = responses.filter(a => a.accepted === true).length < appointment.minPlayers;
         }
 
         return disabled;
@@ -95,8 +84,8 @@ const AppointmentView = () => {
     }
 
     function getNumberOfPeople() {
-        if (responses != null && field != null) {
-            return (responses.filter(a => a.accepted === true).length + "/" + field.minPlayers + " ");
+        if (responses != null && appointment != null) {
+            return (responses.filter(a => a.accepted === true).length + "/" + appointment.minPlayers + " ");
         }
 
     }
@@ -122,9 +111,10 @@ const AppointmentView = () => {
     }
 
     function getBadge() {
-        if (appointment === null) {
+        if (!appointment) {
             return;
         }
+
         if (appointment.confirmed) {
             return <Badge textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je rezerviran</Badge>;
         }
@@ -141,7 +131,6 @@ const AppointmentView = () => {
         <Flex direction={"column"}>
             <KornerAppointmentInfoUpdatedWrapper
                 appointment={appointment}
-                field={field}
                 responses={responses}
             />
             {isOwner && !appointment.confirmed && getButton()}
@@ -156,6 +145,9 @@ const AppointmentView = () => {
         </Flex>
     );
 
+    if (!appointment) {
+       return <Heading>Nije pronađen termin...</Heading>
+    }
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {renderKornerAppointmentInfo}

@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Fields, Appointment } from "../models";
+import { Appointment } from "../models";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { FlexProps, IconProps, ImageProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -46,14 +46,13 @@ export declare type KornerAppointmentInfoUpdatedOverridesProps = {
     organizer?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
 export declare type KornerAppointmentInfoUpdatedProps = React.PropsWithChildren<Partial<ViewProps> & {
-    fields?: Fields;
     time?: String;
-    pricePerPerson?: String;
     acceptedNumber?: Number;
     sport?: String;
     appointment?: Appointment;
     duration?: String;
     photo?: String;
+    pricePerPerson?: String;
 } & {
     overrides?: KornerAppointmentInfoUpdatedOverridesProps | undefined | null;
 }>;

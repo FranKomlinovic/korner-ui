@@ -213,14 +213,14 @@ export const schema = {
                     "name": "start",
                     "isArray": false,
                     "type": "AWSTime",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "end": {
                     "name": "end",
                     "isArray": false,
                     "type": "AWSTime",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "fieldsID": {
@@ -250,7 +250,7 @@ export const schema = {
                     "name": "date",
                     "isArray": false,
                     "type": "AWSDate",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "confirmed": {
@@ -294,6 +294,27 @@ export const schema = {
                     "name": "fieldPhoto",
                     "isArray": false,
                     "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "minPlayers": {
+                    "name": "minPlayers",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "address": {
+                    "name": "address",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "price": {
+                    "name": "price",
+                    "isArray": false,
+                    "type": "Float",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -545,5 +566,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "d209b131c38ebbd2a9279efe028b79c3"
+    "version": "043b12f9bd124714972641e213be5966"
 };

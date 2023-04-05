@@ -40,6 +40,9 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
         object.fieldName = field.name;
         object.fieldPhoto = field.photo;
         object.confirmed = isOwner;
+        object.address = field.address;
+        object.minPlayers = field.minPlayers;
+        object.price = field.price;
         //TODO: Change
         object.sport = Sport.FUTSAL;
 

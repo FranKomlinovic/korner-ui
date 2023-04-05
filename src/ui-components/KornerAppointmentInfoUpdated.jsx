@@ -10,14 +10,13 @@ import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Flex, Icon, Image, Text, View } from "@aws-amplify/ui-react";
 export default function KornerAppointmentInfoUpdated(props) {
   const {
-    fields,
     time,
-    pricePerPerson,
     acceptedNumber,
     sport,
     appointment,
     duration,
     photo,
+    pricePerPerson,
     overrides,
     ...rest
   } = props;
@@ -151,7 +150,7 @@ export default function KornerAppointmentInfoUpdated(props) {
           position="relative"
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
-          children={fields?.name}
+          children={appointment?.fieldName}
           {...getOverrideProps(overrides, "fieldName")}
         ></Text>
         <Flex
@@ -234,7 +233,7 @@ export default function KornerAppointmentInfoUpdated(props) {
               position="relative"
               padding="0px 0px 0px 0px"
               whiteSpace="pre-wrap"
-              children={fields?.address}
+              children={appointment?.address}
               {...getOverrideProps(overrides, "address")}
             ></Text>
           </Flex>
@@ -471,7 +470,7 @@ export default function KornerAppointmentInfoUpdated(props) {
               position="relative"
               padding="0px 0px 0px 0px"
               whiteSpace="pre-wrap"
-              children={`${acceptedNumber}${"/"}${fields?.minPlayers}`}
+              children={`${acceptedNumber}${"/"}${appointment?.minPlayers}`}
               {...getOverrideProps(overrides, "players")}
             ></Text>
           </Flex>

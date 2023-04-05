@@ -37,17 +37,20 @@ type Response @model @auth(rules: [{allow: public}]) {
 
 type Appointment @model @auth(rules: [{allow: public}]) {
   id: ID!
-  start: AWSTime
-  end: AWSTime
+  start: AWSTime!
+  end: AWSTime!
   fieldsID: ID! @index(name: "byFields")
   Responses: [Response] @hasMany(indexName: "byAppointment", fields: ["id"])
-  date: AWSDate
+  date: AWSDate!
   confirmed: Boolean
   bookerID: ID
   bookerName: String
   sport: Sport
   fieldName: String
   fieldPhoto: String
+  minPlayers: Int
+  address: String
+  price: Float
 }
 
 type Fields @model @auth(rules: [{allow: public}]) {
