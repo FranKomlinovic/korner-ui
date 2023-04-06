@@ -4,6 +4,8 @@ import {Flex, Heading} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import {Response} from "../../models";
+
 import KornerResponseUserWrapper from "../wrappers/kornerResponseUserWrapper";
 
 const ListUsersForAppointment = ({responses, isOwner}) => {
@@ -18,7 +20,9 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
             buttons: [
                 {
                     label: 'Da',
-                    onClick: () => DataStore.delete(res)
+                    onClick: () => DataStore.delete(Response, res.id).then(a => {
+                        window.location.reload(false)
+                    })
                 },
                 {
                     label: 'Ne'
