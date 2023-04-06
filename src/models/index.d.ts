@@ -22,6 +22,38 @@ export enum Surface {
 
 
 
+type EagerFollowing = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Following, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly userID: string;
+  readonly followedID: string;
+  readonly followedName?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyFollowing = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Following, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly userID: string;
+  readonly followedID: string;
+  readonly followedName?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Following = LazyLoading extends LazyLoadingDisabled ? EagerFollowing : LazyFollowing
+
+export declare const Following: (new (init: ModelInit<Following>) => Following) & {
+  copyOf(source: Following, mutator: (draft: MutableModel<Following>) => MutableModel<Following> | void): Following;
+}
+
 type EagerReccuringAppointment = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<ReccuringAppointment, 'id'>;

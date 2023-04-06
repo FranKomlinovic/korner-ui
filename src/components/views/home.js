@@ -18,6 +18,11 @@ const Home = ({user}) => {
             return;
         }
         let accepted = responses.filter(a => a.accepted).map(a => a.appointmentID);
+        if (accepted.length === 0) {
+            setReservedAppointment([]);
+            setAcceptedAppointment([]);
+            return;
+        }
         DataStore.query(Appointment, b => b.and(
                 c => [
                     c.or(c => accepted.map(a => c.id.eq(a))),
@@ -36,8 +41,12 @@ const Home = ({user}) => {
         if (responses === undefined || user === undefined) {
             return;
         }
-        let refused = responses?.filter(a => !a.accepted).map(a => a.appointmentID)
+        let refused = responses.filter(a => !a.accepted).map(a => a.appointmentID)
 
+        if (refused.length === 0) {
+            setRefusedAppointment([]);
+            return;
+        }
         DataStore.query(Appointment, b => b.and(
                 c => [
                     c.or(c => refused.map(a => c.id.eq(a))),

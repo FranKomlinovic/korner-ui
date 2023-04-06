@@ -1,6 +1,6 @@
 import React from "react";
-import {FaTrash} from "react-icons/fa";
-import {Flex, Heading} from "@aws-amplify/ui-react";
+import {FaTrash, FaUserPlus} from "react-icons/fa";
+import {Button, Flex, Heading} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -31,9 +31,28 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
         });
     };
 
+    const addAsFriend = (res) => {
+        confirmAlert({
+            title: 'Dodaj za prijatelja',
+            message: 'Želite li dodati ' + res.playerName + ' za prijatelja?',
+            buttons: [
+                {
+                    label: 'Da',
+                    // onClick: () => DataStore.delete(Response, res.id).then(a => {
+                    //     window.location.reload(false)
+                    // })
+                },
+                {
+                    label: 'Ne'
+                }
+            ]
+        });
+    };
+
     const mapResponseToComponent = (res) => {
         return (<Flex key={res.id} alignItems={"center"}>
             <KornerResponseUserWrapper response={res}/>
+            <FaUserPlus onClick={() => addAsFriend(res)}/>
             {isOwner && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
         </Flex>);
     };

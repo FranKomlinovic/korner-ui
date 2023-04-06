@@ -56,3 +56,5 @@ export { default as CreateResponse } from "./CreateResponse";
 export { default as FieldsCreateForm } from "./FieldsCreateForm";
 export { default as FieldsUpdateForm } from "./FieldsUpdateForm";
 export { default as Test } from "./Test";
+export { default as FollowingCreateForm } from "./FollowingCreateForm";
+export { default as FollowingUpdateForm } from "./FollowingUpdateForm";
