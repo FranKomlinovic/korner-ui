@@ -3,7 +3,6 @@ import {Button, FileUploader, Flex, Heading, Image, TextField, withAuthenticator
 import {checkIfOwner} from "../converters";
 import {Auth, DataStore, Storage} from "aws-amplify";
 import {Fields} from "../../models";
-import {KornerFieldShort} from "../../ui-components";
 import KornerFieldShortWrapper from "../wrappers/kornerFieldShortWrapper";
 
 
