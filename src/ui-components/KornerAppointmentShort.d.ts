@@ -22,6 +22,7 @@ export declare type KornerAppointmentShortProps = React.PropsWithChildren<Partia
     appointment?: Appointment;
     date?: String;
     status?: String;
+    photo?: String;
 } & {
     overrides?: KornerAppointmentShortOverridesProps | undefined | null;
 }>;

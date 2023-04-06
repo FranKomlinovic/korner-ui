@@ -1,11 +1,10 @@
 import React from "react";
-import {getTimeFromTimestamp} from "../converters";
-import {FaMinus, FaPlus, FaTrash} from "react-icons/fa";
-import {KornerResponseUser} from "../../ui-components";
+import {FaTrash} from "react-icons/fa";
 import {Flex, Heading} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import KornerResponseUserWrapper from "../wrappers/kornerResponseUserWrapper";
 
 const ListUsersForAppointment = ({responses, isOwner}) => {
     if (responses == null) {
@@ -29,13 +28,8 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
     };
 
     const mapResponseToComponent = (res) => {
-        const time = getTimeFromTimestamp(res.updatedAt);
-        let icon = <FaMinus/>;
-        if (res.accepted) {
-            icon = <FaPlus/>
-        }
         return (<Flex key={res.id} alignItems={"center"}>
-            <KornerResponseUser name={res.playerName} time={time} icon={icon} id={res.id}/>
+            <KornerResponseUserWrapper response={res}/>
             {isOwner && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
         </Flex>);
     };

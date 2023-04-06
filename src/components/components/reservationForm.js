@@ -3,7 +3,7 @@ import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 
-const ReservationForm = ({userId, userName, responses, appointmentId, functionTest}) => {
+const ReservationForm = ({userId, userName, responses, appointmentId, functionTest, userPhoto}) => {
     const [name, setName] = useState();
     const [responseToUpdate, setResponseToUpdate] = useState();
 
@@ -25,6 +25,7 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
             accepted: accepted,
             appointmentID: appointmentId,
             playerName: nm,
+            playerPhoto: userPhoto,
         });
         DataStore.save(response).then((a) => {
             DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]))

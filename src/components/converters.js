@@ -37,7 +37,7 @@ export function checkIfOwner(user) {
     }
     let payloadElement = user.getSignInUserSession().getAccessToken().payload['cognito:groups'];
     if (!payloadElement) {
-       return false
+        return false
     }
     return payloadElement.includes("owners");
 }

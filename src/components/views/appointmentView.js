@@ -13,6 +13,7 @@ import {FaLink, FaLock, FaTrash} from "react-icons/fa";
 import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
 import UnauthorizedReservationForm from "../components/unauthorizedReservationForm";
+import {SortDirection} from "@aws-amplify/datastore";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -20,6 +21,7 @@ const AppointmentView = () => {
     const [responses, setResponses] = useState(null);
     const [userId, setUserId] = useState(null);
     const [userName, setUsername] = useState(null);
+    const [userPhoto, setUserPhoto] = useState(null);
     const [isOwner, setIsOwner] = useState(false);
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
@@ -29,13 +31,16 @@ const AppointmentView = () => {
             let payload = u.getIdToken().payload;
             setUsername(payload.given_name + " " + payload.family_name);
             setUserId(payload.sub);
+            setUserPhoto(payload.picture);
             setIsOwner(appointment.bookerID === payload.sub);
         }).catch(a => {
         });
     }, [appointment]);
 
     useEffect(() => {
-        DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)])).then(r => {
+        DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]), {
+            sort: (s) => s.accepted(SortDirection.DESCENDING).createdAt(SortDirection.DESCENDING)
+        }).then(r => {
             setResponses(r);
         })
 
@@ -154,7 +159,7 @@ const AppointmentView = () => {
             <Divider size={"small"}/>
             <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Vaš odgovor:</Heading>
             {userId &&
-                <ReservationForm userName={userName} userId={userId} responses={responses} appointmentId={appointmentId}
+                <ReservationForm userName={userName} userPhoto={userPhoto} userId={userId} responses={responses} appointmentId={appointmentId}
                                  functionTest={(a) => setResponses(a)}/>}
             {!userId && <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}
                                                      functionTest={(a) => setResponses(a)}/>}

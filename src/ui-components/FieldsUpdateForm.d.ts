@@ -16,43 +16,37 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type FieldsUpdateFormInputValues = {
     name?: string;
     address?: string;
-    width?: number;
     length?: number;
+    width?: number;
     price?: number;
     minPlayers?: number;
     surface?: string;
-    photo?: string;
     sports?: string[];
     city?: string;
-    ownerID?: string;
 };
 export declare type FieldsUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
     address?: ValidationFunction<string>;
-    width?: ValidationFunction<number>;
     length?: ValidationFunction<number>;
+    width?: ValidationFunction<number>;
     price?: ValidationFunction<number>;
     minPlayers?: ValidationFunction<number>;
     surface?: ValidationFunction<string>;
-    photo?: ValidationFunction<string>;
     sports?: ValidationFunction<string>;
     city?: ValidationFunction<string>;
-    ownerID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FieldsUpdateFormOverridesProps = {
     FieldsUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
     address?: PrimitiveOverrideProps<TextFieldProps>;
-    width?: PrimitiveOverrideProps<TextFieldProps>;
     length?: PrimitiveOverrideProps<TextFieldProps>;
+    width?: PrimitiveOverrideProps<TextFieldProps>;
     price?: PrimitiveOverrideProps<TextFieldProps>;
     minPlayers?: PrimitiveOverrideProps<TextFieldProps>;
     surface?: PrimitiveOverrideProps<SelectFieldProps>;
-    photo?: PrimitiveOverrideProps<TextFieldProps>;
     sports?: PrimitiveOverrideProps<SelectFieldProps>;
     city?: PrimitiveOverrideProps<SelectFieldProps>;
-    ownerID?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type FieldsUpdateFormProps = React.PropsWithChildren<{
     overrides?: FieldsUpdateFormOverridesProps | undefined | null;
@@ -62,6 +56,7 @@ export declare type FieldsUpdateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: FieldsUpdateFormInputValues) => FieldsUpdateFormInputValues;
     onSuccess?: (fields: FieldsUpdateFormInputValues) => void;
     onError?: (fields: FieldsUpdateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
     onChange?: (fields: FieldsUpdateFormInputValues) => FieldsUpdateFormInputValues;
     onValidate?: FieldsUpdateFormValidationValues;
 } & React.CSSProperties>;

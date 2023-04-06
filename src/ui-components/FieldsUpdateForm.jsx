@@ -188,6 +188,7 @@ export default function FieldsUpdateForm(props) {
     onSuccess,
     onError,
     onSubmit,
+    onCancel,
     onValidate,
     onChange,
     overrides,
@@ -196,27 +197,23 @@ export default function FieldsUpdateForm(props) {
   const initialValues = {
     name: "",
     address: "",
-    width: "",
     length: "",
+    width: "",
     price: "",
     minPlayers: "",
     surface: "",
-    photo: "",
     sports: [],
     city: "",
-    ownerID: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
-  const [width, setWidth] = React.useState(initialValues.width);
   const [length, setLength] = React.useState(initialValues.length);
+  const [width, setWidth] = React.useState(initialValues.width);
   const [price, setPrice] = React.useState(initialValues.price);
   const [minPlayers, setMinPlayers] = React.useState(initialValues.minPlayers);
   const [surface, setSurface] = React.useState(initialValues.surface);
-  const [photo, setPhoto] = React.useState(initialValues.photo);
   const [sports, setSports] = React.useState(initialValues.sports);
   const [city, setCity] = React.useState(initialValues.city);
-  const [ownerID, setOwnerID] = React.useState(initialValues.ownerID);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = fieldsRecord
@@ -224,16 +221,14 @@ export default function FieldsUpdateForm(props) {
       : initialValues;
     setName(cleanValues.name);
     setAddress(cleanValues.address);
-    setWidth(cleanValues.width);
     setLength(cleanValues.length);
+    setWidth(cleanValues.width);
     setPrice(cleanValues.price);
     setMinPlayers(cleanValues.minPlayers);
     setSurface(cleanValues.surface);
-    setPhoto(cleanValues.photo);
     setSports(cleanValues.sports ?? []);
     setCurrentSportsValue("");
     setCity(cleanValues.city);
-    setOwnerID(cleanValues.ownerID);
     setErrors({});
   };
   const [fieldsRecord, setFieldsRecord] = React.useState(fieldsModelProp);
@@ -254,7 +249,7 @@ export default function FieldsUpdateForm(props) {
       const enumDisplayValueMap = {
         FUTSAL: "Futsal",
         TENNIS: "Tennis",
-        BASKETBALL: "Basketball",
+        BASKETBALL: "Ko\u0161arka",
       };
       return enumDisplayValueMap[r];
     },
@@ -262,15 +257,13 @@ export default function FieldsUpdateForm(props) {
   const validations = {
     name: [],
     address: [],
-    width: [],
     length: [],
+    width: [],
     price: [],
     minPlayers: [],
     surface: [],
-    photo: [],
     sports: [],
     city: [],
-    ownerID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -300,15 +293,13 @@ export default function FieldsUpdateForm(props) {
         let modelFields = {
           name,
           address,
-          width,
           length,
+          width,
           price,
           minPlayers,
           surface,
-          photo,
           sports,
           city,
-          ownerID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -356,7 +347,7 @@ export default function FieldsUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Name"
+        label="Naziv"
         isRequired={false}
         isReadOnly={false}
         value={name}
@@ -366,15 +357,13 @@ export default function FieldsUpdateForm(props) {
             const modelFields = {
               name: value,
               address,
-              width,
               length,
+              width,
               price,
               minPlayers,
               surface,
-              photo,
               sports,
               city,
-              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -390,7 +379,7 @@ export default function FieldsUpdateForm(props) {
         {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Address"
+        label="Adresa"
         isRequired={false}
         isReadOnly={false}
         value={address}
@@ -400,15 +389,13 @@ export default function FieldsUpdateForm(props) {
             const modelFields = {
               name,
               address: value,
-              width,
               length,
+              width,
               price,
               minPlayers,
               surface,
-              photo,
               sports,
               city,
-              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -424,45 +411,7 @@ export default function FieldsUpdateForm(props) {
         {...getOverrideProps(overrides, "address")}
       ></TextField>
       <TextField
-        label="Width"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={width}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              width: value,
-              length,
-              price,
-              minPlayers,
-              surface,
-              photo,
-              sports,
-              city,
-              ownerID,
-            };
-            const result = onChange(modelFields);
-            value = result?.width ?? value;
-          }
-          if (errors.width?.hasError) {
-            runValidationTasks("width", value);
-          }
-          setWidth(value);
-        }}
-        onBlur={() => runValidationTasks("width", width)}
-        errorMessage={errors.width?.errorMessage}
-        hasError={errors.width?.hasError}
-        {...getOverrideProps(overrides, "width")}
-      ></TextField>
-      <TextField
-        label="Length"
+        label="Duljina(m)"
         isRequired={false}
         isReadOnly={false}
         type="number"
@@ -476,15 +425,13 @@ export default function FieldsUpdateForm(props) {
             const modelFields = {
               name,
               address,
-              width,
               length: value,
+              width,
               price,
               minPlayers,
               surface,
-              photo,
               sports,
               city,
-              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.length ?? value;
@@ -500,7 +447,43 @@ export default function FieldsUpdateForm(props) {
         {...getOverrideProps(overrides, "length")}
       ></TextField>
       <TextField
-        label="Price"
+        label="Širina(m)"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={width}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              address,
+              length,
+              width: value,
+              price,
+              minPlayers,
+              surface,
+              sports,
+              city,
+            };
+            const result = onChange(modelFields);
+            value = result?.width ?? value;
+          }
+          if (errors.width?.hasError) {
+            runValidationTasks("width", value);
+          }
+          setWidth(value);
+        }}
+        onBlur={() => runValidationTasks("width", width)}
+        errorMessage={errors.width?.errorMessage}
+        hasError={errors.width?.hasError}
+        {...getOverrideProps(overrides, "width")}
+      ></TextField>
+      <TextField
+        label="Cijena(€)"
         isRequired={false}
         isReadOnly={false}
         type="number"
@@ -514,15 +497,13 @@ export default function FieldsUpdateForm(props) {
             const modelFields = {
               name,
               address,
-              width,
               length,
+              width,
               price: value,
               minPlayers,
               surface,
-              photo,
               sports,
               city,
-              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -538,7 +519,7 @@ export default function FieldsUpdateForm(props) {
         {...getOverrideProps(overrides, "price")}
       ></TextField>
       <TextField
-        label="Min players"
+        label="Minimalni broj igrača"
         isRequired={false}
         isReadOnly={false}
         type="number"
@@ -552,15 +533,13 @@ export default function FieldsUpdateForm(props) {
             const modelFields = {
               name,
               address,
-              width,
               length,
+              width,
               price,
               minPlayers: value,
               surface,
-              photo,
               sports,
               city,
-              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.minPlayers ?? value;
@@ -576,8 +555,8 @@ export default function FieldsUpdateForm(props) {
         {...getOverrideProps(overrides, "minPlayers")}
       ></TextField>
       <SelectField
-        label="Surface"
-        placeholder="Please select an option"
+        label="Podloga"
+        placeholder="Odaberi"
         isDisabled={false}
         value={surface}
         onChange={(e) => {
@@ -586,15 +565,13 @@ export default function FieldsUpdateForm(props) {
             const modelFields = {
               name,
               address,
-              width,
               length,
+              width,
               price,
               minPlayers,
               surface: value,
-              photo,
               sports,
               city,
-              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.surface ?? value;
@@ -610,60 +587,26 @@ export default function FieldsUpdateForm(props) {
         {...getOverrideProps(overrides, "surface")}
       >
         <option
-          children="Artificial grass"
+          children="Umjetna trava"
           value="ARTIFICIAL_GRASS"
           {...getOverrideProps(overrides, "surfaceoption0")}
         ></option>
         <option
-          children="Rubber"
+          children="Guma"
           value="RUBBER"
           {...getOverrideProps(overrides, "surfaceoption1")}
         ></option>
         <option
-          children="Concrete"
+          children="Beton"
           value="CONCRETE"
           {...getOverrideProps(overrides, "surfaceoption2")}
         ></option>
         <option
-          children="Wood"
+          children="Parket"
           value="WOOD"
           {...getOverrideProps(overrides, "surfaceoption3")}
         ></option>
       </SelectField>
-      <TextField
-        label="Photo"
-        isRequired={false}
-        isReadOnly={false}
-        value={photo}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              width,
-              length,
-              price,
-              minPlayers,
-              surface,
-              photo: value,
-              sports,
-              city,
-              ownerID,
-            };
-            const result = onChange(modelFields);
-            value = result?.photo ?? value;
-          }
-          if (errors.photo?.hasError) {
-            runValidationTasks("photo", value);
-          }
-          setPhoto(value);
-        }}
-        onBlur={() => runValidationTasks("photo", photo)}
-        errorMessage={errors.photo?.errorMessage}
-        hasError={errors.photo?.hasError}
-        {...getOverrideProps(overrides, "photo")}
-      ></TextField>
       <ArrayField
         onChange={async (items) => {
           let values = items;
@@ -671,15 +614,13 @@ export default function FieldsUpdateForm(props) {
             const modelFields = {
               name,
               address,
-              width,
               length,
+              width,
               price,
               minPlayers,
               surface,
-              photo,
               sports: values,
               city,
-              ownerID,
             };
             const result = onChange(modelFields);
             values = result?.sports ?? values;
@@ -688,7 +629,7 @@ export default function FieldsUpdateForm(props) {
           setCurrentSportsValue("");
         }}
         currentFieldValue={currentSportsValue}
-        label={"Sports"}
+        label={"Sportovi"}
         items={sports}
         hasError={errors?.sports?.hasError}
         errorMessage={errors?.sports?.errorMessage}
@@ -698,8 +639,8 @@ export default function FieldsUpdateForm(props) {
         defaultFieldValue={""}
       >
         <SelectField
-          label="Sports"
-          placeholder="Please select an option"
+          label="Sportovi"
+          placeholder="Odaberi"
           isDisabled={false}
           value={currentSportsValue}
           onChange={(e) => {
@@ -727,15 +668,15 @@ export default function FieldsUpdateForm(props) {
             {...getOverrideProps(overrides, "sportsoption1")}
           ></option>
           <option
-            children="Basketball"
+            children="Košarka"
             value="BASKETBALL"
             {...getOverrideProps(overrides, "sportsoption2")}
           ></option>
         </SelectField>
       </ArrayField>
       <SelectField
-        label="City"
-        placeholder="Please select an option"
+        label="Grad"
+        placeholder="Odaberi"
         isDisabled={false}
         value={city}
         onChange={(e) => {
@@ -744,15 +685,13 @@ export default function FieldsUpdateForm(props) {
             const modelFields = {
               name,
               address,
-              width,
               length,
+              width,
               price,
               minPlayers,
               surface,
-              photo,
               sports,
               city: value,
-              ownerID,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -778,60 +717,24 @@ export default function FieldsUpdateForm(props) {
           {...getOverrideProps(overrides, "cityoption1")}
         ></option>
       </SelectField>
-      <TextField
-        label="Owner id"
-        isRequired={false}
-        isReadOnly={false}
-        value={ownerID}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              width,
-              length,
-              price,
-              minPlayers,
-              surface,
-              photo,
-              sports,
-              city,
-              ownerID: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.ownerID ?? value;
-          }
-          if (errors.ownerID?.hasError) {
-            runValidationTasks("ownerID", value);
-          }
-          setOwnerID(value);
-        }}
-        onBlur={() => runValidationTasks("ownerID", ownerID)}
-        errorMessage={errors.ownerID?.errorMessage}
-        hasError={errors.ownerID?.hasError}
-        {...getOverrideProps(overrides, "ownerID")}
-      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
-        <Button
-          children="Reset"
-          type="reset"
-          onClick={(event) => {
-            event.preventDefault();
-            resetStateValues();
-          }}
-          isDisabled={!(idProp || fieldsModelProp)}
-          {...getOverrideProps(overrides, "ResetButton")}
-        ></Button>
         <Flex
           gap="15px"
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
           <Button
-            children="Submit"
+            children="Odustani"
+            type="button"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, "CancelButton")}
+          ></Button>
+          <Button
+            children="Spremi"
             type="submit"
             variation="primary"
             isDisabled={

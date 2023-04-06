@@ -7,9 +7,9 @@
 /* eslint-disable */
 import * as React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Flex, Text, View } from "@aws-amplify/ui-react";
+import { Flex, Image, Text, View } from "@aws-amplify/ui-react";
 export default function KornerResponseUser(props) {
-  const { icon, name, time, id, overrides, ...rest } = props;
+  const { icon, name, time, id, photo, overrides, ...rest } = props;
   return (
     <Flex
       gap="10px"
@@ -27,29 +27,45 @@ export default function KornerResponseUser(props) {
     >
       <Flex
         gap="0"
-        direction="column"
+        direction="row"
         width="320px"
         height="39px"
-        justifyContent="center"
+        justifyContent="flex-start"
         alignItems="center"
         shrink="0"
         position="relative"
-        padding="0px 0px 0px 10px"
+        padding="0px 0px 0px 0px"
         {...getOverrideProps(overrides, "Body")}
       >
         <Flex
           gap="6px"
           direction="row"
-          width="unset"
-          height="24px"
-          justifyContent="center"
+          width="310px"
+          height="unset"
+          justifyContent="flex-start"
           alignItems="center"
           shrink="0"
           alignSelf="stretch"
           position="relative"
-          padding="0px 8px 0px 8px"
+          padding="0px 0px 0px 8px"
           {...getOverrideProps(overrides, "Frame")}
         >
+          <Image
+            width="39px"
+            height="unset"
+            display="block"
+            gap="unset"
+            alignItems="unset"
+            justifyContent="unset"
+            shrink="0"
+            alignSelf="stretch"
+            position="relative"
+            borderRadius="64px"
+            padding="0px 0px 0px 0px"
+            objectFit="cover"
+            src={photo}
+            {...getOverrideProps(overrides, "image")}
+          ></Image>
           <Text
             fontFamily="Inter"
             fontSize="20px"

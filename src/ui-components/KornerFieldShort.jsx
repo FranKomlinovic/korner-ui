@@ -12,7 +12,7 @@ import {
 } from "@aws-amplify/ui-react/internal";
 import { Flex, Icon, Image, Text, View } from "@aws-amplify/ui-react";
 export default function KornerFieldShort(props) {
-  const { fields, overrides, ...rest } = props;
+  const { fields, photo, overrides, ...rest } = props;
   const kornerFieldShortOnClick = useNavigateAction({
     type: "url",
     url: `${"/fields/"}${fields?.id}`,
@@ -47,7 +47,7 @@ export default function KornerFieldShort(props) {
         left="0px"
         padding="0px 0px 0px 0px"
         objectFit="cover"
-        src={fields?.photo}
+        src={photo}
         {...getOverrideProps(overrides, "image")}
       ></Image>
       <Flex

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
 import {Appointment, Response} from "../../models";
-import {KornerAppointmentShort} from "../../ui-components";
-import {getCurrentDateInDynamoDbString, getDayAndDateFromAppointment} from "../converters";
+import {getCurrentDateInDynamoDbString} from "../converters";
 import {Divider, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
+import KornerAppointmentShortWrapper from "../wrappers/kornerAppointmentShortWrapper";
 
 const Home = ({user}) => {
     const [reservedAppointment, setReservedAppointment] = useState();
@@ -83,11 +83,11 @@ const Home = ({user}) => {
         if (test.length === 0) {
             return <Heading>Nema termina</Heading>
         }
-        return test.map(a => <Flex key={a.id} >
-            <KornerAppointmentShort
-                date={getDayAndDateFromAppointment(a.date)}
-                appointment={a}/>
-        </Flex>);
+        return test.map(a => {
+            return <Flex key={a.id}>
+                <KornerAppointmentShortWrapper appointment={a}/>
+            </Flex>;
+        });
     }
 
     return (

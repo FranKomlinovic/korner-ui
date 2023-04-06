@@ -8,6 +8,7 @@ export { default as KornerResponseUserCollection } from "./KornerResponseUserCol
 export { default as PlayerCard } from "./PlayerCard";
 export { default as Features2x3 } from "./Features2x3";
 export { default as AvailableSlotsCollection } from "./AvailableSlotsCollection";
+export { default as KornerFieldShortNoImage } from "./KornerFieldShortNoImage";
 export { default as Ampligram } from "./Ampligram";
 export { default as FeaturesText2x2 } from "./FeaturesText2x2";
 export { default as HeroLayout3 } from "./HeroLayout3";
@@ -15,6 +16,7 @@ export { default as KornerAppointmentCollection } from "./KornerAppointmentColle
 export { default as ProductDetail } from "./ProductDetail";
 export { default as ContactUs } from "./ContactUs";
 export { default as KornerAppointmentShort } from "./KornerAppointmentShort";
+export { default as KornerEditProfile } from "./KornerEditProfile";
 export { default as HeroLayout4 } from "./HeroLayout4";
 export { default as MarketingPricing } from "./MarketingPricing";
 export { default as MarketingFooter } from "./MarketingFooter";
@@ -32,6 +34,7 @@ export { default as KornerAppointmentInfo } from "./KornerAppointmentInfo";
 export { default as KornerResponseUser } from "./KornerResponseUser";
 export { default as EditProfile } from "./EditProfile";
 export { default as ProductCard } from "./ProductCard";
+export { default as KornerFieldShortNoImageCollection } from "./KornerFieldShortNoImageCollection";
 export { default as HeroLayout2 } from "./HeroLayout2";
 export { default as PlayerCardCollection } from "./PlayerCardCollection";
 export { default as CommentCard } from "./CommentCard";

@@ -12,7 +12,7 @@ import {
 } from "@aws-amplify/ui-react/internal";
 import { Flex, Image, Text, View } from "@aws-amplify/ui-react";
 export default function KornerAppointmentShort(props) {
-  const { appointment, date, status, overrides, ...rest } = props;
+  const { appointment, date, status, photo, overrides, ...rest } = props;
   const kornerAppointmentShortOnClick = useNavigateAction({
     type: "url",
     url: `${"appointment/"}${appointment?.id}`,
@@ -47,7 +47,7 @@ export default function KornerAppointmentShort(props) {
         left="0px"
         padding="0px 0px 0px 0px"
         objectFit="cover"
-        src={appointment?.fieldPhoto}
+        src={photo}
         {...getOverrideProps(overrides, "image")}
       ></Image>
       <Flex

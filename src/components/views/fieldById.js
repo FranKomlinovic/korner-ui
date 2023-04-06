@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {DataStore, Storage} from "aws-amplify";
 import {Fields} from "../../models";
 import {useParams} from "react-router-dom";
-import {KornerFieldInfo} from "../../ui-components";
+import {FieldsUpdateForm, KornerFieldInfo} from "../../ui-components";
 import FreeAppointmentsView from "../components/freeAppointmentsView";
 import {checkIfOwner, convertSportsEnumListToString, convertSurfaceEnumToString} from "../converters";
 import {Button, Divider, FileUploader, Flex, withAuthenticator} from "@aws-amplify/ui-react";
@@ -15,6 +15,7 @@ const FieldById = ({user}) => {
     const [photo, setPhoto] = useState(null)
     const [surface, setSurface] = useState(null)
     const [isOwner, setIsOwner] = useState(false)
+    const [showUpdateForm, setShowUpdateForm] = useState(false)
 
     useEffect(() => {
         DataStore.query(Fields, fieldId).then((a) => {
@@ -23,6 +24,7 @@ const FieldById = ({user}) => {
     }, [fieldId, user]);
 
     useEffect(() => {
+        console.log("okida se")
         if (!field) {
            return;
         }
@@ -35,7 +37,7 @@ const FieldById = ({user}) => {
             setPhoto("https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg")
         })
 
-    }, [field]);
+    }, [field, user]);
 
 
     const addPhotoToField = (photo) => {
@@ -57,8 +59,12 @@ const FieldById = ({user}) => {
                 acceptedFileTypes={['image/*']}
                 accessLevel="public"
 
-            /> &&
-            <Button>Uredi igralište</Button>}
+            />}
+            {isOwner && <Button onClick={() => setShowUpdateForm(!showUpdateForm)}>Uredi igralište</Button>}
+            {showUpdateForm && <FieldsUpdateForm onCancel={() => setShowUpdateForm(false)}
+                                                 onSubmit={a => {setField(a); setShowUpdateForm(false)}}
+                fields={field}
+            />}
             <Divider/>
             <FreeAppointmentsView field={field} user={user} isOwner={isOwner}/>
         </Flex>

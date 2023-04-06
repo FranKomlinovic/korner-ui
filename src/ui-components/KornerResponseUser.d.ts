@@ -6,12 +6,13 @@
 
 import * as React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { FlexProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
+import { FlexProps, ImageProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type KornerResponseUserOverridesProps = {
     KornerResponseUser?: PrimitiveOverrideProps<FlexProps>;
     Body?: PrimitiveOverrideProps<FlexProps>;
     Frame?: PrimitiveOverrideProps<FlexProps>;
+    image?: PrimitiveOverrideProps<ImageProps>;
     test37113016?: PrimitiveOverrideProps<TextProps>;
     test37113025?: PrimitiveOverrideProps<TextProps>;
     Icon?: PrimitiveOverrideProps<ViewProps>;
@@ -21,6 +22,7 @@ export declare type KornerResponseUserProps = React.PropsWithChildren<Partial<Fl
     name?: String;
     time?: String;
     id?: String;
+    photo?: String;
 } & {
     overrides?: KornerResponseUserOverridesProps | undefined | null;
 }>;

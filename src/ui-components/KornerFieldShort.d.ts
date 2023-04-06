@@ -25,6 +25,7 @@ export declare type KornerFieldShortOverridesProps = {
 } & EscapeHatchProps;
 export declare type KornerFieldShortProps = React.PropsWithChildren<Partial<ViewProps> & {
     fields?: Fields;
+    photo?: String;
 } & {
     overrides?: KornerFieldShortOverridesProps | undefined | null;
 }>;
