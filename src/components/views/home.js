@@ -13,6 +13,7 @@ const Home = ({user}) => {
     const [refusedAppointment, setRefusedAppointment] = useState();
     const [responses, setResponses] = useState();
 
+
     useEffect(() => {
         if (responses === undefined || user === undefined) {
             return;
