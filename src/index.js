@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {ThemeProvider} from "@aws-amplify/ui-react";
+import {ThemeProvider, Authenticator} from "@aws-amplify/ui-react";
 import {Amplify} from 'aws-amplify';
 
 import awsconfig from './aws-exports';
@@ -19,7 +19,9 @@ root.render(
     <ThemeProvider theme={studioTheme}>
         <React.StrictMode>
             <BrowserRouter>
-                <App/>
+                <Authenticator.Provider>
+                    <App/>
+                </Authenticator.Provider>
             </BrowserRouter>
         </React.StrictMode>
     </ThemeProvider>

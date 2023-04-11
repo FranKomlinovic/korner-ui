@@ -105,7 +105,7 @@ const AppointmentView = () => {
         if (checkIfAvailableForReservation()) {
             return (
                 <>
-                    <Button variation={"primary"} isDisabled={true}><FaLock/>{getNumberOfPeople()}Rezerviraj
+                    <Button variation={"primary"} isDisabled ><FaLock/>{getNumberOfPeople()}Rezerviraj
                         termin*</Button>
                     <Text variation={"warning"} fontSize={"small"}>*Moguće rezervirati kada
                         skupite dovoljno igrača</Text>

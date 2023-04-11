@@ -69,7 +69,7 @@ const Profile = ({user}) => {
             <Image width={"250px"} height={"250px"} objectFit={"cover"} borderRadius={400} src={photo}/>
             <FileUploader
                 variation={"button"}
-                shouldAutoProceed={true}
+                shouldAutoProceed
                 onSuccess={(a) => uploadProfilePicture(a)}
                 hasMultipleFiles={false}
                 acceptedFileTypes={['image/*']}

@@ -21,10 +21,7 @@ const ConfirmAppointmentReservation = ({appointment, isOwner}) => {
     }
 
     const text = () => {
-        if (isOwner) {
-            return "Rezerviraj termin"
-        }
-        return "Skupi ekipu"
+        return isOwner ? "Rezerviraj termin" : "Skupi ekipu"
     };
 
 

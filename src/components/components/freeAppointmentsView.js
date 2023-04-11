@@ -62,19 +62,12 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
     const dayAfter = new Date(now.getTime() + 48 * 60 * 60 * 1000);
 
     function setButtonColor(bol: boolean): string {
-        if (bol) {
-            return 'yellow.20';
-        }
-        return 'green.20';
+        return bol ? 'yellow.20' : 'green.20';
     }
 
     function getButtonText(app): string {
         let text = app.start + " - " + app.end;
-        if (app.overlaping) {
-            return text + "*";
-        }
-        return text;
-
+        return app.overlaping ? text + "*" : text;
     }
 
     function getButtons(appointmentss) {

@@ -53,7 +53,7 @@ const FieldById = ({user}) => {
             <KornerFieldInfo fields={field} sports={sports} surface={surface} photo={photo}/>
             {isOwner && <FileUploader
                 variation={"button"}
-                shouldAutoProceed={true}
+                shouldAutoProceed
                 onSuccess={(a) => addPhotoToField(a)}
                 hasMultipleFiles={false}
                 acceptedFileTypes={['image/*']}
