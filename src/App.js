@@ -49,7 +49,7 @@ function App() {
         if (user) {
             return (
                 <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-                    <Image src={image} onClick={signOut} borderRadius={400} width={"60px"} height={"60px"}
+                    <Image src={image} onClick={signOut} borderRadius={400} objectFit={"cover"} width={"60px"} height={"60px"}
                            color={"darkred"} alt={"Profilna slika"}/>
                 </Flex>
             )
