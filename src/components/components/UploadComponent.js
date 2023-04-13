@@ -16,7 +16,7 @@ const UploadComponent = ({uploadSuccessFunction, text, open, handleClose}) => {
                     key: `${Date.now()}${fileParts.join('.')}.${ext}`,
                 };
             }}
-            maxFileSize={100000}
+            maxFileSize={1000000}
             displayText={{
                 // some text are plain strings
                 dropFilesText: text,
