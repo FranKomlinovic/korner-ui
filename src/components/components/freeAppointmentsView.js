@@ -1,12 +1,15 @@
 import {API} from "aws-amplify";
 import React, {useEffect, useState} from "react";
-import {Button, Flex, Grid, Heading, Loader, SelectField, Text, View} from "@aws-amplify/ui-react";
-import {getCurrentDateInDynamoDbString, getDateInString} from "../converters";
+import {Badge, Button, Flex, Grid, Heading, Loader, SelectField, Text, View} from "@aws-amplify/ui-react";
+import {getCurrentDateInDynamoDbString, getDateInString, getDateTimeFromAppointment} from "../converters";
 import {Sport} from "../../models";
 import ConfirmAppointmentReservation from "./confirmAppointmentReservation";
+import {useNavigate} from "react-router-dom";
 
 const FreeAppointmentsView = ({field, user, isOwner}) => {
+    const navigate = useNavigate();
     const [appointments, setAppointments] = useState([]);
+    const [reservedAppointments, setReservedAppointments] = useState([]);
     const [duration, setDuration] = useState(60);
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
     const [displayAppointments, setDisplayAppointments] = useState(null);
@@ -15,16 +18,17 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
     useEffect(() => {
         field && API.get('availableAppointments', '/appointments/available/' + field.id).then(
             a => {
-                setAppointments(a);
-                setDisplayAppointments(a);
-                setDisplayAppointments(a.filter(appointment => {
-
+                console.log(a)
+                setReservedAppointments(a.reservedAppointments)
+                setAppointments(a.availableAppointments);
+                setDisplayAppointments(a.availableAppointments);
+                setDisplayAppointments(a.availableAppointments.filter(appointment => {
                     return appointment.date === getCurrentDateInDynamoDbString(0)
                         && appointment.duration === 60
                 }));
             }
         )
-    }, [field, user]);
+    }, [field]);
 
     useEffect(() => {
         setDisplayAppointments(appointments.filter(appointment => {
@@ -97,6 +101,13 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
         }
     }
 
+    const ListAppointments = () => {
+        return (<Flex direction={"column"}>
+            {reservedAppointments.sort(a => a.confirmed).map(a => <Button onClick={() => navigate("/appointment/" + a.id)} backgroundColor={setButtonColor(!a.confirmed)} key={a.id}>{a.bookerName} {getDateTimeFromAppointment(a)}</Button>)}
+        </Flex>)
+
+    };
+
     return (
         <Flex direction={"column"} margin={"10px"}>
             <Heading level={5}>Rezerviraj termin:</Heading>
@@ -119,7 +130,9 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
             {getButtons(displayAppointments)}
             <Text>*Za termine označene žuto već se skupljaju ekipe</Text>
 
-
+            <Heading level={5}>Rezervirani termini:</Heading>
+            {loader()}
+            {isOwner && <ListAppointments/>}
         </Flex>
 
     )

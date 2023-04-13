@@ -1,7 +1,7 @@
 import {KornerResponseUser} from "../../ui-components";
 import React, {useEffect, useState} from "react";
 import {FaMinus, FaPlus} from "react-icons/fa";
-import {getTimeFromTimestamp} from "../converters";
+import {getTimeFromDate, getTimeFromTimestamp} from "../converters";
 import {Storage} from "aws-amplify";
 
 const KornerResponseUserWrapper = ({response}) => {
@@ -16,7 +16,11 @@ const KornerResponseUserWrapper = ({response}) => {
         if (!response) {
             return;
         }
-        setTime(getTimeFromTimestamp(response.updatedAt));
+        if (response.updatedAt === null) {
+            setTime(getTimeFromDate(new Date()));
+        } else {
+            setTime(getTimeFromTimestamp(response.updatedAt));
+        }
         setPlayerName(response.playerName)
         setId(response.id)
         let playerPhoto = response.playerPhoto;

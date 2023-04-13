@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {Button, Divider, Flex, Heading, Image, TextField, withAuthenticator} from "@aws-amplify/ui-react";
-import {StorageManager} from "@aws-amplify/ui-react-storage";
 import {checkIfOwner} from "../converters";
 import {Auth, DataStore, Storage} from "aws-amplify";
 import {Fields} from "../../models";
 import KornerFieldShortWrapper from "../wrappers/kornerFieldShortWrapper";
+import UploadComponent from "../components/UploadComponent";
 
 
 const Profile = ({user}) => {
@@ -13,6 +13,7 @@ const Profile = ({user}) => {
     const {sub, given_name, family_name, picture} = user.getSignInUserSession().getIdToken().payload
     const [familyName, setFamilyName] = useState(family_name);
     const [givenName, setGivenName] = useState(given_name);
+    const [modalOpen, setModalOpen] = useState(false);
     const [photo, setPhoto] = useState("/no-picture.png");
 
     //Gets user picture
@@ -32,6 +33,7 @@ const Profile = ({user}) => {
 
     //Gets owners fields
     useEffect(() => {
+
         if (isOwner) {
             DataStore.query(Fields, a =>
                 a.ownerID.eq(sub)
@@ -49,6 +51,7 @@ const Profile = ({user}) => {
         Auth.updateUserAttributes(user, {
             'picture': pic.key
         }).then(a => {
+            setModalOpen(false)
             user = a;
         });
     }
@@ -61,36 +64,6 @@ const Profile = ({user}) => {
             user = a;
         });
     }
-
-    const UploadComponent = () => (
-        <StorageManager
-            maxFileCount={1}
-            processFile={({file, key}) => {
-                const fileParts = key.split('.');
-                const ext = fileParts.pop();
-                return {
-                    file,
-                    // This will prepend a unix timestamp
-                    // to ensure all files uploaded are unique
-                    key: `${Date.now()}${fileParts.join('.')}.${ext}`,
-                };
-            }}
-            maxFileSize={100000}
-            displayText={{
-                // some text are plain strings
-                dropFilesText: 'Promijeni profilnu sliku',
-                browseFilesText: 'Učitaj fotografiju',
-                // others are functions that take an argument
-                getFilesUploadedText(count) {
-                    return `Fotografija učitana`;
-                },
-            }}
-            onUploadSuccess={uploadProfilePicture}
-            acceptedFileTypes={['image/*']}
-            accessLevel="public"
-
-        />
-    )
 
     const FieldOwnerComponent = () => {
         if (fields) {
@@ -105,31 +78,43 @@ const Profile = ({user}) => {
 
     }
 
+    const changeFirstName = (a) => {
+        setGivenName(a.currentTarget.value)
+    }
 
-    const ProfileDetails = () => (
-        <Flex>
-            <Flex direction={"column"}>
-                <Image alt={"Profile photo"} width={"118px"} height={"118px"} objectFit={"cover"} borderRadius={400}
-                       src={photo}/>
-            </Flex>
-            <Flex direction={"column"}>
-                <TextField defaultValue={given_name}
-                           onChange={a => setGivenName(a.currentTarget.value)}></TextField>
-                <TextField defaultValue={family_name}
-                           onChange={a => setFamilyName(a.currentTarget.value)}></TextField>
-                <Button variation={"primary"} onClick={updateUserData}>Spremi</Button>
-            </Flex>
+    const changeLastName = (a) => {
+        setFamilyName(a.currentTarget.value)
+    }
 
-        </Flex>
-    )
+    const ProfileDetails = () => {
+        return (
+            <Flex>
+                <Flex direction={"column"}>
+                    <Image alt={"Profile photo"} width={"140px"} height={"140px"} objectFit={"cover"} borderRadius={400}
+                           src={photo}/>
+                    <Button variation={"link"} onClick={() => setModalOpen(true)}>Promijeni sliku</Button>
+
+                </Flex>
+                <Flex direction={"column"}>
+                    <TextField size={"small"} defaultValue={givenName}
+                               onChange={changeFirstName} label={"Ime"}></TextField>
+                    <TextField size={"small"} defaultValue={familyName}
+                               onChange={changeLastName} label={"Prezime"}></TextField>
+                    <Button variation={"primary"} size={"small"} onClick={updateUserData}>Spremi</Button>
+                </Flex>
+
+            </Flex>
+        )
+    }
 
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            <FieldOwnerComponent/>
+            {FieldOwnerComponent()}
             <Heading level={4}>Vaš profil:</Heading>
-            <ProfileDetails/>
-            <UploadComponent/>
+            {ProfileDetails()}
+            <UploadComponent open={modalOpen} uploadSuccessFunction={uploadProfilePicture}
+                             handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
         </Flex>
     );
 

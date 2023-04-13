@@ -5,66 +5,87 @@ import {useParams} from "react-router-dom";
 import {FieldsUpdateForm, KornerFieldInfo} from "../../ui-components";
 import FreeAppointmentsView from "../components/freeAppointmentsView";
 import {checkIfOwner, convertSportsEnumListToString, convertSurfaceEnumToString} from "../converters";
-import {Button, Divider, FileUploader, Flex, withAuthenticator} from "@aws-amplify/ui-react";
+import UploadComponent from "../components/UploadComponent";
+import {Button, Divider, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
+import {Dialog, DialogTitle} from "@mui/material";
 
 
 const FieldById = ({user}) => {
     const {fieldId} = useParams();
-    const [field, setField] = useState(null)
-    const [sports, setSports] = useState(null)
-    const [photo, setPhoto] = useState(null)
-    const [surface, setSurface] = useState(null)
+    const [field, setField] = useState()
+    const [fieldAdditionalInfo, setFieldAdditionalInfo] = useState()
+    const [photo, setPhoto] = useState("/no-field.jpg")
     const [isOwner, setIsOwner] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
     const [showUpdateForm, setShowUpdateForm] = useState(false)
 
+    const {sub} = user.getSignInUserSession().getIdToken().payload
+
+    // Gets field by id
     useEffect(() => {
         DataStore.query(Fields, fieldId).then((a) => {
             setField(a);
         });
-    }, [fieldId, user]);
+    }, [fieldId]);
+
+    // Sets if user is owner of field
+    useEffect(() => {
+        setIsOwner(checkIfOwner(user) && field?.ownerID === sub);
+    }, [field, user, sub]);
 
     useEffect(() => {
-        console.log("okida se")
         if (!field) {
-           return;
+            return;
         }
-        setSports(convertSportsEnumListToString(field.sports));
-        setSurface(convertSurfaceEnumToString(field.surface));
-        setIsOwner(checkIfOwner(user) && field.ownerID === user.attributes.sub);
-        Storage.get(field.photo).then(b => {
+        setFieldAdditionalInfo({
+            sports: convertSportsEnumListToString(field?.sports),
+            surface: convertSurfaceEnumToString(field?.surface)
+        })
+        Storage.get(field?.photo).then(b => {
             setPhoto(b);
-        }).catch((c) => {
-            setPhoto("https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg")
+        }).catch(() => {
+            setPhoto("/no-field.jpg")
         })
 
-    }, [field, user]);
-
+    }, [field]);
 
     const addPhotoToField = (photo) => {
         DataStore.save(Fields.copyOf(field, (item) => {
             item.photo = photo.key;
         })).then((a) => {
             setField(a);
+            setModalOpen(false);
         });
+    };
+
+    const OwnerView = () => {
+        if (!isOwner) {
+            return;
+        }
+        return (
+            <Flex>
+                <Button variation={"menu"} onClick={() => setModalOpen(true)}>Učitaj sliku</Button>
+                <Button variation={"menu"} onClick={() => setShowUpdateForm(!showUpdateForm)}>Uredi igralište</Button>
+                <UploadComponent open={modalOpen} uploadSuccessFunction={addPhotoToField}
+                                 handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
+                <Dialog open={showUpdateForm} onClose={() => setShowUpdateForm(false)}>
+                    <DialogTitle>Ažuriraj teren</DialogTitle>
+                    <FieldsUpdateForm onCancel={() => setShowUpdateForm(false)}
+                                      onSuccess={() => {
+                                          window.location.reload()
+                                          setShowUpdateForm(false)
+                                      }}
+                                      fields={field}
+                    />
+                </Dialog>
+            </Flex>)
     };
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            <KornerFieldInfo fields={field} sports={sports} surface={surface} photo={photo}/>
-            {isOwner && <FileUploader
-                variation={"button"}
-                shouldAutoProceed
-                onSuccess={(a) => addPhotoToField(a)}
-                hasMultipleFiles={false}
-                acceptedFileTypes={['image/*']}
-                accessLevel="public"
-
-            />}
-            {isOwner && <Button onClick={() => setShowUpdateForm(!showUpdateForm)}>Uredi igralište</Button>}
-            {showUpdateForm && <FieldsUpdateForm onCancel={() => setShowUpdateForm(false)}
-                                                 onSubmit={a => {setField(a); setShowUpdateForm(false)}}
-                fields={field}
-            />}
+            <KornerFieldInfo fields={field} sports={fieldAdditionalInfo?.sports} surface={fieldAdditionalInfo?.surface}
+                             photo={photo}/>
+            <OwnerView/>
             <Divider/>
             <FreeAppointmentsView field={field} user={user} isOwner={isOwner}/>
         </Flex>
