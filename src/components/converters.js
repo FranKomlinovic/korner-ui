@@ -23,8 +23,13 @@ export function getDayOfWeek(date: Date) {
 
 export function getTimeFromTimestamp(timestamp) {
     let date = new Date(timestamp);
+    return getTimeFromDate(date);
+}
+
+export function getTimeFromDate(date: Date) {
     return date.getHours() + ":" + date.getMinutes();
 }
+
 
 export function getDateInString(date: Date) {
     let month = date.getMonth() + 1;
