@@ -2,7 +2,7 @@ import './App.css';
 
 import {Amplify, Storage} from 'aws-amplify';
 
-import {Button, Flex, Heading, Image, Text, useAuthenticator} from '@aws-amplify/ui-react';
+import {Button, Divider, Flex, Heading, Image, ScrollView, Text, useAuthenticator} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
@@ -22,8 +22,7 @@ function App() {
     const navigate = useNavigate();
     const [image, setImage] = useState("/no-picture.png");
 
-    const {signOut, user} = useAuthenticator((context) => [
-        context.signOut,
+    const {user} = useAuthenticator((context) => [
         context.user
     ]);
 
@@ -50,7 +49,8 @@ function App() {
         if (user) {
             return (
                 <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-                    <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"60px"} height={"60px"}
+                    <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"60px"}
+                           height={"60px"}
                            color={"darkred"} alt={"Profilna slika"}/>
                 </Flex>
             )
@@ -74,28 +74,32 @@ function App() {
     )
 
     const MyMenu = () => (
-        <Flex backgroundColor={"white"} position={"sticky"} bottom={"0px"} justifyContent={"space-between"}
-              gap={"0.5rem"}>
-            <Button onClick={() => navigate("/profile")} border={"none"}>
-                <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                    <FaUser size={"20px"}/><Text>Profil</Text>
-                </Flex>
-            </Button>
-            <Button onClick={() => navigate("/")} border={"none"}>
-                <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                    <FaRunning size={"20px"}/><Text>Termini</Text>
-                </Flex>
-            </Button>
-            <Button onClick={() => navigate("/fields")} border={"none"}>
-                <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                    <FaPlus size={"20px"}/><Text>Rezerviraj</Text>
-                </Flex>
-            </Button>
-            <Button disabled border={"none"}>
-                <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                    <FaUsers size={"20px"}/><Text>Prijatelji</Text>
-                </Flex>
-            </Button>
+        <Flex gap={"5px"} backgroundColor={"white"} direction={"column"} position={"sticky"} bottom={"5px"} >
+            <Divider size={"small"}/>
+            <Flex marginTop={"0px"} justifyContent={"space-between"}
+                  gap={"0.5rem"}>
+                <Button onClick={() => navigate("/profile")} border={"none"}>
+                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
+                        <FaUser size={"20px"}/><Text>Profil</Text>
+                    </Flex>
+                </Button>
+                <Button onClick={() => navigate("/")} border={"none"}>
+                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
+                        <FaRunning size={"20px"}/><Text>Termini</Text>
+                    </Flex>
+                </Button>
+                <Button onClick={() => navigate("/fields")} border={"none"}>
+                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
+                        <FaPlus size={"20px"}/><Text>Rezerviraj</Text>
+                    </Flex>
+                </Button>
+                <Button disabled border={"none"}>
+                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
+                        <FaUsers size={"20px"}/><Text>Prijatelji</Text>
+                    </Flex>
+                </Button>
+            </Flex>
+
         </Flex>
     )
 
@@ -109,7 +113,9 @@ function App() {
     return (
         <Flex margin={"5px"} direction={"column"} justifyContent={"space-between"}>
             <TopHeader/>
-            {routes()}
+            <ScrollView height={"100vh"} direction={"column"} justifyContent={"start"}>
+                {routes()}
+            </ScrollView>
             {user && <MyMenu/>}
         </Flex>
     )

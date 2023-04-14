@@ -1,6 +1,6 @@
 import {API} from "aws-amplify";
 import React, {useEffect, useState} from "react";
-import {Badge, Button, Flex, Grid, Heading, Loader, SelectField, Text, View} from "@aws-amplify/ui-react";
+import {Button, Flex, Grid, Heading, Loader, SelectField, Text, View} from "@aws-amplify/ui-react";
 import {getCurrentDateInDynamoDbString, getDateInString, getDateTimeFromAppointment} from "../converters";
 import {Sport} from "../../models";
 import ConfirmAppointmentReservation from "./confirmAppointmentReservation";
@@ -102,8 +102,14 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
     }
 
     const ListAppointments = () => {
+        if (reservedAppointments.length === 0) {
+            return <Heading>Nema rezerviranih termina</Heading>
+        }
+
         return (<Flex direction={"column"}>
-            {reservedAppointments.sort(a => a.confirmed).map(a => <Button onClick={() => navigate("/appointment/" + a.id)} backgroundColor={setButtonColor(!a.confirmed)} key={a.id}>{a.bookerName} {getDateTimeFromAppointment(a)}</Button>)}
+            {reservedAppointments.sort(a => a.confirmed).map(a => <Button
+                onClick={() => navigate("/appointment/" + a.id)} backgroundColor={setButtonColor(!a.confirmed)}
+                key={a.id}>{a.bookerName} {getDateTimeFromAppointment(a)}</Button>)}
         </Flex>)
 
     };

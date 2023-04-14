@@ -7,9 +7,9 @@ import KornerFieldShortWrapper from "../wrappers/kornerFieldShortWrapper";
 import UploadComponent from "../components/UploadComponent";
 
 
-const Profile = ({user}) => {
+const Profile = ({user, signOut}) => {
     const [isOwner, setIsOwner] = useState(false)
-    const [fields, setFields] = useState([]);
+    const [fields, setFields] = useState();
     const {sub, given_name, family_name, picture} = user.getSignInUserSession().getIdToken().payload
     const [familyName, setFamilyName] = useState(family_name);
     const [givenName, setGivenName] = useState(given_name);
@@ -115,6 +115,7 @@ const Profile = ({user}) => {
             {ProfileDetails()}
             <UploadComponent open={modalOpen} uploadSuccessFunction={uploadProfilePicture}
                              handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
+            <Button variation={"destructive"} onClick={signOut}>Odjavi se</Button>
         </Flex>
     );
 
