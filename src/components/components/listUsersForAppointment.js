@@ -52,7 +52,7 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
     const mapResponseToComponent = (res) => {
         return (<Flex key={res.id} alignItems={"center"}>
             <KornerResponseUserWrapper response={res}/>
-            <FaUserPlus onClick={() => addAsFriend(res)}/>
+            {/*<FaUserPlus onClick={() => addAsFriend(res)}/>*/}
             {isOwner && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
         </Flex>);
     };

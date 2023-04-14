@@ -31,6 +31,7 @@ const AddGuestForm = ({appointmentId, functionTest}) => {
         <Flex direction={"column"}>
             <Flex alignContent={"flex-end"}>
                 <TextField
+                    size={"small"}
                     label={"Ime i prezime"}
                     onChange={(a) => setName(a.currentTarget.value)}
                     value={name}

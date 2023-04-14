@@ -99,6 +99,9 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
     }
 
     const ListAppointments = () => {
+        if (!displayAppointments) {
+            return;
+        }
         if (!isOwner) {
             return;
         }

@@ -17,26 +17,27 @@ import {SortDirection} from "@aws-amplify/datastore";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
-    const [appointment, setAppointment] = useState(null);
-    const [responses, setResponses] = useState(null);
-    const [userId, setUserId] = useState(null);
-    const [userName, setUsername] = useState(null);
-    const [userPhoto, setUserPhoto] = useState(null);
+    const [appointment, setAppointment] = useState();
+    const [responses, setResponses] = useState();
+    const [user, setUser] = useState();
     const [isOwner, setIsOwner] = useState(false);
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
 
+    // Sets user and checks if user is owner
     useEffect(() => {
-        appointment && Auth.currentSession().then((u) => {
-            let payload = u.getIdToken().payload;
-            setUsername(payload.given_name + " " + payload.family_name);
-            setUserId(payload.sub);
-            setUserPhoto(payload.picture);
-            setIsOwner(appointment.bookerID === payload.sub);
-        }).catch(a => {
+        Auth.currentSession().then((u) => {
+            const payload = u.getIdToken().payload;
+            setUser({
+                name: payload.given_name + " " + payload.family_name,
+                sub: payload.sub,
+                photo: payload.picture
+            });
+            setIsOwner(appointment?.bookerID === payload.sub);
         });
     }, [appointment]);
 
+    // Gets all responses
     useEffect(() => {
         DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]), {
             sort: (s) => s.accepted(SortDirection.DESCENDING).createdAt(SortDirection.DESCENDING)
@@ -46,6 +47,7 @@ const AppointmentView = () => {
 
     }, [appointmentId]);
 
+    // Sets appointments
     useEffect(() => {
         DataStore.query(Appointment, appointmentId).then(a => {
             setAppointment(a);
@@ -53,7 +55,101 @@ const AppointmentView = () => {
 
     }, [appointmentId]);
 
+    // Checks if appointment is available for reservation
+    const isAvailableForReservation = () => {
+        return getNumberOfAcceptedUsers() < appointment?.minPlayers;
+    }
 
+    // Button to create reservation
+    const ReservationButton = () => {
+        //Confirms appointment
+        const confirmAppointment = () => {
+            //TODO Ovo treba biti lambda koja ponistava sve ostale termine
+            DataStore.save(Appointment.copyOf(appointment, (item) => {
+                item.confirmed = true;
+            })).then(a => setAppointment(a))
+        }
+
+        if (!isOwner) {
+            return;
+        }
+        if (isAvailableForReservation) {
+            return (
+                <Flex direction={"column"}>
+                    <Button variation={"primary"} isDisabled><FaLock/>{getNumberOfPeople()}Rezerviraj
+                        termin*</Button>
+                    <Text variation={"warning"} fontSize={"small"}>*Moguće rezervirati kada
+                        skupite dovoljno igrača</Text>
+                </Flex>);
+        }
+        return (<Button variation={"primary"} onClick={confirmAppointment}>Rezerviraj termin</Button>)
+
+    }
+
+    // Badge that shows status of current appointment
+    const StatusBadge = () => {
+        //TODO dodati ako je canceled
+        if (appointment?.confirmed) {
+            return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je
+                rezerviran</Badge>;
+        }
+
+    }
+
+    // Gets button or badge regarding of status
+    const ButtonOrBadge = () => {
+        if (!isOwner) {
+            return;
+        }
+        if (appointment?.confirmed) {
+            return <StatusBadge/>;
+        }
+        return <ReservationButton/>;
+    }
+
+    // Gets button for sharing link to other users
+    const ShareLink = () => {
+        if (isOwner) {
+            return <Tooltip onClose={() => setOpen(false)} open={open} leaveTouchDelay={1200}
+                            title={"Link kopiran"}>
+                <Button onClick={copyLink}><FaLink/> Pozovi prijatelje</Button>
+            </Tooltip>
+        }
+    }
+
+    // All other options for owner
+    const OwnerOptions = () => {
+        if (!isOwner) {
+            return;
+        }
+        return (
+            <Flex direction={"column"} alignItems={"center"}>
+                <Heading level={5}>Dodaj goste:</Heading>
+                <AddGuestForm appointmentId={appointmentId} functionTest={(a) => setResponses(a)}/>
+                {!appointment?.confirmed &&
+                    <Button variation={"destructive"} onClick={() => deleteAppointment()}><FaTrash/> Obriši
+                        termin</Button>}
+            </Flex>
+        )
+    }
+
+    const GetReservationForm = () => {
+        let form = <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}
+                                                functionTest={(a) => setResponses(a)}/>
+        if (user) {
+            form = <ReservationForm userName={user?.name} userPhoto={user?.photo} userId={user?.sub}
+                                    responses={responses}
+                                    appointmentId={appointmentId}
+                                    functionTest={(a) => setResponses(a)}/>
+        }
+        return (
+            <Flex direction={"column"}>
+                <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Vaš odgovor:</Heading>
+                {form}
+            </Flex>)
+    }
+
+    // Dialog for deleting appointment
     const deleteAppointment = () => {
         confirmAlert({
             title: 'Potvrdi brisanje',
@@ -72,110 +168,37 @@ const AppointmentView = () => {
         });
     };
 
-    function checkIfAvailableForReservation() {
-        let disabled = true;
-        if (responses != null && appointment != null) {
-            disabled = responses.filter(a => a.accepted === true).length < appointment.minPlayers;
-        }
-
-        return disabled;
-
+    const copyLink = () => {
+        navigator.clipboard.writeText(window.location.href)
+        setOpen(true)
     }
-
-    function confirmAppointment() {
-        DataStore.save(Appointment.copyOf(appointment, (item) => {
-            item.confirmed = true;
-        })).then(a => setAppointment(a))
-    }
-
-    function getNumberOfPeople() {
-        if (responses != null && appointment != null) {
-            return (responses.filter(a => a.accepted === true).length + "/" + appointment.minPlayers + " ");
-        }
-
-    }
-
-    function getButton() {
-        if (appointment === null) {
-            return;
-        }
-        if (!isOwner) {
-            return;
-        }
-        if (checkIfAvailableForReservation()) {
-            return (
-                <>
-                    <Button variation={"primary"} isDisabled ><FaLock/>{getNumberOfPeople()}Rezerviraj
-                        termin*</Button>
-                    <Text variation={"warning"} fontSize={"small"}>*Moguće rezervirati kada
-                        skupite dovoljno igrača</Text>
-                </>);
-        }
-        return (<Button variation={"primary"} onClick={() => confirmAppointment()}>Rezerviraj termin</Button>)
-
-    }
-
-    function getBadge() {
-        if (!appointment) {
-            return;
-        }
-
-        if (appointment.confirmed) {
-            return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je rezerviran</Badge>;
-        }
-
-    }
-
-    function copyLink() {
-        navigator.clipboard.writeText(window.location.href);
-        setOpen(true);
-
-    }
-
-    const renderKornerAppointmentInfo = (
-        <Flex direction={"column"}>
-            <KornerAppointmentInfoUpdatedWrapper
-                appointment={appointment}
-                responses={responses}
-            />
-            {isOwner && !appointment.confirmed && getButton()}
-            {getBadge()}
-            {isOwner &&
-                <Tooltip onClose={() => setOpen(false)} open={open} leaveTouchDelay={1200}
-                         title={"Link kopiran"}><Button
-                    onClick={() => copyLink()}>
-                    <FaLink/> Pozovi prijatelje
-                </Button></Tooltip>
-            }
-        </Flex>
-    );
 
     if (!appointment) {
-       return <Heading>Nije pronađen termin...</Heading>
+        return <Heading>Ne postoji traženi termin</Heading>
     }
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            {renderKornerAppointmentInfo}
+            <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
+            <ButtonOrBadge/>
+            <ShareLink/>
             <Divider size={"small"}/>
-            <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Vaš odgovor:</Heading>
-            {userId &&
-                <ReservationForm userName={userName} userPhoto={userPhoto} userId={userId} responses={responses} appointmentId={appointmentId}
-                                 functionTest={(a) => setResponses(a)}/>}
-            {!userId && <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}
-                                                     functionTest={(a) => setResponses(a)}/>}
+            <GetReservationForm/>
             <Divider size={"small"}/>
-            <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Igrači:</Heading>
+            <Heading level={5}>Igrači:</Heading>
             <ListUsersForAppointment isOwner={isOwner} responses={responses}/>
-            {isOwner && <Divider size={"small"}/>}
-            {isOwner && <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Dodaj goste:</Heading>}
-            {isOwner && <AddGuestForm appointmentId={appointmentId} functionTest={(a) => setResponses(a)}/>}
             <Divider size={"small"}/>
-            {isOwner && !appointment.confirmed &&
-                <Button variation={"destructive"} onClick={() => deleteAppointment()}><FaTrash/> Obriši
-                    rezervaciju</Button>}
+            <OwnerOptions/>
+
         </Flex>
     );
 
+    function getNumberOfPeople() {
+        return getNumberOfAcceptedUsers() + "/" + appointment?.minPlayers + " "
+    }
+
+    function getNumberOfAcceptedUsers() {
+        return responses?.filter(a => a.accepted === true).length;
+    }
 }
 
 
