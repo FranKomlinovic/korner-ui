@@ -121,7 +121,7 @@ const AppointmentView = () => {
         }
 
         if (appointment.confirmed) {
-            return <Badge textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je rezerviran</Badge>;
+            return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je rezerviran</Badge>;
         }
 
     }

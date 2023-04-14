@@ -8,33 +8,28 @@ import {useNavigate} from "react-router-dom";
 
 const FreeAppointmentsView = ({field, user, isOwner}) => {
     const navigate = useNavigate();
-    const [appointments, setAppointments] = useState([]);
-    const [reservedAppointments, setReservedAppointments] = useState([]);
+    const [appointments, setAppointments] = useState();
+    const [reservedAppointments, setReservedAppointments] = useState();
     const [duration, setDuration] = useState(60);
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
-    const [displayAppointments, setDisplayAppointments] = useState(null);
-    const [appointmentToCreate, setAppointmentToCreate] = useState(null);
+    const [displayAppointments, setDisplayAppointments] = useState();
+    const [appointmentToCreate, setAppointmentToCreate] = useState();
 
     useEffect(() => {
         field && API.get('availableAppointments', '/appointments/available/' + field.id).then(
             a => {
-                console.log(a)
                 setReservedAppointments(a.reservedAppointments)
                 setAppointments(a.availableAppointments);
-                setDisplayAppointments(a.availableAppointments);
-                setDisplayAppointments(a.availableAppointments.filter(appointment => {
-                    return appointment.date === getCurrentDateInDynamoDbString(0)
-                        && appointment.duration === 60
-                }));
             }
         )
     }, [field]);
 
     useEffect(() => {
-        setDisplayAppointments(appointments.filter(appointment => {
-            return appointment.date === date
-                && appointment.duration === duration
-        }));
+        setDisplayAppointments(appointments?.filter(appointment =>
+            appointment.date === date
+            && appointment.duration === duration
+        ));
+
     }, [date, duration, appointments]);
 
     function openConfirm(object) {
@@ -65,61 +60,67 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
     const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
     const dayAfter = new Date(now.getTime() + 48 * 60 * 60 * 1000);
 
-    function setButtonColor(bol: boolean): string {
+    const buttonColor = (bol: boolean) => {
         return bol ? 'yellow.20' : 'green.20';
     }
 
-    function getButtonText(app): string {
+    const buttonText = (app) => {
         let text = app.start + " - " + app.end;
         return app.overlaping ? text + "*" : text;
     }
 
-    function getButtons(appointmentss) {
-        if (appointmentss != null) {
-            return <Grid templateColumns="1fr 1fr" gap={"1rem"} alignContent={"center"}>
-                {appointmentss.map((item, key) => (
-                    <View key={key}>
-                        <Button key={key} backgroundColor={setButtonColor(item.overlaping)}
-                                color={"black"} onClick={() => openConfirm(item)}
+    const AppointmentButtons = () => {
+        if (displayAppointments) {
+            return (
+                <Flex direction={"column"}>
+                    <Grid templateColumns="1fr 1fr" gap={"1rem"} alignContent={"center"}>
+                        {displayAppointments?.map((item, key) => (
+                            <View key={key}>
+                                <Button key={key} backgroundColor={buttonColor(item.overlaping)}
+                                        color={"black"} onClick={() => openConfirm(item)}>{buttonText(item)}</Button>
+                            </View>))}
+                    </Grid>
+                    <Text>*Za termine označene žuto već se skupljaju ekipe</Text>
 
-                        >{getButtonText(item)}</Button>
-                    </View>))}
-            </Grid>
-        } else {
-            return <Heading>Test</Heading>
+                </Flex>
+            )
         }
     }
 
-    function loader() {
-        if (displayAppointments === null || displayAppointments.length === 0) {
-            //TODO rijesiti logiku (ak  je prazan mozda je stvarno prazan)
-            return <Flex direction={"column"}>
-                <Text>Učitavam slobodne termine...</Text>
-                <Loader variation="linear"/>
-
-            </Flex>
+    const AppointmentLoader = () => {
+        if (!displayAppointments) {
+            return (
+                <Flex direction={"column"}>
+                    <Text>Učitavam termine...</Text>
+                    <Loader variation="linear"/>
+                </Flex>
+            )
         }
     }
 
     const ListAppointments = () => {
-        if (reservedAppointments.length === 0) {
-            return <Heading>Nema rezerviranih termina</Heading>
+        if (!isOwner) {
+            return;
+        }
+        if (reservedAppointments?.length === 0) {
+            return <Heading>Nema rezerviranih termina...</Heading>
         }
 
-        return (<Flex direction={"column"}>
-            {reservedAppointments.sort(a => a.confirmed).map(a => <Button
-                onClick={() => navigate("/appointment/" + a.id)} backgroundColor={setButtonColor(!a.confirmed)}
-                key={a.id}>{a.bookerName} {getDateTimeFromAppointment(a)}</Button>)}
-        </Flex>)
+        return (
+            <Flex direction={"column"}>
+                <Heading level={5}>Rezervirani termini:</Heading>
+                {reservedAppointments?.sort(a => a.confirmed).map(a => <Button
+                    onClick={() => navigate("/appointment/" + a.id)} backgroundColor={buttonColor(!a.confirmed)}
+                    key={a.id}>{a.bookerName} - {getDateTimeFromAppointment(a)}</Button>)}
+            </Flex>)
 
     };
 
-    return (
-        <Flex direction={"column"} margin={"10px"}>
-            <Heading level={5}>Rezerviraj termin:</Heading>
-            {appointmentToCreate != null && field != null &&
-                <ConfirmAppointmentReservation isOwner={isOwner} appointment={appointmentToCreate}/>}
-
+    const DateAndDurationDropdowns = () => {
+        if (!displayAppointments) {
+            return;
+        }
+        return (
             <Flex>
                 <SelectField label="Odaberi datum" onChange={(e) => filterByDate(e.target.value)}>
                     <option value={0}>{getDateInString(now)}</option>
@@ -132,13 +133,24 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
                     <option value={120}>2:00h</option>
                 </SelectField>
             </Flex>
-            {loader()}
-            {getButtons(displayAppointments)}
-            <Text>*Za termine označene žuto već se skupljaju ekipe</Text>
+        )
+    };
 
-            <Heading level={5}>Rezervirani termini:</Heading>
-            {loader()}
-            {isOwner && <ListAppointments/>}
+    const AppointmentCreateView = () => {
+        if (appointmentToCreate) {
+            return <ConfirmAppointmentReservation isOwner={isOwner} appointment={appointmentToCreate}/>
+        }
+
+    };
+
+    return (
+        <Flex direction={"column"} margin={"10px"}>
+            <Heading level={5}>Rezerviraj termin:</Heading>
+            <AppointmentCreateView/>
+            <DateAndDurationDropdowns/>
+            <AppointmentLoader/>
+            <AppointmentButtons/>
+            <ListAppointments/>
         </Flex>
 
     )

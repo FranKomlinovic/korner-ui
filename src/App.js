@@ -74,7 +74,7 @@ function App() {
     )
 
     const MyMenu = () => (
-        <Flex gap={"5px"} backgroundColor={"white"} direction={"column"} position={"sticky"} bottom={"5px"} >
+        <Flex gap={"5px"} backgroundColor={"white"} direction={"column"} position={"sticky"} bottom={"0px"}>
             <Divider size={"small"}/>
             <Flex marginTop={"0px"} justifyContent={"space-between"}
                   gap={"0.5rem"}>
@@ -111,12 +111,15 @@ function App() {
     )
 
     return (
-        <Flex margin={"5px"} direction={"column"} justifyContent={"space-between"}>
-            <TopHeader/>
-            <ScrollView height={"100vh"} direction={"column"} justifyContent={"start"}>
-                {routes()}
-            </ScrollView>
-            {user && <MyMenu/>}
+        <Flex justifyContent={"center"} margin={"5px"}>
+            <Flex maxWidth={"400px"} direction={"column"} justifyContent={"space-between"}>
+                <TopHeader/>
+                <ScrollView height={"100vh"} direction={"column"} justifyContent={"start"}>
+                    {routes()}
+                </ScrollView>
+                {user && <MyMenu/>}
+            </Flex>
+
         </Flex>
     )
 }
