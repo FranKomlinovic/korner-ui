@@ -14,8 +14,8 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "DobrodoÅ¡li u korner",
-    "emailVerificationMessage": "Pozdrav dragi Å¡paneru, hvala ti Å¡to koristiÅ¡ korner.hr\n\nTvoj verifikacijski kod je: {####}\n\nKopiraj ga odmah kako bi mogao dovrÅ¡iti registraciju u sustav.\n\nÅ½elimo ti ugodne termine bez ozljeda, tvoj korner.hr tim",
+    "emailVerificationSubject": "Dobrodosli u korner",
+    "emailVerificationMessage": "Pozdrav dragi ljubitelju sporta, hvala ti sto koristis kornerhr\n\nTvoj verifikacijski kod je: {####}\n\nKopiraj ga odmah kako bi mogao dovrsiti registraciju u sustav.\n\nZelimo ti ugodne termine bez ozljeda, tvoj kornerhr tim",
     "defaultPasswordPolicy": false,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
@@ -44,13 +44,7 @@
     "adminQueries": false,
     "thirdPartyAuth": false,
     "authProviders": [],
-    "hostedUI": true,
-    "hostedUIDomainName": "sy00rtbdfc4d",
-    "authProvidersUserPool": [
-      "Facebook"
-    ],
-    "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"public_profile,email\",\"AttributeMapping\":{\"given_name\":\"first_name\",\"family_name\":\"last_name\",\"email\":\"email\",\"username\":\"id\"}}]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://main.dgjx5uo9usegy.amplifyapp.com/\"],\"LogoutURLs\":[\"https://main.dgjx5uo9usegy.amplifyapp.com/\"]}",
+    "hostedUI": false,
     "usernameCaseSensitive": false,
     "useEnabledMfas": true,
     "authRoleArn": {

@@ -8,14 +8,10 @@ const KornerAppointmentShortWrapper = ({appointment}) => {
     const [photo, setPhoto] = useState(null);
 
     useEffect(() => {
-        if (!appointment) {
-            return;
-        }
-
-        Storage.get(appointment.fieldPhoto).then(b => {
+        Storage.get(appointment?.fieldPhoto).then(b => {
             setPhoto(b);
-        }).catch((c) =>
-            setPhoto("https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg")
+        }).catch(() =>
+            setPhoto("/no-field.jpg")
         )
 
     }, [appointment]);

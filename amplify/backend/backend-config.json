@@ -54,9 +54,7 @@
           "FAMILY_NAME",
           "EMAIL"
         ],
-        "socialProviders": [
-          "FACEBOOK"
-        ],
+        "socialProviders": [],
         "usernameAttributes": [
           "EMAIL"
         ],

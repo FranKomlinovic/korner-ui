@@ -1,8 +1,18 @@
 import './App.css';
 
-import {Amplify, Storage} from 'aws-amplify';
+import {Amplify, Auth, Storage} from 'aws-amplify';
 
-import {Button, Divider, Flex, Heading, Image, ScrollView, Text, useAuthenticator} from '@aws-amplify/ui-react';
+import {
+    Authenticator,
+    Button,
+    Divider,
+    Flex,
+    Heading,
+    Image,
+    ScrollView,
+    Text,
+    useAuthenticator
+} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
@@ -15,14 +25,16 @@ import {FaPlus, FaRunning, FaSignInAlt, FaUser, FaUsers} from "react-icons/fa";
 import FieldOwnerView from "./components/views/owner/fieldOwnerView";
 import Profile from "./components/views/profile";
 import {useEffect, useState} from "react";
+import {Dialog, DialogTitle} from "@mui/material";
 
 Amplify.configure(awsExports);
 
 function App() {
     const navigate = useNavigate();
     const [image, setImage] = useState("/no-picture.png");
+    const [open, setOpen] = useState(false);
 
-    const {user} = useAuthenticator((context) => [
+    const {user, toSignIn} = useAuthenticator((context) => [
         context.user
     ]);
 
@@ -57,7 +69,7 @@ function App() {
         } else {
             return (
                 <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-                    <Heading alignSelf={"center"}><FaSignInAlt size={"30px"}/></Heading>
+                    <FaSignInAlt onClick={() => setOpen(true)} size={"30px"}/>
                 </Flex>
             )
         }
@@ -114,6 +126,9 @@ function App() {
         <Flex justifyContent={"center"} margin={"5px"}>
             <Flex maxWidth={"400px"} direction={"column"} justifyContent={"space-between"}>
                 <TopHeader/>
+                <Dialog open={open} onClose={() => {setOpen(false); window.location.reload();}} >
+                    <Authenticator/>
+                </Dialog>
                 <ScrollView height={"100vh"} direction={"column"} justifyContent={"start"}>
                     {routes()}
                 </ScrollView>

@@ -34,6 +34,7 @@ const AppointmentView = () => {
                 photo: payload.picture
             });
             setIsOwner(appointment?.bookerID === payload.sub);
+        }).catch(() => {
         });
     }, [appointment]);
 

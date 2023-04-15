@@ -24,10 +24,15 @@ const KornerResponseUserWrapper = ({response}) => {
         setPlayerName(response.playerName)
         setId(response.id)
         let playerPhoto = response.playerPhoto;
-        if (!playerPhoto) {
-           playerPhoto = "player-no-photo.png"
+        if (playerPhoto) {
+            Storage.get(playerPhoto).then(b => setPhoto(b))
+                .catch(() => {
+                    setPhoto("/no-player.png")
+                });
+        } else {
+            setPhoto("/no-player.png")
         }
-        Storage.get(playerPhoto).then(b => setPhoto(b));
+
         if (response.accepted) {
             setIcon(<FaPlus/>)
         } else {

@@ -7,10 +7,10 @@ const KornerFieldShortWrapper = ({fields}) => {
     const [photo, setPhoto] = useState(null);
 
     useEffect(() => {
-        if (!fields) {
-            return;
-        }
-        Storage.get(fields.photo).then(b => setPhoto(b));
+        Storage.get(fields?.photo).then(b => setPhoto(b))
+            .catch(() => {
+            setPhoto("/no-field.jpg")
+        });
 
     }, [fields]);
 

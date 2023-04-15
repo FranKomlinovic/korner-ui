@@ -27,7 +27,8 @@ export function getTimeFromTimestamp(timestamp) {
 }
 
 export function getTimeFromDate(date: Date) {
-    return date.getHours() + ":" + date.getMinutes();
+    let time = date.toTimeString().split(":");
+    return time[0] + ":" + time[1];
 }
 
 
