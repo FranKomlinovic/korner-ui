@@ -1,4 +1,5 @@
 import {API} from "aws-amplify";
+import {PubSub} from "@aws-amplify/pubsub";
 import React, {useEffect, useState} from "react";
 import {Button, Flex, Grid, Heading, Loader, SelectField, Text, View} from "@aws-amplify/ui-react";
 import {getCurrentDateInDynamoDbString, getDateInString, getDateTimeFromAppointment} from "../converters";

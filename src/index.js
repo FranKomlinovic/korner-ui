@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {ThemeProvider, Authenticator} from "@aws-amplify/ui-react";
+import {Authenticator, ThemeProvider} from "@aws-amplify/ui-react";
 import {Amplify} from 'aws-amplify';
+import {AWSIoTProvider} from '@aws-amplify/pubsub';
 
 import awsconfig from './aws-exports';
 
@@ -13,6 +14,13 @@ import {studioTheme} from "./ui-components";
 import {BrowserRouter} from 'react-router-dom';
 
 Amplify.configure(awsconfig);
+Amplify.addPluggable(
+    new AWSIoTProvider({
+        aws_pubsub_region: 'eu-central-1',
+        aws_pubsub_endpoint:
+            'wss://a16qy0d29qbjsh-ats.iot.eu-central-1.amazonaws.com/mqtt'
+    })
+);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
