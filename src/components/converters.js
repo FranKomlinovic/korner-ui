@@ -54,7 +54,7 @@ export function getCurrentDateInDynamoDbString(plusDays: number) {
 }
 
 export function getDateTimeFromAppointment(appointment: Appointment) {
-    return getDayOfWeek(new Date(appointment.date)) + ' ' + appointment.start + ' - ' + appointment.end;
+    return getDayOfWeek(new Date(appointment?.date)) + ' ' + appointment?.start + ' - ' + appointment?.end;
 }
 
 

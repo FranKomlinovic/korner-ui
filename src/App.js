@@ -1,6 +1,6 @@
 import './App.css';
 
-import {Amplify, Auth, Storage} from 'aws-amplify';
+import {Amplify, Storage} from 'aws-amplify';
 
 import {
     Authenticator,
@@ -25,7 +25,7 @@ import {FaPlus, FaRunning, FaSignInAlt, FaUser, FaUsers} from "react-icons/fa";
 import FieldOwnerView from "./components/views/owner/fieldOwnerView";
 import Profile from "./components/views/profile";
 import {useEffect, useState} from "react";
-import {Dialog, DialogTitle} from "@mui/material";
+import {Dialog} from "@mui/material";
 
 Amplify.configure(awsExports);
 
@@ -34,11 +34,14 @@ function App() {
     const [image, setImage] = useState("/no-picture.png");
     const [open, setOpen] = useState(false);
 
-    const {user, toSignIn} = useAuthenticator((context) => [
+    const {user} = useAuthenticator((context) => [
         context.user
     ]);
 
     useEffect(() => {
+        if (user) {
+            setOpen(false);
+        }
         let pic = user?.attributes.picture;
         if (pic) {
             Storage.get(pic).then(a => {

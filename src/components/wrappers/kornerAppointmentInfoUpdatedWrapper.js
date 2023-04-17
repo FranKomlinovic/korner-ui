@@ -7,7 +7,7 @@ const KornerAppointmentInfoUpdatedWrapper = ({appointment, responses}) => {
 
     const [photo, setPhoto] = useState(null);
 
-    const somethingMissing = appointment === null || responses === null || photo === null;
+    const somethingMissing = !appointment || !responses || !photo;
 
     useEffect(() => {
         Storage.get(appointment?.fieldPhoto).then(b => {
@@ -26,11 +26,11 @@ const KornerAppointmentInfoUpdatedWrapper = ({appointment, responses}) => {
     return (
         <KornerAppointmentInfoUpdated time={getDateTimeFromAppointment(appointment)}
                                       appointment={appointment}
-                                      pricePerPerson={appointment.price / appointment.minPlayers}
+                                      pricePerPerson={appointment?.price / appointment?.minPlayers}
                                       photo={photo}
                                       acceptedNumber={responses?.filter(a => a.accepted === true).length}
                                       duration={calculateDurationFromAppointment(appointment)}
-                                      sport={convertSportsEnumToString(appointment.sport)}/>
+                                      sport={convertSportsEnumToString(appointment?.sport)}/>
     );
 
 

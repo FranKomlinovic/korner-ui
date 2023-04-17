@@ -18,11 +18,27 @@ import {SortDirection} from "@aws-amplify/datastore";
 const AppointmentView = () => {
     const {appointmentId} = useParams();
     const [appointment, setAppointment] = useState();
+    const [appointmentNotFound, setAppointmentNotFound] = useState(false);
     const [responses, setResponses] = useState();
     const [user, setUser] = useState();
     const [isOwner, setIsOwner] = useState(false);
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+    const [responseToUpdate, setResponseToUpdate] = useState();
+
+    // Sets appointments
+    useEffect(() => {
+        DataStore.query(Appointment, appointmentId).then(a => {
+            if (a === undefined) {
+                setAppointmentNotFound(true)
+            }
+            a ? setAppointment(a): setAppointmentNotFound(true);
+        }).catch(a => {
+            console.log("cached")
+            console.log(a)
+        })
+
+    }, [appointmentId]);
 
     // Sets user and checks if user is owner
     useEffect(() => {
@@ -38,6 +54,10 @@ const AppointmentView = () => {
         });
     }, [appointment]);
 
+    useEffect(() => {
+        setResponseToUpdate(responses?.find((response) => response.playerID === user?.sub));
+    }, [responses, user]);
+
     // Gets all responses
     useEffect(() => {
         DataStore.observeQuery(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]), {
@@ -48,13 +68,6 @@ const AppointmentView = () => {
 
     }, [appointmentId]);
 
-    // Sets appointments
-    useEffect(() => {
-        DataStore.query(Appointment, appointmentId).then(a => {
-            setAppointment(a);
-        })
-
-    }, [appointmentId]);
 
     // Checks if appointment is available for reservation
     const isAvailableForReservation = () => {
@@ -134,17 +147,11 @@ const AppointmentView = () => {
         )
     }
 
-    function testtt() {
-        console.log("trig")
-    }
-
     const GetReservationForm = () => {
         let form;
         if (user) {
             form = <ReservationForm user={user}
-                                    responses={responses}
-                                    appointmentId={appointmentId}
-                                    functionTest={(a) => testtt(a)}/>
+                                    appointmentId={appointmentId} responseToUpdate={responseToUpdate}/>
         }
         else {
             form = <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
@@ -180,7 +187,7 @@ const AppointmentView = () => {
         setOpen(true)
     }
 
-    if (!appointment) {
+    if (appointmentNotFound) {
         return <Heading>Ne postoji traženi termin</Heading>
     }
     return (
