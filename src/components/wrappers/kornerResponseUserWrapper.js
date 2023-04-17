@@ -30,7 +30,7 @@ const KornerResponseUserWrapper = ({response}) => {
                     setPhoto("/no-player.png")
                 });
         } else {
-            setPhoto("/no-player.png")
+            response.playerID ? setPhoto("/no-picture.png") :  setPhoto("/no-player.png")
         }
 
         if (response.accepted) {

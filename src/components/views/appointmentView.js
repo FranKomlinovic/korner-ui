@@ -15,7 +15,6 @@ import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
 import UnauthorizedReservationForm from "../components/unauthorizedReservationForm";
 import {SortDirection} from "@aws-amplify/datastore";
-import {render} from "@testing-library/react";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -44,7 +43,7 @@ const AppointmentView = () => {
             if (a === undefined) {
                 setAppointmentNotFound(true)
             }
-            a ? setAppointment(a): setAppointmentNotFound(true);
+            a ? setAppointment(a) : setAppointmentNotFound(true);
         }).catch(a => {
         })
 
@@ -162,8 +161,7 @@ const AppointmentView = () => {
         if (user) {
             form = <ReservationForm user={user}
                                     appointmentId={appointmentId} responseToUpdate={responseToUpdate}/>
-        }
-        else {
+        } else {
             form = <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
         }
         return (
@@ -200,6 +198,12 @@ const AppointmentView = () => {
     if (appointmentNotFound) {
         return <Heading>Ne postoji traženi termin</Heading>
     }
+
+    const responsesText = () => {
+        const plus = responses?.filter(a => a.accepted).length
+        const minus = responses?.filter(a => !a.accepted).length
+        return "(" + plus + "/" + (plus + minus) + ")";
+    }
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {alert}
@@ -209,7 +213,7 @@ const AppointmentView = () => {
             <Divider size={"small"}/>
             <GetReservationForm/>
             <Divider size={"small"}/>
-            <Heading level={5}>Igrači:</Heading>
+            <Heading level={5}>Igrači: {responsesText()}</Heading>
             <ListUsersForAppointment isOwner={isOwner} responses={responses}/>
             <Divider size={"small"}/>
             <OwnerOptions/>

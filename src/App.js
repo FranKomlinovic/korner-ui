@@ -21,7 +21,7 @@ import Home from "./components/views/home";
 import FieldById from "./components/views/fieldById";
 import AppointmentView from "./components/views/appointmentView";
 import FieldView from "./components/views/fieldView";
-import {FaPlus, FaRunning, FaSignInAlt, FaUser, FaUsers} from "react-icons/fa";
+import {FaLock, FaPlus, FaRunning, FaSign, FaSignInAlt, FaUser, FaUsers} from "react-icons/fa";
 import FieldOwnerView from "./components/views/owner/fieldOwnerView";
 import Profile from "./components/views/profile";
 import {useEffect, useState} from "react";
@@ -71,8 +71,11 @@ function App() {
             )
         } else {
             return (
-                <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-                    <FaSignInAlt onClick={() => setOpen(true)} size={"30px"}/>
+                <Flex onClick={() => setOpen(true)} alignItems={"center"}  alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
+                    <Button >
+                        <Text fontSize={"small"}>Login</Text>
+                        {/*<FaSignInAlt size={"20px"}/>*/}
+                    </Button>
                 </Flex>
             )
         }
