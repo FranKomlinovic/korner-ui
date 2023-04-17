@@ -13,16 +13,14 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
         return;
     }
 
-    const deleteResponse = (res) => {
+    function deleteResponse(res) {
         confirmAlert({
             title: 'Potvrdi brisanje',
             message: 'Želite li obrisati odgovor korisnika ' + res.playerName + '?',
             buttons: [
                 {
                     label: 'Da',
-                    onClick: () => DataStore.delete(Response, res.id).then(a => {
-                        window.location.reload(false)
-                    })
+                    onClick: () => DataStore.delete(Response, res.id)
                 },
                 {
                     label: 'Ne'

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
+import {PubSub} from "@aws-amplify/pubsub";
 
 const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
     const [name, setName] = useState();
@@ -23,7 +24,9 @@ const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
             playerPhoto: user?.photo,
         });
         DataStore.save(response).then((a) => {
-
+            const response = a.accepted ? "DOLAZI" : "NE DOLAZI"
+            const message = `${a.playerName} ${response} na termin`
+            PubSub.publish(appointmentId, message)
         });
     };
 
@@ -32,6 +35,9 @@ const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
             item.accepted = accepted;
             item.playerPhoto = user?.photo
         })).then((a) => {
+            const response = a.accepted ? "DOLAZIM" : "NE DOLAZIM"
+            const message = `${a.playerName} promijenio je odgovor u ${response}`
+            PubSub.publish(appointmentId, message)
         });
     }
 
@@ -94,7 +100,7 @@ const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
     return (
         <Flex direction={"column"}>
             <Flex>
-                {alreadyAnsweredView()}
+                {responseToUpdate && alreadyAnsweredView()}
                 {!responseToUpdate && createForm()}
             </Flex>
 

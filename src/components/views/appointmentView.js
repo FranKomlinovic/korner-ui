@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
+import {PubSub} from "@aws-amplify/pubsub";
 import {Appointment, Response} from "../../models";
 
 
-import {Badge, Button, Divider, Flex, Heading, Text} from "@aws-amplify/ui-react";
+import {Alert, Badge, Button, Divider, Flex, Heading, Text} from "@aws-amplify/ui-react";
 import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../components/reservationForm";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
@@ -14,6 +15,7 @@ import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
 import UnauthorizedReservationForm from "../components/unauthorizedReservationForm";
 import {SortDirection} from "@aws-amplify/datastore";
+import {render} from "@testing-library/react";
 
 const AppointmentView = () => {
     const {appointmentId} = useParams();
@@ -25,17 +27,25 @@ const AppointmentView = () => {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const [responseToUpdate, setResponseToUpdate] = useState();
+    const [alert, setAlert] = useState();
 
     // Sets appointments
     useEffect(() => {
+        PubSub.subscribe(appointmentId).subscribe({
+            next: data => {
+                setAlert(<Alert variation={"info"}>
+                    {data.value}
+                </Alert>)
+            },
+            error: error => console.error(error),
+            complete: () => console.log('Done'),
+        });
         DataStore.query(Appointment, appointmentId).then(a => {
             if (a === undefined) {
                 setAppointmentNotFound(true)
             }
             a ? setAppointment(a): setAppointmentNotFound(true);
         }).catch(a => {
-            console.log("cached")
-            console.log(a)
         })
 
     }, [appointmentId]);
@@ -61,7 +71,7 @@ const AppointmentView = () => {
     // Gets all responses
     useEffect(() => {
         DataStore.observeQuery(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]), {
-            sort: (s) => s.accepted(SortDirection.DESCENDING).createdAt(SortDirection.DESCENDING)
+            sort: (s) => s.accepted(SortDirection.DESCENDING).createdAt(SortDirection.ASCENDING)
         }).subscribe(r => {
             setResponses(r.items)
         })
@@ -192,6 +202,7 @@ const AppointmentView = () => {
     }
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+            {alert}
             <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
             <ButtonOrBadge/>
             <ShareLink/>
