@@ -33,14 +33,15 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
         });
     };
 
-    const updateResponse = (accepted) => {
+    function updateResponse(accepted) {
         DataStore.save(Response.copyOf(responseToUpdate, (item) => {
             item.accepted = accepted;
+            item.playerPhoto = userPhoto
         })).then((a) => {
-            DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]))
-                .then((a) => functionTest(a));
+            // DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]))
+            //     .then((a) => functionTest(a));
         });
-    };
+    }
 
     const commingButton = (
         <Button size={"small"} onClick={() => updateResponse(true)} variation={"primary"}>
