@@ -58,7 +58,7 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
     };
 
 
-    const renderResponses = responses && responses.map(mapResponseToComponent);
+    const renderResponses = responses && responses?.map(mapResponseToComponent);
 
     if (responses.length === 0) {
         return <Heading>Nema odgovora na ovaj termin</Heading>

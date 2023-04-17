@@ -3,43 +3,41 @@ import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 
-const ReservationForm = ({userId, userName, responses, appointmentId, functionTest, userPhoto}) => {
+const ReservationForm = ({user, responses, appointmentId}) => {
     const [name, setName] = useState();
     const [responseToUpdate, setResponseToUpdate] = useState();
 
     useEffect(() => {
-        responses && userId && setResponseToUpdate(responses.find((response) => response.playerID === userId));
-    }, [responses, userId]);
+        setResponseToUpdate(responses?.find((response) => response.playerID === user?.sub));
+    }, [responses, user]);
 
     useEffect(() => {
-        userName && setName(userName);
-    }, [userName]);
+        setName(user?.name);
+    }, [user]);
 
     const createResponse = (accepted) => {
-        saveResp(accepted, name, userId);
+        saveResp(accepted);
     };
 
-    const saveResp = (accepted, nm, playerId) => {
+    const saveResp = (accepted) => {
         const response = new Response({
-            playerID: playerId,
+            playerID: user?.sub,
             accepted: accepted,
             appointmentID: appointmentId,
-            playerName: nm,
-            playerPhoto: userPhoto,
+            playerName: name,
+            playerPhoto: user?.photo,
         });
         DataStore.save(response).then((a) => {
-            DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]))
-                .then((a) => functionTest(a));
+
         });
     };
 
     function updateResponse(accepted) {
         DataStore.save(Response.copyOf(responseToUpdate, (item) => {
             item.accepted = accepted;
-            item.playerPhoto = userPhoto
+            item.playerPhoto = user?.photo
         })).then((a) => {
-            // DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]))
-            //     .then((a) => functionTest(a));
+            setResponseToUpdate(a);
         });
     }
 
@@ -56,7 +54,7 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
     )
 
     const alreadyAnsweredView = () => {
-        if (responseToUpdate.accepted) {
+        if (responseToUpdate?.accepted) {
             return (
                 <Flex alignItems={"center"} direction={"column"}>
                     <Heading color={"green"} level={3}>Dolazim</Heading>
@@ -79,13 +77,13 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
 
     }
 
-    const createForm = (defaultValue) => {
+    const createForm = () => {
         return (
             <Flex direction={"column"}>
                 <TextField
                     label={"Ime i prezime"}
                     onChange={(a) => setName(a.currentTarget.value)}
-                    defaultValue={defaultValue}
+                    defaultValue={user?.name}
                 />
                 <Flex>
                     <Button variation={"primary"} onClick={() => createResponse(true)}>
@@ -103,7 +101,7 @@ const ReservationForm = ({userId, userName, responses, appointmentId, functionTe
         <Flex direction={"column"}>
             <Flex>
                 {responseToUpdate && alreadyAnsweredView()}
-                {!responseToUpdate && createForm(userName)}
+                {!responseToUpdate && createForm()}
             </Flex>
 
         </Flex>

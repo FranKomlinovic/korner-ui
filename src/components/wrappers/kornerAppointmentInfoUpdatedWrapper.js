@@ -28,7 +28,7 @@ const KornerAppointmentInfoUpdatedWrapper = ({appointment, responses}) => {
                                       appointment={appointment}
                                       pricePerPerson={appointment.price / appointment.minPlayers}
                                       photo={photo}
-                                      acceptedNumber={responses.filter(a => a.accepted === true).length}
+                                      acceptedNumber={responses?.filter(a => a.accepted === true).length}
                                       duration={calculateDurationFromAppointment(appointment)}
                                       sport={convertSportsEnumToString(appointment.sport)}/>
     );

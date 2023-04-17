@@ -40,10 +40,10 @@ const AppointmentView = () => {
 
     // Gets all responses
     useEffect(() => {
-        DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]), {
+        DataStore.observeQuery(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]), {
             sort: (s) => s.accepted(SortDirection.DESCENDING).createdAt(SortDirection.DESCENDING)
-        }).then(r => {
-            setResponses(r);
+        }).subscribe(r => {
+            setResponses(r.items)
         })
 
     }, [appointmentId]);
@@ -134,14 +134,20 @@ const AppointmentView = () => {
         )
     }
 
+    function testtt() {
+        console.log("trig")
+    }
+
     const GetReservationForm = () => {
-        let form = <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}
-                                                functionTest={(a) => setResponses(a)}/>
+        let form;
         if (user) {
-            form = <ReservationForm userName={user?.name} userPhoto={user?.photo} userId={user?.sub}
+            form = <ReservationForm user={user}
                                     responses={responses}
                                     appointmentId={appointmentId}
-                                    functionTest={(a) => setResponses(a)}/>
+                                    functionTest={(a) => testtt(a)}/>
+        }
+        else {
+            form = <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
         }
         return (
             <Flex direction={"column"}>
