@@ -4,10 +4,10 @@ import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 import {FaPlus} from "react-icons/fa";
 
-const AddGuestForm = ({appointmentId, functionTest}) => {
+const AddGuestForm = ({appointmentId}) => {
     const [name, setName] = useState('');
 
-    if (appointmentId === null || functionTest === null) {
+    if (appointmentId === null) {
         return;
     }
 
@@ -19,10 +19,7 @@ const AddGuestForm = ({appointmentId, functionTest}) => {
         });
         setName("");
         DataStore.save(response).then((a) => {
-            DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]))
-                .then((a) => {
-                    functionTest(a)
-                });
+            DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]));
         });
     };
 

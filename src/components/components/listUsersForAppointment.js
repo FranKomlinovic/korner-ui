@@ -62,8 +62,16 @@ const ListUsersForAppointment = ({user, responses, isOwner}) => {
         return <Heading>Nema odgovora na ovaj termin</Heading>
     }
 
+    const PlayersHeading = () => {
+        const plus = responses?.filter(a => a.accepted).length
+        const minus = responses?.filter(a => !a.accepted).length
+        const numberOfResponses = `(${plus}/${plus + minus})`;
+        return (<Heading level={5}>Igrači: {numberOfResponses}</Heading>)
+    }
+
     return (
         <Flex direction={"column"}>
+            <PlayersHeading/>
             {renderResponses}
         </Flex>
     )

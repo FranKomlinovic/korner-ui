@@ -19,13 +19,13 @@ import awsExports from './aws-exports';
 import {Route, Routes, useNavigate} from "react-router-dom";
 import Home from "./components/views/home";
 import FieldById from "./components/views/fieldById";
-import AppointmentView from "./components/views/appointmentView";
 import FieldView from "./components/views/fieldView";
 import {FaPlus, FaRunning, FaUser, FaUsers} from "react-icons/fa";
 import FieldOwnerView from "./components/views/owner/fieldOwnerView";
 import Profile from "./components/views/profile";
 import {useEffect, useState} from "react";
 import {Dialog} from "@mui/material";
+import NewAppointmentView from "./components/views/newAppointmentView";
 
 Amplify.configure(awsExports);
 
@@ -87,7 +87,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/fields/:fieldId" element={<FieldById/>}/>
-            <Route path="/appointment/:appointmentId" element={<AppointmentView/>}/>
+            <Route path="/appointment/:appointmentId" element={<NewAppointmentView/>}/>
             <Route path="/fields" element={<FieldView/>}/>
             <Route path="/owner/fields" element={<FieldOwnerView/>}/>
             <Route path="/profile" element={<Profile/>}/>
