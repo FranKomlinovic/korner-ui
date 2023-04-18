@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
-import {PubSub} from "@aws-amplify/pubsub";
 import {Appointment, Response} from "../../models";
 
 
-import {Alert, Badge, Button, Divider, Flex, Heading, Text} from "@aws-amplify/ui-react";
+import {Badge, Button, Divider, Flex, Heading, Loader, Text} from "@aws-amplify/ui-react";
 import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../components/reservationForm";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
@@ -24,30 +23,30 @@ const AppointmentView = () => {
     const [user, setUser] = useState();
     const [isOwner, setIsOwner] = useState(false);
     const [open, setOpen] = useState(false);
+    const [form, setForm] = useState();
     const navigate = useNavigate();
     const [responseToUpdate, setResponseToUpdate] = useState();
-    const [alert, setAlert] = useState();
 
     // Sets appointments
     useEffect(() => {
-        PubSub.subscribe(appointmentId).subscribe({
-            next: data => {
-                setAlert(<Alert variation={"info"}>
-                    {data.value}
-                </Alert>)
-            },
-            error: error => console.error(error),
-            complete: () => console.log('Done'),
-        });
+        if (!appointmentId) {
+            return;
+        }
         DataStore.query(Appointment, appointmentId).then(a => {
-            if (a === undefined) {
-                setAppointmentNotFound(true)
-            }
             a ? setAppointment(a) : setAppointmentNotFound(true);
         }).catch(a => {
         })
 
     }, [appointmentId]);
+
+    // Sets form
+    useEffect(() => {
+        user ?
+            setForm(<ReservationForm user={user} appointmentId={appointmentId} responseToUpdate={responseToUpdate}/>)
+            :
+            setForm(<UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>)
+
+    }, [appointmentId, user, responseToUpdate, responses]);
 
     // Sets user and checks if user is owner
     useEffect(() => {
@@ -61,7 +60,7 @@ const AppointmentView = () => {
             setIsOwner(appointment?.bookerID === payload.sub);
         }).catch(() => {
         });
-    }, [appointment]);
+    }, []);
 
     useEffect(() => {
         setResponseToUpdate(responses?.find((response) => response.playerID === user?.sub));
@@ -157,13 +156,6 @@ const AppointmentView = () => {
     }
 
     const GetReservationForm = () => {
-        let form;
-        if (user) {
-            form = <ReservationForm user={user}
-                                    appointmentId={appointmentId} responseToUpdate={responseToUpdate}/>
-        } else {
-            form = <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
-        }
         return (
             <Flex direction={"column"}>
                 <Heading alignSelf={"self-start"} marginLeft={"10px"} level={5}>Vaš odgovor:</Heading>
@@ -206,7 +198,7 @@ const AppointmentView = () => {
     }
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            {alert}
+            {!appointmentNotFound && !appointment && <Loader variation="linear"/>}
             <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
             <ButtonOrBadge/>
             <ShareLink/>

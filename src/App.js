@@ -21,7 +21,7 @@ import Home from "./components/views/home";
 import FieldById from "./components/views/fieldById";
 import AppointmentView from "./components/views/appointmentView";
 import FieldView from "./components/views/fieldView";
-import {FaLock, FaPlus, FaRunning, FaSign, FaSignInAlt, FaUser, FaUsers} from "react-icons/fa";
+import {FaPlus, FaRunning, FaUser, FaUsers} from "react-icons/fa";
 import FieldOwnerView from "./components/views/owner/fieldOwnerView";
 import Profile from "./components/views/profile";
 import {useEffect, useState} from "react";
@@ -39,8 +39,9 @@ function App() {
     ]);
 
     useEffect(() => {
-        if (user) {
+        if (user && open) {
             setOpen(false);
+            window.location.reload();
         }
         let pic = user?.attributes.picture;
         if (pic) {
@@ -50,7 +51,8 @@ function App() {
                 setImage("/no-picture.png");
             })
         }
-    }, [user])
+    }, [user, open])
+
     const goToHome = () => navigate("/")
     const goToProfile = () => navigate("/profile")
 
@@ -71,8 +73,9 @@ function App() {
             )
         } else {
             return (
-                <Flex onClick={() => setOpen(true)} alignItems={"center"}  alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-                    <Button >
+                <Flex onClick={() => setOpen(true)} alignItems={"center"} alignSelf={"center"} gap={"0.2rem"}
+                      justifyContent={"end"}>
+                    <Button>
                         <Text fontSize={"small"}>Login</Text>
                         {/*<FaSignInAlt size={"20px"}/>*/}
                     </Button>
@@ -132,7 +135,7 @@ function App() {
         <Flex justifyContent={"center"} margin={"5px"}>
             <Flex maxWidth={"400px"} direction={"column"} justifyContent={"space-between"}>
                 <TopHeader/>
-                <Dialog open={open} onClose={() => {setOpen(false); window.location.reload();}} >
+                <Dialog open={open}>
                     <Authenticator/>
                 </Dialog>
                 <ScrollView height={"100vh"} direction={"column"} justifyContent={"start"}>
