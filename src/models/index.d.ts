@@ -148,6 +148,7 @@ type EagerAppointment = {
   readonly minPlayers?: number | null;
   readonly address?: string | null;
   readonly price?: number | null;
+  readonly canceled?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -172,6 +173,7 @@ type LazyAppointment = {
   readonly minPlayers?: number | null;
   readonly address?: string | null;
   readonly price?: number | null;
+  readonly canceled?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -27,7 +27,7 @@ const KornerResponseUserWrapper = ({response}) => {
         if (playerPhoto) {
             Storage.get(playerPhoto).then(b => setPhoto(b))
                 .catch(() => {
-                    setPhoto("/no-player.png")
+                    setPhoto("/no-picture.png")
                 });
         } else {
             response.playerID ? setPhoto("/no-picture.png") :  setPhoto("/no-player.png")

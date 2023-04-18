@@ -58,6 +58,7 @@ type Appointment @model @auth(rules: [{allow: public}]) {
   minPlayers: Int
   address: String
   price: Float
+  canceled: Boolean
 }
 
 type Fields @model @auth(rules: [{allow: public}]) {

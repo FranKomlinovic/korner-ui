@@ -1,6 +1,6 @@
 import React from "react";
-import {FaTrash, FaUserPlus} from "react-icons/fa";
-import {Button, Flex, Heading} from "@aws-amplify/ui-react";
+import {FaTrash} from "react-icons/fa";
+import {Flex, Heading} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -27,7 +27,7 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
                 }
             ]
         });
-    };
+    }
 
     const addAsFriend = (res) => {
         confirmAlert({

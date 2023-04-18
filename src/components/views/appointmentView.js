@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Response} from "../../models";
 
@@ -24,7 +24,6 @@ const AppointmentView = () => {
     const [isOwner, setIsOwner] = useState(false);
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState();
-    const navigate = useNavigate();
     const [responseToUpdate, setResponseToUpdate] = useState();
 
     // Sets appointments
@@ -60,7 +59,7 @@ const AppointmentView = () => {
             setIsOwner(appointment?.bookerID === payload.sub);
         }).catch(() => {
         });
-    }, []);
+    }, [appointment]);
 
     useEffect(() => {
         setResponseToUpdate(responses?.find((response) => response.playerID === user?.sub));
@@ -110,9 +109,12 @@ const AppointmentView = () => {
 
     // Badge that shows status of current appointment
     const StatusBadge = () => {
-        //TODO dodati ako je canceled
+        if (appointment?.canceled) {
+            return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"error"}>Termin je
+                otkazan</Badge>;
+        }
         if (appointment?.confirmed) {
-            return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"success"}>Teren je
+            return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"success"}>Termin je
                 rezerviran</Badge>;
         }
 
@@ -123,7 +125,7 @@ const AppointmentView = () => {
         if (!isOwner) {
             return;
         }
-        if (appointment?.confirmed) {
+        if (appointment?.confirmed || appointment?.canceled) {
             return <StatusBadge/>;
         }
         return <ReservationButton/>;
@@ -149,7 +151,7 @@ const AppointmentView = () => {
                 <Heading level={5}>Dodaj goste:</Heading>
                 <AddGuestForm appointmentId={appointmentId} functionTest={(a) => setResponses(a)}/>
                 {!appointment?.confirmed &&
-                    <Button variation={"destructive"} onClick={() => deleteAppointment()}><FaTrash/> Obriši
+                    <Button variation={"destructive"} onClick={() => cancelAppointment()}><FaTrash/> Obriši
                         termin</Button>}
             </Flex>
         )
@@ -164,7 +166,7 @@ const AppointmentView = () => {
     }
 
     // Dialog for deleting appointment
-    const deleteAppointment = () => {
+    const cancelAppointment = () => {
         confirmAlert({
             title: 'Potvrdi brisanje',
             message: 'Želite li obrisati ovu rezervaciju?',
@@ -172,7 +174,12 @@ const AppointmentView = () => {
                 {
                     label: 'Da',
                     onClick: () => {
-                        DataStore.delete(appointment).then(() => navigate("/"));
+                        DataStore.save(Appointment.copyOf(appointment, (item) => {
+                            item.canceled = true;
+                        })).then((a) => {
+                            console.log(a);
+                            setAppointment(a)
+                        });
                     }
                 },
                 {
@@ -187,31 +194,43 @@ const AppointmentView = () => {
         setOpen(true)
     }
 
-    if (appointmentNotFound) {
-        return <Heading>Ne postoji traženi termin</Heading>
-    }
-
     const responsesText = () => {
         const plus = responses?.filter(a => a.accepted).length
         const minus = responses?.filter(a => !a.accepted).length
         return "(" + plus + "/" + (plus + minus) + ")";
     }
+
+    const NoAppointment = () => {
+        return <Heading>Ne postoji traženi termin</Heading>
+    }
+
+    const Content = () => {
+        return (
+            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                {!appointment && <Loader variation="linear"/>}
+                <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
+                <ButtonOrBadge/>
+                {!appointment?.canceled &&
+                    <ShareLink/> &&
+                    <Divider size={"small"}/> &&
+                    <GetReservationForm/> &&
+                    <Divider size={"small"}/>}
+                <Heading level={5}>Igrači: {responsesText()}</Heading>
+                <ListUsersForAppointment isOwner={isOwner} responses={responses}/>
+                {!appointment?.canceled && <Divider size={"small"}/> &&
+                <OwnerOptions/>}
+
+            </Flex>
+        );
+    }
+
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            {!appointmentNotFound && !appointment && <Loader variation="linear"/>}
-            <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
-            <ButtonOrBadge/>
-            <ShareLink/>
-            <Divider size={"small"}/>
-            <GetReservationForm/>
-            <Divider size={"small"}/>
-            <Heading level={5}>Igrači: {responsesText()}</Heading>
-            <ListUsersForAppointment isOwner={isOwner} responses={responses}/>
-            <Divider size={"small"}/>
-            <OwnerOptions/>
-
+            {appointmentNotFound && !appointment && <NoAppointment/>}
+            {!appointmentNotFound && <Content/>}
         </Flex>
-    );
+    )
+
 
     function getNumberOfPeople() {
         return getNumberOfAcceptedUsers() + "/" + appointment?.minPlayers + " "
