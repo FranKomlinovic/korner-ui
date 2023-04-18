@@ -8,7 +8,7 @@ import {Response} from "../../models";
 
 import KornerResponseUserWrapper from "../wrappers/kornerResponseUserWrapper";
 
-const ListUsersForAppointment = ({responses, isOwner}) => {
+const ListUsersForAppointment = ({user, responses, isOwner}) => {
     if (responses == null) {
         return;
     }
@@ -49,7 +49,7 @@ const ListUsersForAppointment = ({responses, isOwner}) => {
 
     const mapResponseToComponent = (res) => {
         return (<Flex key={res.id} alignItems={"center"}>
-            <KornerResponseUserWrapper response={res}/>
+            <KornerResponseUserWrapper user={user} response={res}/>
             {/*<FaUserPlus onClick={() => addAsFriend(res)}/>*/}
             {isOwner && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
         </Flex>);

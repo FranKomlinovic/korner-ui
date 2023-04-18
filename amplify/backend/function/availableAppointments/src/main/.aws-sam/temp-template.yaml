@@ -4,7 +4,7 @@ Resources:
     Properties:
       Timeout: 300
       MemorySize: 512
-      Handler: example.LambdaRequestHandler
+      Handler: example.AvailableAppointmentsLambdaRequestHandler
       CodeUri: /Users/frankomlinovic/WebstormProjects/korner/amplify/backend/function/availableAppointments
       Runtime: java11
       Architectures:

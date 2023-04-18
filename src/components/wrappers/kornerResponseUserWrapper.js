@@ -4,7 +4,7 @@ import {FaMinus, FaPlus} from "react-icons/fa";
 import {getTimeFromDate, getTimeFromTimestamp} from "../converters";
 import {Storage} from "aws-amplify";
 
-const KornerResponseUserWrapper = ({response}) => {
+const KornerResponseUserWrapper = ({response, user}) => {
 
     const [photo, setPhoto] = useState(null);
     const [id, setId] = useState(null);
@@ -24,7 +24,7 @@ const KornerResponseUserWrapper = ({response}) => {
         setPlayerName(response.playerName)
         setId(response.id)
         let playerPhoto = response.playerPhoto;
-        if (playerPhoto) {
+        if (user && playerPhoto) {
             Storage.get(playerPhoto).then(b => setPhoto(b))
                 .catch(() => {
                     setPhoto("/no-picture.png")

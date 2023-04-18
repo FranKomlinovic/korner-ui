@@ -29,7 +29,7 @@ const AppointmentView = () => {
     // Sets appointments
     useEffect(() => {
         if (!appointmentId) {
-            return;
+            setAppointmentNotFound(false);
         }
         DataStore.query(Appointment, appointmentId).then(a => {
             a ? setAppointment(a) : setAppointmentNotFound(true);
@@ -207,18 +207,16 @@ const AppointmentView = () => {
     const Content = () => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                {!appointment && <Loader variation="linear"/>}
-                <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
+                <KornerAppointmentInfoUpdatedWrapper user={user} appointment={appointment} responses={responses}/>
                 <ButtonOrBadge/>
-                {!appointment?.canceled &&
-                    <ShareLink/> &&
-                    <Divider size={"small"}/> &&
-                    <GetReservationForm/> &&
-                    <Divider size={"small"}/>}
+                <ShareLink/>
+                <Divider size={"small"}/>
+                <GetReservationForm/>
+                <Divider size={"small"}/>
                 <Heading level={5}>Igrači: {responsesText()}</Heading>
-                <ListUsersForAppointment isOwner={isOwner} responses={responses}/>
-                {!appointment?.canceled && <Divider size={"small"}/> &&
-                <OwnerOptions/>}
+                <ListUsersForAppointment user={user} isOwner={isOwner} responses={responses}/>
+                <Divider size={"small"}/>
+                <OwnerOptions/>
 
             </Flex>
         );
@@ -226,6 +224,7 @@ const AppointmentView = () => {
 
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+            {!appointmentNotFound && !appointment && <Loader variation="linear"/>}
             {appointmentNotFound && !appointment && <NoAppointment/>}
             {!appointmentNotFound && <Content/>}
         </Flex>
