@@ -11,13 +11,16 @@ const Home = ({user}) => {
     const [ownedAppointment, setOwnedAppointment] = useState([]);
     const [acceptedAppointment, setAcceptedAppointment] = useState([]);
     const [refusedAppointment, setRefusedAppointment] = useState([]);
+    const [canceledAppointment, setCanceledAppointment] = useState([]);
     const [responses, setResponses] = useState([]);
 
     const sub = user?.attributes.sub;
+    const currentTime = new Date().toTimeString();
     const ReservedAppointment = () => mapToView(reservedAppointment);
     const OwnedAppointment = () => mapToView(ownedAppointment);
     const AcceptedAppointment = () => mapToView(acceptedAppointment);
     const RefusedAppointment = () => mapToView(refusedAppointment);
+    const CanceledAppointment = () => mapToView(canceledAppointment);
 
     // Set responses
     useEffect(() => {
@@ -37,13 +40,15 @@ const Home = ({user}) => {
         DataStore.query(Appointment, b => b.and(
                 c => [
                     c.or(c => accepted.map(a => c.id.eq(a))),
+                    c.end.ge(currentTime),
                     c.date.ge(getCurrentDateInDynamoDbString(0))
                 ]), {
                 sort: (sort) => sort.date(SortDirection.DESCENDING)
             }
         ).then((app) => {
             setReservedAppointment(app.filter(a => a.confirmed));
-            setAcceptedAppointment(app.filter(a => !a.confirmed && a.bookerID !== sub));
+            setAcceptedAppointment(app.filter(a => !a.confirmed && !a.canceled && a.bookerID !== sub));
+            setCanceledAppointment(app.filter(a => a.canceled));
         });
 
     }, [responses, sub])
@@ -59,12 +64,15 @@ const Home = ({user}) => {
                 c => [
                     c.or(c => refused.map(a => c.id.eq(a))),
                     c.bookerID.ne(sub),
-                    c.date.ge(getCurrentDateInDynamoDbString(0))
+                    c.end.ge(currentTime),
+                    c.date.ge(getCurrentDateInDynamoDbString(0)),
+                    c.canceled.eq(false),
+                    c.confirmed.eq(false)
                 ]), {
                 sort: (sort) => sort.date(SortDirection.DESCENDING)
             }
         ).then((app) => {
-            setRefusedAppointment(app.filter(a => !a.confirmed));
+            setRefusedAppointment(app);
         });
 
     }, [responses, sub])
@@ -75,10 +83,13 @@ const Home = ({user}) => {
             c => [
                 c.bookerID.eq(sub),
                 c.date.ge(getCurrentDateInDynamoDbString(0)),
+                c.end.ge(currentTime),
+                c.canceled.eq(false),
+                c.confirmed.eq(false),
             ]), {
             sort: (sort) => sort.date(SortDirection.DESCENDING)
         }).then((app) => {
-            setOwnedAppointment(app.filter(a => !a.confirmed));
+            setOwnedAppointment(app);
         });
 
     }, [sub]);
@@ -96,6 +107,9 @@ const Home = ({user}) => {
             <Divider color={"#224226"} size={"small"}/>
             <Heading level={4} alignSelf={"start"}>Termini koje ste odbili:</Heading>
             <RefusedAppointment/>
+            <Divider color={"#224226"} size={"small"}/>
+            <Heading level={4} alignSelf={"start"}>Otkazani termini:</Heading>
+            <CanceledAppointment/>
         </Flex>
     )
 

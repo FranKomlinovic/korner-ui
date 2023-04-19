@@ -19,6 +19,7 @@ const NewAppointmentView = () => {
     // Sets appointments
     useEffect(() => {
         DataStore.query(Appointment, appointmentId).then(a => {
+            console.log(a);
             a ? setAppointment(a) : setAppointmentNotFound(true);
         })
     }, [appointmentId]);
