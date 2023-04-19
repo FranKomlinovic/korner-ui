@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
 
-public class AvailableAppointmentsLambdaRequestHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class LambdaRequestHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private static final Map<String, String> HEADERS = Map.of("Access-Control-Allow-Origin", "*");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalTime.class, new LocalTimeGsonConverter()).registerTypeAdapter(LocalDate.class, new LocalDateGsonConverter()).setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();

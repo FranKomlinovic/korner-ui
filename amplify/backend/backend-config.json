@@ -95,24 +95,6 @@
       "service": "S3AndCloudFront"
     }
   },
-  "parameters": {
-    "AMPLIFY_function_availableAppointments_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "availableAppointments"
-        }
-      ]
-    },
-    "AMPLIFY_function_availableAppointments_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "availableAppointments"
-        }
-      ]
-    }
-  },
   "storage": {
     "s3kornerfieldpictures": {
       "dependsOn": [],
