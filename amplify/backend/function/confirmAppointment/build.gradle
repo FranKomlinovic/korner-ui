@@ -11,14 +11,14 @@ repositories {
 
 dependencies {
     implementation(
-            'com.amazonaws:aws-lambda-java-core:1.2.0',
-            'com.amazonaws:aws-lambda-java-events:2.2.7',
+            'com.amazonaws:aws-lambda-java-core:1.2.2',
+            'com.amazonaws:aws-lambda-java-events:3.11.1',
             'com.amazonaws:aws-java-sdk-dynamodb:1.12.429',
             'com.google.code.gson:gson:2.8.9'
     )
 }
 
-jar.baseName = 'latest_build'
+jar.archiveBaseName = 'latest_build'
 
 task buildZip(type: Zip) {
     from compileJava

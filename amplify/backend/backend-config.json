@@ -34,6 +34,20 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "API Gateway"
+    },
+    "confirmAppointment": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "confirmAppointment"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -93,6 +107,40 @@
     "S3AndCloudFront": {
       "providerPlugin": "awscloudformation",
       "service": "S3AndCloudFront"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_availableAppointments_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "availableAppointments"
+        }
+      ]
+    },
+    "AMPLIFY_function_availableAppointments_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "availableAppointments"
+        }
+      ]
+    },
+    "AMPLIFY_function_confirmAppointment_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "confirmAppointment"
+        }
+      ]
+    },
+    "AMPLIFY_function_confirmAppointment_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "confirmAppointment"
+        }
+      ]
     }
   },
   "storage": {

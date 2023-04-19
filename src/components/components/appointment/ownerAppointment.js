@@ -1,11 +1,11 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Badge, Button, Divider, Flex, Heading, Text} from "@aws-amplify/ui-react";
 import KornerAppointmentInfoUpdatedWrapper from "../../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../reservationForm";
 import ListUsersForAppointment from "../listUsersForAppointment";
 import AddGuestForm from "../addGuestForm";
 import {FaLink, FaLock, FaTrash} from "react-icons/fa";
-import {DataStore} from "aws-amplify";
+import {API, DataStore} from "aws-amplify";
 import {Appointment} from "../../../models";
 import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
@@ -25,10 +25,16 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
 
     //Confirms appointment
     const confirmAppointment = () => {
+        console.log(appointment.id)
+        API.get('confirmAppointment', '/confirmAppointment/' + appointment.id).then(a => {
+            console.log(a);
+        }).catch(a => {
+            console.log(a)
+        })
         //TODO Ovo treba biti lambda koja ponistava sve ostale termine
-        DataStore.save(Appointment.copyOf(appointment, (item) => {
-            item.confirmed = true;
-        }));
+        // DataStore.save(Appointment.copyOf(appointment, (item) => {
+        //     item.confirmed = true;
+        // }));
     }
 
     // Button to create reservation

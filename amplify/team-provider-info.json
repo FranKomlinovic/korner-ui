@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-terminihr-staging-160454-unauthRole",
       "StackName": "amplify-terminihr-staging-160454",
       "StackId": "arn:aws:cloudformation:eu-central-1:837397013660:stack/amplify-terminihr-staging-160454/a3b55e70-b781-11ed-9643-02dbb5c6ed4e",
-      "AmplifyAppId": "dgjx5uo9usegy"
+      "AmplifyAppId": "dgjx5uo9usegy",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-terminihr-staging-160454-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -19,10 +20,22 @@
         "s3kornerfieldpictures": {}
       },
       "api": {
-        "Terminihr": {}
+        "Terminihr": {},
+        "availableAppointments": {},
+        "confirmAppointment": {}
       },
       "function": {
-        "availableAppointments": {}
+        "availableAppointments": {
+          "deploymentBucketName": "amplify-terminihr-staging-160454-deployment",
+          "s3Key": "amplify-builds/availableAppointments-7231566e305063346a54-build.zip"
+        },
+        "confirmAppointment": {
+          "deploymentBucketName": "amplify-terminihr-staging-160454-deployment",
+          "s3Key": "amplify-builds/confirmAppointment-7539305161667669556d-build.zip"
+        }
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
       }
     }
   }

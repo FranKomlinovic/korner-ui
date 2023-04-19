@@ -7,13 +7,7 @@
       "Default": "NONE",
       "Description": " Schedule Expression"
     },
-    "deploymentBucketName": {
-      "Type": "String"
-    },
     "env": {
-      "Type": "String"
-    },
-    "s3Key": {
       "Type": "String"
     },
     "apiTerminihrGraphQLAPIIdOutput": {
@@ -27,6 +21,12 @@
     "apiTerminihrGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apiTerminihrGraphQLAPIKeyOutput"
+    },
+    "deploymentBucketName": {
+      "Type": "String"
+    },
+    "s3Key": {
+      "Type": "String"
     }
   },
   "Conditions": {

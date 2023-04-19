@@ -7,10 +7,10 @@
       "Default": "NONE",
       "Description": " Schedule Expression"
     },
-    "deploymentBucketName": {
+    "env": {
       "Type": "String"
     },
-    "env": {
+    "deploymentBucketName": {
       "Type": "String"
     },
     "s3Key": {

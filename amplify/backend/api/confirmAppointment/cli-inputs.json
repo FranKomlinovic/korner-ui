@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/confirmAppointment/{appointmentId}": {
+      "name": "/confirmAppointment/{appointmentId}",
+      "lambdaFunction": "confirmAppointment",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}
