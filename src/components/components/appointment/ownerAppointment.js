@@ -9,6 +9,7 @@ import {API, DataStore} from "aws-amplify";
 import {Appointment} from "../../../models";
 import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
+import {confirmAppointment} from "../../lambdas";
 
 const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
     const [open, setOpen] = useState(false);
@@ -23,24 +24,10 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
             </Flex>)
     }
 
-    //Confirms appointment
-    const confirmAppointment = () => {
-        console.log(appointment.id)
-        API.get('confirmAppointment', '/confirmAppointment/' + appointment.id).then(a => {
-            console.log(a);
-        }).catch(a => {
-            console.log(a)
-        })
-        //TODO Ovo treba biti lambda koja ponistava sve ostale termine
-        // DataStore.save(Appointment.copyOf(appointment, (item) => {
-        //     item.confirmed = true;
-        // }));
-    }
-
     // Button to create reservation
     const ReservationButton = () => {
         return getNumberOfAcceptedUsers() < appointment?.minPlayers ? <ReserveLockButton/> :
-            <Button variation={"primary"} onClick={confirmAppointment}>Rezerviraj termin</Button>
+            <Button variation={"primary"} onClick={() => confirmAppointment(appointment.id)}>Rezerviraj termin</Button>
     }
 
     // Gets button or badge regarding of status

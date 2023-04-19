@@ -28,6 +28,7 @@ public class LambdaRequestHandler implements RequestHandler<APIGatewayProxyReque
     private static final DynamoDBMapper DYNAMO_DB_MAPPER = new DynamoDBMapper(AmazonDynamoDBClientBuilder.standard().build());
 
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
+        context.getLogger().log("Started confirming appointment");
         String fieldId = request.getPathParameters().get("appointmentId");
 
         Appointment load = DYNAMO_DB_MAPPER.load(Appointment.class, fieldId);
@@ -41,6 +42,9 @@ public class LambdaRequestHandler implements RequestHandler<APIGatewayProxyReque
         }
         load.setConfirmed(true);
         DYNAMO_DB_MAPPER.save(load);
+        context.getLogger().log("Finished confirming appointment");
+        context.getLogger().log(GSON.toJson(load));
+
         return new APIGatewayProxyResponseEvent().withStatusCode(200)
                 .withHeaders(HEADERS).withBody(GSON.toJson(load));
     }

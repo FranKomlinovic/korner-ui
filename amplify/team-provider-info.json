@@ -31,7 +31,7 @@
         },
         "confirmAppointment": {
           "deploymentBucketName": "amplify-terminihr-staging-160454-deployment",
-          "s3Key": "amplify-builds/confirmAppointment-7539305161667669556d-build.zip"
+          "s3Key": "amplify-builds/confirmAppointment-5a696f55677a4d774e66-build.zip"
         }
       },
       "hosting": {
