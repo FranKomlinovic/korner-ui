@@ -1,6 +1,6 @@
 import {KornerResponseUser} from "../../ui-components";
 import React, {useEffect, useState} from "react";
-import {FaMinus, FaPlus} from "react-icons/fa";
+import {FaCheck, FaMinus} from "react-icons/fa";
 import {getTimeFromDate, getTimeFromTimestamp} from "../converters";
 import {Storage} from "aws-amplify";
 
@@ -34,7 +34,7 @@ const KornerResponseUserWrapper = ({response, user}) => {
         }
 
         if (response.accepted) {
-            setIcon(<FaPlus/>)
+            setIcon(<FaCheck/>)
         } else {
             setIcon(<FaMinus/>)
         }

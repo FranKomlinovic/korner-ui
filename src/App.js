@@ -20,7 +20,7 @@ import {Route, Routes, useNavigate} from "react-router-dom";
 import Home from "./components/views/home";
 import FieldById from "./components/views/fieldById";
 import FieldView from "./components/views/fieldView";
-import {FaPlus, FaRunning, FaUser, FaUsers} from "react-icons/fa";
+import {FaCalendar, FaPlusCircle} from "react-icons/fa";
 import FieldOwnerView from "./components/views/owner/fieldOwnerView";
 import Profile from "./components/views/profile";
 import {useEffect, useState} from "react";
@@ -59,18 +59,18 @@ function App() {
     const LogoAndAppName = () => (
         <Flex justifyContent={"start"} alignItems={"center"}>
             <Image height={"60px"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
-            <Heading color={"#224226"} level={"3"} onClick={goToHome}>Korner.hr</Heading>
+            <Heading color={"#224226"} level={"3"} onClick={goToHome}>Korner</Heading>
         </Flex>)
 
     const SignInSignOut = () => {
         if (user) {
-            return (
-                <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-                    <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"60px"}
-                           height={"60px"}
-                           color={"darkred"} alt={"Profilna slika"}/>
-                </Flex>
-            )
+            return;
+                // <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
+                //     <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"60px"}
+                //            height={"60px"}
+                //            color={"darkred"} alt={"Profilna slika"}/>
+                // </Flex>
+
         } else {
             return (
                 <Flex onClick={() => setOpen(true)} alignItems={"center"} alignSelf={"center"} gap={"0.2rem"}
@@ -99,26 +99,29 @@ function App() {
             <Divider size={"small"}/>
             <Flex marginTop={"0px"} justifyContent={"space-between"}
                   gap={"0.5rem"}>
-                <Button onClick={() => navigate("/profile")} border={"none"}>
-                    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaUser size={"20px"}/><Text>Profil</Text>
-                    </Flex>
-                </Button>
                 <Button onClick={() => navigate("/")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaRunning size={"20px"}/><Text>Termini</Text>
+                        <FaCalendar size={"30px"}/><Text>Termini</Text>
                     </Flex>
                 </Button>
                 <Button onClick={() => navigate("/fields")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaPlus size={"20px"}/><Text>Rezerviraj</Text>
+                        <FaPlusCircle size={"30px"}/><Text>Rezerviraj</Text>
                     </Flex>
                 </Button>
-                <Button disabled border={"none"}>
+                <Button onClick={() => navigate("/profile")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaUsers size={"20px"}/><Text>Prijatelji</Text>
+                        <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"30px"}
+                               height={"30px"}
+                               color={"darkred"} alt={"Profilna slika"}/>
+                        <Text>Profil</Text>
                     </Flex>
                 </Button>
+                {/*<Button disabled border={"none"}>*/}
+                {/*    <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>*/}
+                {/*        <FaUsers size={"20px"}/><Text>Prijatelji</Text>*/}
+                {/*    </Flex>*/}
+                {/*</Button>*/}
             </Flex>
 
         </Flex>
