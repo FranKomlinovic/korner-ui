@@ -398,6 +398,21 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "Fields": {
+                    "name": "Fields",
+                    "isArray": false,
+                    "type": {
+                        "model": "Fields"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "fieldsID"
+                        ]
+                    }
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -513,7 +528,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "fieldsID"
+                            "Fields"
                         ]
                     }
                 },
@@ -646,5 +661,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "102e6a56411832113540686bcea28619"
+    "version": "918307ab562415a91a874f70f1435e1d"
 };

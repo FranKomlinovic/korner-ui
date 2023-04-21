@@ -1,6 +1,6 @@
 import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled, AsyncCollection } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
 export enum Cities {
   PETRINJA = "PETRINJA",
@@ -149,6 +149,7 @@ type EagerAppointment = {
   readonly address?: string | null;
   readonly price?: number | null;
   readonly canceled?: boolean | null;
+  readonly Fields?: Fields | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -174,6 +175,7 @@ type LazyAppointment = {
   readonly address?: string | null;
   readonly price?: number | null;
   readonly canceled?: boolean | null;
+  readonly Fields: AsyncItem<Fields | undefined>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

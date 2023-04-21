@@ -30,6 +30,7 @@ export default function AvailableSlotsCollection(props) {
         itemsDataStore.map(async (item) => ({
           ...item,
           Responses: await item.Responses.toArray(),
+          Fields: await item.Fields,
         }))
       );
       setItems(loaded);

@@ -59,6 +59,7 @@ type Appointment @model @auth(rules: [{allow: public}]) {
   address: String
   price: Float
   canceled: Boolean
+  Fields: Fields @belongsTo(fields: ["fieldsID"])
 }
 
 type Fields @model @auth(rules: [{allow: public}]) {

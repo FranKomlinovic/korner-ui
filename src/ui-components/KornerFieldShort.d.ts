@@ -5,27 +5,30 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Fields } from "../models";
+import { Fields, Appointment } from "../models";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { FlexProps, IconProps, ImageProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
+import { FlexProps, ImageProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type KornerFieldShortOverridesProps = {
     KornerFieldShort?: PrimitiveOverrideProps<ViewProps>;
     image?: PrimitiveOverrideProps<ImageProps>;
-    details?: PrimitiveOverrideProps<FlexProps>;
+    Frame?: PrimitiveOverrideProps<FlexProps>;
     name?: PrimitiveOverrideProps<TextProps>;
-    address37333244?: PrimitiveOverrideProps<FlexProps>;
-    Icon37333245?: PrimitiveOverrideProps<FlexProps>;
-    Vector37333246?: PrimitiveOverrideProps<IconProps>;
-    address37333247?: PrimitiveOverrideProps<TextProps>;
-    price37333248?: PrimitiveOverrideProps<FlexProps>;
-    Icon37333249?: PrimitiveOverrideProps<FlexProps>;
-    Vector37333250?: PrimitiveOverrideProps<IconProps>;
-    price37333251?: PrimitiveOverrideProps<TextProps>;
+    Frame1?: PrimitiveOverrideProps<FlexProps>;
+    date?: PrimitiveOverrideProps<TextProps>;
+    organizator?: PrimitiveOverrideProps<TextProps>;
+    Frame2?: PrimitiveOverrideProps<FlexProps>;
+    time?: PrimitiveOverrideProps<TextProps>;
+    numberOfPeople?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
 export declare type KornerFieldShortProps = React.PropsWithChildren<Partial<ViewProps> & {
-    fields?: Fields;
     photo?: String;
+    date?: String;
+    time?: String;
+    fields?: Fields;
+    appointment?: Appointment;
+    fon?: String;
+    responseNumber?: String;
 } & {
     overrides?: KornerFieldShortOverridesProps | undefined | null;
 }>;

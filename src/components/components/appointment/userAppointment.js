@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Divider, Flex} from "@aws-amplify/ui-react";
+import {Card, Flex} from "@aws-amplify/ui-react";
 import KornerAppointmentInfoUpdatedWrapper from "../../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../reservationForm";
 import ListUsersForAppointment from "../listUsersForAppointment";
@@ -15,19 +15,23 @@ const UserAppointment = ({user, appointment, responses}) => {
     const UserView = () => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                <KornerAppointmentInfoUpdatedWrapper user={user} appointment={appointment} responses={responses}/>
-                <Divider size={"small"}/>
-                <ReservationForm user={user} appointmentId={appointment?.id} responseToUpdate={responseToUpdate}/>
-                <Divider size={"small"}/>
-                <ListUsersForAppointment user={user} isOwner={false} responses={responses}/>
-                <Divider size={"small"}/>
+                <Card variation={"elevated"} width={"100%"}>
+                    <KornerAppointmentInfoUpdatedWrapper user={user} appointment={appointment} responses={responses}/>
+                </Card>
+                <Card variation={"elevated"} width={"100%"}>
+                    <ReservationForm user={user} appointmentId={appointment?.id} responseToUpdate={responseToUpdate}/>
+                </Card>
+                <Card variation={"elevated"} width={"100%"}>
+                    <ListUsersForAppointment user={user} isOwner={false} responses={responses}/>
+                </Card>
             </Flex>
         )
     }
 
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            {user?.isOwner && <OwnerAppointment appointment={appointment} responses={responses} user={user} responseToUpdate={responseToUpdate}/>}
+            {user?.isOwner && <OwnerAppointment appointment={appointment} responses={responses} user={user}
+                                                responseToUpdate={responseToUpdate}/>}
             {!user?.isOwner && <UserView/>}
         </Flex>
     );

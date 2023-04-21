@@ -2,10 +2,9 @@ import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
 import {Appointment, Response} from "../../models";
 import {getCurrentDateInDynamoDbString} from "../converters";
-import {Divider, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
+import {Card, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 import KornerAppointmentShortWrapper from "../wrappers/kornerAppointmentShortWrapper";
-
 const Home = ({user}) => {
     const [reservedAppointment, setReservedAppointment] = useState([]);
     const [ownedAppointment, setOwnedAppointment] = useState([]);
@@ -16,11 +15,11 @@ const Home = ({user}) => {
 
     const sub = user?.attributes.sub;
     const currentTime = new Date().toTimeString();
-    const ReservedAppointment = () => mapToView(reservedAppointment);
-    const OwnedAppointment = () => mapToView(ownedAppointment);
-    const AcceptedAppointment = () => mapToView(acceptedAppointment);
-    const RefusedAppointment = () => mapToView(refusedAppointment);
-    const CanceledAppointment = () => mapToView(canceledAppointment);
+    const ReservedAppointment = () => mapToView(reservedAppointment, "Rezervirani Termini", "Nema rezerviranih termina");
+    const OwnedAppointment = () => mapToView(ownedAppointment, "Termini koje organizirate", "Ne organizirate termin");
+    const AcceptedAppointment = () => mapToView(acceptedAppointment, "Prihvaćeni termini", "Nema prihvaćenih termina");
+    const RefusedAppointment = () => mapToView(refusedAppointment, "Odbijeni termini", "Nema odbijenih termina");
+    const CanceledAppointment = () => mapToView(canceledAppointment, "Otkazani termini", "Nema othazanih termina");
 
     // Set responses
     useEffect(() => {
@@ -96,29 +95,36 @@ const Home = ({user}) => {
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            <Heading level={4} alignSelf={"start"}>Rezervirani termini:</Heading>
-            <ReservedAppointment/>
-            <Divider color={"#224226"} size={"small"}/>
-            <Heading level={4} alignSelf={"start"}>Termini koje organizirate:</Heading>
-            <OwnedAppointment/>
-            <Divider color={"#224226"} size={"small"}/>
-            <Heading level={4} alignSelf={"start"}>Termini koje ste prihvatili:</Heading>
-            <AcceptedAppointment/>
-            <Divider color={"#224226"} size={"small"}/>
-            <Heading level={4} alignSelf={"start"}>Termini koje ste odbili:</Heading>
-            <RefusedAppointment/>
-            <Divider color={"#224226"} size={"small"}/>
-            <Heading level={4} alignSelf={"start"}>Otkazani termini:</Heading>
-            <CanceledAppointment/>
+            <Card variation={"elevated"} width={"100%"}>
+                <ReservedAppointment/>
+            </Card>
+            <Card variation={"elevated"} width={"100%"}>
+                <OwnedAppointment/>
+            </Card>
+            <Card variation={"elevated"} width={"100%"}>
+                <AcceptedAppointment/>
+            </Card>
+            <Card variation={"elevated"} width={"100%"}>
+                <RefusedAppointment/>
+            </Card>
+            <Card variation={"elevated"} width={"100%"}>
+                <CanceledAppointment/>
+            </Card>
         </Flex>
     )
 
-    function mapToView(appointments: []) {
-        return appointments.length === 0 ? <Heading>Nema termina</Heading> : appointments.map(a => {
-            return <Flex key={a.id}>
-                <KornerAppointmentShortWrapper appointment={a}/>
-            </Flex>;
-        });
+    function mapToView(appointments: [], text, noReservedText) {
+        return appointments.length === 0 ? <Heading level={6}>{noReservedText}</Heading> :
+            <Flex direction={"column"}>
+                <Heading level={4} alignSelf={"start"}>{text}</Heading>
+                {appointments.map(a => {
+                    return <Flex key={a.id}>
+                        <KornerAppointmentShortWrapper appointment={a}/>
+                    </Flex>;
+                })}
+            </Flex>
+
+
     }
 }
 

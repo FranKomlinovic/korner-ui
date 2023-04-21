@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Response} from "../../models";
 import {SortDirection} from "@aws-amplify/datastore";
-import {Divider, Flex, Heading} from "@aws-amplify/ui-react";
+import {Card, Divider, Flex, Heading} from "@aws-amplify/ui-react";
 import UserAppointment from "../components/appointment/userAppointment";
 import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
@@ -52,11 +52,13 @@ const NewAppointmentView = () => {
     const NoUserView = () => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
-                <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
-                <Divider size={"small"}/>
+                <Card variation={"elevated"} width={"100%"}>
+                    <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
+                    <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
+                </Card>
+                <Card variation={"elevated"} width={"100%"}>
                 <ListUsersForAppointment user={user} isOwner={false} responses={responses}/>
-                <Divider size={"small"}/>
+                </Card>
             </Flex>
 
         );

@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
-import {Badge, Button, Divider, Flex, Heading, Text} from "@aws-amplify/ui-react";
+import React, {useState} from "react";
+import {Badge, Button, Card, Flex, Heading, Text} from "@aws-amplify/ui-react";
 import KornerAppointmentInfoUpdatedWrapper from "../../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../reservationForm";
 import ListUsersForAppointment from "../listUsersForAppointment";
 import AddGuestForm from "../addGuestForm";
 import {FaLink, FaLock, FaTrash} from "react-icons/fa";
-import {API, DataStore} from "aws-amplify";
+import {DataStore} from "aws-amplify";
 import {Appointment} from "../../../models";
 import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
@@ -91,15 +91,26 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
 
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            <KornerAppointmentInfoUpdatedWrapper user={user} appointment={appointment} responses={responses}/>
-            <ButtonOrBadge/>
-            <ShareLink/>
-            <Divider size={"small"}/>
-            <ReservationForm user={user} appointmentId={appointment.id} responseToUpdate={responseToUpdate}/>
-            <Divider size={"small"}/>
-            <ListUsersForAppointment user={user} isOwner={true} responses={responses}/>
-            <Divider size={"small"}/>
-            <OwnerOptions/>
+            <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
+                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                    <KornerAppointmentInfoUpdatedWrapper user={user} appointment={appointment} responses={responses}/>
+                    <ButtonOrBadge/>
+                    <ShareLink/>
+                </Flex>
+            </Card>
+            <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
+                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                    <ReservationForm user={user} appointmentId={appointment.id} responseToUpdate={responseToUpdate}/>
+                </Flex>
+            </Card>
+            <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
+                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                    <ListUsersForAppointment user={user} isOwner={true} responses={responses}/>
+                </Flex>
+            </Card>
+            <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
+                <OwnerOptions/>
+            </Card>
         </Flex>
     )
 
