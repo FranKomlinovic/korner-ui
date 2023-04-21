@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Response} from "../../models";
 import {SortDirection} from "@aws-amplify/datastore";
-import {Card, Divider, Flex, Heading} from "@aws-amplify/ui-react";
+import {Card, Flex, Heading} from "@aws-amplify/ui-react";
 import UserAppointment from "../components/appointment/userAppointment";
 import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
@@ -54,10 +54,12 @@ const NewAppointmentView = () => {
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                 <Card variation={"elevated"} width={"100%"}>
                     <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
+                </Card>
+                <Card variation={"elevated"} width={"100%"}>
                     <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
-                <ListUsersForAppointment user={user} isOwner={false} responses={responses}/>
+                    <ListUsersForAppointment user={user} isOwner={false} responses={responses}/>
                 </Card>
             </Flex>
 
@@ -66,7 +68,7 @@ const NewAppointmentView = () => {
 
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            {appointmentNotFound ? <Heading>Termin nije pronađen</Heading> :
+            {appointmentNotFound ? <Heading>Termin nije pronađen (osvježi stranicu)</Heading> :
                 user ? <UserAppointment user={user} appointment={appointment} responses={responses}/> : <NoUserView/>}
         </Flex>
     );

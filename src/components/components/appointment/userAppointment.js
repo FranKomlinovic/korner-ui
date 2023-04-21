@@ -30,9 +30,9 @@ const UserAppointment = ({user, appointment, responses}) => {
 
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            {user?.isOwner && <OwnerAppointment appointment={appointment} responses={responses} user={user}
-                                                responseToUpdate={responseToUpdate}/>}
-            {!user?.isOwner && <UserView/>}
+            {user?.isOwner ? <OwnerAppointment appointment={appointment} responses={responses} user={user}
+                                               responseToUpdate={responseToUpdate}/> :
+                <UserView/>}
         </Flex>
     );
 }

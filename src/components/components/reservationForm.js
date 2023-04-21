@@ -56,8 +56,8 @@ const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
     const alreadyAnsweredView = () => {
         if (responseToUpdate?.accepted) {
             return (
-                <Flex alignItems={"center"} direction={"column"}>
-                    <Heading color={"green"} level={3}>Dolazim</Heading>
+                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                <Heading color={"green"} level={3}>Dolazim</Heading>
                     <Heading level={6}>Promijeni odgovor:</Heading>
                     <Flex>
                         {notComming}
@@ -66,8 +66,8 @@ const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
             );
         }
         return (
-            <Flex alignItems={"center"} direction={"column"}>
-                <Heading color={"red"} level={3}>Ne dolazim</Heading>
+            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+            <Heading color={"red"} level={3}>Ne dolazim</Heading>
                 <Heading level={6}>Promijeni odgovor:</Heading>
                 <Flex>
                     {commingButton}
@@ -99,8 +99,8 @@ const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
 
     return (
         <Flex direction={"column"}>
-            <Flex>
-                {responseToUpdate && alreadyAnsweredView()}
+            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+            {responseToUpdate && alreadyAnsweredView()}
                 {!responseToUpdate && createForm()}
             </Flex>
 

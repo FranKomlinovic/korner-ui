@@ -30,8 +30,8 @@ const UnauthorizedReservationForm = ({responses, appointmentId, functionTest}) =
 
     const createForm = () => {
         return (
-            <Flex direction={"column"}>
-                <TextField
+            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+            <TextField
                     label={"Ime i prezime"}
                     onChange={(a) => setName(a.currentTarget.value)}
                     defaultValue={""}
