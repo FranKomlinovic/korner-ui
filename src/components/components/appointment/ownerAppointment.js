@@ -10,6 +10,7 @@ import {Appointment} from "../../../models";
 import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
 import {confirmAppointment} from "../../lambdas";
+import KornerAppointmentShortWrapper from "../../wrappers/kornerAppointmentShortWrapper";
 
 const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
     const [open, setOpen] = useState(false);
@@ -93,7 +94,7 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <KornerAppointmentInfoUpdatedWrapper user={user} appointment={appointment} responses={responses}/>
+                    <KornerAppointmentShortWrapper appointment={appointment} />
                     <ButtonOrBadge/>
                     <ShareLink/>
                 </Flex>

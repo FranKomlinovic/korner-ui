@@ -2,17 +2,7 @@ import './App.css';
 
 import {Amplify, Storage} from 'aws-amplify';
 
-import {
-    Authenticator,
-    Button,
-    Divider,
-    Flex,
-    Heading,
-    Image,
-    ScrollView,
-    Text,
-    useAuthenticator
-} from '@aws-amplify/ui-react';
+import {Button, Flex, Heading, Image, ScrollView, Text, useAuthenticator} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
@@ -24,7 +14,6 @@ import {FaCalendar, FaPlusCircle} from "react-icons/fa";
 import FieldOwnerView from "./components/views/owner/fieldOwnerView";
 import Profile from "./components/views/profile";
 import {useEffect, useState} from "react";
-import {Dialog} from "@mui/material";
 import NewAppointmentView from "./components/views/newAppointmentView";
 
 Amplify.configure(awsExports);
@@ -32,17 +21,12 @@ Amplify.configure(awsExports);
 function App() {
     const navigate = useNavigate();
     const [image, setImage] = useState("/no-picture.png");
-    const [open, setOpen] = useState(false);
 
     const {user} = useAuthenticator((context) => [
         context.user
     ]);
 
     useEffect(() => {
-        if (user && open) {
-            setOpen(false);
-            window.location.reload();
-        }
         let pic = user?.attributes.picture;
         if (pic) {
             Storage.get(pic).then(a => {
@@ -51,29 +35,29 @@ function App() {
                 setImage("/no-picture.png");
             })
         }
-    }, [user, open])
+    }, [user])
 
     const goToHome = () => navigate("/")
     const goToProfile = () => navigate("/profile")
 
     const LogoAndAppName = () => (
         <Flex justifyContent={"start"} alignItems={"center"}>
-            <Image height={"60px"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
-            <Heading color={"#224226"} level={"3"} onClick={goToHome}>Korner</Heading>
+            {/*<Image height={"40px"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>*/}
+            <Heading color={"#224226"} level={"3"} onClick={goToHome}>KornerHR</Heading>
         </Flex>)
 
     const SignInSignOut = () => {
         if (user) {
             return;
-                // <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-                //     <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"60px"}
-                //            height={"60px"}
-                //            color={"darkred"} alt={"Profilna slika"}/>
-                // </Flex>
+            // <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
+            //     <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"60px"}
+            //            height={"60px"}
+            //            color={"darkred"} alt={"Profilna slika"}/>
+            // </Flex>
 
         } else {
             return (
-                <Flex onClick={() => setOpen(true)} alignItems={"center"} alignSelf={"center"} gap={"0.2rem"}
+                <Flex alignItems={"center"} alignSelf={"center"} gap={"0.2rem"}
                       justifyContent={"end"}>
                     <Button>
                         <Text fontSize={"small"}>Login</Text>
@@ -95,26 +79,26 @@ function App() {
     )
 
     const MyMenu = () => (
-        <Flex gap={"5px"} backgroundColor={"white"} direction={"column"} position={"sticky"} bottom={"0px"}>
-            <Divider size={"small"}/>
+        <Flex backgroundColor={"#224226"} direction={"column"} width={"100%"} position={"sticky"} bottom={"0px"}>
+
             <Flex marginTop={"0px"} justifyContent={"space-between"}
                   gap={"0.5rem"}>
                 <Button onClick={() => navigate("/")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaCalendar size={"30px"}/><Text>Termini</Text>
+                        <FaCalendar color={"white"} size={"20px"}/><Text color={"white"}>Termini</Text>
                     </Flex>
                 </Button>
                 <Button onClick={() => navigate("/fields")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaPlusCircle size={"30px"}/><Text>Rezerviraj</Text>
+                        <FaPlusCircle color={"white"} size={"20px"}/><Text color={"white"}>Rezerviraj</Text>
                     </Flex>
                 </Button>
                 <Button onClick={() => navigate("/profile")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"30px"}
-                               height={"30px"}
-                               color={"darkred"} alt={"Profilna slika"}/>
-                        <Text>Profil</Text>
+                        <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"20px"}
+                               height={"20px"}
+                               color={"white"} alt={"Profilna slika"}/>
+                        <Text color={"white"}>Profil</Text>
                     </Flex>
                 </Button>
                 {/*<Button disabled border={"none"}>*/}
@@ -128,20 +112,16 @@ function App() {
     )
 
     const TopHeader = () => (
-        <Flex justifyContent={"space-between"}>
+        <Flex marginInline={"10px"} justifyContent={"space-between"}>
             <LogoAndAppName/>
-            <SignInSignOut/>
         </Flex>
     )
 
     return (
-        <Flex justifyContent={"center"} margin={"5px"}>
-            <Flex maxWidth={"400px"} direction={"column"} justifyContent={"space-between"}>
+        <Flex>
+            <Flex width={"100%"} direction={"column"} alignContent={"center"} justifyContent={"space-between"}>
                 <TopHeader/>
-                <Dialog open={open}>
-                    <Authenticator/>
-                </Dialog>
-                <ScrollView height={"100vh"} direction={"column"} justifyContent={"start"}>
+                <ScrollView margin={"5px"} height={"100vh"} direction={"column"} justifyContent={"start"}>
                     {routes()}
                 </ScrollView>
                 {user && <MyMenu/>}

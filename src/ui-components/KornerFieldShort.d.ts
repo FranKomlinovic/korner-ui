@@ -13,12 +13,15 @@ export declare type KornerFieldShortOverridesProps = {
     KornerFieldShort?: PrimitiveOverrideProps<ViewProps>;
     image?: PrimitiveOverrideProps<ImageProps>;
     Frame?: PrimitiveOverrideProps<FlexProps>;
-    name?: PrimitiveOverrideProps<TextProps>;
-    Frame1?: PrimitiveOverrideProps<FlexProps>;
+    "Frame 3"?: PrimitiveOverrideProps<FlexProps>;
     date?: PrimitiveOverrideProps<TextProps>;
-    organizator?: PrimitiveOverrideProps<TextProps>;
-    Frame2?: PrimitiveOverrideProps<FlexProps>;
     time?: PrimitiveOverrideProps<TextProps>;
+    "Frame 4"?: PrimitiveOverrideProps<FlexProps>;
+    Frame1?: PrimitiveOverrideProps<FlexProps>;
+    fieldName?: PrimitiveOverrideProps<TextProps>;
+    fieldAddress?: PrimitiveOverrideProps<TextProps>;
+    Frame2?: PrimitiveOverrideProps<FlexProps>;
+    organizator?: PrimitiveOverrideProps<TextProps>;
     numberOfPeople?: PrimitiveOverrideProps<TextProps>;
 } & EscapeHatchProps;
 export declare type KornerFieldShortProps = React.PropsWithChildren<Partial<ViewProps> & {

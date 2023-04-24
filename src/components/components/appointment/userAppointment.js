@@ -16,7 +16,7 @@ const UserAppointment = ({user, appointment, responses}) => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                 <Card variation={"elevated"} width={"100%"}>
-                    <KornerAppointmentInfoUpdatedWrapper user={user} appointment={appointment} responses={responses}/>
+                    <KornerAppointmentInfoUpdatedWrapper appointment={appointment}/>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
                     <ReservationForm user={user} appointmentId={appointment?.id} responseToUpdate={responseToUpdate}/>

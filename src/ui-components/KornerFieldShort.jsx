@@ -64,12 +64,12 @@ export default function KornerFieldShort(props) {
         {...getOverrideProps(overrides, "image")}
       ></Image>
       <Flex
-        gap="15px"
+        gap="5px"
         direction="column"
         width="320px"
         height="104px"
-        justifyContent="flex-start"
-        alignItems="flex-start"
+        justifyContent="center"
+        alignItems="center"
         overflow="hidden"
         position="absolute"
         top="116px"
@@ -78,48 +78,26 @@ export default function KornerFieldShort(props) {
         backgroundColor="rgba(9,12,9,0.47)"
         {...getOverrideProps(overrides, "Frame")}
       >
-        <Text
-          fontFamily="Arial"
-          fontSize="20px"
-          fontWeight="700"
-          color="rgba(255,255,255,1)"
-          lineHeight="25px"
-          textAlign="left"
-          display="block"
+        <Flex
+          gap="3px"
           direction="column"
-          justifyContent="unset"
           width="unset"
-          height="34px"
-          gap="unset"
-          alignItems="unset"
+          height="unset"
+          justifyContent="flex-start"
+          alignItems="center"
           shrink="0"
           alignSelf="stretch"
           position="relative"
           padding="0px 0px 0px 0px"
-          whiteSpace="pre-wrap"
-          children={fields?.name}
-          {...getOverrideProps(overrides, "name")}
-        ></Text>
-        <Flex
-          gap="50px"
-          direction="row"
-          width="unset"
-          height="16px"
-          justifyContent="space-between"
-          alignItems="center"
-          shrink="0"
-          alignSelf="stretch"
-          position="relative"
-          padding="0px 10px 0px 0px"
-          {...getOverrideProps(overrides, "Frame1")}
+          {...getOverrideProps(overrides, "Frame 3")}
         >
           <Text
             fontFamily="Arial"
-            fontSize="14px"
-            fontWeight="400"
+            fontSize="16px"
+            fontWeight="800"
             color="rgba(255,255,255,1)"
-            lineHeight="21px"
-            textAlign="left"
+            lineHeight="20px"
+            textAlign="center"
             display="block"
             direction="column"
             justifyContent="unset"
@@ -128,77 +106,20 @@ export default function KornerFieldShort(props) {
             gap="unset"
             alignItems="unset"
             shrink="0"
-            position="relative"
-            padding="0px 0px 0px 0px"
-            whiteSpace="pre-wrap"
-            children={`${appointment?.start}${" - "}${appointment?.end}`}
-            {...getOverrideProps(overrides, "date")}
-          ></Text>
-          <Text
-            fontFamily="Arial"
-            fontSize="14px"
-            fontWeight="400"
-            color="rgba(255,255,255,1)"
-            lineHeight="21px"
-            textAlign="right"
-            display="block"
-            direction="column"
-            justifyContent="unset"
-            width="unset"
-            height="unset"
-            gap="unset"
-            alignItems="unset"
-            shrink="0"
-            position="relative"
-            padding="0px 0px 0px 0px"
-            whiteSpace="pre-wrap"
-            children={`${"Broj Igra\u010Da:"}${responseNumber}${"/"}${
-              fields?.minPlayers
-            }`}
-            {...getOverrideProps(overrides, "organizator")}
-          ></Text>
-        </Flex>
-        <Flex
-          gap="50px"
-          direction="row"
-          width="unset"
-          height="21px"
-          justifyContent="space-between"
-          alignItems="center"
-          shrink="0"
-          alignSelf="stretch"
-          position="relative"
-          padding="0px 10px 0px 0px"
-          {...getOverrideProps(overrides, "Frame2")}
-        >
-          <Text
-            fontFamily="Arial"
-            fontSize="14px"
-            fontWeight="400"
-            color="rgba(255,255,255,1)"
-            lineHeight="21px"
-            textAlign="left"
-            display="block"
-            direction="column"
-            justifyContent="unset"
-            width="unset"
-            height="unset"
-            gap="unset"
-            alignItems="unset"
-            shrink="0"
+            alignSelf="stretch"
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
             children={date}
-            {...getOverrideProps(overrides, "time")}
+            {...getOverrideProps(overrides, "date")}
           ></Text>
           <Text
             fontFamily="Arial"
-            fontSize="14px"
-            fontWeight="400"
+            fontSize="20px"
+            fontWeight="700"
             color="rgba(255,255,255,1)"
-            lineHeight="21px"
-            textAlign="right"
+            lineHeight="25px"
+            textAlign="center"
             display="block"
             direction="column"
             justifyContent="unset"
@@ -207,12 +128,137 @@ export default function KornerFieldShort(props) {
             gap="unset"
             alignItems="unset"
             shrink="0"
+            alignSelf="stretch"
             position="relative"
             padding="0px 0px 0px 0px"
             whiteSpace="pre-wrap"
-            children={appointment?.bookerName}
-            {...getOverrideProps(overrides, "numberOfPeople")}
+            children={`${appointment?.start}${" - "}${appointment?.end}`}
+            {...getOverrideProps(overrides, "time")}
           ></Text>
+        </Flex>
+        <Flex
+          gap="0"
+          direction="row"
+          width="unset"
+          height="47px"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          shrink="0"
+          alignSelf="stretch"
+          position="relative"
+          padding="4px 0px 0px 0px"
+          {...getOverrideProps(overrides, "Frame 4")}
+        >
+          <Flex
+            gap="0"
+            direction="column"
+            width="unset"
+            height="unset"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            shrink="0"
+            position="relative"
+            padding="0px 0px 0px 0px"
+            {...getOverrideProps(overrides, "Frame1")}
+          >
+            <Text
+              fontFamily="Arial"
+              fontSize="14px"
+              fontWeight="400"
+              color="rgba(255,255,255,1)"
+              lineHeight="21px"
+              textAlign="left"
+              display="block"
+              direction="column"
+              justifyContent="unset"
+              width="unset"
+              height="unset"
+              gap="unset"
+              alignItems="unset"
+              shrink="0"
+              position="relative"
+              padding="0px 0px 0px 0px"
+              whiteSpace="pre-wrap"
+              children={fields?.name}
+              {...getOverrideProps(overrides, "fieldName")}
+            ></Text>
+            <Text
+              fontFamily="Arial"
+              fontSize="14px"
+              fontWeight="400"
+              color="rgba(255,255,255,1)"
+              lineHeight="21px"
+              textAlign="left"
+              display="block"
+              direction="column"
+              justifyContent="unset"
+              width="unset"
+              height="unset"
+              gap="unset"
+              alignItems="unset"
+              shrink="0"
+              position="relative"
+              padding="0px 0px 0px 0px"
+              whiteSpace="pre-wrap"
+              children={fields?.address}
+              {...getOverrideProps(overrides, "fieldAddress")}
+            ></Text>
+          </Flex>
+          <Flex
+            gap="0"
+            direction="column"
+            width="unset"
+            height="unset"
+            justifyContent="center"
+            alignItems="flex-end"
+            shrink="0"
+            position="relative"
+            padding="0px 0px 0px 0px"
+            {...getOverrideProps(overrides, "Frame2")}
+          >
+            <Text
+              fontFamily="Arial"
+              fontSize="14px"
+              fontWeight="400"
+              color="rgba(255,255,255,1)"
+              lineHeight="21px"
+              textAlign="right"
+              display="block"
+              direction="column"
+              justifyContent="unset"
+              width="unset"
+              height="unset"
+              gap="unset"
+              alignItems="unset"
+              shrink="0"
+              position="relative"
+              padding="0px 0px 0px 0px"
+              whiteSpace="pre-wrap"
+              children={appointment?.bookerName}
+              {...getOverrideProps(overrides, "organizator")}
+            ></Text>
+            <Text
+              fontFamily="Arial"
+              fontSize="14px"
+              fontWeight="400"
+              color="rgba(255,255,255,1)"
+              lineHeight="21px"
+              textAlign="right"
+              display="block"
+              direction="column"
+              justifyContent="unset"
+              width="unset"
+              height="unset"
+              gap="unset"
+              alignItems="unset"
+              shrink="0"
+              position="relative"
+              padding="0px 0px 0px 0px"
+              whiteSpace="pre-wrap"
+              children={`${responseNumber}${"/"}${fields?.minPlayers}`}
+              {...getOverrideProps(overrides, "numberOfPeople")}
+            ></Text>
+          </Flex>
         </Flex>
       </Flex>
     </View>

@@ -5,7 +5,7 @@ import {Storage} from "aws-amplify";
 
 const KornerAppointmentShortWrapper = ({appointment}) => {
 
-    const [photo, setPhoto] = useState();
+    const [photo, setPhoto] = useState("/no-field.jpg");
     const [field, setField] = useState();
     const [responseNumber, setResponseNumber] = useState();
 
@@ -13,7 +13,7 @@ const KornerAppointmentShortWrapper = ({appointment}) => {
         appointment?.Responses.toArray().then(a => {
             setResponseNumber(a.filter(b => b.accepted).length)
         })
-        appointment.Fields.then(a => {
+        appointment?.Fields.then(a => {
             setField(a)
             a.photo ?
                 Storage.get(a.photo).then(b => {
@@ -32,7 +32,7 @@ const KornerAppointmentShortWrapper = ({appointment}) => {
             responseNumber={responseNumber}
             photo={photo}
             fields={field}
-            date={getDayAndDateFromAppointment(appointment.date)}
+            date={getDayAndDateFromAppointment(appointment?.date)}
             appointment={appointment}/>
     );
 

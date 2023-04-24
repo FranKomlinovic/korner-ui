@@ -3,18 +3,23 @@ import {useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
 import {Appointment, Response} from "../../models";
 import {SortDirection} from "@aws-amplify/datastore";
-import {Card, Flex, Heading} from "@aws-amplify/ui-react";
+import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
 import UserAppointment from "../components/appointment/userAppointment";
-import KornerAppointmentInfoUpdatedWrapper from "../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
 import UnauthorizedReservationForm from "../components/unauthorizedReservationForm";
+import KornerAppointmentShortWrapper from "../wrappers/kornerAppointmentShortWrapper";
+import {Dialog} from "@mui/material";
 
 const NewAppointmentView = () => {
     const {appointmentId} = useParams();
     const [appointment, setAppointment] = useState();
     const [responses, setResponses] = useState();
     const [appointmentNotFound, setAppointmentNotFound] = useState();
-    const [user, setUser] = useState();
+    const [open, setOpen] = useState(false);
+    const [userr, setUser] = useState();
+    const {user} = useAuthenticator((context) => [
+        context.user
+    ]);
 
     // Sets appointments
     useEffect(() => {
@@ -27,17 +32,17 @@ const NewAppointmentView = () => {
     // Sets user and checks if user is owner
     useEffect(() => {
         Auth.currentSession().then((u) => {
-            const payload = u.getIdToken().payload;
+            let attributes = user.attributes;
             setUser({
-                name: payload.given_name + " " + payload.family_name,
-                sub: payload.sub,
-                photo: payload.picture,
-                isOwner: appointment?.bookerID === payload.sub
+                name: attributes.given_name + " " + attributes.family_name,
+                sub: attributes.sub,
+                photo: attributes.picture,
+                isOwner: appointment?.bookerID === attributes.sub
             });
         }).catch(a => {
 
         })
-    }, [appointment]);
+    }, [user,appointment]);
 
     // Gets all responses
     useEffect(() => {
@@ -49,17 +54,36 @@ const NewAppointmentView = () => {
 
     }, [appointmentId]);
 
+    useEffect(() => {
+        if (open && user) {
+            setOpen(false);
+        }
+    }, [open, user]);
+
+
     const NoUserView = () => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                <Dialog open={open} onClose={() => setOpen(false)}>
+                    <Authenticator/>
+                </Dialog>
                 <Card variation={"elevated"} width={"100%"}>
-                    <KornerAppointmentInfoUpdatedWrapper appointment={appointment} responses={responses}/>
+                    <KornerAppointmentShortWrapper appointment={appointment}/>
+                </Card>
+                <Card variation={"elevated"} width={"100%"}>
+                    <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                        <Heading textAlign={"center"} fontSize={"small"}>Jednostavnije odgovori, dogovaraj termine i još
+                            mnogo toga...</Heading>
+                        <Button onClick={() => setOpen(true)} variation={"primary"}>
+                            Napravi profil
+                        </Button>
+                    </Flex>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
                     <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
-                    <ListUsersForAppointment user={user} isOwner={false} responses={responses}/>
+                    <ListUsersForAppointment user={userr} isOwner={false} responses={responses}/>
                 </Card>
             </Flex>
 
@@ -69,7 +93,7 @@ const NewAppointmentView = () => {
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {appointmentNotFound ? <Heading>Termin nije pronađen (osvježi stranicu)</Heading> :
-                user ? <UserAppointment user={user} appointment={appointment} responses={responses}/> : <NoUserView/>}
+                userr ? <UserAppointment user={userr} appointment={appointment} responses={responses}/> : <NoUserView/>}
         </Flex>
     );
 }
