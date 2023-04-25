@@ -2,12 +2,13 @@ import React, {useEffect, useState} from "react";
 import {DataStore, Storage} from "aws-amplify";
 import {Fields} from "../../models";
 import {useParams} from "react-router-dom";
-import {FieldsUpdateForm, KornerFieldInfo} from "../../ui-components";
+import {FieldsUpdateForm} from "../../ui-components";
 import FreeAppointmentsView from "../components/freeAppointmentsView";
 import {checkIfOwner, convertSportsEnumListToString, convertSurfaceEnumToString} from "../converters";
 import UploadComponent from "../components/UploadComponent";
-import {Button, Divider, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
+import {Button, Divider, Flex, withAuthenticator} from "@aws-amplify/ui-react";
 import {Dialog, DialogTitle} from "@mui/material";
+import FigmaFieldInfoView from "../../figma-components/FigmaFIeldInfoView";
 
 
 const FieldById = ({user}) => {
@@ -83,10 +84,8 @@ const FieldById = ({user}) => {
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            <KornerFieldInfo fields={field} sports={fieldAdditionalInfo?.sports} surface={fieldAdditionalInfo?.surface}
-                             photo={photo}/>
+            <FigmaFieldInfoView field={field}/>
             <OwnerView/>
-            <Divider/>
             <FreeAppointmentsView field={field} user={user} isOwner={isOwner}/>
         </Flex>
     );

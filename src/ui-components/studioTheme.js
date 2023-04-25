@@ -1180,7 +1180,7 @@ export default createTheme({
         40: { value: "#4CCB68" },
         60: { value: "#44AF5B" },
         80: { value: "#31703D" },
-        90: { value: "#224226" },
+        90: { value: "#153D11" },
         100: { value: "hsl(130, 22%, 23%)" },
       },
       teal: {

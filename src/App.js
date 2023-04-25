@@ -41,32 +41,11 @@ function App() {
     const goToProfile = () => navigate("/profile")
 
     const LogoAndAppName = () => (
-        <Flex justifyContent={"start"} alignItems={"center"}>
-            {/*<Image height={"40px"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>*/}
-            <Heading color={"#224226"} level={"3"} onClick={goToHome}>KornerHR</Heading>
+        <Flex justifyContent={"start"} alignItems={"center"} marginTop={"0.5rem"}>
+            <Image height={"40px"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
+            <Heading level={"3"} onClick={goToHome}>Korner</Heading>
         </Flex>)
 
-    const SignInSignOut = () => {
-        if (user) {
-            return;
-            // <Flex alignContent={"center"} alignSelf={"center"} gap={"0.2rem"} justifyContent={"end"}>
-            //     <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"60px"}
-            //            height={"60px"}
-            //            color={"darkred"} alt={"Profilna slika"}/>
-            // </Flex>
-
-        } else {
-            return (
-                <Flex alignItems={"center"} alignSelf={"center"} gap={"0.2rem"}
-                      justifyContent={"end"}>
-                    <Button>
-                        <Text fontSize={"small"}>Login</Text>
-                        {/*<FaSignInAlt size={"20px"}/>*/}
-                    </Button>
-                </Flex>
-            )
-        }
-    }
     const routes = () => (
         <Routes>
             <Route path="/" element={<Home/>}/>
@@ -79,7 +58,7 @@ function App() {
     )
 
     const MyMenu = () => (
-        <Flex backgroundColor={"#224226"} direction={"column"} width={"100%"} position={"sticky"} bottom={"0px"}>
+        <Flex backgroundColor={"green.90"} direction={"column"} width={"100%"} position={"sticky"} bottom={"0px"}>
 
             <Flex marginTop={"0px"} justifyContent={"space-between"}
                   gap={"0.5rem"}>

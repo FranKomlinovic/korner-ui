@@ -493,7 +493,7 @@ export default function KornerAppointmentInfoUpdated(props) {
               viewBox={{
                 minX: 0,
                 minY: 0,
-                width: 24.218170166015625,
+                width: 24.21820068359375,
                 height: 24.22265625,
               }}
               paths={[

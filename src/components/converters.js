@@ -5,7 +5,7 @@ const surfaces = new Map(
         ["ARTIFICIAL_GRASS", "Umjetna trava"],
         ["RUBBER", "Guma"],
         ["CONCRETE", "Beton"],
-        ["WOOD", "Drvo"]
+        ["WOOD", "Parket"]
     ]);
 
 const sports = new Map(
@@ -79,19 +79,13 @@ export function calculateDurationFromAppointment(appointment: Appointment) {
 }
 
 export function convertSurfaceEnumToString(a): string {
-    if (!surfaces.has(a)) {
-        return a;
-    }
-    return surfaces.get(a);
+   return surfaces.has(a) ? surfaces.get(a) : a;
 }
 
 export function convertSportsEnumListToString(a: []): string {
-    return a.map(convertSportsEnumToString).join(', ');
+   return a ? a.map(convertSportsEnumToString).join(', ') : "";
 }
 
 export function convertSportsEnumToString(a): string {
-    if (!sports.has(a)) {
-        return a;
-    }
-    return sports.get(a);
+    return sports.has(a) ? sports.get(a) : a;
 }

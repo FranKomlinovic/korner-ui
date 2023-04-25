@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {Card, Flex} from "@aws-amplify/ui-react";
-import KornerAppointmentInfoUpdatedWrapper from "../../wrappers/kornerAppointmentInfoUpdatedWrapper";
+import {Badge, Card, Flex} from "@aws-amplify/ui-react";
 import ReservationForm from "../reservationForm";
 import ListUsersForAppointment from "../listUsersForAppointment";
 import OwnerAppointment from "./ownerAppointment";
 import KornerAppointmentShortWrapper from "../../wrappers/kornerAppointmentShortWrapper";
+import {getCurrentDateInDynamoDbString} from "../../converters";
 
 const UserAppointment = ({user, appointment, responses}) => {
     const [responseToUpdate, setResponseToUpdate] = useState();
@@ -17,7 +17,10 @@ const UserAppointment = ({user, appointment, responses}) => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                 <Card variation={"elevated"} width={"100%"}>
-                    <KornerAppointmentShortWrapper appointment={appointment}/>
+                    <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                        <KornerAppointmentShortWrapper appointment={appointment}/>
+                        <StatusBadge/>
+                    </Flex>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
                     <ReservationForm user={user} appointmentId={appointment?.id} responseToUpdate={responseToUpdate}/>
@@ -27,6 +30,22 @@ const UserAppointment = ({user, appointment, responses}) => {
                 </Card>
             </Flex>
         )
+    }
+
+    // Badge that shows status of current appointment
+    const StatusBadge = () => {
+        if (appointment?.canceled) {
+            return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"error"}>Termin je
+                otkazan</Badge>;
+        }
+        if (appointment?.confirmed) {
+            if (appointment?.date < getCurrentDateInDynamoDbString(0)) {
+                return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"info"}>Termin je
+                    odigran</Badge>;
+            }
+            return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"success"}>Termin je
+                rezerviran</Badge>;
+        }
     }
 
     return (

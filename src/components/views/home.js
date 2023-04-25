@@ -11,15 +11,17 @@ const Home = ({user}) => {
     const [acceptedAppointment, setAcceptedAppointment] = useState([]);
     const [refusedAppointment, setRefusedAppointment] = useState([]);
     const [canceledAppointment, setCanceledAppointment] = useState([]);
+    const [playedAppointment, setPlayedAppointment] = useState([]);
     const [responses, setResponses] = useState([]);
 
     const sub = user?.attributes.sub;
     const currentTime = new Date().toTimeString();
-    const ReservedAppointment = () => mapToView(reservedAppointment, "Rezervirani Termini", "Nema rezerviranih termina");
-    const OwnedAppointment = () => mapToView(ownedAppointment, "Termini koje organizirate", "Ne organizirate termin");
-    const AcceptedAppointment = () => mapToView(acceptedAppointment, "Prihvaćeni termini", "Nema prihvaćenih termina");
-    const RefusedAppointment = () => mapToView(refusedAppointment, "Odbijeni termini", "Nema odbijenih termina");
-    const CanceledAppointment = () => mapToView(canceledAppointment, "Otkazani termini", "Nema othazanih termina");
+    const ReservedAppointment = () => mapToView(reservedAppointment, "Rezervirani Termini", "Trenutno nema rezerviranih termina");
+    const OwnedAppointment = () => mapToView(ownedAppointment, "Termini koje organizirate", "Trenutno ne organizirate termin");
+    const AcceptedAppointment = () => mapToView(acceptedAppointment, "Prihvaćeni termini", "Trenurno nema prihvaćenih termina");
+    const RefusedAppointment = () => mapToView(refusedAppointment, "Odbijeni termini", "Trenutno nema odbijenih termina");
+    const CanceledAppointment = () => mapToView(canceledAppointment, "Otkazani termini", "Trenurno nema otkazanih termina");
+    const PlayedAppointment = () => mapToView(playedAppointment, "Odigrani termini", "Trenurno nema odigranih termina");
 
     // Set responses
     useEffect(() => {
@@ -51,6 +53,27 @@ const Home = ({user}) => {
         });
 
     }, [responses, sub])
+
+    // Already played appointments
+    useEffect(() => {
+        let accepted = responses.filter(a => a.accepted).map(a => a.appointmentID);
+        if (accepted.length === 0) {
+            return;
+        }
+        DataStore.query(Appointment, b => b.and(
+                c => [
+                    c.or(c => accepted.map(a => c.id.eq(a))),
+                    c.date.lt(getCurrentDateInDynamoDbString(0)),
+                    c.confirmed.eq(true)
+                ]), {
+                sort: (sort) => sort.date(SortDirection.DESCENDING)
+            }
+        ).then((app) => {
+            setPlayedAppointment(app);
+        });
+
+    }, [responses, sub])
+
 
     // Refused appointment
     useEffect(() => {
@@ -109,6 +132,9 @@ const Home = ({user}) => {
             </Card>
             <Card variation={"elevated"} width={"100%"}>
                 <CanceledAppointment/>
+            </Card>
+            <Card variation={"elevated"} width={"100%"}>
+                <PlayedAppointment/>
             </Card>
         </Flex>
     )

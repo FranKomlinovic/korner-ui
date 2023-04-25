@@ -16,6 +16,7 @@ export { default as KornerAppointmentCollection } from "./KornerAppointmentColle
 export { default as ProductDetail } from "./ProductDetail";
 export { default as ContactUs } from "./ContactUs";
 export { default as KornerAppointmentShort } from "./KornerAppointmentShort";
+export { default as KornerFieldInfoNewCollection } from "./KornerFieldInfoNewCollection";
 export { default as KornerEditProfile } from "./KornerEditProfile";
 export { default as HeroLayout4 } from "./HeroLayout4";
 export { default as MarketingPricing } from "./MarketingPricing";
@@ -40,6 +41,7 @@ export { default as PlayerCardCollection } from "./PlayerCardCollection";
 export { default as CommentCard } from "./CommentCard";
 export { default as FieldDetails } from "./FieldDetails";
 export { default as ReviewCard } from "./ReviewCard";
+export { default as KornerFieldInfoNew } from "./KornerFieldInfoNew";
 export { default as SocialPost } from "./SocialPost";
 export { default as KornerFieldShort } from "./KornerFieldShort";
 export { default as TallCard } from "./TallCard";

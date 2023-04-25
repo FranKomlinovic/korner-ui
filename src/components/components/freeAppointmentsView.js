@@ -93,7 +93,7 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
             return (
                 <Flex direction={"column"}>
                     <Text>Učitavam termine...</Text>
-                    <Loader variation="linear"/>
+                    <Loader color={"green.90"} variation="linear"/>
                 </Flex>
             )
         }

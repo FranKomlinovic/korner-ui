@@ -11,6 +11,7 @@ import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
 import {confirmAppointment} from "../../lambdas";
 import KornerAppointmentShortWrapper from "../../wrappers/kornerAppointmentShortWrapper";
+import {getCurrentDateInDynamoDbString} from "../../converters";
 
 const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
     const [open, setOpen] = useState(false);
@@ -43,6 +44,10 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
                 otkazan</Badge>;
         }
         if (appointment?.confirmed) {
+            if (appointment?.date < getCurrentDateInDynamoDbString(0)) {
+                return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"info"}>Termin je
+                    odigran</Badge>;
+            }
             return <Badge size={"large"} textAlign={"center"} alignSelf={"center"} variation={"success"}>Termin je
                 rezerviran</Badge>;
         }
