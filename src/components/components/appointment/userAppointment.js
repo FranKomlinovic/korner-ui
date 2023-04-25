@@ -4,6 +4,7 @@ import KornerAppointmentInfoUpdatedWrapper from "../../wrappers/kornerAppointmen
 import ReservationForm from "../reservationForm";
 import ListUsersForAppointment from "../listUsersForAppointment";
 import OwnerAppointment from "./ownerAppointment";
+import KornerAppointmentShortWrapper from "../../wrappers/kornerAppointmentShortWrapper";
 
 const UserAppointment = ({user, appointment, responses}) => {
     const [responseToUpdate, setResponseToUpdate] = useState();
@@ -16,7 +17,7 @@ const UserAppointment = ({user, appointment, responses}) => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                 <Card variation={"elevated"} width={"100%"}>
-                    <KornerAppointmentInfoUpdatedWrapper appointment={appointment}/>
+                    <KornerAppointmentShortWrapper appointment={appointment}/>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
                     <ReservationForm user={user} appointmentId={appointment?.id} responseToUpdate={responseToUpdate}/>
