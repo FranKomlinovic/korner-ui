@@ -4,9 +4,9 @@ import {Flex, Heading} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import {Response} from "../../models";
+import {Response} from "../models";
 
-import FigmaResponse from "../../figma-components/FigmaResponse";
+import FigmaResponse from "../figma-components/FigmaResponse";
 
 const ListUsersForAppointment = ({user, responses, isOwner}) => {
     if (responses == null) {

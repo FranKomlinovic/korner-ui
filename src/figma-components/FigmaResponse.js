@@ -1,7 +1,7 @@
 import {KornerResponseUser} from "../ui-components";
 import React, {useEffect, useState} from "react";
 import {FaCheck, FaMinus} from "react-icons/fa";
-import {getTimeFromDate, getTimeFromTimestamp} from "../components/converters";
+import {getTimeFromDate, getTimeFromTimestamp} from "../functions/converters";
 import {Storage} from "aws-amplify";
 
 const FigmaResponse = ({response, user}) => {

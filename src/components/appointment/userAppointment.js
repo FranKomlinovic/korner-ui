@@ -3,8 +3,8 @@ import {Badge, Card, Flex} from "@aws-amplify/ui-react";
 import ReservationForm from "../reservationForm";
 import ListUsersForAppointment from "../listUsersForAppointment";
 import OwnerAppointment from "./ownerAppointment";
-import FigmaAppointment from "../../../figma-components/FigmaAppointment";
-import {getCurrentDateInDynamoDbString} from "../../converters";
+import FigmaAppointment from "../../figma-components/FigmaAppointment";
+import {getCurrentDateInDynamoDbString} from "../../functions/converters";
 
 const UserAppointment = ({user, appointment, responses}) => {
     const [responseToUpdate, setResponseToUpdate] = useState();

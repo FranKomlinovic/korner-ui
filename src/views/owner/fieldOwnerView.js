@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {Flex, withAuthenticator} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
-import {Fields} from "../../../models";
-import FigmaField from "../../../figma-components/FigmaField";
+import {Fields} from "../../models";
+import FigmaField from "../../figma-components/FigmaField";
 
 const FieldView = ({user}) => {
 

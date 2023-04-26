@@ -7,14 +7,14 @@ import '@aws-amplify/ui-react/styles.css';
 
 import awsExports from './aws-exports';
 import {Route, Routes, useNavigate} from "react-router-dom";
-import Home from "./components/views/home";
-import FieldById from "./components/views/fieldById";
-import FieldView from "./components/views/fieldView";
+import Home from "./views/home";
+import FieldById from "./views/fieldById";
+import FieldView from "./views/fieldView";
 import {FaCalendar, FaPlusCircle} from "react-icons/fa";
-import FieldOwnerView from "./components/views/owner/fieldOwnerView";
-import Profile from "./components/views/profile";
+import FieldOwnerView from "./views/owner/fieldOwnerView";
+import Profile from "./views/profile";
 import {useEffect, useState} from "react";
-import NewAppointmentView from "./components/views/newAppointmentView";
+import NewAppointmentView from "./views/newAppointmentView";
 
 Amplify.configure(awsExports);
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Storage} from "aws-amplify";
 import {KornerFieldInfoNew} from "../ui-components";
-import {convertSportsEnumListToString, convertSurfaceEnumToString} from "../components/converters";
+import {convertSportsEnumListToString, convertSurfaceEnumToString} from "../functions/converters";
 
 const FigmaField = ({field}) => {
 

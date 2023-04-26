@@ -1,8 +1,8 @@
 import {API} from "aws-amplify";
 import React, {useEffect, useState} from "react";
 import {Button, Flex, Grid, Heading, Loader, SelectField, Text, View} from "@aws-amplify/ui-react";
-import {getCurrentDateInDynamoDbString, getDateInString, getDateTimeFromAppointment} from "../converters";
-import {Sport} from "../../models";
+import {getCurrentDateInDynamoDbString, getDateInString, getDateTimeFromAppointment} from "../functions/converters";
+import {Sport} from "../models";
 import ConfirmAppointmentReservation from "./confirmAppointmentReservation";
 import {useNavigate} from "react-router-dom";
 

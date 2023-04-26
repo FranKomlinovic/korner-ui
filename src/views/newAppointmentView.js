@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Auth, DataStore} from "aws-amplify";
-import {Appointment, Response} from "../../models";
+import {Appointment, Response} from "../models";
 import {SortDirection} from "@aws-amplify/datastore";
 import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
 import UserAppointment from "../components/appointment/userAppointment";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
 import UnauthorizedReservationForm from "../components/unauthorizedReservationForm";
-import FigmaAppointment from "../../figma-components/FigmaAppointment";
+import FigmaAppointment from "../figma-components/FigmaAppointment";
 import {Dialog} from "@mui/material";
 
 const NewAppointmentView = () => {

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {Button, Divider, Flex, Heading, Image, TextField, withAuthenticator} from "@aws-amplify/ui-react";
-import {checkIfOwner} from "../converters";
+import {checkIfOwner} from "../functions/converters";
 import {Auth, DataStore, Storage} from "aws-amplify";
-import {Fields} from "../../models";
+import {Fields} from "../models";
 import UploadComponent from "../components/UploadComponent";
-import FigmaField from "../../figma-components/FigmaField";
+import FigmaField from "../figma-components/FigmaField";
 
 
 const Profile = ({user, signOut}) => {

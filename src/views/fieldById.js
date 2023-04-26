@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {DataStore, Storage} from "aws-amplify";
-import {Fields} from "../../models";
+import {Fields} from "../models";
 import {useParams} from "react-router-dom";
-import {FieldsUpdateForm} from "../../ui-components";
+import {FieldsUpdateForm} from "../ui-components";
 import FreeAppointmentsView from "../components/freeAppointmentsView";
-import {checkIfOwner, convertSportsEnumListToString, convertSurfaceEnumToString} from "../converters";
+import {checkIfOwner, convertSportsEnumListToString, convertSurfaceEnumToString} from "../functions/converters";
 import UploadComponent from "../components/UploadComponent";
 import {Button, Divider, Flex, withAuthenticator} from "@aws-amplify/ui-react";
 import {Dialog, DialogTitle} from "@mui/material";
-import FigmaField from "../../figma-components/FigmaField";
+import FigmaField from "../figma-components/FigmaField";
 
 
 const FieldById = ({user}) => {

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
-import {Response} from "../../models";
+import {Response} from "../models";
 import {DataStore} from "aws-amplify";
 import {PubSub} from "@aws-amplify/pubsub";
 

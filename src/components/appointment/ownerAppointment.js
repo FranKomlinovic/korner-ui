@@ -5,12 +5,12 @@ import ListUsersForAppointment from "../listUsersForAppointment";
 import AddGuestForm from "../addGuestForm";
 import {FaLink, FaLock, FaTrash} from "react-icons/fa";
 import {DataStore} from "aws-amplify";
-import {Appointment} from "../../../models";
+import {Appointment} from "../../models";
 import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
-import {confirmAppointment} from "../../lambdas";
-import FigmaAppointment from "../../../figma-components/FigmaAppointment";
-import {getCurrentDateInDynamoDbString} from "../../converters";
+import {confirmAppointment} from "../../functions/lambdas";
+import FigmaAppointment from "../../figma-components/FigmaAppointment";
+import {getCurrentDateInDynamoDbString} from "../../functions/converters";
 
 const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
     const [open, setOpen] = useState(false);

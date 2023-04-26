@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
-import {getDateTimeFromAppointment} from "../converters";
+import {getDateTimeFromAppointment} from "../functions/converters";
 import {DataStore} from "aws-amplify";
-import {Appointment} from "../../models";
+import {Appointment} from "../models";
 import {useNavigate} from "react-router-dom";
 
 // Ovo je komponenta koja prikazuje i stvara button da se kreira termin

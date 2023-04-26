@@ -1,6 +1,6 @@
 import {KornerFieldShort} from "../ui-components";
 import React, {useEffect, useState} from "react";
-import {getDayAndDateFromAppointment} from "../components/converters";
+import {getDayAndDateFromAppointment} from "../functions/converters";
 import {Storage} from "aws-amplify";
 
 const FigmaAppointment = ({appointment}) => {

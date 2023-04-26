@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
-import {Appointment, Response} from "../../models";
-import {getCurrentDateInDynamoDbString} from "../converters";
+import {Appointment, Response} from "../models";
+import {getCurrentDateInDynamoDbString} from "../functions/converters";
 import {Card, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
-import FigmaAppointment from "../../figma-components/FigmaAppointment";
+import FigmaAppointment from "../figma-components/FigmaAppointment";
 const Home = ({user}) => {
     const [reservedAppointment, setReservedAppointment] = useState([]);
     const [ownedAppointment, setOwnedAppointment] = useState([]);
