@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Badge, Button, Card, Flex, Heading, Text} from "@aws-amplify/ui-react";
-import KornerAppointmentInfoUpdatedWrapper from "../../wrappers/kornerAppointmentInfoUpdatedWrapper";
 import ReservationForm from "../reservationForm";
 import ListUsersForAppointment from "../listUsersForAppointment";
 import AddGuestForm from "../addGuestForm";
@@ -10,7 +9,7 @@ import {Appointment} from "../../../models";
 import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
 import {confirmAppointment} from "../../lambdas";
-import KornerAppointmentShortWrapper from "../../wrappers/kornerAppointmentShortWrapper";
+import FigmaAppointment from "../../../figma-components/FigmaAppointment";
 import {getCurrentDateInDynamoDbString} from "../../converters";
 
 const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
@@ -99,7 +98,7 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <KornerAppointmentShortWrapper appointment={appointment} />
+                    <FigmaAppointment appointment={appointment} />
                     <ButtonOrBadge/>
                     <ShareLink/>
                 </Flex>

@@ -4,7 +4,7 @@ import {Appointment, Response} from "../../models";
 import {getCurrentDateInDynamoDbString} from "../converters";
 import {Card, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
-import KornerAppointmentShortWrapper from "../wrappers/kornerAppointmentShortWrapper";
+import FigmaAppointment from "../../figma-components/FigmaAppointment";
 const Home = ({user}) => {
     const [reservedAppointment, setReservedAppointment] = useState([]);
     const [ownedAppointment, setOwnedAppointment] = useState([]);
@@ -145,7 +145,7 @@ const Home = ({user}) => {
                 <Heading level={4} alignSelf={"start"}>{text}</Heading>
                 {appointments.map(a => {
                     return <Flex key={a.id}>
-                        <KornerAppointmentShortWrapper appointment={a}/>
+                        <FigmaAppointment appointment={a}/>
                     </Flex>;
                 })}
             </Flex>

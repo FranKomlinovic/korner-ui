@@ -6,7 +6,7 @@ import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {Response} from "../../models";
 
-import KornerResponseUserWrapper from "../wrappers/kornerResponseUserWrapper";
+import FigmaResponse from "../../figma-components/FigmaResponse";
 
 const ListUsersForAppointment = ({user, responses, isOwner}) => {
     if (responses == null) {
@@ -49,7 +49,7 @@ const ListUsersForAppointment = ({user, responses, isOwner}) => {
 
     const mapResponseToComponent = (res) => {
         return (<Flex key={res.id} alignItems={"center"}>
-            <KornerResponseUserWrapper user={user} response={res}/>
+            <FigmaResponse user={user} response={res}/>
             {/*<FaUserPlus onClick={() => addAsFriend(res)}/>*/}
             {isOwner && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
         </Flex>);

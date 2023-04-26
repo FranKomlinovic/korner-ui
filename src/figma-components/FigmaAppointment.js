@@ -1,9 +1,9 @@
-import {KornerFieldShort} from "../../ui-components";
+import {KornerFieldShort} from "../ui-components";
 import React, {useEffect, useState} from "react";
-import {getDayAndDateFromAppointment} from "../converters";
+import {getDayAndDateFromAppointment} from "../components/converters";
 import {Storage} from "aws-amplify";
 
-const KornerAppointmentShortWrapper = ({appointment}) => {
+const FigmaAppointment = ({appointment}) => {
 
     const [photo, setPhoto] = useState("/no-field.jpg");
     const [field, setField] = useState();
@@ -39,4 +39,4 @@ const KornerAppointmentShortWrapper = ({appointment}) => {
 
 }
 
-export default KornerAppointmentShortWrapper;
+export default FigmaAppointment;

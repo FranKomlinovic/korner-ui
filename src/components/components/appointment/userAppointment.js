@@ -3,7 +3,7 @@ import {Badge, Card, Flex} from "@aws-amplify/ui-react";
 import ReservationForm from "../reservationForm";
 import ListUsersForAppointment from "../listUsersForAppointment";
 import OwnerAppointment from "./ownerAppointment";
-import KornerAppointmentShortWrapper from "../../wrappers/kornerAppointmentShortWrapper";
+import FigmaAppointment from "../../../figma-components/FigmaAppointment";
 import {getCurrentDateInDynamoDbString} from "../../converters";
 
 const UserAppointment = ({user, appointment, responses}) => {
@@ -18,7 +18,7 @@ const UserAppointment = ({user, appointment, responses}) => {
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                 <Card variation={"elevated"} width={"100%"}>
                     <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                        <KornerAppointmentShortWrapper appointment={appointment}/>
+                        <FigmaAppointment appointment={appointment}/>
                         <StatusBadge/>
                     </Flex>
                 </Card>

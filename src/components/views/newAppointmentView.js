@@ -7,7 +7,7 @@ import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws
 import UserAppointment from "../components/appointment/userAppointment";
 import ListUsersForAppointment from "../components/listUsersForAppointment";
 import UnauthorizedReservationForm from "../components/unauthorizedReservationForm";
-import KornerAppointmentShortWrapper from "../wrappers/kornerAppointmentShortWrapper";
+import FigmaAppointment from "../../figma-components/FigmaAppointment";
 import {Dialog} from "@mui/material";
 
 const NewAppointmentView = () => {
@@ -68,7 +68,7 @@ const NewAppointmentView = () => {
                     <Authenticator/>
                 </Dialog>
                 <Card variation={"elevated"} width={"100%"}>
-                    <KornerAppointmentShortWrapper appointment={appointment}/>
+                    <FigmaAppointment appointment={appointment}/>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
                     <Flex direction="column" alignItems={"center"} justifyContent={"center"}>

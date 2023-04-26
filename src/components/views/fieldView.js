@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Collection, Flex, Heading, Text, TextField, withAuthenticator} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {Fields} from "../../models";
-import FigmaFieldInfoView from "../../figma-components/FigmaFIeldInfoView";
+import FigmaField from "../../figma-components/FigmaField";
 
 const FieldView = () => {
     const [fields, setFields] = useState()
@@ -32,7 +32,7 @@ const FieldView = () => {
             <Collection items={fields}>
                 {(item, index) => (
                     <Flex key={item.id}>
-                        <FigmaFieldInfoView field={item}/>
+                        <FigmaField field={item}/>
                     </Flex>
                 )}
             </Collection>

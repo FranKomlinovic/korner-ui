@@ -3,7 +3,7 @@ import {Storage} from "aws-amplify";
 import {KornerFieldInfoNew} from "../ui-components";
 import {convertSportsEnumListToString, convertSurfaceEnumToString} from "../components/converters";
 
-const FigmaFieldInfoView = ({field}) => {
+const FigmaField = ({field}) => {
 
     const [photo, setPhoto] = useState("/no-field.jpg");
     const [sports, setSports] = useState();
@@ -32,4 +32,4 @@ const FigmaFieldInfoView = ({field}) => {
 
 }
 
-export default FigmaFieldInfoView;
+export default FigmaField;

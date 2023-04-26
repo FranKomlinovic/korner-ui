@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Flex, withAuthenticator} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {Fields} from "../../../models";
-import KornerFieldShortWrapper from "../../wrappers/kornerFieldShortWrapper";
+import FigmaField from "../../../figma-components/FigmaField";
 
 const FieldView = ({user}) => {
 
@@ -19,7 +19,7 @@ const FieldView = ({user}) => {
     }, [user]);
 
     const allFields = () => {
-        return fields.map(a => <KornerFieldShortWrapper fields={a}/>);
+        return fields.map(a => <FigmaField fields={a}/>);
     };
     return (
         <Flex direction={"column"} alignItems={"center"}>

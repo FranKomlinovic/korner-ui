@@ -3,8 +3,8 @@ import {Button, Divider, Flex, Heading, Image, TextField, withAuthenticator} fro
 import {checkIfOwner} from "../converters";
 import {Auth, DataStore, Storage} from "aws-amplify";
 import {Fields} from "../../models";
-import KornerFieldShortWrapper from "../wrappers/kornerFieldShortWrapper";
 import UploadComponent from "../components/UploadComponent";
+import FigmaField from "../../figma-components/FigmaField";
 
 
 const Profile = ({user, signOut}) => {
@@ -44,7 +44,7 @@ const Profile = ({user, signOut}) => {
     }, [isOwner, sub]);
 
     const AllFields = () => {
-        return fields.map(a => <Flex key={a.id}><KornerFieldShortWrapper fields={a}/></Flex>);
+        return fields.map(a => <Flex key={a.id}><FigmaField fields={a}/></Flex>);
     };
 
     const uploadProfilePicture = (pic) => {

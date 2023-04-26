@@ -1,10 +1,10 @@
-import {KornerResponseUser} from "../../ui-components";
+import {KornerResponseUser} from "../ui-components";
 import React, {useEffect, useState} from "react";
 import {FaCheck, FaMinus} from "react-icons/fa";
-import {getTimeFromDate, getTimeFromTimestamp} from "../converters";
+import {getTimeFromDate, getTimeFromTimestamp} from "../components/converters";
 import {Storage} from "aws-amplify";
 
-const KornerResponseUserWrapper = ({response, user}) => {
+const FigmaResponse = ({response, user}) => {
 
     const [photo, setPhoto] = useState(null);
     const [id, setId] = useState(null);
@@ -45,4 +45,4 @@ const KornerResponseUserWrapper = ({response, user}) => {
 
 }
 
-export default KornerResponseUserWrapper;
+export default FigmaResponse;

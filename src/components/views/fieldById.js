@@ -8,7 +8,7 @@ import {checkIfOwner, convertSportsEnumListToString, convertSurfaceEnumToString}
 import UploadComponent from "../components/UploadComponent";
 import {Button, Divider, Flex, withAuthenticator} from "@aws-amplify/ui-react";
 import {Dialog, DialogTitle} from "@mui/material";
-import FigmaFieldInfoView from "../../figma-components/FigmaFIeldInfoView";
+import FigmaField from "../../figma-components/FigmaField";
 
 
 const FieldById = ({user}) => {
@@ -84,7 +84,7 @@ const FieldById = ({user}) => {
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            <FigmaFieldInfoView field={field}/>
+            <FigmaField field={field}/>
             <OwnerView/>
             <FreeAppointmentsView field={field} user={user} isOwner={isOwner}/>
         </Flex>
