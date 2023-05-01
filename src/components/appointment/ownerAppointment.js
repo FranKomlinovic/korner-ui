@@ -10,7 +10,7 @@ import {Tooltip} from "@mui/material";
 import {confirmAlert} from "react-confirm-alert";
 import {confirmAppointment} from "../../functions/lambdas";
 import FigmaAppointment from "../../figma-components/FigmaAppointment";
-import {getCurrentDateInDynamoDbString} from "../../functions/converters";
+import {getCurrentDateInDynamoDbString, getDayAndDateFromAppointment} from "../../functions/converters";
 
 const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
     const [open, setOpen] = useState(false);
@@ -98,7 +98,7 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <FigmaAppointment appointment={appointment} />
+                    <FigmaAppointment appointment={appointment}/>
                     <ButtonOrBadge/>
                     <ShareLink/>
                 </Flex>
@@ -125,7 +125,8 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
     }
 
     function copyLink() {
-        navigator.clipboard.writeText(window.location.href)
+        navigator.clipboard.writeText(
+            "Skupljamo se za termin:\n" + appointment?.fieldName + "\n" + getDayAndDateFromAppointment(appointment?.date) + "\n" + appointment?.start + " - " + appointment?.end + " \n\nOdgovori na ovoj poveznici:\n" + window.location.href + "\n")
         setOpen(true)
     }
 }

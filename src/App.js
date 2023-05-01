@@ -11,7 +11,6 @@ import Home from "./views/home";
 import FieldById from "./views/fieldById";
 import FieldView from "./views/fieldView";
 import {FaCalendar, FaPlusCircle} from "react-icons/fa";
-import FieldOwnerView from "./views/owner/fieldOwnerView";
 import Profile from "./views/profile";
 import {useEffect, useState} from "react";
 import NewAppointmentView from "./views/newAppointmentView";
@@ -52,15 +51,21 @@ function App() {
             <Route path="/fields/:fieldId" element={<FieldById/>}/>
             <Route path="/appointment/:appointmentId" element={<NewAppointmentView/>}/>
             <Route path="/fields" element={<FieldView/>}/>
-            <Route path="/owner/fields" element={<FieldOwnerView/>}/>
             <Route path="/profile" element={<Profile/>}/>
         </Routes>
     )
 
-    const MyMenu = () => (
-        <Flex backgroundColor={"green.90"} direction={"column"} width={"100%"} position={"sticky"} bottom={"0px"}>
+    const style = {
+        backgroundImage: "url("+ "/menu-background.png" + ")",
+        backgroundPosition: 'center',
+        backgroundSize: 'contain'
+    }
 
-            <Flex marginTop={"0px"} justifyContent={"space-between"}
+    const MyMenu = () => (
+        <Flex style={style} backgroundColor={"transparent"} direction={"column"} width={"100%"} position={"sticky"}
+              bottom={"-1px"}>
+
+            <Flex marginTop={"25px"} backgroundColor={"transparent"} alignContent={"end"} justifyContent={"space-between"}
                   gap={"0.5rem"}>
                 <Button onClick={() => navigate("/")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
@@ -100,7 +105,7 @@ function App() {
         <Flex>
             <Flex width={"100%"} direction={"column"} alignContent={"center"} justifyContent={"space-between"}>
                 <TopHeader/>
-                <ScrollView margin={"5px"} height={"100vh"} direction={"column"} justifyContent={"start"}>
+                <ScrollView marginTop={"5px"} marginBottom={"0px"} direction={"column"} justifyContent={"start"}>
                     {routes()}
                 </ScrollView>
                 {user && <MyMenu/>}
