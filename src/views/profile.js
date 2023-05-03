@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Divider, Flex, Heading, Image, TextField, withAuthenticator} from "@aws-amplify/ui-react";
-import {checkIfOwner} from "../functions/converters";
+import {checkIfInOwnerGroup, checkIfOwner} from "../functions/converters";
 import {Auth, DataStore, Storage} from "aws-amplify";
 import {Fields} from "../models";
 import UploadComponent from "../components/UploadComponent";
@@ -28,12 +28,11 @@ const Profile = ({user, signOut}) => {
 
     //Checks if user is in owner group
     useEffect(() => {
-        setIsOwner(checkIfOwner(user));
+        setIsOwner(checkIfInOwnerGroup(user));
     }, [user]);
 
     //Gets owners fields
     useEffect(() => {
-
         if (isOwner) {
             DataStore.query(Fields, a =>
                 a.ownerID.eq(sub)
@@ -44,7 +43,7 @@ const Profile = ({user, signOut}) => {
     }, [isOwner, sub]);
 
     const AllFields = () => {
-        return fields.map(a => <Flex key={a.id}><FigmaField fields={a}/></Flex>);
+        return fields?.map(a => <Flex key={a.id}><FigmaField field={a}/></Flex>);
     };
 
     const uploadProfilePicture = (pic) => {
@@ -70,8 +69,7 @@ const Profile = ({user, signOut}) => {
             return (
                 <Flex direction={"column"} alignItems={"center"}>
                     <Heading level={4}>Vaši tereni:</Heading>
-                    <AllFields/>
-                    <Divider size={"large"}/>
+                    {AllFields()}
                 </Flex>
             )
         }

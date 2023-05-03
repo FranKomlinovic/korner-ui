@@ -55,14 +55,14 @@ function App() {
         </Routes>
     )
 
-    const style = {
+    const menuStyle = {
         backgroundImage: "url("+ "/menu-background.png" + ")",
         backgroundPosition: 'center',
         backgroundSize: 'contain'
     }
 
     const MyMenu = () => (
-        <Flex style={style} backgroundColor={"transparent"} direction={"column"} width={"100%"} position={"sticky"}
+        <Flex style={menuStyle} backgroundColor={"transparent"} direction={"column"} width={"100%"} position={"sticky"}
               bottom={"-1px"}>
 
             <Flex marginTop={"25px"} backgroundColor={"transparent"} alignContent={"end"} justifyContent={"space-between"}
@@ -101,11 +101,12 @@ function App() {
         </Flex>
     )
 
+
     return (
-        <Flex>
+        <Flex >
             <Flex width={"100%"} direction={"column"} alignContent={"center"} justifyContent={"space-between"}>
                 <TopHeader/>
-                <ScrollView marginTop={"5px"} marginBottom={"0px"} direction={"column"} justifyContent={"start"}>
+                <ScrollView  marginTop={"5px"} marginBottom={"0px"} direction={"column"} justifyContent={"start"}>
                     {routes()}
                 </ScrollView>
                 {user && <MyMenu/>}

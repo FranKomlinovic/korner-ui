@@ -12,11 +12,11 @@ import {confirmAppointment} from "../../functions/lambdas";
 import FigmaAppointment from "../../figma-components/FigmaAppointment";
 import {getCurrentDateInDynamoDbString, getDayAndDateFromAppointment} from "../../functions/converters";
 
-const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
+const OwnerAppointment = ({user, appointment, responses, responseToUpdate, field}) => {
     const [open, setOpen] = useState(false);
 
     const ReserveLockButton = () => {
-        const numberOfPeople = ` ${getNumberOfAcceptedUsers()}/${appointment?.minPlayers} `;
+        const numberOfPeople = ` ${getNumberOfAcceptedUsers()}/${field?.minPlayers} `;
         return (
             <Flex direction={"column"}>
                 <Button variation={"primary"} isDisabled><FaLock/>{numberOfPeople}Rezerviraj termin*</Button>
@@ -27,7 +27,7 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
 
     // Button to create reservation
     const ReservationButton = () => {
-        return getNumberOfAcceptedUsers() < appointment?.minPlayers ? <ReserveLockButton/> :
+        return getNumberOfAcceptedUsers() < field?.minPlayers ? <ReserveLockButton/> :
             <Button variation={"primary"} onClick={() => confirmAppointment(appointment.id)}>Rezerviraj termin</Button>
     }
 
@@ -126,7 +126,7 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate}) => {
 
     function copyLink() {
         navigator.clipboard.writeText(
-            "Skupljamo se za termin:\n" + appointment?.fieldName + "\n" + getDayAndDateFromAppointment(appointment?.date) + "\n" + appointment?.start + " - " + appointment?.end + " \n\nOdgovori na ovoj poveznici:\n" + window.location.href + "\n")
+            "Skupljamo se za termin:\n" + field?.name + "\n" + getDayAndDateFromAppointment(appointment?.date) + "\n" + appointment?.start + " - " + appointment?.end + " \n\nOdgovori na ovoj poveznici:\n" + window.location.href + "\n")
         setOpen(true)
     }
 }

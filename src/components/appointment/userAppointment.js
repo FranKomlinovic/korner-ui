@@ -6,7 +6,7 @@ import OwnerAppointment from "./ownerAppointment";
 import FigmaAppointment from "../../figma-components/FigmaAppointment";
 import {getCurrentDateInDynamoDbString} from "../../functions/converters";
 
-const UserAppointment = ({user, appointment, responses}) => {
+const UserAppointment = ({user, appointment, responses, field}) => {
     const [responseToUpdate, setResponseToUpdate] = useState();
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const UserAppointment = ({user, appointment, responses}) => {
 
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            {user?.isOwner ? <OwnerAppointment appointment={appointment} responses={responses} user={user}
+            {user?.isOwner ? <OwnerAppointment field={field} appointment={appointment} responses={responses} user={user}
                                                responseToUpdate={responseToUpdate}/> :
                 <UserView/>}
         </Flex>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Collection, Flex, Heading, Text, TextField, withAuthenticator} from "@aws-amplify/ui-react";
+import {Collection, Flex, TextField, withAuthenticator} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {Fields} from "../models";
 import FigmaField from "../figma-components/FigmaField";

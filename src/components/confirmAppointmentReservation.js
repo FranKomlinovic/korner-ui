@@ -6,9 +6,10 @@ import {Appointment} from "../models";
 import {useNavigate} from "react-router-dom";
 
 // Ovo je komponenta koja prikazuje i stvara button da se kreira termin
-const ConfirmAppointmentReservation = ({appointment, isOwner}) => {
+const ConfirmAppointmentReservation = ({appointment}) => {
     const navigate = useNavigate();
     const [name, setName] = useState(null)
+    const isOwner = false;
 
 
     function createAppointment() {

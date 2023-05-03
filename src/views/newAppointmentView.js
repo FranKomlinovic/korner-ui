@@ -13,8 +13,9 @@ import {Dialog} from "@mui/material";
 const NewAppointmentView = () => {
     const {appointmentId} = useParams();
     const [appointment, setAppointment] = useState();
+    const [field, setField] = useState();
     const [responses, setResponses] = useState();
-    const [appointmentNotFound, setAppointmentNotFound] = useState();
+    const [appointmentNotFound, setAppointmentNotFound] = useState(false);
     const [open, setOpen] = useState(false);
     const [userr, setUser] = useState();
     const {user} = useAuthenticator((context) => [
@@ -24,10 +25,15 @@ const NewAppointmentView = () => {
     // Sets appointments
     useEffect(() => {
         DataStore.query(Appointment, appointmentId).then(a => {
-            console.log(a);
             a ? setAppointment(a) : setAppointmentNotFound(true);
         })
     }, [appointmentId]);
+
+    // Sets fields
+    useEffect(() => {
+        appointment?.Fields.then(a => setField(a));
+    }, [appointment]);
+
 
     // Sets user and checks if user is owner
     useEffect(() => {
@@ -42,7 +48,7 @@ const NewAppointmentView = () => {
         }).catch(a => {
 
         })
-    }, [user,appointment]);
+    }, [user, appointment]);
 
     // Gets all responses
     useEffect(() => {
@@ -93,7 +99,7 @@ const NewAppointmentView = () => {
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {appointmentNotFound ? <Heading>Termin nije pronađen (osvježi stranicu)</Heading> :
-                userr ? <UserAppointment user={userr} appointment={appointment} responses={responses}/> : <NoUserView/>}
+                userr ? <UserAppointment field={field} user={userr} appointment={appointment} responses={responses}/> : <NoUserView/>}
         </Flex>
     );
 }

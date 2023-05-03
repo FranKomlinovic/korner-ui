@@ -31,21 +31,37 @@ export function getTimeFromDate(date: Date) {
     return time[0] + ":" + time[1];
 }
 
+export function getDateInStringFromOffset(plusDays: number) {
+    let date = new Date(Date.now() + plusDays * 24 * 60 * 60 * 1000);
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    return getDayOfWeek(date) + ' ' + date.getDate() + '.' + month + '.' + year;
+}
 
 export function getDateInString(date: Date) {
     let month = date.getMonth() + 1;
     return getDayOfWeek(date) + ' ' + date.getDate() + '.' + month + '.';
 }
 
-export function checkIfOwner(user) {
+export function checkIfInOwnerGroup(user): boolean {
     if (!user) {
         return false;
     }
-    let payloadElement = user.getSignInUserSession().getAccessToken().payload['cognito:groups'];
+    let signInUserSession = user.getSignInUserSession().getAccessToken().payload;
+    let payloadElement = signInUserSession['cognito:groups'];
     if (!payloadElement) {
         return false
     }
     return payloadElement.includes("owners");
+}
+
+
+export function checkIfOwner(user, fieldOwnerId): boolean {
+    let signInUserSession = user.getSignInUserSession().getAccessToken().payload;
+    if (!fieldOwnerId) {
+        return false;
+    }
+    return checkIfInOwnerGroup(user) && fieldOwnerId === signInUserSession.sub;
 }
 
 export function getCurrentDateInDynamoDbString(plusDays: number) {
@@ -53,7 +69,7 @@ export function getCurrentDateInDynamoDbString(plusDays: number) {
     return newDate.toISOString().split('T')[0]
 }
 
-export function getDateTimeFromAppointment(appointment: Appointment) {
+export function getDateTimeFromAppointment(appointment) {
     return getDayOfWeek(new Date(appointment?.date)) + ' ' + appointment?.start + ' - ' + appointment?.end;
 }
 
@@ -79,11 +95,11 @@ export function calculateDurationFromAppointment(appointment: Appointment) {
 }
 
 export function convertSurfaceEnumToString(a): string {
-   return surfaces.has(a) ? surfaces.get(a) : a;
+    return surfaces.has(a) ? surfaces.get(a) : a;
 }
 
 export function convertSportsEnumListToString(a: []): string {
-   return a ? a.map(convertSportsEnumToString).join(', ') : "";
+    return a ? a.map(convertSportsEnumToString).join(', ') : "";
 }
 
 export function convertSportsEnumToString(a): string {

@@ -151,10 +151,9 @@ const FreeAppointmentsView = ({field, user, isOwner}) => {
         <Flex direction={"column"} margin={"10px"}>
             <Heading level={5}>Rezerviraj termin:</Heading>
             <AppointmentCreateView/>
-            <DateAndDurationDropdowns/>
+            {DateAndDurationDropdowns()}
             <AppointmentLoader/>
             <AppointmentButtons/>
-            <ListAppointments/>
         </Flex>
 
     )
