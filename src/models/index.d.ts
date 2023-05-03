@@ -143,10 +143,6 @@ type EagerAppointment = {
   readonly bookerID?: string | null;
   readonly bookerName?: string | null;
   readonly sport?: Sport | keyof typeof Sport | null;
-  readonly fieldName?: string | null;
-  readonly fieldPhoto?: string | null;
-  readonly minPlayers?: number | null;
-  readonly address?: string | null;
   readonly price?: number | null;
   readonly canceled?: boolean | null;
   readonly Fields?: Fields | null;
@@ -169,10 +165,6 @@ type LazyAppointment = {
   readonly bookerID?: string | null;
   readonly bookerName?: string | null;
   readonly sport?: Sport | keyof typeof Sport | null;
-  readonly fieldName?: string | null;
-  readonly fieldPhoto?: string | null;
-  readonly minPlayers?: number | null;
-  readonly address?: string | null;
   readonly price?: number | null;
   readonly canceled?: boolean | null;
   readonly Fields: AsyncItem<Fields | undefined>;

@@ -5,6 +5,7 @@ import {getCurrentDateInDynamoDbString} from "../functions/converters";
 import {Card, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
+
 const Home = ({user}) => {
     const [reservedAppointment, setReservedAppointment] = useState([]);
     const [ownedAppointment, setOwnedAppointment] = useState([]);
@@ -118,22 +119,27 @@ const Home = ({user}) => {
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            <Card variation={"elevated"} width={"100%"}>
+            <Card variation={"elevated"}>
+
                 <ReservedAppointment/>
             </Card>
-            <Card variation={"elevated"} width={"100%"}>
+            <Card variation={"elevated"}>
+
                 <OwnedAppointment/>
             </Card>
-            <Card variation={"elevated"} width={"100%"}>
+            <Card variation={"elevated"}>
+
                 <AcceptedAppointment/>
             </Card>
-            <Card variation={"elevated"} width={"100%"}>
+            <Card variation={"elevated"}>
+
                 <RefusedAppointment/>
             </Card>
-            <Card variation={"elevated"} width={"100%"}>
+            <Card variation={"elevated"}>
+
                 <CanceledAppointment/>
             </Card>
-            <Card variation={"elevated"} width={"100%"}>
+            <Card variation={"elevated"}>
                 <PlayedAppointment/>
             </Card>
         </Flex>

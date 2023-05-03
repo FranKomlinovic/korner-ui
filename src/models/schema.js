@@ -356,34 +356,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "fieldName": {
-                    "name": "fieldName",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "fieldPhoto": {
-                    "name": "fieldPhoto",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "minPlayers": {
-                    "name": "minPlayers",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "address": {
-                    "name": "address",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
                 "price": {
                     "name": "price",
                     "isArray": false,
@@ -660,6 +632,6 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "codegenVersion": "3.4.0",
-    "version": "918307ab562415a91a874f70f1435e1d"
+    "codegenVersion": "3.4.2",
+    "version": "baa20b0b46b8d74ad63bdec4689d89f4"
 };
