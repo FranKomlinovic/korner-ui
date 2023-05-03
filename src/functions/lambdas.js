@@ -73,6 +73,7 @@ export function getAvailableAppointments(fieldAppointments: Appointment[], date:
         if (isOverlapping(a, unconfirmedAppointments)) {
             a.overlapping = true
         }
+        console.log(a);
         return a;
     });
 
@@ -102,5 +103,6 @@ function createAppointment(start, end, date): Appointment {
 }
 
 export function checkOverlap(app1: Appointment, app2: Appointment) {
-    return (app1.start < app2.end && app2.start < app1.end);
+    //TODO maybe fix logic??
+    return (app1.start < app2.end && app2.start < app1.end) || app1.end === "00:00";
 }

@@ -31,11 +31,8 @@ const FieldConfirmAppointmentReservation = ({appointment, field, user}) => {
         appointmentToCreate.canceled = false
         appointmentToCreate.sport = Sport.FUTSAL
         DataStore.save(new Appointment(appointmentToCreate)).then(a => {
-            navigate('/appointment/' + a.id)
-            if (isOwner) {
-                confirmAppointment(a.id);
+                isOwner ? confirmAppointment(a.id) : navigate('/appointment/' + a.id);
             }
-        }
         )
     }
 
