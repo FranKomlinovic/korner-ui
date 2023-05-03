@@ -103,6 +103,8 @@ function createAppointment(start, end, date): Appointment {
 }
 
 export function checkOverlap(app1: Appointment, app2: Appointment) {
-    //TODO maybe fix logic??
-    return (app1.start < app2.end && app2.start < app1.end) || app1.end === "00:00";
+    //TODO Fix logic for hours over midnight
+    const end1 = app1.end === "00:00" ? "24:00" : app1.end;
+    const end2 = app2.end === "00:00" ? "24:00" : app2.end;
+    return (app1.start < end2 && app2.start < end1);
 }
