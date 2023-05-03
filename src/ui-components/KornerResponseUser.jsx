@@ -67,7 +67,7 @@ export default function KornerResponseUser(props) {
             {...getOverrideProps(overrides, "image")}
           ></Image>
           <Text
-            fontFamily="Inter"
+            fontFamily="Arial"
             fontSize="20px"
             fontWeight="400"
             color="rgba(48,64,80,1)"
@@ -90,7 +90,7 @@ export default function KornerResponseUser(props) {
             {...getOverrideProps(overrides, "test37113016")}
           ></Text>
           <Text
-            fontFamily="Inter"
+            fontFamily="Arial"
             fontSize="14px"
             fontWeight="400"
             color="rgba(48,64,80,1)"

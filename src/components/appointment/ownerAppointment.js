@@ -96,24 +96,24 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate, field
 
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
+            <Card alignSelf={"center"} variation={"elevated"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                     <FigmaAppointment appointment={appointment}/>
                     <ButtonOrBadge/>
                     <ShareLink/>
                 </Flex>
             </Card>
-            <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
+            <Card alignSelf={"center"} variation={"elevated"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                     <ReservationForm user={user} appointmentId={appointment.id} responseToUpdate={responseToUpdate}/>
                 </Flex>
             </Card>
-            <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
+            <Card alignSelf={"center"} variation={"elevated"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                     <ListUsersForAppointment user={user} isOwner={true} responses={responses}/>
                 </Flex>
             </Card>
-            <Card alignSelf={"center"} variation={"elevated"} width={"100%"}>
+            <Card alignSelf={"center"} variation={"elevated"}>
                 <OwnerOptions/>
             </Card>
         </Flex>

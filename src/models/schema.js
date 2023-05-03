@@ -562,6 +562,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "workTimeStart": {
+                    "name": "workTimeStart",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "workTimeEnd": {
+                    "name": "workTimeEnd",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -633,5 +647,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.2",
-    "version": "baa20b0b46b8d74ad63bdec4689d89f4"
+    "version": "3fba816b319e171d7eb7f3aa327624ce"
 };

@@ -36,22 +36,28 @@ export function confirmAppointment(appointmentId): Appointment {
 }
 
 
-export function getAvailableAppointments(fieldAppointments: Appointment[], date: Date, duration: number): Appointment[] {
+export function getAvailableAppointments(fieldAppointments: Appointment[], date: Date, duration: number, field): Appointment[] {
     const appointments = [];
 
+    const [startHours, startMinutes] = field ? field.workTimeStart.split(':') : [16, 0];
+    const [endHours, endMinutes] = field ? field.workTimeEnd.split(':') : [23, 0];
     const start = new Date();
-    isToday(date) && date>16?
+    isToday(date) && date > +startHours ?
         start.setHours(new Date().getHours() + 1) :
         start.setHours(16)
-    start.setMinutes(0);
+    start.setMinutes(+startMinutes);
     start.setSeconds(0);
     start.setMilliseconds(0);
 
     const workTimeEnd = new Date();
-    workTimeEnd.setHours(23);
-    workTimeEnd.setMinutes(0 - duration);
+    workTimeEnd.setHours(+endHours);
+    if (+endHours < +startHours) {
+        workTimeEnd.setDate(workTimeEnd.getDate()+1)
+    }
+    workTimeEnd.setMinutes(+endMinutes - duration);
     workTimeEnd.setSeconds(0);
     workTimeEnd.setMilliseconds(0);
+
     while (start <= workTimeEnd) {
         const end = new Date(start);
         end.setMinutes(start.getMinutes() + duration);

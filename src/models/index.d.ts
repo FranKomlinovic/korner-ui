@@ -197,6 +197,8 @@ type EagerFields = {
   readonly city?: Cities | keyof typeof Cities | null;
   readonly ReccuringAppointments?: (ReccuringAppointment | null)[] | null;
   readonly ownerID?: string | null;
+  readonly workTimeStart?: string | null;
+  readonly workTimeEnd?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -220,6 +222,8 @@ type LazyFields = {
   readonly city?: Cities | keyof typeof Cities | null;
   readonly ReccuringAppointments: AsyncCollection<ReccuringAppointment>;
   readonly ownerID?: string | null;
+  readonly workTimeStart?: string | null;
+  readonly workTimeEnd?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

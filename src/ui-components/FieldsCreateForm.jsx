@@ -204,6 +204,8 @@ export default function FieldsCreateForm(props) {
     sports: [],
     city: "",
     ownerID: "",
+    workTimeStart: "",
+    workTimeEnd: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
@@ -216,6 +218,12 @@ export default function FieldsCreateForm(props) {
   const [sports, setSports] = React.useState(initialValues.sports);
   const [city, setCity] = React.useState(initialValues.city);
   const [ownerID, setOwnerID] = React.useState(initialValues.ownerID);
+  const [workTimeStart, setWorkTimeStart] = React.useState(
+    initialValues.workTimeStart
+  );
+  const [workTimeEnd, setWorkTimeEnd] = React.useState(
+    initialValues.workTimeEnd
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -230,6 +238,8 @@ export default function FieldsCreateForm(props) {
     setCurrentSportsValue("");
     setCity(initialValues.city);
     setOwnerID(initialValues.ownerID);
+    setWorkTimeStart(initialValues.workTimeStart);
+    setWorkTimeEnd(initialValues.workTimeEnd);
     setErrors({});
   };
   const [currentSportsValue, setCurrentSportsValue] = React.useState("");
@@ -263,6 +273,8 @@ export default function FieldsCreateForm(props) {
     sports: [],
     city: [],
     ownerID: [],
+    workTimeStart: [],
+    workTimeEnd: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -301,6 +313,8 @@ export default function FieldsCreateForm(props) {
           sports,
           city,
           ownerID,
+          workTimeStart,
+          workTimeEnd,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -367,6 +381,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -402,6 +418,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -441,6 +459,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.width ?? value;
@@ -480,6 +500,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.length ?? value;
@@ -519,6 +541,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -558,6 +582,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.minPlayers ?? value;
@@ -592,6 +618,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.surface ?? value;
@@ -647,6 +675,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.photo ?? value;
@@ -677,6 +707,8 @@ export default function FieldsCreateForm(props) {
               sports: values,
               city,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             values = result?.sports ?? values;
@@ -750,6 +782,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city: value,
               ownerID,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -795,6 +829,8 @@ export default function FieldsCreateForm(props) {
               sports,
               city,
               ownerID: value,
+              workTimeStart,
+              workTimeEnd,
             };
             const result = onChange(modelFields);
             value = result?.ownerID ?? value;
@@ -808,6 +844,80 @@ export default function FieldsCreateForm(props) {
         errorMessage={errors.ownerID?.errorMessage}
         hasError={errors.ownerID?.hasError}
         {...getOverrideProps(overrides, "ownerID")}
+      ></TextField>
+      <TextField
+        label="Work time start"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={workTimeStart}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              address,
+              width,
+              length,
+              price,
+              minPlayers,
+              surface,
+              photo,
+              sports,
+              city,
+              ownerID,
+              workTimeStart: value,
+              workTimeEnd,
+            };
+            const result = onChange(modelFields);
+            value = result?.workTimeStart ?? value;
+          }
+          if (errors.workTimeStart?.hasError) {
+            runValidationTasks("workTimeStart", value);
+          }
+          setWorkTimeStart(value);
+        }}
+        onBlur={() => runValidationTasks("workTimeStart", workTimeStart)}
+        errorMessage={errors.workTimeStart?.errorMessage}
+        hasError={errors.workTimeStart?.hasError}
+        {...getOverrideProps(overrides, "workTimeStart")}
+      ></TextField>
+      <TextField
+        label="Work time end"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={workTimeEnd}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              address,
+              width,
+              length,
+              price,
+              minPlayers,
+              surface,
+              photo,
+              sports,
+              city,
+              ownerID,
+              workTimeStart,
+              workTimeEnd: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.workTimeEnd ?? value;
+          }
+          if (errors.workTimeEnd?.hasError) {
+            runValidationTasks("workTimeEnd", value);
+          }
+          setWorkTimeEnd(value);
+        }}
+        onBlur={() => runValidationTasks("workTimeEnd", workTimeEnd)}
+        errorMessage={errors.workTimeEnd?.errorMessage}
+        hasError={errors.workTimeEnd?.hasError}
+        {...getOverrideProps(overrides, "workTimeEnd")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -22,6 +22,10 @@ const FieldOwnerAppointments = ({appointments}) => {
                 <option value={0}>{getDateInStringFromOffset(0)}</option>
                 <option value={1}>{getDateInStringFromOffset(1)}</option>
                 <option value={2}>{getDateInStringFromOffset(2)}</option>
+                <option value={3}>{getDateInStringFromOffset(3)}</option>
+                <option value={4}>{getDateInStringFromOffset(4)}</option>
+                <option value={5}>{getDateInStringFromOffset(5)}</option>
+                <option value={6}>{getDateInStringFromOffset(6)}</option>
             </SelectField>
 
         )

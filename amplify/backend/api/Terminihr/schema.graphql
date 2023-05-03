@@ -73,5 +73,7 @@ type Fields @model @auth(rules: [{allow: public}]) {
   city: Cities
   ReccuringAppointments: [ReccuringAppointment] @hasMany(indexName: "byFields", fields: ["id"])
   ownerID: ID
+  workTimeStart: AWSTime
+  workTimeEnd: AWSTime
 }
  

@@ -195,40 +195,50 @@ export default function FieldsUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
+    price: "",
+    workTimeStart: "",
+    workTimeEnd: "",
+    minPlayers: "",
+    city: "",
     name: "",
     address: "",
-    length: "",
     width: "",
-    price: "",
-    minPlayers: "",
+    length: "",
     surface: "",
     sports: [],
-    city: "",
   };
+  const [price, setPrice] = React.useState(initialValues.price);
+  const [workTimeStart, setWorkTimeStart] = React.useState(
+    initialValues.workTimeStart
+  );
+  const [workTimeEnd, setWorkTimeEnd] = React.useState(
+    initialValues.workTimeEnd
+  );
+  const [minPlayers, setMinPlayers] = React.useState(initialValues.minPlayers);
+  const [city, setCity] = React.useState(initialValues.city);
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
-  const [length, setLength] = React.useState(initialValues.length);
   const [width, setWidth] = React.useState(initialValues.width);
-  const [price, setPrice] = React.useState(initialValues.price);
-  const [minPlayers, setMinPlayers] = React.useState(initialValues.minPlayers);
+  const [length, setLength] = React.useState(initialValues.length);
   const [surface, setSurface] = React.useState(initialValues.surface);
   const [sports, setSports] = React.useState(initialValues.sports);
-  const [city, setCity] = React.useState(initialValues.city);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = fieldsRecord
       ? { ...initialValues, ...fieldsRecord }
       : initialValues;
+    setPrice(cleanValues.price);
+    setWorkTimeStart(cleanValues.workTimeStart);
+    setWorkTimeEnd(cleanValues.workTimeEnd);
+    setMinPlayers(cleanValues.minPlayers);
+    setCity(cleanValues.city);
     setName(cleanValues.name);
     setAddress(cleanValues.address);
-    setLength(cleanValues.length);
     setWidth(cleanValues.width);
-    setPrice(cleanValues.price);
-    setMinPlayers(cleanValues.minPlayers);
+    setLength(cleanValues.length);
     setSurface(cleanValues.surface);
     setSports(cleanValues.sports ?? []);
     setCurrentSportsValue("");
-    setCity(cleanValues.city);
     setErrors({});
   };
   const [fieldsRecord, setFieldsRecord] = React.useState(fieldsModelProp);
@@ -255,15 +265,17 @@ export default function FieldsUpdateForm(props) {
     },
   };
   const validations = {
+    price: [],
+    workTimeStart: [],
+    workTimeEnd: [],
+    minPlayers: [],
+    city: [],
     name: [],
     address: [],
-    length: [],
     width: [],
-    price: [],
-    minPlayers: [],
+    length: [],
     surface: [],
     sports: [],
-    city: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -291,15 +303,17 @@ export default function FieldsUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
+          price,
+          workTimeStart,
+          workTimeEnd,
+          minPlayers,
+          city,
           name,
           address,
-          length,
           width,
-          price,
-          minPlayers,
+          length,
           surface,
           sports,
-          city,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -347,6 +361,197 @@ export default function FieldsUpdateForm(props) {
       {...rest}
     >
       <TextField
+        label="Cijena(€)"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={price}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              price: value,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers,
+              city,
+              name,
+              address,
+              width,
+              length,
+              surface,
+              sports,
+            };
+            const result = onChange(modelFields);
+            value = result?.price ?? value;
+          }
+          if (errors.price?.hasError) {
+            runValidationTasks("price", value);
+          }
+          setPrice(value);
+        }}
+        onBlur={() => runValidationTasks("price", price)}
+        errorMessage={errors.price?.errorMessage}
+        hasError={errors.price?.hasError}
+        {...getOverrideProps(overrides, "price")}
+      ></TextField>
+      <TextField
+        label="Vrijeme otvaranja"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={workTimeStart}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              price,
+              workTimeStart: value,
+              workTimeEnd,
+              minPlayers,
+              city,
+              name,
+              address,
+              width,
+              length,
+              surface,
+              sports,
+            };
+            const result = onChange(modelFields);
+            value = result?.workTimeStart ?? value;
+          }
+          if (errors.workTimeStart?.hasError) {
+            runValidationTasks("workTimeStart", value);
+          }
+          setWorkTimeStart(value);
+        }}
+        onBlur={() => runValidationTasks("workTimeStart", workTimeStart)}
+        errorMessage={errors.workTimeStart?.errorMessage}
+        hasError={errors.workTimeStart?.hasError}
+        {...getOverrideProps(overrides, "workTimeStart")}
+      ></TextField>
+      <TextField
+        label="Vrijeme zatvaranja"
+        isRequired={false}
+        isReadOnly={false}
+        type="time"
+        value={workTimeEnd}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              price,
+              workTimeStart,
+              workTimeEnd: value,
+              minPlayers,
+              city,
+              name,
+              address,
+              width,
+              length,
+              surface,
+              sports,
+            };
+            const result = onChange(modelFields);
+            value = result?.workTimeEnd ?? value;
+          }
+          if (errors.workTimeEnd?.hasError) {
+            runValidationTasks("workTimeEnd", value);
+          }
+          setWorkTimeEnd(value);
+        }}
+        onBlur={() => runValidationTasks("workTimeEnd", workTimeEnd)}
+        errorMessage={errors.workTimeEnd?.errorMessage}
+        hasError={errors.workTimeEnd?.hasError}
+        {...getOverrideProps(overrides, "workTimeEnd")}
+      ></TextField>
+      <TextField
+        label="Minimalni broj igrača"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={minPlayers}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              price,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers: value,
+              city,
+              name,
+              address,
+              width,
+              length,
+              surface,
+              sports,
+            };
+            const result = onChange(modelFields);
+            value = result?.minPlayers ?? value;
+          }
+          if (errors.minPlayers?.hasError) {
+            runValidationTasks("minPlayers", value);
+          }
+          setMinPlayers(value);
+        }}
+        onBlur={() => runValidationTasks("minPlayers", minPlayers)}
+        errorMessage={errors.minPlayers?.errorMessage}
+        hasError={errors.minPlayers?.hasError}
+        {...getOverrideProps(overrides, "minPlayers")}
+      ></TextField>
+      <SelectField
+        label="Grad"
+        placeholder="Odaberi"
+        isDisabled={false}
+        value={city}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              price,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers,
+              city: value,
+              name,
+              address,
+              width,
+              length,
+              surface,
+              sports,
+            };
+            const result = onChange(modelFields);
+            value = result?.city ?? value;
+          }
+          if (errors.city?.hasError) {
+            runValidationTasks("city", value);
+          }
+          setCity(value);
+        }}
+        onBlur={() => runValidationTasks("city", city)}
+        errorMessage={errors.city?.errorMessage}
+        hasError={errors.city?.hasError}
+        {...getOverrideProps(overrides, "city")}
+      >
+        <option
+          children="Petrinja"
+          value="PETRINJA"
+          {...getOverrideProps(overrides, "cityoption0")}
+        ></option>
+        <option
+          children="Zagreb"
+          value="ZAGREB"
+          {...getOverrideProps(overrides, "cityoption1")}
+        ></option>
+      </SelectField>
+      <TextField
         label="Naziv"
         isRequired={false}
         isReadOnly={false}
@@ -355,15 +560,17 @@ export default function FieldsUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              price,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers,
+              city,
               name: value,
               address,
-              length,
               width,
-              price,
-              minPlayers,
+              length,
               surface,
               sports,
-              city,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -387,15 +594,17 @@ export default function FieldsUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              price,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers,
+              city,
               name,
               address: value,
-              length,
               width,
-              price,
-              minPlayers,
+              length,
               surface,
               sports,
-              city,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -411,42 +620,6 @@ export default function FieldsUpdateForm(props) {
         {...getOverrideProps(overrides, "address")}
       ></TextField>
       <TextField
-        label="Duljina(m)"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={length}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              length: value,
-              width,
-              price,
-              minPlayers,
-              surface,
-              sports,
-              city,
-            };
-            const result = onChange(modelFields);
-            value = result?.length ?? value;
-          }
-          if (errors.length?.hasError) {
-            runValidationTasks("length", value);
-          }
-          setLength(value);
-        }}
-        onBlur={() => runValidationTasks("length", length)}
-        errorMessage={errors.length?.errorMessage}
-        hasError={errors.length?.hasError}
-        {...getOverrideProps(overrides, "length")}
-      ></TextField>
-      <TextField
         label="Širina(m)"
         isRequired={false}
         isReadOnly={false}
@@ -459,15 +632,17 @@ export default function FieldsUpdateForm(props) {
             : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
+              price,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers,
+              city,
               name,
               address,
-              length,
               width: value,
-              price,
-              minPlayers,
+              length,
               surface,
               sports,
-              city,
             };
             const result = onChange(modelFields);
             value = result?.width ?? value;
@@ -483,76 +658,42 @@ export default function FieldsUpdateForm(props) {
         {...getOverrideProps(overrides, "width")}
       ></TextField>
       <TextField
-        label="Cijena(€)"
+        label="Duljina(m)"
         isRequired={false}
         isReadOnly={false}
         type="number"
         step="any"
-        value={price}
+        value={length}
         onChange={(e) => {
           let value = isNaN(parseFloat(e.target.value))
             ? e.target.value
             : parseFloat(e.target.value);
           if (onChange) {
             const modelFields = {
-              name,
-              address,
-              length,
-              width,
-              price: value,
-              minPlayers,
-              surface,
-              sports,
-              city,
-            };
-            const result = onChange(modelFields);
-            value = result?.price ?? value;
-          }
-          if (errors.price?.hasError) {
-            runValidationTasks("price", value);
-          }
-          setPrice(value);
-        }}
-        onBlur={() => runValidationTasks("price", price)}
-        errorMessage={errors.price?.errorMessage}
-        hasError={errors.price?.hasError}
-        {...getOverrideProps(overrides, "price")}
-      ></TextField>
-      <TextField
-        label="Minimalni broj igrača"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={minPlayers}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              length,
-              width,
               price,
-              minPlayers: value,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers,
+              city,
+              name,
+              address,
+              width,
+              length: value,
               surface,
               sports,
-              city,
             };
             const result = onChange(modelFields);
-            value = result?.minPlayers ?? value;
+            value = result?.length ?? value;
           }
-          if (errors.minPlayers?.hasError) {
-            runValidationTasks("minPlayers", value);
+          if (errors.length?.hasError) {
+            runValidationTasks("length", value);
           }
-          setMinPlayers(value);
+          setLength(value);
         }}
-        onBlur={() => runValidationTasks("minPlayers", minPlayers)}
-        errorMessage={errors.minPlayers?.errorMessage}
-        hasError={errors.minPlayers?.hasError}
-        {...getOverrideProps(overrides, "minPlayers")}
+        onBlur={() => runValidationTasks("length", length)}
+        errorMessage={errors.length?.errorMessage}
+        hasError={errors.length?.hasError}
+        {...getOverrideProps(overrides, "length")}
       ></TextField>
       <SelectField
         label="Podloga"
@@ -563,15 +704,17 @@ export default function FieldsUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              price,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers,
+              city,
               name,
               address,
-              length,
               width,
-              price,
-              minPlayers,
+              length,
               surface: value,
               sports,
-              city,
             };
             const result = onChange(modelFields);
             value = result?.surface ?? value;
@@ -612,15 +755,17 @@ export default function FieldsUpdateForm(props) {
           let values = items;
           if (onChange) {
             const modelFields = {
+              price,
+              workTimeStart,
+              workTimeEnd,
+              minPlayers,
+              city,
               name,
               address,
-              length,
               width,
-              price,
-              minPlayers,
+              length,
               surface,
               sports: values,
-              city,
             };
             const result = onChange(modelFields);
             values = result?.sports ?? values;
@@ -674,49 +819,6 @@ export default function FieldsUpdateForm(props) {
           ></option>
         </SelectField>
       </ArrayField>
-      <SelectField
-        label="Grad"
-        placeholder="Odaberi"
-        isDisabled={false}
-        value={city}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              length,
-              width,
-              price,
-              minPlayers,
-              surface,
-              sports,
-              city: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.city ?? value;
-          }
-          if (errors.city?.hasError) {
-            runValidationTasks("city", value);
-          }
-          setCity(value);
-        }}
-        onBlur={() => runValidationTasks("city", city)}
-        errorMessage={errors.city?.errorMessage}
-        hasError={errors.city?.hasError}
-        {...getOverrideProps(overrides, "city")}
-      >
-        <option
-          children="Petrinja"
-          value="PETRINJA"
-          {...getOverrideProps(overrides, "cityoption0")}
-        ></option>
-        <option
-          children="Zagreb"
-          value="ZAGREB"
-          {...getOverrideProps(overrides, "cityoption1")}
-        ></option>
-      </SelectField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

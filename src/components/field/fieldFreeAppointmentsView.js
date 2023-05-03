@@ -11,8 +11,8 @@ const FieldFreeAppointmentsView = ({appointments, user, field}) => {
     const [appointmentToCreate, setAppointmentToCreate] = useState();
 
     useEffect(() => {
-        setDisplayAppointments(getAvailableAppointments(appointments, date, duration));
-    }, [date, duration, appointments]);
+        setDisplayAppointments(getAvailableAppointments(appointments, date, duration, field));
+    }, [date, duration, appointments, field]);
 
 
     const DateAndDurationDropdowns = () => {
@@ -23,6 +23,10 @@ const FieldFreeAppointmentsView = ({appointments, user, field}) => {
                     <option value={0}>{getDateInStringFromOffset(0)}</option>
                     <option value={1}>{getDateInStringFromOffset(1)}</option>
                     <option value={2}>{getDateInStringFromOffset(2)}</option>
+                    <option value={3}>{getDateInStringFromOffset(3)}</option>
+                    <option value={4}>{getDateInStringFromOffset(4)}</option>
+                    <option value={5}>{getDateInStringFromOffset(5)}</option>
+                    <option value={6}>{getDateInStringFromOffset(6)}</option>
                 </SelectField>
                 <SelectField label="Odaberi trajanje" onChange={(e) => setDuration(+e.target.value)}>
                     <option value={60}>1:00h</option>
