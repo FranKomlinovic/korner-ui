@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
+import {Button, Flex, Heading, Text, TextField} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {useNavigate} from "react-router-dom";
 import {getDateTimeFromAppointment} from "../../functions/converters";
@@ -37,14 +37,16 @@ const FieldConfirmAppointmentReservation = ({appointment, field, user}) => {
     }
 
     return (
-        <Flex direction={"column"}>
+        <Flex direction={"column"} alignItems={"center"} padding={"1rem"} alignSelf={"center"}>
+            <Heading level={5}>{field.name}</Heading>
             <Heading level={4}>{getDateTimeFromAppointment(appointment)}</Heading>
             {isOwner && <TextField
-                label={"Ime i prezime"}
+                label={"Naziv ekipe"}
                 onChange={(a) => setName(a.currentTarget.value)}
             />}
-            <Button variation={"primary"}
+            <Button variation={"primary"} backgroundColor={"green.40"} color={"black"}
                     onClick={createAppointment}>{isOwner ? "Rezerviraj termin" : "Skupi ekipu"}</Button>
+            {!isOwner && <Text alignSelf={"center"} fontSize={"small"} variation={"warning"}>Klikom na gumb termin neće biti odmah rezerviran, to možete učiniti u sljedećem koraku</Text>}
         </Flex>
     );
 

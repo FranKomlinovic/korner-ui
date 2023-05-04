@@ -5,12 +5,12 @@ import {Appointment, Response} from "../models";
 import {SortDirection} from "@aws-amplify/datastore";
 import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
 import UserAppointment from "../components/appointment/userAppointment";
-import ListUsersForAppointment from "../components/listUsersForAppointment";
-import UnauthorizedReservationForm from "../components/unauthorizedReservationForm";
+import AppointmentPlayerList from "../components/appointment/appointmentPlayerList";
+import AppointmentUnauthorizedReservationForm from "../components/appointment/appointmentUnauthorizedReservationForm";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
 import {Dialog} from "@mui/material";
 
-const NewAppointmentView = () => {
+const AppointmentView = () => {
     const {appointmentId} = useParams();
     const [appointment, setAppointment] = useState();
     const [field, setField] = useState();
@@ -86,10 +86,10 @@ const NewAppointmentView = () => {
                     </Flex>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
-                    <UnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
+                    <AppointmentUnauthorizedReservationForm responses={responses} appointmentId={appointmentId}/>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
-                    <ListUsersForAppointment user={userr} isOwner={false} responses={responses}/>
+                    <AppointmentPlayerList user={userr} isOwner={false} responses={responses}/>
                 </Card>
             </Flex>
 
@@ -105,5 +105,5 @@ const NewAppointmentView = () => {
 }
 
 
-export default NewAppointmentView;
+export default AppointmentView;
 

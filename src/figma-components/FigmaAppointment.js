@@ -10,10 +10,10 @@ const FigmaAppointment = ({appointment}) => {
     const [responseNumber, setResponseNumber] = useState();
 
     useEffect(() => {
-        appointment?.Responses.toArray().then(a => {
+        appointment?.Responses?.toArray().then(a => {
             setResponseNumber(a.filter(b => b.accepted).length)
         })
-        appointment?.Fields.then(a => {
+        appointment?.Fields?.then(a => {
             setField(a)
             a.photo ?
                 Storage.get(a.photo).then(b => {

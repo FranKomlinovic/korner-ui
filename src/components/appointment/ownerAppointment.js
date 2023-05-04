@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {Badge, Button, Card, Flex, Heading, Text} from "@aws-amplify/ui-react";
-import ReservationForm from "../reservationForm";
-import ListUsersForAppointment from "../listUsersForAppointment";
-import AddGuestForm from "../addGuestForm";
+import AppointmentReservationForm from "./appointmentReservationForm";
+import AppointmentPlayerList from "./appointmentPlayerList";
+import AppointmentGuestForm from "./appointmentGuestForm";
 import {FaLink, FaLock, FaTrash} from "react-icons/fa";
 import {DataStore} from "aws-amplify";
 import {Appointment} from "../../models";
@@ -78,7 +78,7 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate, field
         return (
             <Flex direction={"column"} alignItems={"center"}>
                 <Heading level={5}>Dodaj goste:</Heading>
-                <AddGuestForm appointmentId={appointment?.id}/>
+                <AppointmentGuestForm appointmentId={appointment?.id}/>
                 {!appointment?.confirmed &&
                     <Button variation={"destructive"} onClick={() => cancelAppointment()}><FaTrash/> Obriši
                         termin</Button>}
@@ -105,12 +105,12 @@ const OwnerAppointment = ({user, appointment, responses, responseToUpdate, field
             </Card>
             <Card alignSelf={"center"} variation={"elevated"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <ReservationForm user={user} appointmentId={appointment.id} responseToUpdate={responseToUpdate}/>
+                    <AppointmentReservationForm user={user} appointmentId={appointment.id} responseToUpdate={responseToUpdate}/>
                 </Flex>
             </Card>
             <Card alignSelf={"center"} variation={"elevated"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <ListUsersForAppointment user={user} isOwner={true} responses={responses}/>
+                    <AppointmentPlayerList user={user} isOwner={true} responses={responses}/>
                 </Flex>
             </Card>
             <Card alignSelf={"center"} variation={"elevated"}>

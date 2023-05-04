@@ -73,7 +73,6 @@ export function getAvailableAppointments(fieldAppointments: Appointment[], date:
         if (isOverlapping(a, unconfirmedAppointments)) {
             a.overlapping = true
         }
-        console.log(a);
         return a;
     });
 

@@ -34,7 +34,7 @@ const UploadComponent = ({uploadSuccessFunction, text, open, handleClose}) => {
     )
 
     return (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog fullWidth open={open} onClose={handleClose}>
             <DialogTitle>Učitaj fotografiju</DialogTitle>
             <Body/>
         </Dialog>)

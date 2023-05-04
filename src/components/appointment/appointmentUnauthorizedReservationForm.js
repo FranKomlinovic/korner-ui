@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
-import {Response} from "../models";
+import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 
-const UnauthorizedReservationForm = ({responses, appointmentId, functionTest}) => {
+const AppointmentUnauthorizedReservationForm = ({responses, appointmentId, functionTest}) => {
     const [name, setName] = useState();
     const [answered, setAnswered] = useState(false);
 
@@ -61,4 +61,4 @@ const UnauthorizedReservationForm = ({responses, appointmentId, functionTest}) =
     )
 }
 
-export default UnauthorizedReservationForm;
+export default AppointmentUnauthorizedReservationForm;

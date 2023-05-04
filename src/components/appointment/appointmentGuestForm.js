@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import {Button, Flex, TextField} from "@aws-amplify/ui-react";
-import {Response} from "../models";
+import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 import {FaPlus} from "react-icons/fa";
 
-const AddGuestForm = ({appointmentId}) => {
+const AppointmentGuestForm = ({appointmentId}) => {
     const [name, setName] = useState('');
 
     const saveResp = () => {
@@ -37,4 +37,4 @@ const AddGuestForm = ({appointmentId}) => {
 
 }
 
-export default AddGuestForm;
+export default AppointmentGuestForm;

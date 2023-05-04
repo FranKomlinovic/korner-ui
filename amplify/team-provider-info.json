@@ -20,19 +20,7 @@
         "s3kornerfieldpictures": {}
       },
       "api": {
-        "Terminihr": {},
-        "availableAppointments": {},
-        "confirmAppointment": {}
-      },
-      "function": {
-        "availableAppointments": {
-          "deploymentBucketName": "amplify-terminihr-staging-160454-deployment",
-          "s3Key": "amplify-builds/availableAppointments-7231566e305063346a54-build.zip"
-        },
-        "confirmAppointment": {
-          "deploymentBucketName": "amplify-terminihr-staging-160454-deployment",
-          "s3Key": "amplify-builds/confirmAppointment-5a696f55677a4d774e66-build.zip"
-        }
+        "Terminihr": {}
       },
       "hosting": {
         "S3AndCloudFront": {}

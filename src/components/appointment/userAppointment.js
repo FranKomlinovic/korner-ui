@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Badge, Card, Flex} from "@aws-amplify/ui-react";
-import ReservationForm from "../reservationForm";
-import ListUsersForAppointment from "../listUsersForAppointment";
+import AppointmentReservationForm from "./appointmentReservationForm";
+import AppointmentPlayerList from "./appointmentPlayerList";
 import OwnerAppointment from "./ownerAppointment";
 import FigmaAppointment from "../../figma-components/FigmaAppointment";
 import {getCurrentDateInDynamoDbString} from "../../functions/converters";
@@ -23,10 +23,10 @@ const UserAppointment = ({user, appointment, responses, field}) => {
                     </Flex>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
-                    <ReservationForm user={user} appointmentId={appointment?.id} responseToUpdate={responseToUpdate}/>
+                    <AppointmentReservationForm user={user} appointmentId={appointment?.id} responseToUpdate={responseToUpdate}/>
                 </Card>
                 <Card variation={"elevated"} width={"100%"}>
-                    <ListUsersForAppointment user={user} isOwner={false} responses={responses}/>
+                    <AppointmentPlayerList user={user} isOwner={false} responses={responses}/>
                 </Card>
             </Flex>
         )

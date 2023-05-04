@@ -3,16 +3,22 @@ import {Button, Card, Flex, Grid, Heading, SelectField, Text, View} from "@aws-a
 import {getCurrentDateInDynamoDbString, getDateInStringFromOffset} from "../../functions/converters";
 import {getAvailableAppointments} from "../../functions/lambdas";
 import FieldConfirmAppointmentReservation from "./fieldConfirmAppointmentReservation";
+import {Dialog} from "@mui/material";
 
 const FieldFreeAppointmentsView = ({appointments, user, field}) => {
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
     const [duration, setDuration] = useState(60);
     const [displayAppointments, setDisplayAppointments] = useState();
     const [appointmentToCreate, setAppointmentToCreate] = useState();
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         setDisplayAppointments(getAvailableAppointments(appointments, date, duration, field));
     }, [date, duration, appointments, field]);
+
+    useEffect(() => {
+        setModalOpen(!!appointmentToCreate);
+    }, [appointmentToCreate]);
 
 
     const DateAndDurationDropdowns = () => {
@@ -55,11 +61,14 @@ const FieldFreeAppointmentsView = ({appointments, user, field}) => {
         )
     }
 
+
     return (
         <Flex direction={"column"}>
             <Card variation={"elevated"}>
                 <Heading level={4}>Rezerviraj termin:</Heading>
-                {appointmentToCreate && <FieldConfirmAppointmentReservation appointment={appointmentToCreate} field={field} user={user}/>}
+                <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
+                    <FieldConfirmAppointmentReservation appointment={appointmentToCreate} field={field} user={user}/>
+                </Dialog>
                 {DateAndDurationDropdowns()}
                 {AppointmentButtons()}
             </Card>

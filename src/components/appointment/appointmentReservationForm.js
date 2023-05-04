@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
-import {Response} from "../models";
+import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 import {PubSub} from "@aws-amplify/pubsub";
 
-const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
+const AppointmentReservationForm = ({user, appointmentId, responseToUpdate}) => {
     const [name, setName] = useState();
 
     useEffect(() => {
@@ -109,4 +109,4 @@ const ReservationForm = ({user, appointmentId, responseToUpdate}) => {
     )
 }
 
-export default ReservationForm;
+export default AppointmentReservationForm;
