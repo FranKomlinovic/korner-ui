@@ -13,7 +13,7 @@ import FieldView from "./views/fieldView";
 import {FaCalendar, FaPlusCircle} from "react-icons/fa";
 import Profile from "./views/profile";
 import {useEffect, useState} from "react";
-import AppointmentView from "./views/appointmentView";
+import AppointmentById from "./views/appointmentById";
 
 Amplify.configure(awsExports);
 
@@ -49,7 +49,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Home/>}/>
             <Route path="/fields/:fieldId" element={<FieldById/>}/>
-            <Route path="/appointment/:appointmentId" element={<AppointmentView/>}/>
+            <Route path="/appointment/:appointmentId" element={<AppointmentById/>}/>
             <Route path="/fields" element={<FieldView/>}/>
             <Route path="/profile" element={<Profile/>}/>
         </Routes>

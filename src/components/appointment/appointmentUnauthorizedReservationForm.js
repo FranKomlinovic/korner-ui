@@ -3,7 +3,7 @@ import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 
-const AppointmentUnauthorizedReservationForm = ({responses, appointmentId, functionTest}) => {
+const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
     const [name, setName] = useState();
     const [answered, setAnswered] = useState(false);
 
@@ -15,17 +15,16 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointmentId, funct
         responses && name && setAnswered(responses.find((response) => response.playerName === name));
     }, [name, responses]);
 
+    if (appointment?.canceled) {
+        return;
+    }
     const saveResp = (accepted, nm) => {
         const response = new Response({
             accepted: accepted,
-            appointmentID: appointmentId,
+            appointmentID: appointment.id,
             playerName: nm,
         });
-
-        DataStore.save(response).then((a) => {
-            DataStore.query(Response, (c) => c.and(c => [c.appointmentID.eq(a.appointmentID)]))
-                .then((a) => functionTest(a));
-        });
+        DataStore.save(response);
     }
 
     const createForm = () => {

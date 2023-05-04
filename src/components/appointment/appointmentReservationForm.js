@@ -2,15 +2,17 @@ import React, {useEffect, useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
-import {PubSub} from "@aws-amplify/pubsub";
 
-const AppointmentReservationForm = ({user, appointmentId, responseToUpdate}) => {
+const AppointmentReservationForm = ({user, appointment, responseToUpdate}) => {
     const [name, setName] = useState();
 
     useEffect(() => {
         setName(user?.name);
     }, [user]);
 
+    if (appointment?.canceled) {
+        return;
+    }
     const createResponse = (accepted) => {
         saveResp(accepted);
     };
@@ -19,26 +21,18 @@ const AppointmentReservationForm = ({user, appointmentId, responseToUpdate}) => 
         const response = new Response({
             playerID: user?.sub,
             accepted: accepted,
-            appointmentID: appointmentId,
+            appointmentID: appointment.id,
             playerName: name,
             playerPhoto: user?.photo,
         });
-        DataStore.save(response).then((a) => {
-            const response = a.accepted ? "DOLAZI" : "NE DOLAZI"
-            const message = `${a.playerName} ${response} na termin`
-            PubSub.publish(appointmentId, message)
-        });
+        DataStore.save(response);
     };
 
     function updateResponse(accepted) {
         DataStore.save(Response.copyOf(responseToUpdate, (item) => {
             item.accepted = accepted;
             item.playerPhoto = user?.photo
-        })).then((a) => {
-            const response = a.accepted ? "DOLAZIM" : "NE DOLAZIM"
-            const message = `${a.playerName} promijenio je odgovor u ${response}`
-            PubSub.publish(appointmentId, message)
-        });
+        }));
     }
 
     const commingButton = (
@@ -57,7 +51,7 @@ const AppointmentReservationForm = ({user, appointmentId, responseToUpdate}) => 
         if (responseToUpdate?.accepted) {
             return (
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                <Heading color={"green"} level={3}>Dolazim</Heading>
+                    <Heading color={"green"} level={3}>Dolazim</Heading>
                     <Heading level={6}>Promijeni odgovor:</Heading>
                     <Flex>
                         {notComming}
@@ -67,7 +61,7 @@ const AppointmentReservationForm = ({user, appointmentId, responseToUpdate}) => 
         }
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            <Heading color={"red"} level={3}>Ne dolazim</Heading>
+                <Heading color={"red"} level={3}>Ne dolazim</Heading>
                 <Heading level={6}>Promijeni odgovor:</Heading>
                 <Flex>
                     {commingButton}
@@ -98,13 +92,11 @@ const AppointmentReservationForm = ({user, appointmentId, responseToUpdate}) => 
     }
 
     return (
-        <Flex direction={"column"}>
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            {responseToUpdate && alreadyAnsweredView()}
+                {responseToUpdate && alreadyAnsweredView()}
                 {!responseToUpdate && createForm()}
             </Flex>
 
-        </Flex>
 
     )
 }

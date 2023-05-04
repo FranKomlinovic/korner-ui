@@ -1,6 +1,6 @@
 import React from "react";
 import {FaTrash} from "react-icons/fa";
-import {Flex, Heading} from "@aws-amplify/ui-react";
+import {Card, Flex, Heading} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -8,10 +8,7 @@ import {Response} from "../../models";
 
 import FigmaResponse from "../../figma-components/FigmaResponse";
 
-const AppointmentPlayerList = ({user, responses, isOwner}) => {
-    if (responses == null) {
-        return;
-    }
+const AppointmentPlayerList = ({user, responses, role}) => {
 
     function deleteResponse(res) {
         confirmAlert({
@@ -29,37 +26,22 @@ const AppointmentPlayerList = ({user, responses, isOwner}) => {
         });
     }
 
-    const addAsFriend = (res) => {
-        confirmAlert({
-            title: 'Dodaj za prijatelja',
-            message: 'Želite li dodati ' + res.playerName + ' za prijatelja?',
-            buttons: [
-                {
-                    label: 'Da',
-                    // onClick: () => DataStore.delete(Response, res.id).then(a => {
-                    //     window.location.reload(false)
-                    // })
-                },
-                {
-                    label: 'Ne'
-                }
-            ]
-        });
-    };
-
     const mapResponseToComponent = (res) => {
-        return (<Flex key={res.id} alignItems={"center"}>
-            <FigmaResponse user={user} response={res}/>
-            {/*<FaUserPlus onClick={() => addAsFriend(res)}/>*/}
-            {isOwner && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
-        </Flex>);
+        return (
+            <Card variation={"elevated"} padding={"0.2rem"}>
+                <Flex key={res.id} alignItems={"center"} gap={"0px"} paddingRight={"0.5rem"}>
+                    <FigmaResponse user={user} response={res}/>
+                    {role === "APPOINTMENT_OWNER" && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
+                </Flex>
+            </Card>
+        );
     };
 
 
     const renderResponses = responses && responses?.map(mapResponseToComponent);
 
-    if (responses.length === 0) {
-        return <Heading>Nema odgovora na ovaj termin</Heading>
+    if (responses?.length === 0) {
+        return <Heading>Nema odgovora za ovaj termin</Heading>
     }
 
     const PlayersHeading = () => {
@@ -72,7 +54,10 @@ const AppointmentPlayerList = ({user, responses, isOwner}) => {
     return (
         <Flex direction={"column"}>
             <PlayersHeading/>
-            {renderResponses}
+            <Flex direction={"column"} gap={"0.2rem"}>
+                {renderResponses}
+
+            </Flex>
         </Flex>
     )
 

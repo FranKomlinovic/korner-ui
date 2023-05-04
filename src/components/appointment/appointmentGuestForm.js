@@ -1,24 +1,28 @@
 import React, {useState} from "react";
-import {Button, Flex, TextField} from "@aws-amplify/ui-react";
+import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 import {FaPlus} from "react-icons/fa";
 
-const AppointmentGuestForm = ({appointmentId}) => {
+const AppointmentGuestForm = ({appointment, role}) => {
     const [name, setName] = useState('');
 
+    if (role !== "APPOINTMENT_OWNER" || appointment?.canceled) {
+        return;
+    }
     const saveResp = () => {
         setName("");
         DataStore.save(new Response({
             accepted: true,
-            appointmentID: appointmentId,
+            appointmentID: appointment.id,
             playerName: name,
         }));
     };
 
 
     return (
-        <Flex direction={"column"}>
+        <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+        <Heading level={4}>Dodaj gosta</Heading>
             <Flex alignContent={"flex-end"}>
                 <TextField
                     size={"small"}

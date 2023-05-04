@@ -1,8 +1,9 @@
-import {KornerResponseUser} from "../ui-components";
 import React, {useEffect, useState} from "react";
 import {FaCheck, FaMinus} from "react-icons/fa";
 import {getTimeFromDate, getTimeFromTimestamp} from "../functions/converters";
 import {Storage} from "aws-amplify";
+import {Card, Flex, Heading, Image, Text} from "@aws-amplify/ui-react";
+import {KornerResponseUser} from "../ui-components";
 
 const FigmaResponse = ({response, user}) => {
 
@@ -30,7 +31,7 @@ const FigmaResponse = ({response, user}) => {
                     setPhoto("/no-picture.png")
                 });
         } else {
-            response.playerID ? setPhoto("/no-picture.png") :  setPhoto("/no-player.png")
+            response.playerID ? setPhoto("/no-picture.png") : setPhoto("/no-player.png")
         }
 
         if (response.accepted) {
@@ -40,7 +41,7 @@ const FigmaResponse = ({response, user}) => {
         }
     }, [response]);
 
-    return (<KornerResponseUser photo={photo} name={playerName} time={time} icon={icon} id={id}/>);
+    return (<KornerResponseUser photo={photo} name={playerName} time={time} icon={icon} id={id}/>)
 
 
 }

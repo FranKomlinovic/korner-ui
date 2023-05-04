@@ -19,7 +19,6 @@ export default function KornerResponseUser(props) {
       justifyContent="flex-start"
       alignItems="center"
       position="relative"
-      boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
       padding="0px 0px 0px 0px"
       backgroundColor="rgba(255,255,255,1)"
       {...getOverrideProps(overrides, "KornerResponseUser")}
