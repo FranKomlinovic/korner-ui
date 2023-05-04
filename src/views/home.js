@@ -53,7 +53,7 @@ const Home = ({user}) => {
             setCanceledAppointment(app.filter(a => a.canceled));
         });
 
-    }, [responses, sub])
+    }, [currentTime, responses, sub])
 
     // Already played appointments
     useEffect(() => {
@@ -75,7 +75,6 @@ const Home = ({user}) => {
 
     }, [responses, sub])
 
-
     // Refused appointment
     useEffect(() => {
         let refused = responses.filter(a => !a.accepted).map(a => a.appointmentID)
@@ -87,10 +86,8 @@ const Home = ({user}) => {
                 c => [
                     c.or(c => refused.map(a => c.id.eq(a))),
                     c.bookerID.ne(sub),
-                    c.end.ge(currentTime),
-                    c.date.ge(getCurrentDateInDynamoDbString(0)),
-                    c.canceled.eq(false),
-                    c.confirmed.eq(false)
+                    c.and(d => [c.end.ge(currentTime), c.date.ge(getCurrentDateInDynamoDbString(0))]),
+                    c.canceled.eq(false)
                 ]), {
                 sort: (sort) => sort.date(SortDirection.DESCENDING)
             }
@@ -98,7 +95,7 @@ const Home = ({user}) => {
             setRefusedAppointment(app);
         });
 
-    }, [responses, sub])
+    }, [currentTime, responses, sub])
 
     // Owned appointment
     useEffect(() => {
@@ -115,7 +112,7 @@ const Home = ({user}) => {
             setOwnedAppointment(app);
         });
 
-    }, [sub]);
+    }, [currentTime, sub]);
 
     return (
         <Flex direction={"column"} alignItems={"center"}>

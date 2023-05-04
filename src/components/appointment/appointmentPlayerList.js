@@ -28,8 +28,8 @@ const AppointmentPlayerList = ({user, responses, role}) => {
 
     const mapResponseToComponent = (res) => {
         return (
-            <Card variation={"elevated"} padding={"0.2rem"}>
-                <Flex key={res.id} alignItems={"center"} gap={"0px"} paddingRight={"0.5rem"}>
+            <Card key={res.id} variation={"elevated"} padding={"0.2rem"}>
+                <Flex alignItems={"center"} gap={"0px"} paddingRight={"0.5rem"}>
                     <FigmaResponse user={user} response={res}/>
                     {role === "APPOINTMENT_OWNER" && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
                 </Flex>
