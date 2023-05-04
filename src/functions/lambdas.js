@@ -42,7 +42,7 @@ export function getAvailableAppointments(fieldAppointments: Appointment[], date:
     const [startHours, startMinutes] = field ? field.workTimeStart.split(':') : [16, 0];
     const [endHours, endMinutes] = field ? field.workTimeEnd.split(':') : [23, 0];
     const start = new Date();
-    isToday(date) && date > +startHours ?
+    isToday(date) && start.getHours() > +startHours ?
         start.setHours(new Date().getHours() + 1) :
         start.setHours(16)
     start.setMinutes(+startMinutes);
