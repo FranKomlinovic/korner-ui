@@ -8,7 +8,7 @@ import {Response} from "../../models";
 
 import FigmaResponse from "../../figma-components/FigmaResponse";
 
-const AppointmentPlayerList = ({user, responses, role}) => {
+const AppointmentPlayerList = ({user, responses, role, isLocked}) => {
 
     function deleteResponse(res) {
         confirmAlert({
@@ -31,7 +31,7 @@ const AppointmentPlayerList = ({user, responses, role}) => {
             <Card key={res.id} variation={"elevated"} padding={"0.2rem"}>
                 <Flex alignItems={"center"} gap={"0px"} paddingRight={"0.5rem"}>
                     <FigmaResponse user={user} response={res}/>
-                    {role === "APPOINTMENT_OWNER" && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
+                    {role === "APPOINTMENT_OWNER" && !isLocked && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
                 </Flex>
             </Card>
         );

@@ -7,13 +7,15 @@ import {Appointment} from "../../models";
 const AppointmentCancelButton = ({appointment, role}) => {
 
     if (role !== "APPOINTMENT_OWNER" || appointment?.canceled || appointment?.confirmed) {
-        return;
+        if (role !== "FIELD_OWNER") {
+            return;
+        }
     }
     // Dialog for deleting appointment
     const cancelAppointment = () => {
         confirmAlert({
-            title: 'Potvrdi brisanje',
-            message: 'Želite li obrisati ovu rezervaciju?',
+            title: 'Potvrdi otkazivanje',
+            message: 'Želite li otkazati ovaj termin?',
             buttons: [
                 {
                     label: 'Da',
