@@ -5,8 +5,7 @@ import {getAvailableAppointments} from "../../functions/lambdas";
 import FieldConfirmAppointmentReservation from "./fieldConfirmAppointmentReservation";
 import {Dialog} from "@mui/material";
 
-const FieldFreeAppointmentsView = ({appointments, user, field}) => {
-    const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
+const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) => {
     const [duration, setDuration] = useState(60);
     const [displayAppointments, setDisplayAppointments] = useState();
     const [appointmentToCreate, setAppointmentToCreate] = useState();
@@ -55,8 +54,7 @@ const FieldFreeAppointmentsView = ({appointments, user, field}) => {
                                     backgroundColor={item.overlapping ? "yellow.20" : "green.20"}>{item.start} - {item.end}</Button>
                         </View>))}
                 </Grid>
-                <Text>*Za termine označene žuto već se skupljaju ekipe </Text>
-
+                <Text>*Za termine označene žuto već se skupljaju ekipe</Text>
             </Flex>
         )
     }

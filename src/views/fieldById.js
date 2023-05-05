@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
 import {Appointment, Fields} from "../models";
 import {useParams} from "react-router-dom";
-import {checkIfOwner} from "../functions/converters";
+import {checkIfOwner, getCurrentDateInDynamoDbString} from "../functions/converters";
 import {Flex, withAuthenticator} from "@aws-amplify/ui-react";
 import FigmaField from "../figma-components/FigmaField";
 import FieldOwnerFunctions from "../components/field/fieldOwnerFunctions";
@@ -12,6 +12,7 @@ import FieldFreeAppointmentsView from "../components/field/fieldFreeAppointments
 const FieldById = ({user}) => {
     const {fieldId} = useParams();
     const [field, setField] = useState()
+    const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
     const [fieldAppointments, setFieldAppointments] = useState()
     const [isOwner, setIsOwner] = useState(false)
 
@@ -40,8 +41,8 @@ const FieldById = ({user}) => {
         <Flex direction={"column"} alignItems={"center"}>
             <FigmaField field={field}/>
             {isOwner && <FieldOwnerFunctions updateFieldFunction={setField} fieldParam={field}/>}
-            {isOwner && <FieldOwnerAppointments appointments={fieldAppointments}/>}
-            <FieldFreeAppointmentsView field={field} appointments={fieldAppointments} user={user}/>
+            <FieldFreeAppointmentsView field={field} appointments={fieldAppointments} user={user} date={date} setDate={setDate}/>
+            {isOwner && <FieldOwnerAppointments appointments={fieldAppointments} date={date}/>}
         </Flex>
     );
 }

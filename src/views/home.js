@@ -48,7 +48,7 @@ const Home = ({user}) => {
                 sort: (sort) => sort.date(SortDirection.DESCENDING)
             }
         ).then((app) => {
-            setReservedAppointment(app.filter(a => a.confirmed));
+            setReservedAppointment(app.filter(a => a.confirmed && !a.canceled));
             setAcceptedAppointment(app.filter(a => !a.confirmed && !a.canceled && a.bookerID !== sub));
             setCanceledAppointment(app.filter(a => a.canceled));
         });
