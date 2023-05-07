@@ -42,7 +42,7 @@ function App() {
     const LogoAndAppName = () => (
         <Flex justifyContent={"start"} alignItems={"center"} marginTop={"0.5rem"}>
             <Image height={"40px"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
-            <Heading level={"3"} onClick={goToHome}>Korner</Heading>
+            <Heading level={"3"} color={"green.90"} onClick={goToHome}>Korner</Heading>
         </Flex>)
 
     const routes = () => (
@@ -55,26 +55,21 @@ function App() {
         </Routes>
     )
 
-    const menuStyle = {
-        backgroundImage: "url("+ "/menu-background.png" + ")",
-        backgroundPosition: 'center',
-        backgroundSize: 'contain'
-    }
-
     const MyMenu = () => (
-        <Flex style={menuStyle} backgroundColor={"transparent"} direction={"column"} width={"100%"} position={"sticky"}
-              bottom={"-1px"}>
+        <Flex backgroundColor={"green.90"} direction={"column"} width={"100%"} position={"sticky"} bottom={"-1px"}>
 
-            <Flex marginTop={"25px"} backgroundColor={"transparent"} alignContent={"end"} justifyContent={"space-between"}
+            <Flex marginTop={"0px"} justifyContent={"space-between"}
                   gap={"0.5rem"}>
                 <Button onClick={() => navigate("/")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaCalendar color={"white"} size={"20px"}/><Text color={"white"}>Termini</Text>
+                        <FaCalendar color={"white"} size={"20px"}/><Text fontSize={"small"}
+                                                                         color={"white"}>Termini</Text>
                     </Flex>
                 </Button>
                 <Button onClick={() => navigate("/fields")} border={"none"}>
                     <Flex alignItems={"center"} gap={"0rem"} direction={"column"}>
-                        <FaPlusCircle color={"white"} size={"20px"}/><Text color={"white"}>Rezerviraj</Text>
+                        <FaPlusCircle color={"white"} size={"20px"}/><Text fontSize={"small"}
+                                                                           color={"white"}>Rezerviraj</Text>
                     </Flex>
                 </Button>
                 <Button onClick={() => navigate("/profile")} border={"none"}>
@@ -82,7 +77,7 @@ function App() {
                         <Image src={image} onClick={goToProfile} borderRadius={400} objectFit={"cover"} width={"20px"}
                                height={"20px"}
                                color={"white"} alt={"Profilna slika"}/>
-                        <Text color={"white"}>Profil</Text>
+                        <Text fontSize={"small"} color={"white"}>Profil</Text>
                     </Flex>
                 </Button>
                 {/*<Button disabled border={"none"}>*/}
@@ -103,16 +98,14 @@ function App() {
 
 
     return (
-        <Flex >
-            <Flex width={"100%"} direction={"column"} alignContent={"center"} justifyContent={"space-between"}>
-                <TopHeader/>
-                <ScrollView  marginTop={"5px"} marginBottom={"0px"} direction={"column"} justifyContent={"start"}>
-                    {routes()}
-                </ScrollView>
-                {user && <MyMenu/>}
-            </Flex>
-
+        <Flex maxWidth={"500px"} direction={"column"} alignContent={"center"}>
+            <TopHeader/>
+            <ScrollView marginTop={"5px"} marginBottom={"0px"} direction={"column"}>
+                {routes()}
+            </ScrollView>
+            {user && <MyMenu/>}
         </Flex>
+
     )
 }
 

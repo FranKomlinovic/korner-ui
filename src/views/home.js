@@ -115,28 +115,23 @@ const Home = ({user}) => {
     }, [currentTime, sub]);
 
     return (
-        <Flex direction={"column"} alignItems={"center"}>
-            <Card variation={"elevated"}>
-
+        <Flex direction={"column"} >
+            <Card variation={"elevated"} marginInline={"1rem"} >
                 <ReservedAppointment/>
             </Card>
-            <Card variation={"elevated"}>
-
+            <Card variation={"elevated"} marginInline={"1rem"}>
                 <OwnedAppointment/>
             </Card>
-            <Card variation={"elevated"}>
-
+            <Card variation={"elevated"} marginInline={"1rem"}>
                 <AcceptedAppointment/>
             </Card>
-            <Card variation={"elevated"}>
-
+            <Card variation={"elevated"} marginInline={"1rem"}>
                 <RefusedAppointment/>
             </Card>
-            <Card variation={"elevated"}>
-
+            <Card variation={"elevated"} marginInline={"1rem"}>
                 <CanceledAppointment/>
             </Card>
-            <Card variation={"elevated"}>
+            <Card variation={"elevated"} marginInline={"1rem"}>
                 <PlayedAppointment/>
             </Card>
         </Flex>
@@ -147,7 +142,7 @@ const Home = ({user}) => {
             <Flex direction={"column"}>
                 <Heading level={4} alignSelf={"start"}>{text}</Heading>
                 {appointments.map(a => {
-                    return <Flex key={a.id}>
+                    return <Flex alignSelf={"center"} key={a.id}>
                         <FigmaAppointment appointment={a}/>
                     </Flex>;
                 })}

@@ -38,10 +38,14 @@ const FieldById = ({user}) => {
     }, [field, user]);
 
     return (
-        <Flex direction={"column"} alignItems={"center"}>
-            <FigmaField field={field}/>
-            {isOwner && <FieldOwnerFunctions updateFieldFunction={setField} fieldParam={field}/>}
-            <FieldFreeAppointmentsView field={field} appointments={fieldAppointments} user={user} date={date} setDate={setDate}/>
+        <Flex direction={"column"}>
+            <Flex direction={"column"} alignSelf={"center"}>
+                <FigmaField field={field}/>
+                {isOwner && <FieldOwnerFunctions updateFieldFunction={setField} fieldParam={field}/>}
+            </Flex>
+
+            <FieldFreeAppointmentsView field={field} appointments={fieldAppointments} user={user} date={date}
+                                       setDate={setDate}/>
             {isOwner && <FieldOwnerAppointments appointments={fieldAppointments} date={date}/>}
         </Flex>
     );

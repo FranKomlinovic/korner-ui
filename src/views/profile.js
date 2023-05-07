@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Button, Divider, Flex, Heading, Image, TextField, withAuthenticator} from "@aws-amplify/ui-react";
-import {checkIfInOwnerGroup, checkIfOwner} from "../functions/converters";
+import {Button, Card, Flex, Heading, Image, TextField, withAuthenticator} from "@aws-amplify/ui-react";
+import {checkIfInOwnerGroup} from "../functions/converters";
 import {Auth, DataStore, Storage} from "aws-amplify";
 import {Fields} from "../models";
 import UploadComponent from "../components/UploadComponent";
@@ -90,7 +90,7 @@ const Profile = ({user, signOut}) => {
                 <Flex direction={"column"}>
                     <Image alt={"Profile photo"} width={"140px"} height={"140px"} objectFit={"cover"} borderRadius={400}
                            src={photo}/>
-                    <Button variation={"link"} onClick={() => setModalOpen(true)}>Promijeni sliku</Button>
+                    <Button size={"small"} variation={"link"} onClick={() => setModalOpen(true)}>Promijeni sliku</Button>
 
                 </Flex>
                 <Flex direction={"column"}>
@@ -109,11 +109,15 @@ const Profile = ({user, signOut}) => {
     return (
         <Flex direction={"column"} alignItems={"center"}>
             {FieldOwnerComponent()}
-            <Heading level={4}>Vaš profil:</Heading>
-            {ProfileDetails()}
-            <UploadComponent open={modalOpen} uploadSuccessFunction={uploadProfilePicture}
-                             handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
-            <Button variation={"destructive"} onClick={signOut}>Odjavi se</Button>
+            <Card variation={"elevated"} marginInline={"1rem"}>
+                <Flex direction={"column"} alignItems={"center"}>
+                <Heading level={4}>Vaš profil:</Heading>
+                {ProfileDetails()}
+                <UploadComponent open={modalOpen} uploadSuccessFunction={uploadProfilePicture}
+                                 handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
+                <Button variation={"destructive"} onClick={signOut}>Odjavi se</Button>
+                </Flex>
+            </Card>
         </Flex>
     );
 

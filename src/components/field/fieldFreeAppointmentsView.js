@@ -23,7 +23,7 @@ const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) =
     const DateAndDurationDropdowns = () => {
         return (
             <Flex justifyContent={"center"} marginTop={"1rem"}>
-                <SelectField label="Odaberi datum"
+                <SelectField size={"small"} label="Odaberi datum"
                              onChange={(e) => setDate(getCurrentDateInDynamoDbString(e.target.value))}>
                     <option value={0}>{getDateInStringFromOffset(0)}</option>
                     <option value={1}>{getDateInStringFromOffset(1)}</option>
@@ -33,7 +33,7 @@ const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) =
                     <option value={5}>{getDateInStringFromOffset(5)}</option>
                     <option value={6}>{getDateInStringFromOffset(6)}</option>
                 </SelectField>
-                <SelectField label="Odaberi trajanje" onChange={(e) => setDuration(+e.target.value)}>
+                <SelectField size={"small"} label="Odaberi trajanje" onChange={(e) => setDuration(+e.target.value)}>
                     <option value={60}>1:00h</option>
                     <option value={90}>1:30h</option>
                     <option value={120}>2:00h</option>
@@ -62,8 +62,8 @@ const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) =
 
     return (
         <Flex direction={"column"}>
-            <Card variation={"elevated"}>
-                <Heading level={4}>Rezerviraj termin:</Heading>
+            <Card variation={"elevated"} marginInline={"1rem"}>
+            <Heading level={4}>Rezerviraj termin:</Heading>
                 <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
                     <FieldConfirmAppointmentReservation appointment={appointmentToCreate} field={field} user={user}/>
                 </Dialog>

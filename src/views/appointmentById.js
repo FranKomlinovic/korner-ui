@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Flex, useAuthenticator} from "@aws-amplify/ui-react";
+import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
 import {DataStore, Storage} from "aws-amplify";
 import {Appointment, Response} from "../models";
 import {SortDirection} from "@aws-amplify/datastore";
@@ -14,6 +14,7 @@ import AppointmentShareLink from "../components/appointment/appointmetShareLink"
 import AppointmentCancelButton from "../components/appointment/appointmentCancelButton";
 import {getCurrentDateInDynamoDbString, getDayAndDateFromAppointment} from "../functions/converters";
 import {KornerFieldShort} from "../ui-components";
+import {Dialog} from "@mui/material";
 
 const AppointmentById = () => {
     const {appointmentId} = useParams();
@@ -21,7 +22,8 @@ const AppointmentById = () => {
     const [field, setField] = useState();
     const [responses, setResponses] = useState();
     const [role, setRole] = useState();
-    const [photo, setPhoto] = useState();
+    const [photo, setPhoto] = useState("/no-field.jpg");
+    const [open, setOpen] = useState(false);
     const [isOld, setIsOld] = useState();
     const [userModel, setUserModel] = useState();
     const [responseToUpdate, setResponseToUpdate] = useState();
@@ -42,6 +44,7 @@ const AppointmentById = () => {
             photo: attributes.picture,
             isOwner: appointment?.bookerID === attributes.sub
         });
+        setOpen(false);
         if (field?.ownerID === attributes.sub) {
             setRole("FIELD_OWNER")
             return;
@@ -57,7 +60,6 @@ const AppointmentById = () => {
     // Sets appointment
     useEffect(() => {
         DataStore.observeQuery(Appointment, c => c.id.eq(appointmentId)).subscribe(b => {
-            console.log(b)
             const a = b.items[0];
             setAppointment(a)
             const currentDate = getCurrentDateInDynamoDbString(0);
@@ -97,29 +99,64 @@ const AppointmentById = () => {
             return;
         }
         return (
-            user ? <AppointmentReservationForm user={userModel} appointment={appointment}
-                                               responseToUpdate={responseToUpdate}/> :
-                <AppointmentUnauthorizedReservationForm responses={responses} appointment={appointment}/>
+            <Card variation={"elevated"} marginInline={"1rem"}>
+                {user ? <AppointmentReservationForm user={userModel} appointment={appointment}
+                                                    responseToUpdate={responseToUpdate}/> :
+                    <AppointmentUnauthorizedReservationForm responses={responses} appointment={appointment}/>}
+            </Card>
+
         )
     }
-    return (
-        <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-            <KornerFieldShort
-                responseNumber={responses?.filter(a => a.accepted).length}
-                photo={photo}
-                fields={field}
-                date={getDayAndDateFromAppointment(appointment?.date)}
-                appointment={appointment}/>
-            {/*<FigmaAppointment appointment={appointment}/>*/}
-            <AppointmentStatusBadge appointment={appointment}/>
-            <AppointmentReservationButton appointment={appointment} responses={responses} field={field} role={role}/>
-            <AppointmentShareLink appointment={appointment} field={field} role={role}/>
-            {ReservationForm()}
-            <AppointmentPlayerList user={userModel} responses={responses} role={role}
-                                   isLocked={isOld || appointment?.canceled}/>
-            {!isOld && <AppointmentGuestForm role={role} appointment={appointment}/>}
-            {!isOld && <AppointmentCancelButton role={role} appointment={appointment}/>}
 
+    const RegisterButton = () => {
+        return (
+            <Card variation={"elevated"} marginInline={"1rem"}>
+                <Flex direction="column" alignItems={"center"} justifyContent={"space-around"}>
+                    <Heading textAlign={"center"} fontSize={"small"}>Jednostavnije odgovori, dogovaraj termine i još
+                        mnogo toga...</Heading>
+                    <Button onClick={() => setOpen(true)} variation={"primary"}>
+                        Prijava / Registracija
+                    </Button>
+                </Flex>
+            </Card>
+
+        );
+    }
+
+
+    return (
+        <Flex direction="column">
+            <Dialog open={open} onClose={() => setOpen(false)}>
+                <Authenticator/>
+            </Dialog>
+            <Card variation={"elevated"} marginInline={"1rem"}>
+                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                    <KornerFieldShort
+                        responseNumber={responses?.filter(a => a.accepted).length}
+                        photo={photo}
+                        fields={field}
+                        date={getDayAndDateFromAppointment(appointment?.date)}
+                        appointment={appointment}/>
+                    <AppointmentStatusBadge appointment={appointment} isOld={isOld}/>
+                    <AppointmentReservationButton appointment={appointment} responses={responses} field={field}
+                                                  role={role}/>
+                    <AppointmentShareLink appointment={appointment} field={field} role={role}/>
+                </Flex>
+            </Card>
+            {!user && <RegisterButton/>}
+
+            {ReservationForm()}
+
+            <Card variation={"elevated"} marginInline={"1rem"}>
+                <AppointmentPlayerList user={userModel} responses={responses} role={role}
+                                       isLocked={isOld || appointment?.canceled}/>
+            </Card>
+            {isOld && <Card variation={"elevated"} marginInline={"1rem"}>
+                <Flex direction="column" alignItems="center" justifyContent={"space-around"}>
+                    <AppointmentGuestForm role={role} appointment={appointment}/>
+                    <AppointmentCancelButton role={role} appointment={appointment}/>
+                </Flex>
+            </Card>}
         </Flex>
     );
 }

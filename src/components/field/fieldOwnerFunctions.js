@@ -28,7 +28,7 @@ const FieldOwnerFunctions = ({fieldParam, updateFieldFunction}) => {
     };
 
     return (
-        <Flex alignItems={"center"}>
+        <Flex alignItems={"center"} justifyContent={"center"}>
             <Button onClick={() => setModalOpen(true)}>Učitaj sliku</Button>
             <Button onClick={() => setShowUpdateForm(!showUpdateForm)}>Uredi informacije</Button>
             <UploadComponent open={modalOpen} uploadSuccessFunction={addPhotoToField}
