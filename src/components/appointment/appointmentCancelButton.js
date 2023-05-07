@@ -6,10 +6,14 @@ import {Appointment} from "../../models";
 
 const AppointmentCancelButton = ({appointment, role}) => {
 
-    if (role !== "APPOINTMENT_OWNER" || appointment?.canceled || appointment?.confirmed) {
+    if (role !== "APPOINTMENT_OWNER" || appointment?.confirmed) {
         if (role !== "FIELD_OWNER") {
             return;
         }
+    }
+
+    if (appointment?.canceled) {
+        return;
     }
     // Dialog for deleting appointment
     const cancelAppointment = () => {

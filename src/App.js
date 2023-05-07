@@ -56,7 +56,7 @@ function App() {
     )
 
     const MyMenu = () => (
-        <Flex backgroundColor={"green.90"} direction={"column"} width={"100%"} position={"sticky"} bottom={"-1px"}>
+        <Flex marginTop={"auto"} backgroundColor={"green.90"} direction={"column"}>
 
             <Flex marginTop={"0px"} justifyContent={"space-between"}
                   gap={"0.5rem"}>
@@ -98,9 +98,9 @@ function App() {
 
 
     return (
-        <Flex maxWidth={"500px"} direction={"column"} alignContent={"center"}>
+        <Flex height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
             <TopHeader/>
-            <ScrollView marginTop={"5px"} marginBottom={"0px"} direction={"column"}>
+            <ScrollView  marginTop={"1rem"} marginBottom={"0px"} direction={"column"}>
                 {routes()}
             </ScrollView>
             {user && <MyMenu/>}

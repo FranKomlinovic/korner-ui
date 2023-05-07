@@ -95,7 +95,7 @@ const AppointmentById = () => {
     }, [responses, userModel]);
 
     const ReservationForm = () => {
-        if (isOld) {
+        if (isOld || appointment?.canceled) {
             return;
         }
         return (
@@ -154,9 +154,10 @@ const AppointmentById = () => {
             {isOld && <Card variation={"elevated"} marginInline={"1rem"}>
                 <Flex direction="column" alignItems="center" justifyContent={"space-around"}>
                     <AppointmentGuestForm role={role} appointment={appointment}/>
-                    <AppointmentCancelButton role={role} appointment={appointment}/>
                 </Flex>
             </Card>}
+            <AppointmentCancelButton role={role} appointment={appointment}/>
+
         </Flex>
     );
 }
