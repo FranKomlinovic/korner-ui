@@ -14,7 +14,7 @@ import {FaCalendar, FaPlusCircle} from "react-icons/fa";
 import Profile from "./views/profile";
 import {useEffect, useState} from "react";
 import AppointmentById from "./views/appointmentById";
-
+import {AddToHomeScreen} from "react-pwa-add-to-homescreen";
 Amplify.configure(awsExports);
 
 function App() {
@@ -99,6 +99,7 @@ function App() {
 
     return (
         <Flex height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
+            <AddToHomeScreen translate={{chromiumInstall: "Preuzmi KornerHR aplikaciju na svoj mobitel", buttonInstall: "Preuzmi"}} delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
             <TopHeader/>
             <ScrollView  marginTop={"1rem"} marginBottom={"0px"} direction={"column"}>
                 {routes()}
