@@ -45,7 +45,7 @@ function App() {
     const LogoAndAppName = () => (
         <Flex justifyContent={"start"} alignItems={"center"} marginTop={"0.5rem"}>
             <Image height={"40px"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
-            <Heading level={"3"} color={"green.90"} onClick={goToHome}>Korner</Heading>
+            <Heading level={"3"} color={"green.90"} fontFamily={"sans-serif"} onClick={goToHome}>Korner</Heading>
         </Flex>)
 
     const routes = () => (
