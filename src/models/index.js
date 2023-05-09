@@ -1,6 +1,6 @@
 // @ts-check
-import { initSchema } from '@aws-amplify/datastore';
-import { schema } from './schema';
+import {initSchema} from '@aws-amplify/datastore';
+import {schema} from './schema';
 
 const Cities = {
   "PETRINJA": "PETRINJA",
@@ -20,9 +20,10 @@ const Surface = {
   "WOOD": "WOOD"
 };
 
-const { Following, ReccuringAppointment, Response, Appointment, Fields } = initSchema(schema);
+const { User, Following, ReccuringAppointment, Response, Appointment, Fields } = initSchema(schema);
 
 export {
+  User,
   Following,
   ReccuringAppointment,
   Response,

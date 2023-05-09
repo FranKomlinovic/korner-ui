@@ -65,7 +65,8 @@ const Home = ({user}) => {
                 c => [
                     c.or(c => accepted.map(a => c.id.eq(a))),
                     c.date.lt(getCurrentDateInDynamoDbString(0)),
-                    c.confirmed.eq(true)
+                    c.confirmed.eq(true),
+                    c.canceled.eq(false)
                 ]), {
                 sort: (sort) => sort.date(SortDirection.DESCENDING)
             }

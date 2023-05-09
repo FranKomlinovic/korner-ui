@@ -1,17 +1,33 @@
 import React, {useEffect, useState} from "react";
-import {FaCheck, FaMinus} from "react-icons/fa";
+import {FaCheck, FaMinus, FaTrash} from "react-icons/fa";
 import {getTimeFromDate, getTimeFromTimestamp} from "../functions/converters";
-import {Storage} from "aws-amplify";
-import {Card, Flex, Heading, Image, Text} from "@aws-amplify/ui-react";
-import {KornerResponseUser} from "../ui-components";
+import {DataStore, Storage} from "aws-amplify";
+import {confirmAlert} from "react-confirm-alert";
+import {Response} from "../models";
+import {Flex, Image, Text} from "@aws-amplify/ui-react";
 
-const FigmaResponse = ({response, user}) => {
+const FigmaResponse = ({response, user, showDelete}) => {
 
     const [photo, setPhoto] = useState(null);
-    const [id, setId] = useState(null);
     const [icon, setIcon] = useState(null);
     const [playerName, setPlayerName] = useState(null);
     const [time, setTime] = useState(null);
+
+    function deleteResponse(res) {
+        confirmAlert({
+            title: 'Potvrdi brisanje',
+            message: 'Želite li obrisati odgovor korisnika ' + res.playerName + '?',
+            buttons: [
+                {
+                    label: 'Da',
+                    onClick: () => DataStore.delete(Response, res.id)
+                },
+                {
+                    label: 'Ne'
+                }
+            ]
+        });
+    }
 
     useEffect(() => {
         if (!response) {
@@ -23,7 +39,6 @@ const FigmaResponse = ({response, user}) => {
             setTime(getTimeFromTimestamp(response.updatedAt));
         }
         setPlayerName(response.playerName)
-        setId(response.id)
         let playerPhoto = response.playerPhoto;
         if (user && playerPhoto) {
             Storage.get(playerPhoto).then(b => setPhoto(b))
@@ -35,15 +50,25 @@ const FigmaResponse = ({response, user}) => {
         }
 
         if (response.accepted) {
-            setIcon(<FaCheck/>)
+            setIcon(<FaCheck size={"1.2rem"} color={"green"}/>)
         } else {
-            setIcon(<FaMinus/>)
+            setIcon(<FaMinus size={"1.2rem"} color={"darkRed"}/>)
         }
-    }, [response]);
+    }, [response, user]);
 
-    return (<KornerResponseUser photo={photo} name={playerName} time={time} icon={icon} id={id}/>)
-
-
+    return (
+        <Flex alignItems={"center"} justifyContent={"space-between"}>
+            <Flex gap={"0.2rem"}>
+                <Image src={photo} borderRadius={400} objectFit={"cover"} width={"2rem"} height={"2rem"}
+                       color={"white"} alt={"Slika"}/>
+                <Text fontSize={"large"}>{playerName}</Text>
+            </Flex>
+            <Flex gap={"0.5rem"} paddingRight={"0.2rem"}>
+                <Text fontSize={"small"}>{time}</Text>
+                {icon}
+                {showDelete && <FaTrash size={"1.2rem"} onClick={() => deleteResponse(response)} color={"darkred"}/>}
+            </Flex>
+        </Flex>)
 }
 
 export default FigmaResponse;

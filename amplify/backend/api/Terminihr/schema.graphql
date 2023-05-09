@@ -1,3 +1,10 @@
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  email: String
+  cognitoID: ID
+}
+
 type Following @model @auth(rules: [{allow: public}]) {
   id: ID!
   userID: ID!

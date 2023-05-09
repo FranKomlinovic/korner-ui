@@ -1,44 +1,19 @@
-import React from "react";
-import {FaTrash} from "react-icons/fa";
+import React, {useEffect, useState} from "react";
 import {Card, Flex, Heading} from "@aws-amplify/ui-react";
-import {DataStore} from "aws-amplify";
-import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import {Response} from "../../models";
 
 import FigmaResponse from "../../figma-components/FigmaResponse";
 
 const AppointmentPlayerList = ({user, responses, role, isLocked}) => {
+    const [toDisplay, setToDisplay] = useState();
 
-    function deleteResponse(res) {
-        confirmAlert({
-            title: 'Potvrdi brisanje',
-            message: 'Želite li obrisati odgovor korisnika ' + res.playerName + '?',
-            buttons: [
-                {
-                    label: 'Da',
-                    onClick: () => DataStore.delete(Response, res.id)
-                },
-                {
-                    label: 'Ne'
-                }
-            ]
-        });
-    }
-
-    const mapResponseToComponent = (res) => {
-        return (
+    useEffect(() => {
+        setToDisplay(responses?.map(res => (
             <Card key={res.id} variation={"elevated"} padding={"0.2rem"}>
-                <Flex alignItems={"center"} gap={"0px"} paddingRight={"0.5rem"}>
-                    <FigmaResponse user={user} response={res}/>
-                    {role === "APPOINTMENT_OWNER" && !isLocked && <FaTrash onClick={() => deleteResponse(res)} color={"darkred"}/>}
-                </Flex>
+                <FigmaResponse user={user} response={res} showDelete={role === "APPOINTMENT_OWNER" && !isLocked}/>
             </Card>
-        );
-    };
-
-
-    const renderResponses = responses && responses?.map(mapResponseToComponent);
+        )))
+    }, [responses, role, isLocked, user])
 
     if (responses?.length === 0) {
         return <Heading>Nema odgovora za ovaj termin</Heading>
@@ -55,8 +30,7 @@ const AppointmentPlayerList = ({user, responses, role, isLocked}) => {
         <Flex direction={"column"}>
             <PlayersHeading/>
             <Flex direction={"column"} gap={"0.2rem"}>
-                {renderResponses}
-
+                {toDisplay}
             </Flex>
         </Flex>
     )

@@ -26,6 +26,9 @@ function App() {
     ]);
 
     useEffect(() => {
+        if (!user?.attributes) {
+            return;
+        }
         let pic = user?.attributes.picture;
         if (pic) {
             Storage.get(pic).then(a => {
@@ -99,9 +102,11 @@ function App() {
 
     return (
         <Flex height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
-            <AddToHomeScreen translate={{chromiumInstall: "Preuzmi KornerHR aplikaciju na svoj mobitel", buttonInstall: "Preuzmi"}} delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
+            <AddToHomeScreen
+                translate={{chromiumInstall: "Preuzmi KornerHR aplikaciju na svoj mobitel", buttonInstall: "Preuzmi"}}
+                delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
             <TopHeader/>
-            <ScrollView  marginTop={"1rem"} marginBottom={"0px"} direction={"column"}>
+            <ScrollView marginTop={"1rem"} marginBottom={"0px"} direction={"column"}>
                 {routes()}
             </ScrollView>
             {user && <MyMenu/>}
