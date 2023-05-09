@@ -43,9 +43,9 @@ function App() {
     const goToProfile = () => navigate("/profile")
 
     const LogoAndAppName = () => (
-        <Flex justifyContent={"start"} alignItems={"center"} marginTop={"0.5rem"}>
-            <Image height={"40px"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
-            <Heading level={"3"} color={"green.90"} fontFamily={"sans-serif"} onClick={goToHome}>Korner</Heading>
+        <Flex gap={"0.2rem"} justifyContent={"start"} alignItems={"center"} marginTop={"0.5rem"}>
+            <Image alignSelf={"start"} height={"1.9rem"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
+            <Heading alignSelf={"end"} textAlign={"end"} level={"3"} color={"green.90"} fontWeight={"bold"} fontStyle={"italic"} fontFamily={"fantasy"} onClick={goToHome}>KornerHR</Heading>
         </Flex>)
 
     const routes = () => (
@@ -106,7 +106,7 @@ function App() {
                 translate={{chromiumInstall: "Preuzmi KornerHR aplikaciju na svoj mobitel", buttonInstall: "Preuzmi"}}
                 delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
             <TopHeader/>
-            <ScrollView marginTop={"1rem"} marginBottom={"0px"} direction={"column"}>
+            <ScrollView marginTop={"0rem"} marginBottom={"0px"} direction={"column"}>
                 {routes()}
             </ScrollView>
             {user && <MyMenu/>}
