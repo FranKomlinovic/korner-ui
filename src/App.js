@@ -15,6 +15,7 @@ import Profile from "./views/profile";
 import {useEffect, useState} from "react";
 import AppointmentById from "./views/appointmentById";
 import {AddToHomeScreen} from "react-pwa-add-to-homescreen";
+
 Amplify.configure(awsExports);
 
 function App() {
@@ -44,8 +45,10 @@ function App() {
 
     const LogoAndAppName = () => (
         <Flex gap={"0.2rem"} justifyContent={"start"} alignItems={"center"}>
-            <Image alignSelf={"center"} height={"2rem"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
-            <Heading alignSelf={"center"} textAlign={"center"} level={"3"} color={"green.90"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>korner</Heading>
+            <Image alignSelf={"center"} height={"2rem"} alt={"Logo"} src={"/korner-logo.png"}
+                   onClick={goToHome}></Image>
+            <Heading alignSelf={"center"} textAlign={"center"} level={"3"} color={"green.90"} fontWeight={"bold"}
+                     fontStyle={"italic"} onClick={goToHome}>korner</Heading>
         </Flex>)
 
     const routes = () => (
