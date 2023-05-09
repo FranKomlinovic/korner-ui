@@ -43,9 +43,9 @@ function App() {
     const goToProfile = () => navigate("/profile")
 
     const LogoAndAppName = () => (
-        <Flex gap={"0.2rem"} justifyContent={"start"} alignItems={"center"} marginTop={"0.5rem"}>
-            <Image alignSelf={"start"} height={"1.9rem"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
-            <Heading alignSelf={"end"} textAlign={"end"} level={"3"} color={"green.90"} fontWeight={"bold"} fontStyle={"italic"} fontFamily={"fantasy"} onClick={goToHome}>KornerHR</Heading>
+        <Flex gap={"0.2rem"} justifyContent={"start"} alignItems={"center"}>
+            <Image alignSelf={"center"} height={"2rem"} alt={"Logo"} src={"/korner-logo.png"} onClick={goToHome}></Image>
+            <Heading alignSelf={"center"} textAlign={"center"} level={"3"} color={"green.90"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>korner</Heading>
         </Flex>)
 
     const routes = () => (
@@ -94,7 +94,7 @@ function App() {
     )
 
     const TopHeader = () => (
-        <Flex marginInline={"10px"} justifyContent={"space-between"}>
+        <Flex marginInline={"1rem"} justifyContent={"space-between"}>
             <LogoAndAppName/>
         </Flex>
     )
