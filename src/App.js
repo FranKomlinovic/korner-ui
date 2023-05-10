@@ -44,8 +44,8 @@ function App() {
     const goToProfile = () => navigate("/profile")
 
     const LogoAndAppName = () => (
-        <Heading level={"3"} color={"green.90"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>
-            k<Image alignSelf={"center"} height={"1.1rem"} alt={"O"} src={"/korner-logo.png"}
+        <Heading level={"2"} color={"green.90"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>
+            k<Image alignSelf={"center"} height={"1.4rem"} alt={"O"} src={"/korner-logo.png"}
                     onClick={goToHome}></Image>rner
         </Heading>)
 
@@ -60,8 +60,7 @@ function App() {
     )
 
     const MyMenu = () => (
-        <Flex marginTop={"auto"} backgroundColor={"green.90"} direction={"column"}>
-
+        <Flex backgroundColor={"green.90"} direction={"column"}>
             <Flex marginTop={"0px"} justifyContent={"space-between"}
                   gap={"0.5rem"}>
                 <Button onClick={() => navigate("/")} border={"none"}>
@@ -100,11 +99,21 @@ function App() {
         </Flex>
     )
 
+    const translate = {
+        headline: "Preuzmi Korner na svoj uređaj",
+        bottomline: "Za lakše upravljanje terminima",
+        safariTapShare: "Pritisni \"Share\"",
+        safariAddHomeScreen: "Odaberi \"Add to Home Screen\"",
+        chromiumAddHomeScreen: "Pritisni \"Add to Home Screen\" u svom pregledniku",
+        chromiumInstall: "Ikona aplikacije biti će prikazana na zaslonu mobitela",
+        buttonInstall: "Preuzmi",
+    }
+
 
     return (
         <Flex height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
             <AddToHomeScreen
-                translate={{chromiumInstall: "Preuzmi KornerHR aplikaciju na svoj mobitel", buttonInstall: "Preuzmi"}}
+                translate={translate}
                 delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
             <TopHeader/>
             <ScrollView marginTop={"0rem"} marginBottom={"0px"} direction={"column"}>
