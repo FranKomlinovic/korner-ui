@@ -116,7 +116,7 @@ function App() {
                 translate={translate}
                 delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
             <TopHeader/>
-            <ScrollView marginTop={"0rem"} marginBottom={"0px"} direction={"column"}>
+            <ScrollView paddingBlock={"1rem"} direction={"column"}>
                 {routes()}
             </ScrollView>
             {user && <MyMenu/>}

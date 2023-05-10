@@ -2,11 +2,18 @@ import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
 import {Appointment, Response} from "../models";
 import {getCurrentDateInDynamoDbString} from "../functions/converters";
-import {Card, Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
+import {Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
+import LandingPage from "./landing-page";
 
-const Home = ({user}) => {
+const Home = () => {
+
+    const {user} = useAuthenticator((context) => [
+        context.user
+    ]);
+
+
     const [reservedAppointment, setReservedAppointment] = useState([]);
     const [ownedAppointment, setOwnedAppointment] = useState([]);
     const [acceptedAppointment, setAcceptedAppointment] = useState([]);
@@ -115,27 +122,29 @@ const Home = ({user}) => {
 
     }, [currentTime, sub]);
 
+    const appointmnents = () => (<Flex direction={"column"}>
+        <Card variation={"elevated"} marginInline={"1rem"}>
+            <ReservedAppointment/>
+        </Card>
+        <Card variation={"elevated"} marginInline={"1rem"}>
+            <OwnedAppointment/>
+        </Card>
+        <Card variation={"elevated"} marginInline={"1rem"}>
+            <AcceptedAppointment/>
+        </Card>
+        <Card variation={"elevated"} marginInline={"1rem"}>
+            <RefusedAppointment/>
+        </Card>
+        <Card variation={"elevated"} marginInline={"1rem"}>
+            <CanceledAppointment/>
+        </Card>
+        <Card variation={"elevated"} marginInline={"1rem"}>
+            <PlayedAppointment/>
+        </Card>
+    </Flex>)
+
     return (
-        <Flex direction={"column"} >
-            <Card variation={"elevated"} marginInline={"1rem"} >
-                <ReservedAppointment/>
-            </Card>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <OwnedAppointment/>
-            </Card>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <AcceptedAppointment/>
-            </Card>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <RefusedAppointment/>
-            </Card>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <CanceledAppointment/>
-            </Card>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <PlayedAppointment/>
-            </Card>
-        </Flex>
+        user ? appointmnents() : <LandingPage/>
     )
 
     function mapToView(appointments: [], text, noReservedText) {
@@ -153,4 +162,4 @@ const Home = ({user}) => {
     }
 }
 
-export default withAuthenticator(Home);
+export default Home;

@@ -63,7 +63,7 @@ const AppointmentById = () => {
             const a = b.items[0];
             setAppointment(a)
             const currentDate = getCurrentDateInDynamoDbString(0);
-            setIsOld(a.date < currentDate || (a.date === currentDate && a.start <= new Date().toTimeString()));
+            setIsOld(a?.date < currentDate || (a?.date === currentDate && a?.start <= new Date().toTimeString()));
         })
     }, [appointmentId]);
 
@@ -151,7 +151,7 @@ const AppointmentById = () => {
                 <AppointmentPlayerList user={userModel} responses={responses} role={role}
                                        isLocked={isOld || appointment?.canceled}/>
             </Card>
-            {isOld && <Card variation={"elevated"} marginInline={"1rem"}>
+            {!isOld && <Card variation={"elevated"} marginInline={"1rem"}>
                 <Flex direction="column" alignItems="center" justifyContent={"space-around"}>
                     <AppointmentGuestForm role={role} appointment={appointment}/>
                 </Flex>
