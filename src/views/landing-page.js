@@ -14,7 +14,7 @@ const LandingPage = () => {
     }
 
     return (
-        <Flex style={style}  direction={"column"}>
+        <Flex direction={"column"}>
             <Flex direction={"column"} alignItems={"center"}>
                 <Heading margin={"1rem"} level={2}>Jednostavno rezerviraj sportske terene</Heading>
             </Flex>
@@ -58,7 +58,7 @@ const LandingPage = () => {
                         termina koja uključuje rezervaciju terena i okupljanje ekipe koja će taj termin igrati
                     </Text>
                 </ExpanderItem>
-                <ExpanderItem title="Naplaćuje li se korištenje konera?" value="price">
+                <ExpanderItem title="Naplaćuje li se korištenje kornera?" value="price">
                     <Text>
                         Ne. Platforma je za korisnike potpuno besplatna.
                     </Text>
