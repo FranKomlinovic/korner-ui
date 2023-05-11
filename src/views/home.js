@@ -20,7 +20,7 @@ const Home = () => {
     const [refusedAppointment, setRefusedAppointment] = useState([]);
     const [canceledAppointment, setCanceledAppointment] = useState([]);
     const [playedAppointment, setPlayedAppointment] = useState([]);
-    const [responses, setResponses] = useState([]);
+    const [responses, setResponses] = useState();
 
     const sub = user?.attributes.sub;
     const currentTime = new Date().toTimeString();
@@ -33,17 +33,18 @@ const Home = () => {
 
     // Set responses
     useEffect(() => {
-        DataStore.query(Response, (c) => c.playerID.eq(sub))
-            .then((resp) => {
-                setResponses(resp);
-            });
-
+        if (sub) {
+            DataStore.query(Response, (c) => c.playerID.eq(sub))
+                .then((resp) => {
+                    setResponses(resp);
+                });
+        }
     }, [sub]);
 
     // Reserved appointment and acceptedAppointment
     useEffect(() => {
-        let accepted = responses.filter(a => a.accepted).map(a => a.appointmentID);
-        if (accepted.length === 0) {
+        let accepted = responses?.filter(a => a.accepted).map(a => a.appointmentID);
+        if (!accepted || accepted?.length === 0) {
             return;
         }
         DataStore.query(Appointment, b => b.and(
@@ -64,13 +65,13 @@ const Home = () => {
 
     // Already played appointments
     useEffect(() => {
-        let accepted = responses.filter(a => a.accepted).map(a => a.appointmentID);
-        if (accepted.length === 0) {
+        let accepted = responses?.filter(a => a.accepted).map(a => a.appointmentID);
+        if (!accepted || accepted?.length === 0) {
             return;
         }
         DataStore.query(Appointment, b => b.and(
                 c => [
-                    c.or(c => accepted.map(a => c.id.eq(a))),
+                    c.or(c => accepted?.map(a => c.id.eq(a))),
                     c.date.lt(getCurrentDateInDynamoDbString(0)),
                     c.confirmed.eq(true),
                     c.canceled.eq(false)
@@ -85,9 +86,9 @@ const Home = () => {
 
     // Refused appointment
     useEffect(() => {
-        let refused = responses.filter(a => !a.accepted).map(a => a.appointmentID)
+        let refused = responses?.filter(a => !a.accepted).map(a => a.appointmentID)
 
-        if (refused.length === 0) {
+        if (!refused || refused?.length === 0) {
             return;
         }
         DataStore.query(Appointment, b => b.and(
@@ -124,22 +125,27 @@ const Home = () => {
 
     const appointmnents = () => (<Flex direction={"column"}>
         <Card variation={"elevated"} marginInline={"1rem"}>
-            <ReservedAppointment/>
+            {ReservedAppointment()}
         </Card>
         <Card variation={"elevated"} marginInline={"1rem"}>
-            <OwnedAppointment/>
+            {OwnedAppointment()}
+
         </Card>
         <Card variation={"elevated"} marginInline={"1rem"}>
-            <AcceptedAppointment/>
+            {AcceptedAppointment()}
+
         </Card>
         <Card variation={"elevated"} marginInline={"1rem"}>
-            <RefusedAppointment/>
+            {RefusedAppointment()}
+
         </Card>
         <Card variation={"elevated"} marginInline={"1rem"}>
-            <CanceledAppointment/>
+            {CanceledAppointment()}
+
         </Card>
         <Card variation={"elevated"} marginInline={"1rem"}>
-            <PlayedAppointment/>
+            {PlayedAppointment()}
+
         </Card>
     </Flex>)
 
