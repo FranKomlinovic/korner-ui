@@ -44,7 +44,7 @@ const FieldConfirmAppointmentReservation = ({appointment, field, user}) => {
                 label={"Naziv ekipe"}
                 onChange={(a) => setName(a.currentTarget.value)}
             />}
-            <Button variation={"primary"} backgroundColor={"green.40"} color={"black"}
+            <Button backgroundColor={"green.90"} color={"white"}
                     onClick={createAppointment}>{isOwner ? "Rezerviraj termin" : "Skupi ekipu"}</Button>
             {!isOwner && <Text alignSelf={"center"} fontSize={"small"} variation={"warning"}>Klikom na gumb termin neće biti odmah rezerviran, to možete učiniti u sljedećem koraku</Text>}
         </Flex>

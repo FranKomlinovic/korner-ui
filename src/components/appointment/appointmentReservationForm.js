@@ -51,7 +51,7 @@ const AppointmentReservationForm = ({user, appointment, responseToUpdate}) => {
         if (responseToUpdate?.accepted) {
             return (
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <Heading color={"green"} level={3}>Dolazim</Heading>
+                    <Heading color={"font.primary"} level={3}>Dolazim</Heading>
                     <Heading level={6}>Promijeni odgovor:</Heading>
                     <Flex>
                         {notComming}
@@ -61,7 +61,7 @@ const AppointmentReservationForm = ({user, appointment, responseToUpdate}) => {
         }
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                <Heading color={"red"} level={3}>Ne dolazim</Heading>
+                <Heading color={"font.warning"} level={3}>Ne dolazim</Heading>
                 <Heading level={6}>Promijeni odgovor:</Heading>
                 <Flex>
                     {commingButton}

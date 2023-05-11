@@ -51,7 +51,8 @@ const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) =
                     {displayAppointments?.map((item, key) => (
                         <View key={key}>
                             <Button onClick={() => setAppointmentToCreate(item)}
-                                    backgroundColor={item.overlapping ? "yellow.20" : "green.20"}>{item.start} - {item.end}</Button>
+                                    color={"white"}
+                                    backgroundColor={item.overlapping ? "brand.secondary.80" : "brand.primary.80"}>{item.start} - {item.end}</Button>
                         </View>))}
                 </Grid>
                 <Text>*Za termine označene žuto već se skupljaju ekipe</Text>

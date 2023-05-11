@@ -20,7 +20,7 @@ const FieldOwnerAppointments = ({appointments, date}) => {
                     : displayAppointments?.map((item, key) => (
                         <View key={key}>
                             <Badge onClick={() => navigate("/appointment/" + item.id)}
-                                   backgroundColor={item.confirmed ? "green.20" : "yellow.20"}><Heading>{item.bookerName} {item.start} - {item.end} {!item.confirmed ? "*" : ""}</Heading></Badge>
+                                   backgroundColor={item.confirmed ? "brand.primary.40" : "brand.secondary.40"}><Heading>{item.bookerName} {item.start} - {item.end} {!item.confirmed ? "*" : ""}</Heading></Badge>
                         </View>))}
                 {displayAppointments?.filter(a => !a.confirmed).length !== 0 &&
                     <Text>*Termini označeni žuto još nisu potvrđeni</Text>}

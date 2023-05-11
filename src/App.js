@@ -44,7 +44,7 @@ function App() {
     const goToProfile = () => navigate("/profile")
 
     const LogoAndAppName = () => (
-        <Heading level={"2"} color={"green.90"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>
+        <Heading level={"2"} color={"brand.primary.100"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>
             k<Image alignSelf={"center"} height={"1.4rem"} alt={"O"} src={"/korner-logo.png"}
                     onClick={goToHome}></Image>rner
         </Heading>)
@@ -61,18 +61,22 @@ function App() {
 
     const MyMenu = () => (
         <Flex marginBlock={"0.5rem"}>
-            <Menu>
+            <Menu marginRight={"1rem"} border={"none"} padding={"0.1rem"}>
                 <MenuItem onClick={() => navigate("/")}>
-                    <FaCalendar/>Moji termini
+                    <Flex alignItems={"center"}>
+                        <FaCalendar size={"1.5rem"}/><Heading>Moji termini</Heading>
+                    </Flex>
                 </MenuItem>
                 <MenuItem onClick={() => navigate("/fields")}>
-                    <FaPlusCircle/>Rezerviraj
+                    <Flex alignItems={"center"}>
+                        <FaPlusCircle size={"1.5rem"}/><Heading>Rezerviraj</Heading>
+                    </Flex>
                 </MenuItem>
                 <MenuItem onClick={goToProfile}>
-                    <Image src={image} borderRadius={400} objectFit={"cover"} width={"20px"}
-                           height={"20px"}
-                           color={"white"} alt={"Profilna slika"}/>
-                    Profil
+                    <Flex alignItems={"center"}>
+                        <Image src={image} borderRadius={400} objectFit={"cover"} width={"1.5rem"}
+                               height={"1.5rem"} alt={"Profilna slika"}/><Heading>Profil</Heading>
+                    </Flex>
                 </MenuItem>
 
             </Menu>

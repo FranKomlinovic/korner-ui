@@ -6,48 +6,62 @@ import {List, ListItem} from "@mui/material";
 const LandingPage = () => {
     const navigate = useNavigate();
 
-    const style = {
-        backgroundImage: "url(" + "/no-field.jpg" + ")",
-        backgroundSize: 'cover',
-        backgroundRepeat: "no-repeat",
-        backgroundBlendMode: "darken"
-    }
-
     return (
-        <Flex direction={"column"}>
+        <Flex marginInline={"1rem"} direction={"column"}>
             <Flex direction={"column"} alignItems={"center"}>
-                <Heading margin={"1rem"} level={2}>Jednostavno rezerviraj sportske terene</Heading>
+                <Heading level={2}>Jednostavno rezerviraj sportske terene</Heading>
             </Flex>
             <Flex direction={"column"} alignItems={"center"}>
                 <Button variation={"primary"} onClick={() => navigate('/fields')}>Prijava/Registracija</Button>
             </Flex>
             <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
-                {/*<Image boxShadow={"small"} alignSelf={"center"} alt={"Mjesto"} src={"/Subject.png"}/>*/}
-                <Heading level={4}>Pronađi mjesto derbija</Heading>
-                <Text>Pretraži sve terene na korner platformi</Text>
+                <Flex>
+                    <Image alignSelf={"center"} alt={"Mjesto"} width={"40%"} height={"auto"} src={"/Subject.png"}/>
+                    <Flex direction={"column"}>
+                        <Heading level={4}>Pronađi mjesto derbija</Heading>
+                        <Text>Pretraži sve terene na korner platformi</Text>
+                    </Flex>
+                </Flex>
             </Card>
             <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
-                {/*<Image boxShadow={"small"} alignSelf={"center"} alt={"Mjesto"} src={"/Subject 2.png"}/>*/}
-                <Heading level={4}>Odaberi vrijeme tekme</Heading>
-                <Text>Pregledaj slobodne termine i izaberi vrijeme utakmice</Text>
+                <Flex>
+                    <Flex direction={"column"}>
+                        <Heading level={4}>Odaberi vrijeme tekme</Heading>
+                        <Text>Pregledaj slobodne termine i izaberi vrijeme utakmice</Text>
+                    </Flex>
+                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/Subject 2.png"}/>
+                </Flex>
             </Card>
             <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
-                {/*<Image boxShadow={"small"} alignSelf={"center"} alt={"Mjesto"} src={"/landing-gather-team.png"}/>*/}
-                <Heading level={4}>Skupi ekipu</Heading>
-                <Text>Pozovi prijatelje i prati tko će sudijelovati na utakmici</Text>
-            </Card>
-            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
-                {/*<Image boxShadow={"small"} alignSelf={"center"} alt={"Mjesto"} src={"/landing-reserve.png"}/>*/}
-                <Heading level={4}>Rezerviraj termin</Heading>
-                <Text>Kada se skupi dovoljno igrača, rezerviraj termin</Text>
-            </Card>
-            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
-                {/*<Image boxShadow={"small"} alignSelf={"center"} alt={"Mjesto"} src={"/landing-play.jpg"}/>*/}
-                <Heading level={4}>Igraj</Heading>
-                <Text>Jedino je preostalo odigrati termin</Text>
-            </Card>
-            <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
+                <Flex>
+                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/Subject 3.png"}/>
+                    <Flex direction={"column"}>
+                        <Heading level={4}>Skupi ekipu</Heading>
+                        <Text>Pozovi prijatelje i prati tko će sudijelovati na terminu</Text>
+                    </Flex>
+                </Flex>
 
+            </Card>
+            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
+                <Flex>
+                    <Flex direction={"column"}>
+                        <Heading level={4}>Rezerviraj termin</Heading>
+                        <Text>Kada se skupi dovoljno igrača, rezerviraj termin</Text>
+                    </Flex>
+                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/Subject 2.png"}/>
+                </Flex>
+            </Card>
+            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
+                <Flex>
+                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/play.png"}/>
+                    <Flex direction={"column"}>
+                        <Heading level={4}>Igraj</Heading>
+                        <Text>Jedino je preostalo odigrati termin</Text>
+                    </Flex>
+                </Flex>
+            </Card>
+
+            <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
             <Expander backgroundColor={"red"} type="single">
                 <ExpanderItem title="Što je korner?" value="whatIsCorner">
                     <Text>
