@@ -14,7 +14,7 @@ const LandingPage = () => {
             <Flex direction={"column"} alignItems={"center"}>
                 <Button variation={"primary"} onClick={() => navigate('/fields')}>Prijava/Registracija</Button>
             </Flex>
-            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
+            <Card marginInline={"1rem"} variation={"elevated"}>
                 <Flex>
                     <Image alignSelf={"center"} alt={"Mjesto"} width={"40%"} height={"auto"} src={"/field.jpg"}/>
                     <Flex direction={"column"}>
@@ -23,7 +23,7 @@ const LandingPage = () => {
                     </Flex>
                 </Flex>
             </Card>
-            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
+            <Card marginInline={"1rem"} variation={"elevated"}>
                 <Flex>
                     <Flex direction={"column"}>
                         <Heading level={4}>Odaberi vrijeme tekme</Heading>
@@ -32,7 +32,7 @@ const LandingPage = () => {
                     <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/time.jpg"}/>
                 </Flex>
             </Card>
-            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
+            <Card marginInline={"1rem"} variation={"elevated"}>
                 <Flex>
                     <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/team.jpg"}/>
                     <Flex direction={"column"}>
@@ -42,7 +42,7 @@ const LandingPage = () => {
                 </Flex>
 
             </Card>
-            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
+            <Card marginInline={"1rem"} variation={"elevated"}>
                 <Flex>
                     <Flex direction={"column"}>
                         <Heading level={4}>Rezerviraj termin</Heading>
@@ -51,7 +51,7 @@ const LandingPage = () => {
                     <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/reserve.jpg"}/>
                 </Flex>
             </Card>
-            <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
+            <Card marginInline={"1rem"} variation={"elevated"}>
                 <Flex>
                     <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/played.jpg"}/>
                     <Flex direction={"column"}>

@@ -129,20 +129,18 @@ const AppointmentById = () => {
             <Dialog open={open} onClose={() => setOpen(false)}>
                 <Authenticator/>
             </Dialog>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <KornerFieldShort
-                        responseNumber={responses?.filter(a => a.accepted).length}
-                        photo={photo}
-                        fields={field}
-                        date={getDayAndDateFromAppointment(appointment?.date)}
-                        appointment={appointment}/>
-                    <AppointmentStatusBadge appointment={appointment} isOld={isOld}/>
-                    <AppointmentReservationButton appointment={appointment} responses={responses} field={field}
-                                                  role={role}/>
-                    <AppointmentShareLink appointment={appointment} field={field} role={role}/>
-                </Flex>
-            </Card>
+            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                <KornerFieldShort
+                    responseNumber={responses?.filter(a => a.accepted).length}
+                    photo={photo}
+                    fields={field}
+                    date={getDayAndDateFromAppointment(appointment?.date)}
+                    appointment={appointment}/>
+                <AppointmentStatusBadge appointment={appointment} isOld={isOld}/>
+                <AppointmentReservationButton appointment={appointment} responses={responses} field={field}
+                                              role={role}/>
+                {!isOld && <AppointmentShareLink appointment={appointment} field={field} role={role}/>}
+            </Flex>
             {!user && <RegisterButton/>}
 
             {ReservationForm()}
@@ -151,11 +149,12 @@ const AppointmentById = () => {
                 <AppointmentPlayerList user={userModel} responses={responses} role={role}
                                        isLocked={isOld || appointment?.canceled}/>
             </Card>
-            {!isOld && role==="APPOINTMENT_OWNER" && !appointment?.canceled && <Card variation={"elevated"} marginInline={"1rem"}>
-                <Flex direction="column" alignItems="center" justifyContent={"space-around"}>
-                    <AppointmentGuestForm role={role} appointment={appointment}/>
-                </Flex>
-            </Card>}
+            {!isOld && role === "APPOINTMENT_OWNER" && !appointment?.canceled &&
+                <Card variation={"elevated"} marginInline={"1rem"}>
+                    <Flex direction="column" alignItems="center" justifyContent={"space-around"}>
+                        <AppointmentGuestForm role={role} appointment={appointment}/>
+                    </Flex>
+                </Card>}
             <AppointmentCancelButton role={role} appointment={appointment}/>
 
         </Flex>

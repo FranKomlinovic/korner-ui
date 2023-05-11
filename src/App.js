@@ -100,9 +100,14 @@ function App() {
         buttonInstall: "Preuzmi",
     }
 
+    const bg = {
+        backgroundImage: "url(\"/app-bg.png\")",
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+    }
 
     return (
-        <Flex height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
+        <Flex style={bg} height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
             <AddToHomeScreen
                 translate={translate}
                 delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
