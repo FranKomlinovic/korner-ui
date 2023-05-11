@@ -107,7 +107,7 @@ function App() {
                 translate={translate}
                 delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
             <TopHeader/>
-            <ScrollView paddingBlock={"1rem"} direction={"column"}>
+            <ScrollView paddingBottom={"1rem"} direction={"column"}>
                 {routes()}
             </ScrollView>
         </Flex>

@@ -16,7 +16,7 @@ const LandingPage = () => {
             </Flex>
             <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
                 <Flex>
-                    <Image alignSelf={"center"} alt={"Mjesto"} width={"40%"} height={"auto"} src={"/Subject.png"}/>
+                    <Image alignSelf={"center"} alt={"Mjesto"} width={"40%"} height={"auto"} src={"/field.jpg"}/>
                     <Flex direction={"column"}>
                         <Heading level={4}>Pronađi mjesto derbija</Heading>
                         <Text>Pretraži sve terene na korner platformi</Text>
@@ -29,12 +29,12 @@ const LandingPage = () => {
                         <Heading level={4}>Odaberi vrijeme tekme</Heading>
                         <Text>Pregledaj slobodne termine i izaberi vrijeme utakmice</Text>
                     </Flex>
-                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/Subject 2.png"}/>
+                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/time.jpg"}/>
                 </Flex>
             </Card>
             <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
                 <Flex>
-                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/Subject 3.png"}/>
+                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/team.jpg"}/>
                     <Flex direction={"column"}>
                         <Heading level={4}>Skupi ekipu</Heading>
                         <Text>Pozovi prijatelje i prati tko će sudijelovati na terminu</Text>
@@ -48,12 +48,12 @@ const LandingPage = () => {
                         <Heading level={4}>Rezerviraj termin</Heading>
                         <Text>Kada se skupi dovoljno igrača, rezerviraj termin</Text>
                     </Flex>
-                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/Subject 2.png"}/>
+                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/reserve.jpg"}/>
                 </Flex>
             </Card>
             <Card marginInline={"1rem"} backgroundColor={"transparent"} variation={"elevated"}>
                 <Flex>
-                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/play.png"}/>
+                    <Image alignSelf={"center"} alt={"Vrijeme"} width={"40%"} height={"auto"} src={"/played.jpg"}/>
                     <Flex direction={"column"}>
                         <Heading level={4}>Igraj</Heading>
                         <Text>Jedino je preostalo odigrati termin</Text>
