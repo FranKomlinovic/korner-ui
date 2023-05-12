@@ -19,7 +19,7 @@ const FieldConfirmAppointmentReservation = ({appointment, field, user}) => {
     }, [appointment, field, user]);
 
 
-    function createAppointment() {
+    const createAppointment = () => {
         appointmentToCreate.bookerName = isOwner && name ?
             name :
             user?.attributes.given_name + " " + user?.attributes.family_name;
