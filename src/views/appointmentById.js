@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
+import {Authenticator, Button, Card, Flex, Heading, Loader, useAuthenticator} from "@aws-amplify/ui-react";
 import {DataStore, Storage} from "aws-amplify";
 import {Appointment, Response} from "../models";
 import {SortDirection} from "@aws-amplify/datastore";
@@ -59,11 +59,10 @@ const AppointmentById = () => {
 
     // Sets appointment
     useEffect(() => {
-        DataStore.observeQuery(Appointment, c => c.id.eq(appointmentId)).subscribe(b => {
-            const a = b.items[0];
-            setAppointment(a)
+        appointmentId && DataStore.query(Appointment, appointmentId).then(b => {
+            setAppointment(b)
             const currentDate = getCurrentDateInDynamoDbString(0);
-            setIsOld(a?.date < currentDate || (a?.date === currentDate && a?.start <= new Date().toTimeString()));
+            setIsOld(b?.date < currentDate || (b?.date === currentDate && b?.start <= new Date().toTimeString()));
         })
     }, [appointmentId]);
 
@@ -125,40 +124,42 @@ const AppointmentById = () => {
 
 
     return (
-        <Flex direction="column">
-            <Dialog open={open} onClose={() => setOpen(false)}>
-                <Authenticator/>
-            </Dialog>
-            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                <KornerFieldShort
-                    responseNumber={responses?.filter(a => a.accepted).length}
-                    photo={photo}
-                    fields={field}
-                    date={getDayAndDateFromAppointment(appointment?.date)}
-                    appointment={appointment}/>
-                <AppointmentStatusBadge appointment={appointment} isOld={isOld}/>
-                <AppointmentReservationButton appointment={appointment} responses={responses} field={field}
-                                              role={role}/>
-                {!isOld && <AppointmentShareLink appointment={appointment} field={field} role={role}/>}
-            </Flex>
-            {!user && <RegisterButton/>}
+        appointment ? <Flex direction="column">
+                <Dialog open={open} onClose={() => setOpen(false)}>
+                    <Authenticator/>
+                </Dialog>
+                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                    <KornerFieldShort
+                        responseNumber={responses?.filter(a => a.accepted).length}
+                        photo={photo}
+                        fields={field}
+                        date={getDayAndDateFromAppointment(appointment?.date)}
+                        appointment={appointment}/>
+                    <AppointmentStatusBadge appointment={appointment} isOld={isOld}/>
+                    <AppointmentReservationButton appointment={appointment} responses={responses} field={field}
+                                                  role={role}/>
+                    {!isOld && <AppointmentShareLink appointment={appointment} field={field} role={role}/>}
+                </Flex>
+                {!user && <RegisterButton/>}
 
-            {ReservationForm()}
+                {ReservationForm()}
 
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <AppointmentPlayerList user={userModel} responses={responses} role={role}
-                                       isLocked={isOld || appointment?.canceled}/>
-            </Card>
-            {!isOld && role === "APPOINTMENT_OWNER" && !appointment?.canceled &&
                 <Card variation={"elevated"} marginInline={"1rem"}>
-                    <Flex direction="column" alignItems="center" justifyContent={"space-around"}>
-                        <AppointmentGuestForm role={role} appointment={appointment}/>
-                    </Flex>
-                </Card>}
-            <AppointmentCancelButton role={role} appointment={appointment}/>
+                    <AppointmentPlayerList user={userModel} responses={responses} role={role}
+                                           isLocked={isOld || appointment?.canceled}/>
+                </Card>
+                {!isOld && role === "APPOINTMENT_OWNER" && !appointment?.canceled &&
+                    <Card variation={"elevated"} marginInline={"1rem"}>
+                        <Flex direction="column" alignItems="center" justifyContent={"space-around"}>
+                            <AppointmentGuestForm role={role} appointment={appointment}/>
+                        </Flex>
+                    </Card>}
+                <AppointmentCancelButton role={role} appointment={appointment}/>
 
-        </Flex>
-    );
+            </Flex>
+            : <Loader variation="linear"/>);
+
+
 }
 
 
