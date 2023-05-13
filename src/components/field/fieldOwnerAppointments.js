@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Badge, Card, Flex, Heading, Text, View, withAuthenticator} from "@aws-amplify/ui-react";
+import {Button, Card, Flex, Heading, Text, View, withAuthenticator} from "@aws-amplify/ui-react";
 import {useNavigate} from "react-router-dom";
 import {getDayAndDateFromAppointment} from "../../functions/converters";
 
@@ -19,8 +19,8 @@ const FieldOwnerAppointments = ({appointments, date}) => {
                 {displayAppointments?.length === 0 ? <Heading>Nema termina</Heading>
                     : displayAppointments?.map((item, key) => (
                         <View key={key}>
-                            <Badge onClick={() => navigate("/appointment/" + item.id)}
-                                   backgroundColor={item.confirmed ? "brand.primary.40" : "brand.secondary.40"}><Heading>{item.bookerName} {item.start} - {item.end} {!item.confirmed ? "*" : ""}</Heading></Badge>
+                            <Button onClick={() => navigate("/appointment/" + item.id)}
+                                   backgroundColor={item.confirmed ? "brand.primary.80" : "brand.secondary.80"}><Heading color={"white"}>{item.bookerName} {item.start} - {item.end} {!item.confirmed ? "*" : ""}</Heading></Button>
                         </View>))}
                 {displayAppointments?.filter(a => !a.confirmed).length !== 0 &&
                     <Text>*Termini označeni žuto još nisu potvrđeni</Text>}
