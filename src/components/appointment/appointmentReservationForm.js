@@ -25,14 +25,14 @@ const AppointmentReservationForm = ({user, appointment, responseToUpdate}) => {
             playerName: name,
             playerPhoto: user?.photo,
         });
-        DataStore.save(response);
+        DataStore.save(response).then();
     };
 
     function updateResponse(accepted) {
         DataStore.save(Response.copyOf(responseToUpdate, (item) => {
             item.accepted = accepted;
             item.playerPhoto = user?.photo
-        }));
+        })).then();
     }
 
     const commingButton = (

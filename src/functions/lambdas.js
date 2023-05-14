@@ -23,7 +23,7 @@ export function confirmAppointment(appointmentId): Appointment {
                     for (const a1 of app.filter(a => checkOverlap(appointment, a))) {
                         await DataStore.save(Appointment.copyOf(a1, (item) => {
                             item.canceled = true;
-                        }));
+                        })).then();
                     }
                     window.location.reload();
 

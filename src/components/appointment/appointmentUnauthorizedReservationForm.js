@@ -24,7 +24,7 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
             appointmentID: appointment.id,
             playerName: nm,
         });
-        DataStore.save(response);
+        DataStore.save(response).then();
     }
 
     const createForm = () => {

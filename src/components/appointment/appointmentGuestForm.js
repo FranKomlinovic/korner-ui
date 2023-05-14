@@ -16,7 +16,7 @@ const AppointmentGuestForm = ({appointment, role}) => {
             accepted: true,
             appointmentID: appointment.id,
             playerName: name,
-        }));
+        })).then();
     };
 
 

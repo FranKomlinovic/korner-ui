@@ -155,7 +155,7 @@ const LandingPage = () => {
 
     const mapToCard = (cardInfo) => {
         return (
-            <Card key={cardInfo.heading} margin={"1rem"} variation={"elevated"}>
+            <Card key={cardInfo.heading} marginBlock={"1rem"} variation={"elevated"}>
                 <Flex>
                     {!cardInfo.inverted && <Image alignSelf={"center"} alt={cardInfo.alt} width={"40%"} height={"auto"}
                                                   src={cardInfo.img}/>}
@@ -183,9 +183,10 @@ const LandingPage = () => {
     }
 
     return (
-        <Flex marginInline={"1rem"} direction={"column"}>
-            <Card backgroundColor={"transparent"} alignItems={"center"}>
-                <Heading fontWeight={"bold"} color={"brand.primary.100"} level={2}>Jednostavno rezerviraj sportske terene</Heading>
+        <Flex direction={"column"}>
+            <Card marginInline={"1rem"} backgroundColor={"transparent"} alignItems={"center"}>
+                <Heading fontWeight={"bold"} color={"brand.primary.100"} level={2}>Jednostavno rezerviraj sportske
+                    terene</Heading>
             </Card>
             <Flex marginTop={"1rem"} direction={"column"} alignItems={"center"}>
                 <Button variation={"primary"} onClick={() => navigate('/fields')}>Prijava/Registracija</Button>
