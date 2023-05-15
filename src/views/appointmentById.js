@@ -4,29 +4,27 @@ import {Authenticator, Button, Card, Flex, Heading, Loader, useAuthenticator} fr
 import {DataStore, Storage} from "aws-amplify";
 import {Appointment, Response} from "../models";
 import {SortDirection} from "@aws-amplify/datastore";
-import AppointmentPlayerList from "../components/appointment/appointmentPlayerList";
-import AppointmentReservationForm from "../components/appointment/appointmentReservationForm";
-import AppointmentUnauthorizedReservationForm from "../components/appointment/appointmentUnauthorizedReservationForm";
 import AppointmentStatusBadge from "../components/appointment/appointmentStatusBadge";
-import AppointmentReservationButton from "../components/appointment/appointmentReservationButton";
-import AppointmentGuestForm from "../components/appointment/appointmentGuestForm";
-import AppointmentShareLink from "../components/appointment/appointmetShareLink";
-import AppointmentCancelButton from "../components/appointment/appointmentCancelButton";
-import {getCurrentDateInDynamoDbString, getDayAndDateFromAppointment} from "../functions/converters";
+import {getDayAndDateFromAppointment} from "../functions/converters";
 import {KornerFieldShort} from "../ui-components";
+import {getAppointmentStatus} from "../functions/appointmentUItils";
+import UnreservedAppointment from "./apppointment/unreservedAppointment";
 import {Dialog} from "@mui/material";
+import ReservedAppointment from "./apppointment/reservedAppointment";
+import CanceledAppointment from "./apppointment/canceledAppointment";
+import PlayedAppointment from "./apppointment/playedAppointment";
 
 const AppointmentById = () => {
     const {appointmentId} = useParams();
     const [appointment, setAppointment] = useState();
+    const [appointmentStatus, setAppointmentStatus] = useState();
     const [field, setField] = useState();
     const [responses, setResponses] = useState();
     const [role, setRole] = useState();
     const [photo, setPhoto] = useState("/no-field.jpg");
     const [open, setOpen] = useState(false);
-    const [isOld, setIsOld] = useState();
     const [userModel, setUserModel] = useState();
-    const [responseToUpdate, setResponseToUpdate] = useState();
+    const [appointmentView, setAppointmentView] = useState();
     const {user} = useAuthenticator((context) => [
         context.user
     ]);
@@ -59,10 +57,9 @@ const AppointmentById = () => {
 
     // Sets appointment
     useEffect(() => {
-        appointmentId && DataStore.query(Appointment, appointmentId).then(b => {
+        DataStore.query(Appointment, appointmentId).then(b => {
             setAppointment(b)
-            const currentDate = getCurrentDateInDynamoDbString(0);
-            setIsOld(b?.date < currentDate || (b?.date === currentDate && b?.start <= new Date().toTimeString()));
+            setAppointmentStatus(getAppointmentStatus(b))
         })
     }, [appointmentId]);
 
@@ -79,33 +76,40 @@ const AppointmentById = () => {
         });
     }, [appointment]);
 
+    // Sets appointment view
+    useEffect(() => {
+        switch (appointmentStatus) {
+            case "unreserved" :
+                setAppointmentView(<UnreservedAppointment appointment={appointment} user={userModel}
+                                                          responses={responses}
+                                                          role={role} field={field}/>)
+                break;
+            case "reserved" :
+                setAppointmentView(<ReservedAppointment role={role} responses={responses} appointment={appointment}
+                                                        field={field} user={userModel}/>)
+                break;
+            case "canceled" :
+                setAppointmentView(<CanceledAppointment responses={responses}/>)
+                break;
+            case "played" :
+                setAppointmentView(<PlayedAppointment responses={responses}/>)
+                break;
+            default:
+                setAppointmentView(<Loader/>)
+        }
+    }, [appointment, appointmentStatus, field, responses, role, userModel]);
+
     // Gets all responses
     useEffect(() => {
-        DataStore.observeQuery(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]), {
+        const subscription = DataStore.observeQuery(Response, (c) => c.and(c => [c.appointmentID.eq(appointmentId)]), {
             sort: (s) => s.accepted(SortDirection.DESCENDING).createdAt(SortDirection.ASCENDING)
         }).subscribe(r => {
             setResponses(r.items)
         })
 
+        return () => subscription.unsubscribe();
+
     }, [appointmentId]);
-
-    useEffect(() => {
-        setResponseToUpdate(responses?.find((response) => response.playerID === userModel?.sub));
-    }, [responses, userModel]);
-
-    const ReservationForm = () => {
-        if (isOld || appointment?.canceled) {
-            return;
-        }
-        return (
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                {user ? <AppointmentReservationForm user={userModel} appointment={appointment}
-                                                    responseToUpdate={responseToUpdate}/> :
-                    <AppointmentUnauthorizedReservationForm responses={responses} appointment={appointment}/>}
-            </Card>
-
-        )
-    }
 
     const RegisterButton = () => {
         return (
@@ -124,10 +128,8 @@ const AppointmentById = () => {
 
 
     return (
-        appointment ? <Flex direction="column">
-                <Dialog open={open} onClose={() => setOpen(false)}>
-                    <Authenticator/>
-                </Dialog>
+        appointmentView ?
+            <Flex direction={"column"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                     <KornerFieldShort
                         responseNumber={responses?.filter(a => a.accepted).length}
@@ -135,30 +137,15 @@ const AppointmentById = () => {
                         fields={field}
                         date={getDayAndDateFromAppointment(appointment?.date)}
                         appointment={appointment}/>
-                    <AppointmentStatusBadge appointment={appointment} isOld={isOld}/>
-                    <AppointmentReservationButton appointment={appointment} responses={responses} field={field}
-                                                  role={role}/>
-                    {!isOld && <AppointmentShareLink appointment={appointment} field={field} role={role}/>}
+                    <AppointmentStatusBadge appointmentStatus={appointmentStatus}/>
                 </Flex>
+                <Dialog open={open} onClose={() => setOpen(false)}>
+                    <Authenticator/>
+                </Dialog>
                 {!user && <RegisterButton/>}
-
-                {ReservationForm()}
-
-                <Card variation={"elevated"} marginInline={"1rem"}>
-                    <AppointmentPlayerList user={userModel} responses={responses} role={role}
-                                           isLocked={isOld || appointment?.canceled}/>
-                </Card>
-                {!isOld && role === "APPOINTMENT_OWNER" && !appointment?.canceled &&
-                    <Card variation={"elevated"} marginInline={"1rem"}>
-                        <Flex direction="column" alignItems="center" justifyContent={"space-around"}>
-                            <AppointmentGuestForm role={role} appointment={appointment}/>
-                        </Flex>
-                    </Card>}
-                <AppointmentCancelButton role={role} appointment={appointment}/>
-
+                {appointmentView}
             </Flex>
             : <Loader variation="linear"/>);
-
 
 }
 

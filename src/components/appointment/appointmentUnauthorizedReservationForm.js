@@ -11,13 +11,6 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
         saveResp(accepted, name);
     };
 
-    useEffect(() => {
-        responses && name && setAnswered(responses.find((response) => response.playerName === name));
-    }, [name, responses]);
-
-    if (appointment?.canceled) {
-        return;
-    }
     const saveResp = (accepted, nm) => {
         const response = new Response({
             accepted: accepted,
@@ -27,6 +20,11 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
         DataStore.save(response).then();
     }
 
+    useEffect(() => {
+        responses && name && setAnswered(responses.find((response) => response.playerName === name));
+    }, [name, responses]);
+
+
     const createForm = () => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
@@ -35,18 +33,17 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
                     onChange={(a) => setName(a.currentTarget.value)}
                     defaultValue={""}
                 />
-                {!answered && <Flex>
-                    <Button variation={"primary"} onClick={() => createResponse(true)}>
-                        Dolazim
-                    </Button>
-                    <Button onClick={() => createResponse(false)} variation={"warning"}>
-                        Ne Dolazim
-                    </Button>
-                </Flex>
-                }
-                {answered && <Flex>
-                    <Heading>Već postoji odgovor s imenom {name}</Heading>
-                </Flex>
+                {answered ? <Flex>
+                        <Heading>Već postoji odgovor s imenom {name}</Heading>
+                    </Flex>
+                    : <Flex>
+                        <Button variation={"primary"} onClick={() => createResponse(true)}>
+                            Dolazim
+                        </Button>
+                        <Button onClick={() => createResponse(false)} variation={"warning"}>
+                            Ne Dolazim
+                        </Button>
+                    </Flex>
                 }
             </Flex>
         );

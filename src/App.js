@@ -13,7 +13,6 @@ import FieldView from "./views/fieldView";
 import Profile from "./views/profile";
 import {useEffect, useState} from "react";
 import AppointmentById from "./views/appointmentById";
-import {AddToHomeScreen} from "react-pwa-add-to-homescreen";
 import {FaCalendar, FaPlusCircle} from "react-icons/fa";
 
 Amplify.configure(awsExports);
@@ -45,8 +44,7 @@ function App() {
 
     const LogoAndAppName = () => (
         <Heading level={"2"} color={"brand.primary.100"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>
-            k<Image alignSelf={"center"} height={"1.4rem"} alt={"O"} src={"/korner-logo.png"}
-                    onClick={goToHome}></Image>rner
+            k<Image alignSelf={"center"} height={"1.4rem"} alt={"O"} src={"/korner-logo.png"} defaultValue={"o"} onClick={goToHome}></Image>rner
         </Heading>)
 
     const routes = () => (
@@ -90,16 +88,6 @@ function App() {
         </Flex>
     )
 
-    const translate = {
-        headline: "Preuzmi Korner na svoj uređaj",
-        bottomline: "Za lakše upravljanje terminima",
-        safariTapShare: "Pritisni \"Share\"",
-        safariAddHomeScreen: "Odaberi \"Add to Home Screen\"",
-        chromiumAddHomeScreen: "Pritisni \"Add to Home Screen\" u svom pregledniku",
-        chromiumInstall: "Ikona aplikacije biti će prikazana na zaslonu mobitela",
-        buttonInstall: "Preuzmi",
-    }
-
     const bg = {
         backgroundImage: "url(\"/app-bg.png\")",
         backgroundSize: "contain",
@@ -108,9 +96,6 @@ function App() {
 
     return (
         <Flex style={bg} height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
-            <AddToHomeScreen
-                translate={translate}
-                delayNotify={200} skipFirstVisit={false} cookie={{name: "korner", expireDays: 1}}/>
             <TopHeader/>
             <ScrollView paddingBottom={"1rem"} direction={"column"}>
                 {routes()}

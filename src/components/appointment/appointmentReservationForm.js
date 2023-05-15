@@ -3,16 +3,20 @@ import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 
-const AppointmentReservationForm = ({user, appointment, responseToUpdate}) => {
+const AppointmentReservationForm = ({user, appointment, responses}) => {
     const [name, setName] = useState();
+    const [responseToUpdate, setResponseToUpdate] = useState();
+
 
     useEffect(() => {
         setName(user?.name);
     }, [user]);
 
-    if (appointment?.canceled) {
-        return;
-    }
+    useEffect(() => {
+       setResponseToUpdate(responses?.find((response) => response.playerID === user?.sub));
+    }, [responses, user]);
+
+
     const createResponse = (accepted) => {
         saveResp(accepted);
     };
@@ -92,10 +96,9 @@ const AppointmentReservationForm = ({user, appointment, responseToUpdate}) => {
     }
 
     return (
-            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                {responseToUpdate && alreadyAnsweredView()}
-                {!responseToUpdate && createForm()}
-            </Flex>
+        <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+            {responseToUpdate ? alreadyAnsweredView() : createForm()}
+        </Flex>
 
 
     )

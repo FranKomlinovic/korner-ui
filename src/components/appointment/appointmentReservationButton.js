@@ -4,11 +4,8 @@ import {confirmAppointment} from "../../functions/lambdas";
 import React from "react";
 import {FaLock} from "react-icons/fa";
 
-const AppointmentReservationButton = ({responses, field, appointment, role}) => {
+const AppointmentReservationButton = ({responses, field, appointment}) => {
 
-    if (role !== "APPOINTMENT_OWNER" || appointment?.confirmed || appointment?.canceled) {
-        return;
-    }
     function getNumberOfAcceptedUsers() {
         return responses?.filter(a => a.accepted === true).length;
     }

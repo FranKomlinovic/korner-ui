@@ -4,12 +4,9 @@ import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
 import {FaPlus} from "react-icons/fa";
 
-const AppointmentGuestForm = ({appointment, role}) => {
+const AppointmentGuestForm = ({appointment}) => {
     const [name, setName] = useState('');
 
-    if (role !== "APPOINTMENT_OWNER" || appointment?.canceled) {
-        return;
-    }
     const saveResp = () => {
         setName("");
         DataStore.save(new Response({

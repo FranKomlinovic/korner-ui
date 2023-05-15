@@ -4,12 +4,8 @@ import {FaLink} from "react-icons/fa";
 import React, {useState} from "react";
 import {getDayAndDateFromAppointment} from "../../functions/converters";
 
-const AppointmentShareLink = ({appointment, field, role}) => {
+const AppointmentShareLink = ({appointment, field}) => {
     const [open, setOpen] = useState(false);
-
-    if (role !== "APPOINTMENT_OWNER" || appointment?.canceled) {
-        return;
-    }
 
     function copyLink() {
         navigator.clipboard.writeText(
@@ -19,7 +15,7 @@ const AppointmentShareLink = ({appointment, field, role}) => {
 
     return <Tooltip onClose={() => setOpen(false)} open={open} leaveTouchDelay={1200}
                     title={"Link kopiran"}>
-        <Button size={"small"} onClick={copyLink}><FaLink/> Pozovi prijatelje</Button>
+        <Button variation={"primary"} onClick={copyLink}><FaLink/> Pozovi prijatelje</Button>
     </Tooltip>
 }
 

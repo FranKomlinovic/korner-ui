@@ -4,17 +4,8 @@ import {confirmAlert} from "react-confirm-alert";
 import {DataStore} from "aws-amplify";
 import {Appointment} from "../../models";
 
-const AppointmentCancelButton = ({appointment, role}) => {
+const AppointmentCancelButton = ({appointment}) => {
 
-    if (role !== "APPOINTMENT_OWNER" || appointment?.confirmed) {
-        if (role !== "FIELD_OWNER") {
-            return;
-        }
-    }
-
-    if (appointment?.canceled) {
-        return;
-    }
     // Dialog for deleting appointment
     const cancelAppointment = () => {
         confirmAlert({

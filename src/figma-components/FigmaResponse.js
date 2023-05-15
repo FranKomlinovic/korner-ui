@@ -6,7 +6,7 @@ import {confirmAlert} from "react-confirm-alert";
 import {Response} from "../models";
 import {Flex, Image, Text} from "@aws-amplify/ui-react";
 
-const FigmaResponse = ({response, user, showDelete}) => {
+const FigmaResponse = ({response, showDelete}) => {
 
     const [photo, setPhoto] = useState(null);
     const [icon, setIcon] = useState(null);
@@ -40,7 +40,7 @@ const FigmaResponse = ({response, user, showDelete}) => {
         }
         setPlayerName(response.playerName)
         let playerPhoto = response.playerPhoto;
-        if (user && playerPhoto) {
+        if (playerPhoto) {
             Storage.get(playerPhoto).then(b => setPhoto(b))
                 .catch(() => {
                     setPhoto("/no-picture.png")
@@ -54,7 +54,7 @@ const FigmaResponse = ({response, user, showDelete}) => {
         } else {
             setIcon(<FaMinus size={"1.2rem"} color={"darkRed"}/>)
         }
-    }, [response, user]);
+    }, [response]);
 
     return (
         <Flex alignItems={"center"} justifyContent={"space-between"}>
