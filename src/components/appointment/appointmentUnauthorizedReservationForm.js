@@ -7,6 +7,13 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
     const [name, setName] = useState();
     const [answered, setAnswered] = useState(false);
 
+    useEffect(() => {
+        responses && name && setAnswered(responses.find((response) => response.playerName === name));
+    }, [name, responses]);
+
+    if (appointment?.locked) {
+        return <Heading textAlign={"center"}>Organizator je ukinuo mogućnost odgovora na termin</Heading>
+    }
     const createResponse = (accepted) => {
         saveResp(accepted, name);
     };
@@ -19,10 +26,6 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
         });
         DataStore.save(response).then();
     }
-
-    useEffect(() => {
-        responses && name && setAnswered(responses.find((response) => response.playerName === name));
-    }, [name, responses]);
 
 
     const createForm = () => {

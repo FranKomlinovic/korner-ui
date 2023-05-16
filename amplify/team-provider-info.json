@@ -24,6 +24,21 @@
       },
       "hosting": {
         "S3AndCloudFront": {}
+      },
+      "analytics": {
+        "korner": {},
+        "Pinpoint": {
+          "Name": "korner-staging",
+          "Id": "fdc851771a154882a95966d569af8058",
+          "Region": "eu-central-1"
+        }
+      },
+      "notifications": {
+        "Pinpoint": {
+          "Name": "korner-staging",
+          "Id": "fdc851771a154882a95966d569af8058",
+          "Region": "eu-central-1"
+        }
       }
     }
   }

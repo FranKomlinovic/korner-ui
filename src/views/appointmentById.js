@@ -63,6 +63,15 @@ const AppointmentById = () => {
         })
     }, [appointmentId]);
 
+    // Sets appointment
+    useEffect(() => {
+        const subscription = DataStore.observe(Appointment, appointmentId).subscribe(msg => {
+            setAppointment(msg.element);
+        });
+        return () => subscription.unsubscribe();
+    }, [appointmentId]);
+
+
     // Sets field
     useEffect(() => {
         appointment?.Fields.then(a => {

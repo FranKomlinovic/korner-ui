@@ -178,6 +178,7 @@ type EagerAppointment = {
   readonly price?: number | null;
   readonly canceled?: boolean | null;
   readonly Fields?: Fields | null;
+  readonly locked?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -200,6 +201,7 @@ type LazyAppointment = {
   readonly price?: number | null;
   readonly canceled?: boolean | null;
   readonly Fields: AsyncItem<Fields | undefined>;
+  readonly locked?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

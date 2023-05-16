@@ -7,13 +7,14 @@ import AppointmentUnauthorizedReservationForm
     from "../../components/appointment/appointmentUnauthorizedReservationForm";
 import AppointmentReservationForm from "../../components/appointment/appointmentReservationForm";
 import AppointmentGuestForm from "../../components/appointment/appointmentGuestForm";
+import AppointmentLockButton from "../../components/appointment/appointmetLockButton";
 
 const ReservedAppointment = ({responses, role, appointment, field, user}) => {
 
     return (
         <Flex direction="column">
             {role === "APPOINTMENT_OWNER" &&
-                <Flex direction={"column"} alignItems={"center"}>
+                <Flex alignItems={"center"} direction={"column"}>
                     <AppointmentShareLink appointment={appointment} field={field}/>
                 </Flex>}
             <Card variation={"elevated"} marginInline={"1rem"}>
@@ -24,10 +25,13 @@ const ReservedAppointment = ({responses, role, appointment, field, user}) => {
             </Card>
 
             <Card variation={"elevated"} marginInline={"1rem"}>
+                {role === "APPOINTMENT_OWNER" && <AppointmentLockButton appointment={appointment}/>}
                 <AppointmentPlayerList responses={responses} showDelete={role === "APPOINTMENT_OWNER"}/>
             </Card>
 
-            {role === "APPOINTMENT_OWNER" && <AppointmentGuestForm appointment={appointment}/>}
+            {role === "APPOINTMENT_OWNER" && <Card variation={"elevated"} marginInline={"1rem"}>
+                <AppointmentGuestForm appointment={appointment}/>
+            </Card>}
             {role === "FIELD_OWNER" && <AppointmentCancelButton appointment={appointment}/>}
 
         </Flex>

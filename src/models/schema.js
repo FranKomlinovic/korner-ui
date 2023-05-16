@@ -458,6 +458,13 @@ export const schema = {
                         ]
                     }
                 },
+                "locked": {
+                    "name": "locked",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -719,6 +726,6 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "codegenVersion": "3.4.2",
-    "version": "20430be05b2d737d2bcf78f2f3f270de"
+    "codegenVersion": "3.4.3",
+    "version": "2f940e4112d1e02e074567bf7a8e95e6"
 };

@@ -13,7 +13,7 @@ import FieldView from "./views/fieldView";
 import Profile from "./views/profile";
 import {useEffect, useState} from "react";
 import AppointmentById from "./views/appointmentById";
-import {FaCalendar, FaHome, FaPlusCircle, FaQuestion, FaRunning} from "react-icons/fa";
+import {FaHome, FaPlusCircle, FaQuestion, FaRunning} from "react-icons/fa";
 import LandingPage from "./views/landing-page";
 import PlayedAppointments from "./views/playedAppointments";
 
@@ -46,7 +46,7 @@ function App() {
 
     const LogoAndAppName = () => (
         <Heading level={"2"} color={"brand.primary.100"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>
-            k<Image alignSelf={"center"} height={"1.4rem"} alt={"O"} src={"/korner-logo.png"} defaultValue={"o"}
+            k<Image alignSelf={"center"} height={"1.4rem"} alt={"O"} src={"/korner-logo2.png"} defaultValue={"o"}
                     onClick={goToHome}></Image>rner
         </Heading>)
 

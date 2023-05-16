@@ -76,6 +76,9 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
     }
 
     const createForm = () => {
+        if (appointment?.locked) {
+            return <Heading textAlign={"center"}>Organizator je ukinuo mogućnost odgovora na termin</Heading>
+        }
         return (
             <Flex direction={"column"}>
                 <TextField
