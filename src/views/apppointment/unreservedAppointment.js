@@ -28,9 +28,11 @@ const UnreservedAppointment = ({responses, role, appointment, field, user}) => {
                 <AppointmentPlayerList responses={responses} showDelete={role === "APPOINTMENT_OWNER"}/>
             </Card>
 
-            {role === "APPOINTMENT_OWNER" && <AppointmentGuestForm appointment={appointment}/>}
-            {role === "FIELD_OWNER" && <AppointmentCancelButton appointment={appointment}/>}
-
+            <Card variation={"elevated"} marginInline={"1rem"}>
+                {role === "APPOINTMENT_OWNER" && <AppointmentGuestForm appointment={appointment}/>}
+            </Card>
+            {(role === "FIELD_OWNER" || role === "APPOINTMENT_OWNER") &&
+                <AppointmentCancelButton appointment={appointment}/>}
         </Flex>
     );
 }

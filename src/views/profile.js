@@ -1,16 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {Button, Card, Flex, Heading, Image, TextField, withAuthenticator} from "@aws-amplify/ui-react";
-import {checkIfInOwnerGroup} from "../functions/converters";
-import {Auth, DataStore, Storage} from "aws-amplify";
-import {Fields} from "../models";
+import {Auth, Storage} from "aws-amplify";
 import UploadComponent from "../components/UploadComponent";
-import FigmaField from "../figma-components/FigmaField";
 
 
 const Profile = ({user, signOut}) => {
-    const [isOwner, setIsOwner] = useState(false)
-    const [fields, setFields] = useState();
-    const {sub, given_name, family_name, picture} = user.getSignInUserSession().getIdToken().payload
+    const {given_name, family_name, picture} = user.getSignInUserSession().getIdToken().payload
     const [familyName, setFamilyName] = useState(family_name);
     const [givenName, setGivenName] = useState(given_name);
     const [modalOpen, setModalOpen] = useState(false);
@@ -24,27 +19,6 @@ const Profile = ({user, signOut}) => {
             setPhoto("/no-picture.png")
         })
     }, [picture]);
-
-
-    //Checks if user is in owner group
-    useEffect(() => {
-        setIsOwner(checkIfInOwnerGroup(user));
-    }, [user]);
-
-    //Gets owners fields
-    useEffect(() => {
-        if (isOwner) {
-            DataStore.query(Fields, a =>
-                a.ownerID.eq(sub)
-            ).then(a => {
-                setFields(a);
-            })
-        }
-    }, [isOwner, sub]);
-
-    const AllFields = () => {
-        return fields?.map(a => <Flex key={a.id}><FigmaField field={a}/></Flex>);
-    };
 
     const uploadProfilePicture = (pic) => {
         Auth.updateUserAttributes(user, {
@@ -64,17 +38,6 @@ const Profile = ({user, signOut}) => {
         });
     }
 
-    const FieldOwnerComponent = () => {
-        if (fields) {
-            return (
-                <Flex direction={"column"} alignItems={"center"}>
-                    <Heading level={4}>Vaši tereni:</Heading>
-                    {AllFields()}
-                </Flex>
-            )
-        }
-
-    }
 
     const changeFirstName = (a) => {
         setGivenName(a.currentTarget.value)
@@ -90,7 +53,8 @@ const Profile = ({user, signOut}) => {
                 <Flex direction={"column"}>
                     <Image alt={"Profile photo"} width={"140px"} height={"140px"} objectFit={"cover"} borderRadius={400}
                            src={photo}/>
-                    <Button size={"small"} variation={"link"} onClick={() => setModalOpen(true)}>Promijeni sliku</Button>
+                    <Button size={"small"} variation={"link"} onClick={() => setModalOpen(true)}>Promijeni
+                        sliku</Button>
 
                 </Flex>
                 <Flex direction={"column"}>
@@ -108,14 +72,13 @@ const Profile = ({user, signOut}) => {
 
     return (
         <Flex direction={"column"} alignItems={"center"}>
-            {FieldOwnerComponent()}
             <Card variation={"elevated"} marginInline={"1rem"}>
                 <Flex direction={"column"} alignItems={"center"}>
-                <Heading level={4}>Vaš profil:</Heading>
-                {ProfileDetails()}
-                <UploadComponent open={modalOpen} uploadSuccessFunction={uploadProfilePicture}
-                                 handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
-                <Button variation={"destructive"} onClick={signOut}>Odjavi se</Button>
+                    <Heading level={4}>Vaš profil:</Heading>
+                    {ProfileDetails()}
+                    <UploadComponent open={modalOpen} uploadSuccessFunction={uploadProfilePicture}
+                                     handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
+                    <Button variation={"destructive"} onClick={signOut}>Odjavi se</Button>
                 </Flex>
             </Card>
         </Flex>

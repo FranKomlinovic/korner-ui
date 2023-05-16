@@ -3,7 +3,7 @@ import {Button, Card, Expander, ExpanderItem, Flex, Heading, Image, TabItem, Tab
 import {useNavigate} from "react-router-dom";
 import {List, ListItem} from "@mui/material";
 
-const LandingPage = () => {
+const LandingPage = ({isHelp}) => {
     const navigate = useNavigate();
 
     const userCardList = [
@@ -124,7 +124,7 @@ const LandingPage = () => {
         },
         {
             title: "Naplaćuje li se korištenje kornera?",
-            text: ["Vlasnicima terena naplaćuje se naknada od 0.50$ po dogovorenom terminu preko korner platforme", "Naknada se NE obračunava na termine koje je vlasnik terena sam rezervirao", "Naknada se plaća po izdanom mjesečnom računu"]
+            text: ["Vlasnicima terena naplaćuje se naknada od 1€ po dogovorenom terminu preko korner platforme", "Naknada se NE obračunava na termine koje je vlasnik terena sam rezervirao", "Naknada se plaća po izdanom mjesečnom računu"]
         },
         {
             title: "Mogu li koristiti korner bez korisničkog računa?",
@@ -174,7 +174,7 @@ const LandingPage = () => {
         return (
             <ExpanderItem title={faq.title} value={faq.title}>
                 {faq.text.map(a => (
-                    <Text marginBottom={"1rem"}>
+                    <Text key={a.text} marginBottom={"1rem"}>
                         {a}
                     </Text>
                 ))}
@@ -184,20 +184,21 @@ const LandingPage = () => {
 
     return (
         <Flex direction={"column"}>
-            <Card marginInline={"1rem"} backgroundColor={"transparent"} alignItems={"center"}>
-                <Heading fontWeight={"bold"} color={"brand.primary.100"} level={2}>Jednostavno rezerviraj sportske
-                    terene</Heading>
-            </Card>
-            <Flex marginTop={"1rem"} direction={"column"} alignItems={"center"}>
+            {!isHelp && <Flex marginTop={"1rem"} direction={"column"} alignItems={"center"}>
+                <Card marginInline={"1rem"} backgroundColor={"transparent"} alignItems={"center"}>
+                    <Heading fontWeight={"bold"} color={"brand.primary.100"} level={2}>Jednostavno rezerviraj sportske
+                        terene</Heading>
+                </Card>
                 <Button variation={"primary"} onClick={() => navigate('/fields')}>Prijava/Registracija</Button>
-            </Flex>
+            </Flex>}
+
             <Tabs
                 gap={"0.5rem"}
                 justifyContent="flex-start">
                 <TabItem title="Igrači">
                     {userCardList.map(mapToCard)}
                     <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
-                    <Expander type="single">
+                    <Expander type="single" isCollapsible>
                         {userFaq.map(mapToFaq)}
                     </Expander>
                 </TabItem>
@@ -205,7 +206,7 @@ const LandingPage = () => {
                 <TabItem title="Vlasnici terena">
                     {ownerCardList.map(mapToCard)}
                     <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
-                    <Expander type="single">
+                    <Expander type="single" isCollapsible>
                         {ownerFaq.map(mapToFaq)}
                     </Expander>
                 </TabItem>

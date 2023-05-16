@@ -13,7 +13,9 @@ import FieldView from "./views/fieldView";
 import Profile from "./views/profile";
 import {useEffect, useState} from "react";
 import AppointmentById from "./views/appointmentById";
-import {FaCalendar, FaPlusCircle} from "react-icons/fa";
+import {FaCalendar, FaHome, FaPlusCircle, FaQuestion, FaRunning} from "react-icons/fa";
+import LandingPage from "./views/landing-page";
+import PlayedAppointments from "./views/playedAppointments";
 
 Amplify.configure(awsExports);
 
@@ -44,7 +46,8 @@ function App() {
 
     const LogoAndAppName = () => (
         <Heading level={"2"} color={"brand.primary.100"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>
-            k<Image alignSelf={"center"} height={"1.4rem"} alt={"O"} src={"/korner-logo.png"} defaultValue={"o"} onClick={goToHome}></Image>rner
+            k<Image alignSelf={"center"} height={"1.4rem"} alt={"O"} src={"/korner-logo.png"} defaultValue={"o"}
+                    onClick={goToHome}></Image>rner
         </Heading>)
 
     const routes = () => (
@@ -54,6 +57,8 @@ function App() {
             <Route path="/appointment/:appointmentId" element={<AppointmentById/>}/>
             <Route path="/fields" element={<FieldView/>}/>
             <Route path="/profile" element={<Profile/>}/>
+            <Route path="/played" element={<PlayedAppointments/>}/>
+            <Route path="/help" element={<LandingPage isHelp={true}/>}/>
         </Routes>
     )
 
@@ -62,12 +67,22 @@ function App() {
             <Menu marginRight={"1rem"} border={"none"} padding={"0.1rem"}>
                 <MenuItem onClick={() => navigate("/")}>
                     <Flex alignItems={"center"}>
-                        <FaCalendar size={"1.5rem"}/><Heading>Moji termini</Heading>
+                        <FaHome size={"1.5rem"}/><Heading>Home</Heading>
                     </Flex>
                 </MenuItem>
                 <MenuItem onClick={() => navigate("/fields")}>
                     <Flex alignItems={"center"}>
                         <FaPlusCircle size={"1.5rem"}/><Heading>Rezerviraj</Heading>
+                    </Flex>
+                </MenuItem>
+                <MenuItem onClick={() => navigate("/played")}>
+                    <Flex alignItems={"center"}>
+                        <FaRunning size={"1.5rem"}/><Heading>Odigrani termini</Heading>
+                    </Flex>
+                </MenuItem>
+                <MenuItem onClick={() => navigate("/help")}>
+                    <Flex alignItems={"center"}>
+                        <FaQuestion size={"1.5rem"}/><Heading>Upute</Heading>
                     </Flex>
                 </MenuItem>
                 <MenuItem onClick={goToProfile}>
@@ -76,7 +91,6 @@ function App() {
                                height={"1.5rem"} alt={"Profilna slika"}/><Heading>Profil</Heading>
                     </Flex>
                 </MenuItem>
-
             </Menu>
         </Flex>
     )

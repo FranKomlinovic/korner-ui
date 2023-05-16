@@ -15,7 +15,7 @@ const AppointmentShareLink = ({appointment, field}) => {
 
     return <Tooltip onClose={() => setOpen(false)} open={open} leaveTouchDelay={1200}
                     title={"Link kopiran"}>
-        <Button variation={"primary"} onClick={copyLink}><FaLink/> Pozovi prijatelje</Button>
+        <Button backgroundColor={"white"} onClick={copyLink}><FaLink/> Pozovi prijatelje</Button>
     </Tooltip>
 }
 

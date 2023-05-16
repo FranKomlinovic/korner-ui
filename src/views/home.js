@@ -1,44 +1,58 @@
 import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
-import {Appointment, Response} from "../models";
-import {getCurrentDateInDynamoDbString} from "../functions/converters";
-import {Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
+import {Appointment, Fields, Response} from "../models";
+import {Badge, Card, Flex, Grid, Heading, TabItem, Tabs, Text, useAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
 import LandingPage from "./landing-page";
+import {FaPlusCircle, FaQuestion, FaRunning, FaUser} from "react-icons/fa";
+import {useNavigate} from "react-router-dom";
+import {getCurrentDate, getCurrentTime} from "../functions/appointmentUItils";
+import {checkIfInOwnerGroup} from "../functions/converters";
+import FigmaField from "../figma-components/FigmaField";
 
 const Home = () => {
-
+    const navigate = useNavigate();
     const {user} = useAuthenticator((context) => [
         context.user
     ]);
 
-
     const [reservedAppointment, setReservedAppointment] = useState([]);
-    const [ownedAppointment, setOwnedAppointment] = useState([]);
     const [acceptedAppointment, setAcceptedAppointment] = useState([]);
-    const [refusedAppointment, setRefusedAppointment] = useState([]);
     const [canceledAppointment, setCanceledAppointment] = useState([]);
-    const [playedAppointment, setPlayedAppointment] = useState([]);
     const [responses, setResponses] = useState();
+    const [isOwner, setIsOwner] = useState();
+    const [fields, setFields] = useState();
 
     const sub = user?.attributes.sub;
-    const currentTime = new Date().toTimeString();
     const ReservedAppointment = () => mapToView(reservedAppointment, "Rezervirani Termini", "Trenutno nema rezerviranih termina");
-    const OwnedAppointment = () => mapToView(ownedAppointment, "Termini koje organizirate", "Trenutno ne organizirate termin");
     const AcceptedAppointment = () => mapToView(acceptedAppointment, "Prihvaćeni termini", "Trenurno nema prihvaćenih termina");
-    const RefusedAppointment = () => mapToView(refusedAppointment, "Odbijeni termini", "Trenutno nema odbijenih termina");
     const CanceledAppointment = () => mapToView(canceledAppointment, "Otkazani termini", "Trenurno nema otkazanih termina");
-    const PlayedAppointment = () => mapToView(playedAppointment, "Odigrani termini", "Trenurno nema odigranih termina");
+
+    //Checks if user is in owner group
+    useEffect(() => {
+        setIsOwner(checkIfInOwnerGroup(user));
+    }, [user]);
+
+    //Gets owners fields
+    useEffect(() => {
+        if (isOwner) {
+            DataStore.query(Fields, a =>
+                a.ownerID.eq(sub)
+            ).then(a => {
+                setFields(a);
+            })
+        }
+    }, [isOwner, sub]);
 
     // Set responses
     useEffect(() => {
-        if (sub) {
-            DataStore.query(Response, (c) => c.playerID.eq(sub))
-                .then((resp) => {
-                    setResponses(resp);
-                });
-        }
+        const subscription = DataStore.observeQuery(Response, (c) => c.playerID.eq(sub))
+            .subscribe((resp) => {
+                setResponses(resp.items);
+            });
+
+        return () => subscription.unsubscribe();
     }, [sub]);
 
     // Reserved appointment and acceptedAppointment
@@ -50,119 +64,110 @@ const Home = () => {
         DataStore.query(Appointment, b => b.and(
                 c => [
                     c.or(c => accepted.map(a => c.id.eq(a))),
-                    c.end.ge(currentTime),
-                    c.date.ge(getCurrentDateInDynamoDbString(0))
+                    c.end.ge(getCurrentTime()),
+                    c.date.ge(getCurrentDate())
                 ]), {
                 sort: (sort) => sort.date(SortDirection.DESCENDING)
             }
         ).then((app) => {
             setReservedAppointment(app.filter(a => a.confirmed && !a.canceled));
-            setAcceptedAppointment(app.filter(a => !a.confirmed && !a.canceled && a.bookerID !== sub));
+            setAcceptedAppointment(app.filter(a => !a.confirmed && !a.canceled));
             setCanceledAppointment(app.filter(a => a.canceled));
-        });
-
-    }, [currentTime, responses, sub])
-
-    // Already played appointments
-    useEffect(() => {
-        let accepted = responses?.filter(a => a.accepted).map(a => a.appointmentID);
-        if (!accepted || accepted?.length === 0) {
-            return;
-        }
-        DataStore.query(Appointment, b => b.and(
-                c => [
-                    c.or(c => accepted?.map(a => c.id.eq(a))),
-                    c.date.lt(getCurrentDateInDynamoDbString(0)),
-                    c.confirmed.eq(true),
-                    c.canceled.eq(false)
-                ]), {
-                sort: (sort) => sort.date(SortDirection.DESCENDING)
-            }
-        ).then((app) => {
-            setPlayedAppointment(app);
         });
 
     }, [responses, sub])
 
-    // Refused appointment
-    useEffect(() => {
-        let refused = responses?.filter(a => !a.accepted).map(a => a.appointmentID)
+    // // Already played appointments
+    // useEffect(() => {
+    //     let accepted = responses?.filter(a => a.accepted).map(a => a.appointmentID);
+    //     if (!accepted || accepted?.length === 0) {
+    //         return;
+    //     }
+    //     DataStore.query(Appointment, b => b.and(
+    //             c => [
+    //                 c.or(c => accepted?.map(a => c.id.eq(a))),
+    //                 c.date.lt(getCurrentDate()),
+    //                 c.confirmed.eq(true),
+    //                 c.canceled.eq(false)
+    //             ]), {
+    //             sort: (sort) => sort.date(SortDirection.DESCENDING)
+    //         }
+    //     ).then((app) => {
+    //         setPlayedAppointment(app);
+    //     });
+    //
+    // }, [responses, sub])
 
-        if (!refused || refused?.length === 0) {
-            return;
-        }
-        DataStore.query(Appointment, b => b.and(
-                c => [
-                    c.or(c => refused.map(a => c.id.eq(a))),
-                    c.bookerID.ne(sub),
-                    c.and(d => [c.end.ge(currentTime), c.date.ge(getCurrentDateInDynamoDbString(0))]),
-                    c.canceled.eq(false)
-                ]), {
-                sort: (sort) => sort.date(SortDirection.DESCENDING)
-            }
-        ).then((app) => {
-            setRefusedAppointment(app);
-        });
+    const tabList = [
+        {title: "Rezervirano", variation: "success", data: <ReservedAppointment/>, length: reservedAppointment.length},
+        {title: "U najavi", variation: "warning", data: <AcceptedAppointment/>, length: acceptedAppointment.length},
+        {title: "Otkazano", variation: "error", data: <CanceledAppointment/>, length: canceledAppointment.length}
+    ]
 
-    }, [currentTime, responses, sub])
+    const AppointmentTabs = () => (
+        <Flex gap={"0rem"} direction={"column"} paddingTop={"0px"}>
+            <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Termini:</Heading>
+            <Tabs
+                justifyContent="flex-start">
+                {tabList.map(a => (
+                    <TabItem key={a.title} fontSize={"small"} title={
+                        <>
+                            {a.title + ' '}
+                            <Badge size={"small"} variation={a.variation}>{a.length}</Badge>
+                        </>
+                    }>{a.data}</TabItem>))}
+            </Tabs>
+        </Flex>)
 
-    // Owned appointment
-    useEffect(() => {
-        DataStore.query(Appointment, b => b.and(
-            c => [
-                c.bookerID.eq(sub),
-                c.date.ge(getCurrentDateInDynamoDbString(0)),
-                c.end.ge(currentTime),
-                c.canceled.eq(false),
-                c.confirmed.eq(false),
-            ]), {
-            sort: (sort) => sort.date(SortDirection.DESCENDING)
-        }).then((app) => {
-            setOwnedAppointment(app);
-        });
+    const gridList = [
+        {url: "/fields", icon: <FaPlusCircle color={"#2E4732"} size={"3rem"}/>, text: "Rezerviraj"},
+        {url: "/profile", icon: <FaUser color={"#2E4732"} size={"3rem"}/>, text: "Profil"},
+        {url: "/played", icon: <FaRunning color={"#2E4732"} size={"3rem"}/>, text: "Odigrani termini"},
+        {url: "/help", icon: <FaQuestion color={"#2E4732"} size={"3rem"}/>, text: "Upute"},
+    ]
+    const MapToShortcut = () => {
+        return (
+            <Grid gap={"1rem"} marginInline={"1rem"} templateColumns="1fr 1fr">
+                {gridList.map(grid => (
+                    <Card key={grid.text} variation={"elevated"} onClick={() => navigate(grid?.url)}>
+                        <Flex direction={"column"} alignItems={"center"} justifyContent={"center"}>
+                            {grid.icon}
+                            <Text textAlign={"center"}>{grid?.text}</Text>
+                        </Flex>
+                    </Card>)
+                )}
+            </Grid>)
+    }
 
-    }, [currentTime, sub]);
-
-    const appointmnents = () => (<Flex direction={"column"}>
-        <Card variation={"elevated"} marginInline={"1rem"}>
-            {ReservedAppointment()}
-        </Card>
-        <Card variation={"elevated"} marginInline={"1rem"}>
-            {OwnedAppointment()}
-
-        </Card>
-        <Card variation={"elevated"} marginInline={"1rem"}>
-            {AcceptedAppointment()}
-
-        </Card>
-        <Card variation={"elevated"} marginInline={"1rem"}>
-            {RefusedAppointment()}
-
-        </Card>
-        <Card variation={"elevated"} marginInline={"1rem"}>
-            {CanceledAppointment()}
-
-        </Card>
-        <Card variation={"elevated"} marginInline={"1rem"}>
-            {PlayedAppointment()}
-
-        </Card>
-    </Flex>)
+    const AllFields = () => {
+        return (
+            <Flex direction={"column"}>
+                <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Moji tereni:</Heading>
+                <Flex direction={"column"} alignItems={"center"}>
+                    {fields?.map(a => <Flex key={a.id}><FigmaField field={a}/></Flex>)}
+                </Flex>
+            </Flex>)
+    };
 
     return (
-        user ? appointmnents() : <LandingPage/>
-    )
+        <Flex direction={"column"} gap={"1rem"} marginTop={"1rem"}>
+            {user ? <AppointmentTabs/> : <LandingPage/>}
+            {isOwner && <AllFields/>}
+            <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Prečaci:</Heading>
+            <MapToShortcut/>
+        </Flex>
+    );
 
     function mapToView(appointments: [], text, noReservedText) {
-        return appointments.length === 0 ? <Heading level={6}>{noReservedText}</Heading> :
-            <Flex direction={"column"}>
-                <Heading level={4} alignSelf={"start"}>{text}</Heading>
-                {appointments.map(a => {
-                    return <Flex alignSelf={"center"} key={a.id}>
-                        <FigmaAppointment appointment={a}/>
-                    </Flex>;
-                })}
-            </Flex>
+        return (
+            <Flex alignItems={"center"} direction={"column"} marginTop={"1rem"}>
+                {appointments.length === 0 ? <Heading level={6}>{noReservedText}</Heading> :
+                    appointments.map(a => {
+                        return <Flex key={a.id}>
+                            <FigmaAppointment appointment={a}/>
+                        </Flex>;
+                    })}
+            </Flex>)
 
 
     }
