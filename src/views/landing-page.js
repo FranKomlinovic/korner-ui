@@ -12,7 +12,7 @@ const LandingPage = ({isHelp}) => {
             alt: "field",
             img: "/field.jpg",
             heading: "Pronađi mjesto derbija",
-            text: "Pretraži sve terene na korner platformi"
+            text: "Pretraži sve terene na Korner platformi"
         },
         {
             inverted: true,
@@ -63,7 +63,7 @@ const LandingPage = ({isHelp}) => {
             inverted: false,
             alt: "play",
             img: "/field.jpg",
-            heading: "Budite dio korner svijeta",
+            heading: "Budite dio Korner svijeta",
             text: "Postanite dio platforme i dovedite nove ekipe na svoj teren"
         },
         {
@@ -71,33 +71,33 @@ const LandingPage = ({isHelp}) => {
             alt: "play",
             img: "/korner-logo.png",
             heading: "Slušamo Vas",
-            text: "Sve prijedloge slobodno pošaljite, želimo da korner bude najbolji što može biti"
+            text: "Sve prijedloge slobodno pošaljite, želimo da Korner bude najbolji što može biti"
         },
 
     ]
 
     const userFaq = [
         {
-            title: "Što je korner?",
+            title: "Što je Korner?",
             text: ["Korner je platforma za rezervaciju sportskih termina", " Glavna svrha mu je organizacija amaterskih sportskih termina koja uključuje rezervaciju terena i okupljanje ekipe koja će taj termin igrati"]
         },
         {
-            title: "Naplaćuje li se korištenje kornera?",
+            title: "Naplaćuje li se korištenje Kornera?",
             text: ["Ne. Platforma je za korisnike potpuno besplatna"]
         },
         {
             title: "Koji tereni su dostupni?",
-            text: ["Trenutno je dostupno nekoliko terena, ako želite da i teren na kojem ste do sada igrali bude na platformi, slobodno uputite vlasnika da se registrira u korner"]
+            text: ["Trenutno je dostupno nekoliko terena, ako želite da i teren na kojem ste do sada igrali bude na platformi, slobodno uputite vlasnika da se registrira u Korner"]
         },
         {
-            title: "Mogu li koristiti korner bez korisničkog računa?",
+            title: "Mogu li koristiti Korner bez korisničkog računa?",
             text: ["Da, ali samo za potvrđivanje svog dolaska na termin. Za rezervaciju termina potreban je korisnički račun.",
                 "Svakako preporučamo da napravite korisnički račun kako biste mogli imati evidenciju svih utakmica koje ste odigrali, ali i sami organizirati termin"]
 
         },
         {
             title: "Kako rezervirati termin?",
-            text: ["Kako biste rezervirali termin morate imati račun na korner platformi, podsjećamo da je korner potpuno besplatan.", "Rezervacija termina ide kroz nekoliko kratkih koraka:",
+            text: ["Kako biste rezervirali termin morate imati račun na Korner platformi, podsjećamo da je Korner potpuno besplatan.", "Rezervacija termina ide kroz nekoliko kratkih koraka:",
                 <List>
                     <ListItem>1. Odaberite teren na kojem želite igrati</ListItem>
                     <ListItem>2. Izaberite datum i željeno trajanje te pritisnite na jedan od ponuđenih
@@ -119,15 +119,15 @@ const LandingPage = ({isHelp}) => {
 
     const ownerFaq = [
         {
-            title: "Što je korner?",
+            title: "Što je Korner?",
             text: ["Korner je platforma za rezervaciju sportskih termina", " Glavna svrha mu je organizacija amaterskih sportskih termina koja uključuje rezervaciju terena i okupljanje ekipe koja će taj termin igrati"]
         },
         {
-            title: "Naplaćuje li se korištenje kornera?",
-            text: ["Vlasnicima terena naplaćuje se naknada od 1€ po dogovorenom terminu preko korner platforme", "Naknada se NE obračunava na termine koje je vlasnik terena sam rezervirao", "Naknada se plaća po izdanom mjesečnom računu"]
+            title: "Naplaćuje li se korištenje Kornera?",
+            text: ["Vlasnicima terena naplaćuje se naknada od 1€ po dogovorenom terminu preko Korner platforme", "Naknada se NE obračunava na termine koje je vlasnik terena sam rezervirao", "Naknada se plaća po izdanom mjesečnom računu"]
         },
         {
-            title: "Mogu li koristiti korner bez korisničkog računa?",
+            title: "Mogu li koristiti Korner bez korisničkog računa?",
             text: ["Za upravljanje terenima morate imati korisnički račun"]
 
         },

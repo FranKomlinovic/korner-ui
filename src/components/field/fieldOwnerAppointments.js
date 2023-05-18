@@ -33,7 +33,7 @@ const FieldOwnerAppointments = ({appointments, date}) => {
         <Flex direction={"column"} justifyContent={"space-around"}>
             <Card variation={"elevated"} marginInline={"1rem"}>
                 <Heading level={4}>Rezervirano: </Heading>
-                <Heading alignSelf={"center"} level={5}>{getDayAndDateFromAppointment(new Date(date))}</Heading>
+                <Heading alignSelf={"center"} level={5}>{getDayAndDateFromAppointment(date)}</Heading>
                 {AppointmentButtons()}
             </Card>
         </Flex>
