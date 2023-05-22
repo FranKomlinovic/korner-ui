@@ -153,8 +153,8 @@ const Home = () => {
         <Flex direction={"column"} gap={"1rem"} marginTop={"1rem"}>
             {user ? <AppointmentTabs/> : <LandingPage/>}
             {isOwner && <AllFields/>}
-            <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Prečaci:</Heading>
-            <MapToShortcut/>
+            {user && <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Prečaci:</Heading>}
+            {user && <MapToShortcut/>}
         </Flex>
     );
 
