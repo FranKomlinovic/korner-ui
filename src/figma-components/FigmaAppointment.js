@@ -15,7 +15,7 @@ const FigmaAppointment = ({appointment}) => {
         })
         appointment?.Fields?.then(a => {
             setField(a)
-            a.photo ?
+            a?.photo ?
                 Storage.get(a.photo).then(b => {
                     setPhoto(b);
                 }) :
