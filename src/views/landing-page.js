@@ -174,7 +174,7 @@ const LandingPage = ({isHelp}) => {
         return (
             <ExpanderItem key={faq.title} title={faq.title} value={faq.title}>
                 {faq.text.map(a => (
-                    <Text key={a.text} marginBottom={"1rem"}>
+                    <Text key={a} marginBottom={"1rem"}>
                         {a}
                     </Text>
                 ))}
