@@ -5,9 +5,9 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Fields } from "../models";
+import { Fields, Appointment, ReccuringAppointment } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -20,10 +20,12 @@ export declare type FieldsUpdateFormInputValues = {
     length?: number;
     price?: number;
     minPlayers?: number;
+    Appointments?: Appointment[];
     surface?: string;
     photo?: string;
     sports?: string[];
     city?: string;
+    ReccuringAppointments?: ReccuringAppointment[];
     ownerID?: string;
     workTimeStart?: string;
     workTimeEnd?: string;
@@ -35,10 +37,12 @@ export declare type FieldsUpdateFormValidationValues = {
     length?: ValidationFunction<number>;
     price?: ValidationFunction<number>;
     minPlayers?: ValidationFunction<number>;
+    Appointments?: ValidationFunction<Appointment>;
     surface?: ValidationFunction<string>;
     photo?: ValidationFunction<string>;
     sports?: ValidationFunction<string>;
     city?: ValidationFunction<string>;
+    ReccuringAppointments?: ValidationFunction<ReccuringAppointment>;
     ownerID?: ValidationFunction<string>;
     workTimeStart?: ValidationFunction<string>;
     workTimeEnd?: ValidationFunction<string>;
@@ -52,10 +56,12 @@ export declare type FieldsUpdateFormOverridesProps = {
     length?: PrimitiveOverrideProps<TextFieldProps>;
     price?: PrimitiveOverrideProps<TextFieldProps>;
     minPlayers?: PrimitiveOverrideProps<TextFieldProps>;
+    Appointments?: PrimitiveOverrideProps<AutocompleteProps>;
     surface?: PrimitiveOverrideProps<SelectFieldProps>;
     photo?: PrimitiveOverrideProps<TextFieldProps>;
     sports?: PrimitiveOverrideProps<SelectFieldProps>;
     city?: PrimitiveOverrideProps<SelectFieldProps>;
+    ReccuringAppointments?: PrimitiveOverrideProps<AutocompleteProps>;
     ownerID?: PrimitiveOverrideProps<TextFieldProps>;
     workTimeStart?: PrimitiveOverrideProps<TextFieldProps>;
     workTimeEnd?: PrimitiveOverrideProps<TextFieldProps>;
