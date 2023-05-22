@@ -255,21 +255,14 @@ export default function FieldsCreateForm(props) {
     },
   };
   const validations = {
-    name: [{ type: "Required" }],
-    address: [{ type: "Required" }],
+    name: [],
+    address: [],
     width: [],
     length: [],
     price: [],
-    minPlayers: [
-      { type: "Required" },
-      {
-        type: "GreaterThanNum",
-        numValues: [2],
-        validationMessage: "Mora biti ve\u0107e od 2",
-      },
-    ],
+    minPlayers: [],
     surface: [],
-    photo: [{ type: "URL" }],
+    photo: [],
     sports: [],
     city: [],
     ownerID: [],
@@ -361,10 +354,9 @@ export default function FieldsCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Naziv"
-        isRequired={true}
+        label="Name"
+        isRequired={false}
         isReadOnly={false}
-        placeholder="Dvorana u Petrinji"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -398,10 +390,9 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Adresa"
-        isRequired={true}
+        label="Address"
+        isRequired={false}
         isReadOnly={false}
-        placeholder="Ulica kornera 24, Petrinja"
         value={address}
         onChange={(e) => {
           let { value } = e.target;
@@ -435,10 +426,9 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "address")}
       ></TextField>
       <TextField
-        label="Širina(m)"
+        label="Width"
         isRequired={false}
         isReadOnly={false}
-        placeholder="20"
         type="number"
         step="any"
         value={width}
@@ -476,10 +466,9 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "width")}
       ></TextField>
       <TextField
-        label="Duljina(m)"
+        label="Length"
         isRequired={false}
         isReadOnly={false}
-        placeholder="40"
         type="number"
         step="any"
         value={length}
@@ -517,10 +506,9 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "length")}
       ></TextField>
       <TextField
-        label="Cijena sata (€)"
+        label="Price"
         isRequired={false}
         isReadOnly={false}
-        placeholder="40"
         type="number"
         step="any"
         value={price}
@@ -558,10 +546,9 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "price")}
       ></TextField>
       <TextField
-        label="Minimalni broj igrača"
-        isRequired={true}
+        label="Min players"
+        isRequired={false}
         isReadOnly={false}
-        placeholder="10"
         type="number"
         step="any"
         value={minPlayers}
@@ -600,7 +587,7 @@ export default function FieldsCreateForm(props) {
       ></TextField>
       <SelectField
         label="Surface"
-        placeholder="Izaberite podlogu"
+        placeholder="Please select an option"
         isDisabled={false}
         value={surface}
         onChange={(e) => {
@@ -635,22 +622,22 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "surface")}
       >
         <option
-          children="Umjetna trava"
+          children="Artificial grass"
           value="ARTIFICIAL_GRASS"
           {...getOverrideProps(overrides, "surfaceoption0")}
         ></option>
         <option
-          children="Guma"
+          children="Rubber"
           value="RUBBER"
           {...getOverrideProps(overrides, "surfaceoption1")}
         ></option>
         <option
-          children="Beton"
+          children="Concrete"
           value="CONCRETE"
           {...getOverrideProps(overrides, "surfaceoption2")}
         ></option>
         <option
-          children="Parket"
+          children="Wood"
           value="WOOD"
           {...getOverrideProps(overrides, "surfaceoption3")}
         ></option>
@@ -728,7 +715,7 @@ export default function FieldsCreateForm(props) {
       >
         <SelectField
           label="Sports"
-          placeholder="Odaberite sportove"
+          placeholder="Please select an option"
           isDisabled={false}
           value={currentSportsValue}
           onChange={(e) => {
@@ -764,7 +751,7 @@ export default function FieldsCreateForm(props) {
       </ArrayField>
       <SelectField
         label="City"
-        placeholder="Odaberite grad"
+        placeholder="Please select an option"
         isDisabled={false}
         value={city}
         onChange={(e) => {
