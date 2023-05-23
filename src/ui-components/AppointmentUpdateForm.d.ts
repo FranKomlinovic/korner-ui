@@ -7,7 +7,7 @@
 import * as React from "react";
 import { AutocompleteProps, GridProps, SelectFieldProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Appointment, Response, Fields as Fields0 } from "../models";
+import { Appointment, Response, Fields as Fields0, Team } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -26,6 +26,7 @@ export declare type AppointmentUpdateFormInputValues = {
     canceled?: boolean;
     Fields?: Fields0;
     locked?: boolean;
+    Teams?: Team[];
 };
 export declare type AppointmentUpdateFormValidationValues = {
     start?: ValidationFunction<string>;
@@ -40,6 +41,7 @@ export declare type AppointmentUpdateFormValidationValues = {
     canceled?: ValidationFunction<boolean>;
     Fields?: ValidationFunction<Fields0>;
     locked?: ValidationFunction<boolean>;
+    Teams?: ValidationFunction<Team>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type AppointmentUpdateFormOverridesProps = {
@@ -56,6 +58,7 @@ export declare type AppointmentUpdateFormOverridesProps = {
     canceled?: PrimitiveOverrideProps<SwitchFieldProps>;
     Fields?: PrimitiveOverrideProps<AutocompleteProps>;
     locked?: PrimitiveOverrideProps<SwitchFieldProps>;
+    Teams?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type AppointmentUpdateFormProps = React.PropsWithChildren<{
     overrides?: AppointmentUpdateFormOverridesProps | undefined | null;

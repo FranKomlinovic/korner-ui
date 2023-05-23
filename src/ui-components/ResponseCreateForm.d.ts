@@ -18,6 +18,7 @@ export declare type ResponseCreateFormInputValues = {
     appointmentID?: string;
     playerName?: string;
     playerPhoto?: string;
+    teamID?: string;
 };
 export declare type ResponseCreateFormValidationValues = {
     playerID?: ValidationFunction<string>;
@@ -25,6 +26,7 @@ export declare type ResponseCreateFormValidationValues = {
     appointmentID?: ValidationFunction<string>;
     playerName?: ValidationFunction<string>;
     playerPhoto?: ValidationFunction<string>;
+    teamID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ResponseCreateFormOverridesProps = {
@@ -34,6 +36,7 @@ export declare type ResponseCreateFormOverridesProps = {
     appointmentID?: PrimitiveOverrideProps<AutocompleteProps>;
     playerName?: PrimitiveOverrideProps<TextFieldProps>;
     playerPhoto?: PrimitiveOverrideProps<TextFieldProps>;
+    teamID?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type ResponseCreateFormProps = React.PropsWithChildren<{
     overrides?: ResponseCreateFormOverridesProps | undefined | null;

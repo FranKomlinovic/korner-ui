@@ -4,7 +4,7 @@ import {Button, Flex, withAuthenticator} from "@aws-amplify/ui-react";
 import {Dialog, DialogTitle} from "@mui/material";
 import {Fields} from "../../models";
 import UploadComponent from "../UploadComponent";
-import {FieldsUpdateForm} from "../../ui-components";
+import FieldsUpdateForm from "../../ui-components/FieldsUpdateForm";
 
 
 const FieldOwnerFunctions = ({fieldParam, updateFieldFunction}) => {

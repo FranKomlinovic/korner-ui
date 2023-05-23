@@ -55,7 +55,7 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
         if (responseToUpdate?.accepted) {
             return (
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <Heading color={"font.primary"} level={3}>Dolazim</Heading>
+                    <Heading color={"green.80"} level={3}>Dolazim</Heading>
                     <Heading level={6}>Promijeni odgovor:</Heading>
                     <Flex>
                         {notComming}

@@ -24,6 +24,10 @@ yarn-error.log*
 
 /amplify/backend/function/availableAppointments/.gradle/*
 
+/.vscode/
+/.idea/
+/amplify/
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -45,6 +49,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-/.vscode/
-/.idea/
-/amplify/

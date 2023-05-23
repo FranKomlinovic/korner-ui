@@ -19,6 +19,7 @@ export declare type ResponseUpdateFormInputValues = {
     appointmentID?: string;
     playerName?: string;
     playerPhoto?: string;
+    teamID?: string;
 };
 export declare type ResponseUpdateFormValidationValues = {
     playerID?: ValidationFunction<string>;
@@ -26,6 +27,7 @@ export declare type ResponseUpdateFormValidationValues = {
     appointmentID?: ValidationFunction<string>;
     playerName?: ValidationFunction<string>;
     playerPhoto?: ValidationFunction<string>;
+    teamID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ResponseUpdateFormOverridesProps = {
@@ -35,6 +37,7 @@ export declare type ResponseUpdateFormOverridesProps = {
     appointmentID?: PrimitiveOverrideProps<AutocompleteProps>;
     playerName?: PrimitiveOverrideProps<TextFieldProps>;
     playerPhoto?: PrimitiveOverrideProps<TextFieldProps>;
+    teamID?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type ResponseUpdateFormProps = React.PropsWithChildren<{
     overrides?: ResponseUpdateFormOverridesProps | undefined | null;
