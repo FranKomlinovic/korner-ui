@@ -3,7 +3,7 @@ import {DataStore} from "aws-amplify";
 import {Appointment, Fields} from "../models";
 import {useParams} from "react-router-dom";
 import {checkIfOwner, getCurrentDateInDynamoDbString} from "../functions/converters";
-import {Flex, withAuthenticator} from "@aws-amplify/ui-react";
+import {Flex, Loader, withAuthenticator} from "@aws-amplify/ui-react";
 import FigmaField from "../figma-components/FigmaField";
 import FieldOwnerFunctions from "../components/field/fieldOwnerFunctions";
 import FieldOwnerAppointments from "../components/field/fieldOwnerAppointments";
@@ -38,6 +38,7 @@ const FieldById = ({user}) => {
     }, [field, user]);
 
     return (
+        field ?
         <Flex direction={"column"}>
             <Flex direction={"column"} alignSelf={"center"}>
                 <FigmaField field={field}/>
@@ -47,7 +48,7 @@ const FieldById = ({user}) => {
             <FieldFreeAppointmentsView field={field} appointments={fieldAppointments} user={user} date={date}
                                        setDate={setDate}/>
             {isOwner && <FieldOwnerAppointments appointments={fieldAppointments} date={date}/>}
-        </Flex>
+        </Flex> : <Loader variation="linear"/>
     );
 }
 

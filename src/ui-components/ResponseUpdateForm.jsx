@@ -278,7 +278,7 @@ export default function ResponseUpdateForm(props) {
     appointmentID: [{ type: "Required" }],
     playerName: [{ type: "Required" }],
     playerPhoto: [],
-    teamID: [{ type: "Required" }],
+    teamID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -602,7 +602,7 @@ export default function ResponseUpdateForm(props) {
       >
         <Autocomplete
           label="Team id"
-          isRequired={true}
+          isRequired={false}
           isReadOnly={false}
           placeholder="Search Team"
           value={currentTeamIDDisplayValue}

@@ -177,7 +177,7 @@ type EagerResponse = {
   readonly appointmentID: string;
   readonly playerName: string;
   readonly playerPhoto?: string | null;
-  readonly teamID: string;
+  readonly teamID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -193,7 +193,7 @@ type LazyResponse = {
   readonly appointmentID: string;
   readonly playerName: string;
   readonly playerPhoto?: string | null;
-  readonly teamID: string;
+  readonly teamID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

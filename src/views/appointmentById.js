@@ -20,6 +20,7 @@ const AppointmentById = () => {
     const [appointmentStatus, setAppointmentStatus] = useState();
     const [field, setField] = useState();
     const [responses, setResponses] = useState();
+    const [teams, setTeams] = useState([]);
     const [role, setRole] = useState();
     const [photo, setPhoto] = useState("/no-field.jpg");
     const [open, setOpen] = useState(false);
@@ -60,6 +61,9 @@ const AppointmentById = () => {
         DataStore.query(Appointment, appointmentId).then(b => {
             setAppointment(b)
             setAppointmentStatus(getAppointmentStatus(b))
+            b.Teams.toArray().then(a => {
+                setTeams(a)
+            })
         })
     }, [appointmentId]);
 
@@ -95,7 +99,7 @@ const AppointmentById = () => {
                 break;
             case "reserved" :
                 setAppointmentView(<ReservedAppointment role={role} responses={responses} appointment={appointment}
-                                                        field={field} user={userModel}/>)
+                                                        field={field} user={userModel} teams={teams}/>)
                 break;
             case "canceled" :
                 setAppointmentView(<CanceledAppointment responses={responses}/>)
@@ -106,7 +110,7 @@ const AppointmentById = () => {
             default:
                 setAppointmentView(<Loader/>)
         }
-    }, [appointment, appointmentStatus, field, responses, role, userModel]);
+    }, [teams, appointment, appointmentStatus, field, responses, role, userModel]);
 
     // Gets all responses
     useEffect(() => {
@@ -137,7 +141,7 @@ const AppointmentById = () => {
 
 
     return (
-        appointmentView ?
+        appointment && appointmentView ?
             <Flex direction={"column"}>
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                     <KornerFieldShort

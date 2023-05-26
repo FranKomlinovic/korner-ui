@@ -398,7 +398,7 @@ export const schema = {
                     "name": "teamID",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -869,5 +869,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.3",
-    "version": "f0d8b9647959e8be4c77dabc270717bf"
+    "version": "126d36dc734105a173bc03e0d33d0f67"
 };

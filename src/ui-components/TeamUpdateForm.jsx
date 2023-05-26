@@ -231,7 +231,7 @@ export default function TeamUpdateForm(props) {
   };
   const [teamRecord, setTeamRecord] = React.useState(teamModelProp);
   const [linkedResponses, setLinkedResponses] = React.useState([]);
-  const canUnlinkResponses = false;
+  const canUnlinkResponses = true;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
