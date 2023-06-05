@@ -24,7 +24,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Response, Appointment } from "../models";
+import { Response, Appointment, Team } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -202,6 +202,7 @@ export default function ResponseCreateForm(props) {
     appointmentID: undefined,
     playerName: "",
     playerPhoto: "",
+    teamID: undefined,
   };
   const [playerID, setPlayerID] = React.useState(initialValues.playerID);
   const [accepted, setAccepted] = React.useState(initialValues.accepted);
@@ -212,6 +213,7 @@ export default function ResponseCreateForm(props) {
   const [playerPhoto, setPlayerPhoto] = React.useState(
     initialValues.playerPhoto
   );
+  const [teamID, setTeamID] = React.useState(initialValues.teamID);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setPlayerID(initialValues.playerID);
@@ -221,6 +223,9 @@ export default function ResponseCreateForm(props) {
     setCurrentAppointmentIDDisplayValue("");
     setPlayerName(initialValues.playerName);
     setPlayerPhoto(initialValues.playerPhoto);
+    setTeamID(initialValues.teamID);
+    setCurrentTeamIDValue(undefined);
+    setCurrentTeamIDDisplayValue("");
     setErrors({});
   };
   const [
@@ -230,12 +235,21 @@ export default function ResponseCreateForm(props) {
   const [currentAppointmentIDValue, setCurrentAppointmentIDValue] =
     React.useState(undefined);
   const appointmentIDRef = React.createRef();
+  const [currentTeamIDDisplayValue, setCurrentTeamIDDisplayValue] =
+    React.useState("");
+  const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
+  const teamIDRef = React.createRef();
   const appointmentRecords = useDataStoreBinding({
     type: "collection",
     model: Appointment,
   }).items;
+  const teamRecords = useDataStoreBinding({
+    type: "collection",
+    model: Team,
+  }).items;
   const getDisplayValue = {
     appointmentID: (r) => `${r?.confirmed ? r?.confirmed + " - " : ""}${r?.id}`,
+    teamID: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
   };
   const validations = {
     playerID: [],
@@ -243,6 +257,7 @@ export default function ResponseCreateForm(props) {
     appointmentID: [{ type: "Required" }],
     playerName: [{ type: "Required" }],
     playerPhoto: [],
+    teamID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -275,6 +290,7 @@ export default function ResponseCreateForm(props) {
           appointmentID,
           playerName,
           playerPhoto,
+          teamID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -334,6 +350,7 @@ export default function ResponseCreateForm(props) {
               appointmentID,
               playerName,
               playerPhoto,
+              teamID,
             };
             const result = onChange(modelFields);
             value = result?.playerID ?? value;
@@ -362,6 +379,7 @@ export default function ResponseCreateForm(props) {
               appointmentID,
               playerName,
               playerPhoto,
+              teamID,
             };
             const result = onChange(modelFields);
             value = result?.accepted ?? value;
@@ -387,6 +405,7 @@ export default function ResponseCreateForm(props) {
               appointmentID: value,
               playerName,
               playerPhoto,
+              teamID,
             };
             const result = onChange(modelFields);
             value = result?.appointmentID ?? value;
@@ -474,6 +493,7 @@ export default function ResponseCreateForm(props) {
               appointmentID,
               playerName: value,
               playerPhoto,
+              teamID,
             };
             const result = onChange(modelFields);
             value = result?.playerName ?? value;
@@ -502,6 +522,7 @@ export default function ResponseCreateForm(props) {
               appointmentID,
               playerName,
               playerPhoto: value,
+              teamID,
             };
             const result = onChange(modelFields);
             value = result?.playerPhoto ?? value;
@@ -516,6 +537,85 @@ export default function ResponseCreateForm(props) {
         hasError={errors.playerPhoto?.hasError}
         {...getOverrideProps(overrides, "playerPhoto")}
       ></TextField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              playerID,
+              accepted,
+              appointmentID,
+              playerName,
+              playerPhoto,
+              teamID: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.teamID ?? value;
+          }
+          setTeamID(value);
+          setCurrentTeamIDValue(undefined);
+        }}
+        currentFieldValue={currentTeamIDValue}
+        label={"Team id"}
+        items={teamID ? [teamID] : []}
+        hasError={errors?.teamID?.hasError}
+        errorMessage={errors?.teamID?.errorMessage}
+        getBadgeText={(value) =>
+          value
+            ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+            : ""
+        }
+        setFieldValue={(value) => {
+          setCurrentTeamIDDisplayValue(
+            value
+              ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
+              : ""
+          );
+          setCurrentTeamIDValue(value);
+        }}
+        inputFieldRef={teamIDRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Team id"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search Team"
+          value={currentTeamIDDisplayValue}
+          options={teamRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: getDisplayValue.teamID?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentTeamIDValue(id);
+            setCurrentTeamIDDisplayValue(label);
+            runValidationTasks("teamID", label);
+          }}
+          onClear={() => {
+            setCurrentTeamIDDisplayValue("");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.teamID?.hasError) {
+              runValidationTasks("teamID", value);
+            }
+            setCurrentTeamIDDisplayValue(value);
+            setCurrentTeamIDValue(undefined);
+          }}
+          onBlur={() => runValidationTasks("teamID", currentTeamIDValue)}
+          errorMessage={errors.teamID?.errorMessage}
+          hasError={errors.teamID?.hasError}
+          ref={teamIDRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "teamID")}
+        ></Autocomplete>
+      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

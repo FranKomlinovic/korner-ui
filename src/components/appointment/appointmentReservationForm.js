@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
-import {Response} from "../../models";
+import {Button, Flex, Heading, Text, TextField} from "@aws-amplify/ui-react";
+import {Response, Team} from "../../models";
 import {DataStore} from "aws-amplify";
+import {FaTshirt} from "react-icons/fa";
 
 const AppointmentReservationForm = ({user, appointment, responses}) => {
     const [name, setName] = useState();
     const [responseToUpdate, setResponseToUpdate] = useState();
+    const [team, setTeam] = useState();
 
 
     useEffect(() => {
@@ -13,8 +15,15 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
     }, [user]);
 
     useEffect(() => {
-       setResponseToUpdate(responses?.find((response) => response.playerID === user?.sub));
+        setResponseToUpdate(responses?.find((response) => response.playerID === user?.sub));
     }, [responses, user]);
+
+    useEffect(() => {
+        responseToUpdate?.teamID &&
+        DataStore.query(Team, responseToUpdate?.teamID).then(a => {
+            setTeam(a)
+        })
+    }, [responseToUpdate?.teamID]);
 
 
     const createResponse = (accepted) => {
@@ -29,14 +38,15 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
             playerName: name,
             playerPhoto: user?.photo,
         });
-        DataStore.save(response).then();
+        DataStore.save(response)
     };
 
     function updateResponse(accepted) {
         DataStore.save(Response.copyOf(responseToUpdate, (item) => {
+            item.team = undefined;
             item.accepted = accepted;
             item.playerPhoto = user?.photo
-        })).then();
+        }))
     }
 
     const commingButton = (
@@ -52,13 +62,26 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
     )
 
     const alreadyAnsweredView = () => {
+
         if (responseToUpdate?.accepted) {
+            if (team) {
+                return (<Flex alignItems={"center"} justifyContent={"center"}>
+
+                    <Heading>Ekipa:</Heading>
+                    <FaTshirt size={"4rem"} color={team?.color}/>
+                    <Heading level={2}>{team?.name}</Heading>
+
+                </Flex>)
+            }
             return (
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                    <Heading color={"font.primary"} level={3}>Dolazim</Heading>
-                    <Heading level={6}>Promijeni odgovor:</Heading>
+                    <Heading color={"green.80"} level={3}>Dolazim</Heading>
+                    {!appointment?.locked &&
+                        <Heading level={6}>Promijeni odgovor:</Heading>}
                     <Flex>
-                        {notComming}
+                        {!appointment?.locked ? notComming :
+                            <Text textAlign={"center"}>Odgovori su zaključani, za promjenu
+                                kontaktirajte organizatora: {appointment?.bookerName}</Text>}
                     </Flex>
                 </Flex>
             );
@@ -66,9 +89,11 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
         return (
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                 <Heading color={"font.warning"} level={3}>Ne dolazim</Heading>
-                <Heading level={6}>Promijeni odgovor:</Heading>
+                {!appointment?.locked && <Heading level={6}>Promijeni odgovor:</Heading>}
                 <Flex>
-                    {commingButton}
+                    {!appointment?.locked ? commingButton :
+                        <Text textAlign={"center"}>Odgovori su zaključani, za promjenu
+                            kontaktirajte organizatora: {appointment?.bookerName}</Text>}
                 </Flex>
             </Flex>
         );

@@ -22,6 +22,40 @@ export enum Surface {
 
 
 
+type EagerTeam = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Team, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly appointmentID: string;
+  readonly Responses?: (Response | null)[] | null;
+  readonly name?: string | null;
+  readonly color?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyTeam = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Team, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly appointmentID: string;
+  readonly Responses: AsyncCollection<Response>;
+  readonly name?: string | null;
+  readonly color?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Team = LazyLoading extends LazyLoadingDisabled ? EagerTeam : LazyTeam
+
+export declare const Team: (new (init: ModelInit<Team>) => Team) & {
+  copyOf(source: Team, mutator: (draft: MutableModel<Team>) => MutableModel<Team> | void): Team;
+}
+
 type EagerUser = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<User, 'id'>;
@@ -135,6 +169,7 @@ type EagerResponse = {
   readonly appointmentID: string;
   readonly playerName: string;
   readonly playerPhoto?: string | null;
+  readonly teamID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -150,6 +185,7 @@ type LazyResponse = {
   readonly appointmentID: string;
   readonly playerName: string;
   readonly playerPhoto?: string | null;
+  readonly teamID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -179,6 +215,7 @@ type EagerAppointment = {
   readonly canceled?: boolean | null;
   readonly Fields?: Fields | null;
   readonly locked?: boolean | null;
+  readonly Teams?: (Team | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -202,6 +239,7 @@ type LazyAppointment = {
   readonly canceled?: boolean | null;
   readonly Fields: AsyncItem<Fields | undefined>;
   readonly locked?: boolean | null;
+  readonly Teams: AsyncCollection<Team>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

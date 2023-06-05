@@ -5,7 +5,7 @@ import {convertSportsEnumListToString, convertSurfaceEnumToString} from "../func
 
 const FigmaField = ({field}) => {
 
-    const [photo, setPhoto] = useState("/no-field.jpg");
+    const [photo, setPhoto] = useState();
     const [sports, setSports] = useState();
     const [surface, setSurface] = useState();
 

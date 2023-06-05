@@ -25,7 +25,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Appointment, Response, Fields as Fields0 } from "../models";
+import { Appointment, Response, Fields as Fields0, Team } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -211,6 +211,7 @@ export default function AppointmentUpdateForm(props) {
     canceled: false,
     Fields: undefined,
     locked: false,
+    Teams: [],
   };
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
@@ -224,6 +225,7 @@ export default function AppointmentUpdateForm(props) {
   const [canceled, setCanceled] = React.useState(initialValues.canceled);
   const [Fields, setFields] = React.useState(initialValues.Fields);
   const [locked, setLocked] = React.useState(initialValues.locked);
+  const [Teams, setTeams] = React.useState(initialValues.Teams);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = appointmentRecord
@@ -232,6 +234,7 @@ export default function AppointmentUpdateForm(props) {
           ...appointmentRecord,
           Responses: linkedResponses,
           Fields,
+          Teams: linkedTeams,
         }
       : initialValues;
     setStart(cleanValues.start);
@@ -250,12 +253,17 @@ export default function AppointmentUpdateForm(props) {
     setCurrentFieldsValue(undefined);
     setCurrentFieldsDisplayValue("");
     setLocked(cleanValues.locked);
+    setTeams(cleanValues.Teams ?? []);
+    setCurrentTeamsValue(undefined);
+    setCurrentTeamsDisplayValue("");
     setErrors({});
   };
   const [appointmentRecord, setAppointmentRecord] =
     React.useState(appointmentModelProp);
   const [linkedResponses, setLinkedResponses] = React.useState([]);
   const canUnlinkResponses = false;
+  const [linkedTeams, setLinkedTeams] = React.useState([]);
+  const canUnlinkTeams = false;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
@@ -266,6 +274,8 @@ export default function AppointmentUpdateForm(props) {
       setLinkedResponses(linkedResponses);
       const FieldsRecord = record ? await record.Fields : undefined;
       setFields(FieldsRecord);
+      const linkedTeams = record ? await record.Teams.toArray() : [];
+      setLinkedTeams(linkedTeams);
     };
     queryData();
   }, [idProp, appointmentModelProp]);
@@ -273,6 +283,7 @@ export default function AppointmentUpdateForm(props) {
     appointmentRecord,
     linkedResponses,
     Fields,
+    linkedTeams,
   ]);
   const [currentResponsesDisplayValue, setCurrentResponsesDisplayValue] =
     React.useState("");
@@ -283,9 +294,14 @@ export default function AppointmentUpdateForm(props) {
     React.useState("");
   const [currentFieldsValue, setCurrentFieldsValue] = React.useState(undefined);
   const FieldsRef = React.createRef();
+  const [currentTeamsDisplayValue, setCurrentTeamsDisplayValue] =
+    React.useState("");
+  const [currentTeamsValue, setCurrentTeamsValue] = React.useState(undefined);
+  const TeamsRef = React.createRef();
   const getIDValue = {
     Responses: (r) => JSON.stringify({ id: r?.id }),
     Fields: (r) => JSON.stringify({ id: r?.id }),
+    Teams: (r) => JSON.stringify({ id: r?.id }),
   };
   const ResponsesIdSet = new Set(
     Array.isArray(Responses)
@@ -297,6 +313,11 @@ export default function AppointmentUpdateForm(props) {
       ? Fields.map((r) => getIDValue.Fields?.(r))
       : getIDValue.Fields?.(Fields)
   );
+  const TeamsIdSet = new Set(
+    Array.isArray(Teams)
+      ? Teams.map((r) => getIDValue.Teams?.(r))
+      : getIDValue.Teams?.(Teams)
+  );
   const responseRecords = useDataStoreBinding({
     type: "collection",
     model: Response,
@@ -305,9 +326,14 @@ export default function AppointmentUpdateForm(props) {
     type: "collection",
     model: Fields0,
   }).items;
+  const teamRecords = useDataStoreBinding({
+    type: "collection",
+    model: Team,
+  }).items;
   const getDisplayValue = {
     Responses: (r) => `${r?.accepted ? r?.accepted + " - " : ""}${r?.id}`,
     Fields: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
+    Teams: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
   };
   const validations = {
     start: [{ type: "Required" }],
@@ -322,6 +348,7 @@ export default function AppointmentUpdateForm(props) {
     canceled: [],
     Fields: [],
     locked: [],
+    Teams: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -361,6 +388,7 @@ export default function AppointmentUpdateForm(props) {
           canceled,
           Fields,
           locked,
+          Teams,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -440,6 +468,45 @@ export default function AppointmentUpdateForm(props) {
               )
             );
           });
+          const teamsToLink = [];
+          const teamsToUnLink = [];
+          const teamsSet = new Set();
+          const linkedTeamsSet = new Set();
+          Teams.forEach((r) => teamsSet.add(getIDValue.Teams?.(r)));
+          linkedTeams.forEach((r) => linkedTeamsSet.add(getIDValue.Teams?.(r)));
+          linkedTeams.forEach((r) => {
+            if (!teamsSet.has(getIDValue.Teams?.(r))) {
+              teamsToUnLink.push(r);
+            }
+          });
+          Teams.forEach((r) => {
+            if (!linkedTeamsSet.has(getIDValue.Teams?.(r))) {
+              teamsToLink.push(r);
+            }
+          });
+          teamsToUnLink.forEach((original) => {
+            if (!canUnlinkTeams) {
+              throw Error(
+                `Team ${original.id} cannot be unlinked from Appointment because appointmentID is a required field.`
+              );
+            }
+            promises.push(
+              DataStore.save(
+                Team.copyOf(original, (updated) => {
+                  updated.appointmentID = null;
+                })
+              )
+            );
+          });
+          teamsToLink.forEach((original) => {
+            promises.push(
+              DataStore.save(
+                Team.copyOf(original, (updated) => {
+                  updated.appointmentID = appointmentRecord.id;
+                })
+              )
+            );
+          });
           const modelFieldsToSave = {
             start: modelFields.start,
             end: modelFields.end,
@@ -498,6 +565,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.start ?? value;
@@ -534,6 +602,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.end ?? value;
@@ -565,6 +634,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             values = result?.Responses ?? values;
@@ -654,6 +724,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.date ?? value;
@@ -689,6 +760,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.confirmed ?? value;
@@ -724,6 +796,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.bookerID ?? value;
@@ -759,6 +832,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.bookerName ?? value;
@@ -794,6 +868,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.sport ?? value;
@@ -849,6 +924,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -884,6 +960,7 @@ export default function AppointmentUpdateForm(props) {
               canceled: value,
               Fields,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.canceled ?? value;
@@ -916,6 +993,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields: value,
               locked,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.Fields ?? value;
@@ -1003,6 +1081,7 @@ export default function AppointmentUpdateForm(props) {
               canceled,
               Fields,
               locked: value,
+              Teams,
             };
             const result = onChange(modelFields);
             value = result?.locked ?? value;
@@ -1017,6 +1096,89 @@ export default function AppointmentUpdateForm(props) {
         hasError={errors.locked?.hasError}
         {...getOverrideProps(overrides, "locked")}
       ></SwitchField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              start,
+              end,
+              Responses,
+              date,
+              confirmed,
+              bookerID,
+              bookerName,
+              sport,
+              price,
+              canceled,
+              Fields,
+              locked,
+              Teams: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.Teams ?? values;
+          }
+          setTeams(values);
+          setCurrentTeamsValue(undefined);
+          setCurrentTeamsDisplayValue("");
+        }}
+        currentFieldValue={currentTeamsValue}
+        label={"Teams"}
+        items={Teams}
+        hasError={errors?.Teams?.hasError}
+        errorMessage={errors?.Teams?.errorMessage}
+        getBadgeText={getDisplayValue.Teams}
+        setFieldValue={(model) => {
+          setCurrentTeamsDisplayValue(
+            model ? getDisplayValue.Teams(model) : ""
+          );
+          setCurrentTeamsValue(model);
+        }}
+        inputFieldRef={TeamsRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Teams"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search Team"
+          value={currentTeamsDisplayValue}
+          options={teamRecords
+            .filter((r) => !TeamsIdSet.has(getIDValue.Teams?.(r)))
+            .map((r) => ({
+              id: getIDValue.Teams?.(r),
+              label: getDisplayValue.Teams?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentTeamsValue(
+              teamRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentTeamsDisplayValue(label);
+            runValidationTasks("Teams", label);
+          }}
+          onClear={() => {
+            setCurrentTeamsDisplayValue("");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Teams?.hasError) {
+              runValidationTasks("Teams", value);
+            }
+            setCurrentTeamsDisplayValue(value);
+            setCurrentTeamsValue(undefined);
+          }}
+          onBlur={() => runValidationTasks("Teams", currentTeamsDisplayValue)}
+          errorMessage={errors.Teams?.errorMessage}
+          hasError={errors.Teams?.hasError}
+          ref={TeamsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Teams")}
+        ></Autocomplete>
+      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

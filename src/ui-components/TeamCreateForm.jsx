@@ -15,7 +15,6 @@ import {
   Grid,
   Icon,
   ScrollView,
-  SwitchField,
   Text,
   TextField,
   useTheme,
@@ -24,7 +23,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Response, Appointment, Team } from "../models";
+import { Team, Response, Appointment } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -185,10 +184,9 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function ResponseUpdateForm(props) {
+export default function TeamCreateForm(props) {
   const {
-    id: idProp,
-    response: responseModelProp,
+    clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
@@ -198,57 +196,29 @@ export default function ResponseUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    playerID: "",
-    accepted: false,
     appointmentID: undefined,
-    playerName: "",
-    playerPhoto: "",
-    teamID: undefined,
+    Responses: [],
+    name: "",
+    color: "",
   };
-  const [playerID, setPlayerID] = React.useState(initialValues.playerID);
-  const [accepted, setAccepted] = React.useState(initialValues.accepted);
   const [appointmentID, setAppointmentID] = React.useState(
     initialValues.appointmentID
   );
-  const [playerName, setPlayerName] = React.useState(initialValues.playerName);
-  const [playerPhoto, setPlayerPhoto] = React.useState(
-    initialValues.playerPhoto
-  );
-  const [teamID, setTeamID] = React.useState(initialValues.teamID);
+  const [Responses, setResponses] = React.useState(initialValues.Responses);
+  const [name, setName] = React.useState(initialValues.name);
+  const [color, setColor] = React.useState(initialValues.color);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = responseRecord
-      ? { ...initialValues, ...responseRecord, appointmentID, teamID }
-      : initialValues;
-    setPlayerID(cleanValues.playerID);
-    setAccepted(cleanValues.accepted);
-    setAppointmentID(cleanValues.appointmentID);
+    setAppointmentID(initialValues.appointmentID);
     setCurrentAppointmentIDValue(undefined);
     setCurrentAppointmentIDDisplayValue("");
-    setPlayerName(cleanValues.playerName);
-    setPlayerPhoto(cleanValues.playerPhoto);
-    setTeamID(cleanValues.teamID);
-    setCurrentTeamIDValue(undefined);
-    setCurrentTeamIDDisplayValue("");
+    setResponses(initialValues.Responses);
+    setCurrentResponsesValue(undefined);
+    setCurrentResponsesDisplayValue("");
+    setName(initialValues.name);
+    setColor(initialValues.color);
     setErrors({});
   };
-  const [responseRecord, setResponseRecord] = React.useState(responseModelProp);
-  React.useEffect(() => {
-    const queryData = async () => {
-      const record = idProp
-        ? await DataStore.query(Response, idProp)
-        : responseModelProp;
-      setResponseRecord(record);
-      const appointmentIDRecord = record
-        ? await record.appointmentID
-        : undefined;
-      setAppointmentID(appointmentIDRecord);
-      const teamIDRecord = record ? await record.teamID : undefined;
-      setTeamID(teamIDRecord);
-    };
-    queryData();
-  }, [idProp, responseModelProp]);
-  React.useEffect(resetStateValues, [responseRecord, appointmentID, teamID]);
   const [
     currentAppointmentIDDisplayValue,
     setCurrentAppointmentIDDisplayValue,
@@ -256,29 +226,36 @@ export default function ResponseUpdateForm(props) {
   const [currentAppointmentIDValue, setCurrentAppointmentIDValue] =
     React.useState(undefined);
   const appointmentIDRef = React.createRef();
-  const [currentTeamIDDisplayValue, setCurrentTeamIDDisplayValue] =
+  const [currentResponsesDisplayValue, setCurrentResponsesDisplayValue] =
     React.useState("");
-  const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
-  const teamIDRef = React.createRef();
+  const [currentResponsesValue, setCurrentResponsesValue] =
+    React.useState(undefined);
+  const ResponsesRef = React.createRef();
+  const getIDValue = {
+    Responses: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const ResponsesIdSet = new Set(
+    Array.isArray(Responses)
+      ? Responses.map((r) => getIDValue.Responses?.(r))
+      : getIDValue.Responses?.(Responses)
+  );
   const appointmentRecords = useDataStoreBinding({
     type: "collection",
     model: Appointment,
   }).items;
-  const teamRecords = useDataStoreBinding({
+  const responseRecords = useDataStoreBinding({
     type: "collection",
-    model: Team,
+    model: Response,
   }).items;
   const getDisplayValue = {
     appointmentID: (r) => `${r?.confirmed ? r?.confirmed + " - " : ""}${r?.id}`,
-    teamID: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
+    Responses: (r) => `${r?.accepted ? r?.accepted + " - " : ""}${r?.id}`,
   };
   const validations = {
-    playerID: [],
-    accepted: [],
     appointmentID: [{ type: "Required" }],
-    playerName: [{ type: "Required" }],
-    playerPhoto: [],
-    teamID: [],
+    Responses: [],
+    name: [],
+    color: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -306,25 +283,31 @@ export default function ResponseUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          playerID,
-          accepted,
           appointmentID,
-          playerName,
-          playerPhoto,
-          teamID,
+          Responses,
+          name,
+          color,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
                 )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
             );
             return promises;
           }, [])
@@ -341,13 +324,31 @@ export default function ResponseUpdateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(
-            Response.copyOf(responseRecord, (updated) => {
-              Object.assign(updated, modelFields);
-            })
+          const modelFieldsToSave = {
+            appointmentID: modelFields.appointmentID,
+            name: modelFields.name,
+            color: modelFields.color,
+          };
+          const team = await DataStore.save(new Team(modelFieldsToSave));
+          const promises = [];
+          promises.push(
+            ...Responses.reduce((promises, original) => {
+              promises.push(
+                DataStore.save(
+                  Response.copyOf(original, (updated) => {
+                    updated.teamID = team.id;
+                  })
+                )
+              );
+              return promises;
+            }, [])
           );
+          await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
+          }
+          if (clearOnSuccess) {
+            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -355,79 +356,19 @@ export default function ResponseUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "ResponseUpdateForm")}
+      {...getOverrideProps(overrides, "TeamCreateForm")}
       {...rest}
     >
-      <TextField
-        label="Player id"
-        isRequired={false}
-        isReadOnly={false}
-        value={playerID}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              playerID: value,
-              accepted,
-              appointmentID,
-              playerName,
-              playerPhoto,
-              teamID,
-            };
-            const result = onChange(modelFields);
-            value = result?.playerID ?? value;
-          }
-          if (errors.playerID?.hasError) {
-            runValidationTasks("playerID", value);
-          }
-          setPlayerID(value);
-        }}
-        onBlur={() => runValidationTasks("playerID", playerID)}
-        errorMessage={errors.playerID?.errorMessage}
-        hasError={errors.playerID?.hasError}
-        {...getOverrideProps(overrides, "playerID")}
-      ></TextField>
-      <SwitchField
-        label="Accepted"
-        defaultChecked={false}
-        isDisabled={false}
-        isChecked={accepted}
-        onChange={(e) => {
-          let value = e.target.checked;
-          if (onChange) {
-            const modelFields = {
-              playerID,
-              accepted: value,
-              appointmentID,
-              playerName,
-              playerPhoto,
-              teamID,
-            };
-            const result = onChange(modelFields);
-            value = result?.accepted ?? value;
-          }
-          if (errors.accepted?.hasError) {
-            runValidationTasks("accepted", value);
-          }
-          setAccepted(value);
-        }}
-        onBlur={() => runValidationTasks("accepted", accepted)}
-        errorMessage={errors.accepted?.errorMessage}
-        hasError={errors.accepted?.hasError}
-        {...getOverrideProps(overrides, "accepted")}
-      ></SwitchField>
       <ArrayField
         lengthLimit={1}
         onChange={async (items) => {
           let value = items[0];
           if (onChange) {
             const modelFields = {
-              playerID,
-              accepted,
               appointmentID: value,
-              playerName,
-              playerPhoto,
-              teamID,
+              Responses,
+              name,
+              color,
             };
             const result = onChange(modelFields);
             value = result?.appointmentID ?? value;
@@ -483,7 +424,6 @@ export default function ResponseUpdateForm(props) {
           onClear={() => {
             setCurrentAppointmentIDDisplayValue("");
           }}
-          defaultValue={appointmentID}
           onChange={(e) => {
             let { value } = e.target;
             if (errors.appointmentID?.hasError) {
@@ -502,157 +442,148 @@ export default function ResponseUpdateForm(props) {
           {...getOverrideProps(overrides, "appointmentID")}
         ></Autocomplete>
       </ArrayField>
-      <TextField
-        label="Player name"
-        isRequired={true}
-        isReadOnly={false}
-        value={playerName}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              playerID,
-              accepted,
-              appointmentID,
-              playerName: value,
-              playerPhoto,
-              teamID,
-            };
-            const result = onChange(modelFields);
-            value = result?.playerName ?? value;
-          }
-          if (errors.playerName?.hasError) {
-            runValidationTasks("playerName", value);
-          }
-          setPlayerName(value);
-        }}
-        onBlur={() => runValidationTasks("playerName", playerName)}
-        errorMessage={errors.playerName?.errorMessage}
-        hasError={errors.playerName?.hasError}
-        {...getOverrideProps(overrides, "playerName")}
-      ></TextField>
-      <TextField
-        label="Player photo"
-        isRequired={false}
-        isReadOnly={false}
-        value={playerPhoto}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              playerID,
-              accepted,
-              appointmentID,
-              playerName,
-              playerPhoto: value,
-              teamID,
-            };
-            const result = onChange(modelFields);
-            value = result?.playerPhoto ?? value;
-          }
-          if (errors.playerPhoto?.hasError) {
-            runValidationTasks("playerPhoto", value);
-          }
-          setPlayerPhoto(value);
-        }}
-        onBlur={() => runValidationTasks("playerPhoto", playerPhoto)}
-        errorMessage={errors.playerPhoto?.errorMessage}
-        hasError={errors.playerPhoto?.hasError}
-        {...getOverrideProps(overrides, "playerPhoto")}
-      ></TextField>
       <ArrayField
-        lengthLimit={1}
         onChange={async (items) => {
-          let value = items[0];
+          let values = items;
           if (onChange) {
             const modelFields = {
-              playerID,
-              accepted,
               appointmentID,
-              playerName,
-              playerPhoto,
-              teamID: value,
+              Responses: values,
+              name,
+              color,
             };
             const result = onChange(modelFields);
-            value = result?.teamID ?? value;
+            values = result?.Responses ?? values;
           }
-          setTeamID(value);
-          setCurrentTeamIDValue(undefined);
+          setResponses(values);
+          setCurrentResponsesValue(undefined);
+          setCurrentResponsesDisplayValue("");
         }}
-        currentFieldValue={currentTeamIDValue}
-        label={"Team id"}
-        items={teamID ? [teamID] : []}
-        hasError={errors?.teamID?.hasError}
-        errorMessage={errors?.teamID?.errorMessage}
-        getBadgeText={(value) =>
-          value
-            ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
-            : ""
-        }
-        setFieldValue={(value) => {
-          setCurrentTeamIDDisplayValue(
-            value
-              ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
-              : ""
+        currentFieldValue={currentResponsesValue}
+        label={"Responses"}
+        items={Responses}
+        hasError={errors?.Responses?.hasError}
+        errorMessage={errors?.Responses?.errorMessage}
+        getBadgeText={getDisplayValue.Responses}
+        setFieldValue={(model) => {
+          setCurrentResponsesDisplayValue(
+            model ? getDisplayValue.Responses(model) : ""
           );
-          setCurrentTeamIDValue(value);
+          setCurrentResponsesValue(model);
         }}
-        inputFieldRef={teamIDRef}
+        inputFieldRef={ResponsesRef}
         defaultFieldValue={""}
       >
         <Autocomplete
-          label="Team id"
+          label="Responses"
           isRequired={false}
           isReadOnly={false}
-          placeholder="Search Team"
-          value={currentTeamIDDisplayValue}
-          options={teamRecords
-            .filter(
-              (r, i, arr) =>
-                arr.findIndex((member) => member?.id === r?.id) === i
-            )
+          placeholder="Search Response"
+          value={currentResponsesDisplayValue}
+          options={responseRecords
+            .filter((r) => !ResponsesIdSet.has(getIDValue.Responses?.(r)))
             .map((r) => ({
-              id: r?.id,
-              label: getDisplayValue.teamID?.(r),
+              id: getIDValue.Responses?.(r),
+              label: getDisplayValue.Responses?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentTeamIDValue(id);
-            setCurrentTeamIDDisplayValue(label);
-            runValidationTasks("teamID", label);
+            setCurrentResponsesValue(
+              responseRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentResponsesDisplayValue(label);
+            runValidationTasks("Responses", label);
           }}
           onClear={() => {
-            setCurrentTeamIDDisplayValue("");
+            setCurrentResponsesDisplayValue("");
           }}
-          defaultValue={teamID}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.teamID?.hasError) {
-              runValidationTasks("teamID", value);
+            if (errors.Responses?.hasError) {
+              runValidationTasks("Responses", value);
             }
-            setCurrentTeamIDDisplayValue(value);
-            setCurrentTeamIDValue(undefined);
+            setCurrentResponsesDisplayValue(value);
+            setCurrentResponsesValue(undefined);
           }}
-          onBlur={() => runValidationTasks("teamID", currentTeamIDValue)}
-          errorMessage={errors.teamID?.errorMessage}
-          hasError={errors.teamID?.hasError}
-          ref={teamIDRef}
+          onBlur={() =>
+            runValidationTasks("Responses", currentResponsesDisplayValue)
+          }
+          errorMessage={errors.Responses?.errorMessage}
+          hasError={errors.Responses?.hasError}
+          ref={ResponsesRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, "teamID")}
+          {...getOverrideProps(overrides, "Responses")}
         ></Autocomplete>
       </ArrayField>
+      <TextField
+        label="Name"
+        isRequired={false}
+        isReadOnly={false}
+        value={name}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              appointmentID,
+              Responses,
+              name: value,
+              color,
+            };
+            const result = onChange(modelFields);
+            value = result?.name ?? value;
+          }
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
+          }
+          setName(value);
+        }}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
+      ></TextField>
+      <TextField
+        label="Color"
+        isRequired={false}
+        isReadOnly={false}
+        value={color}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              appointmentID,
+              Responses,
+              name,
+              color: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.color ?? value;
+          }
+          if (errors.color?.hasError) {
+            runValidationTasks("color", value);
+          }
+          setColor(value);
+        }}
+        onBlur={() => runValidationTasks("color", color)}
+        errorMessage={errors.color?.errorMessage}
+        hasError={errors.color?.hasError}
+        {...getOverrideProps(overrides, "color")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Reset"
+          children="Clear"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || responseModelProp)}
-          {...getOverrideProps(overrides, "ResetButton")}
+          {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -662,10 +593,7 @@ export default function ResponseUpdateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={
-              !(idProp || responseModelProp) ||
-              Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

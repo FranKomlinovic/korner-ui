@@ -7,7 +7,7 @@ import {Appointment, Sport} from "../../models";
 import {confirmAppointment} from "../../functions/lambdas";
 
 // Ovo je komponenta koja prikazuje i stvara button da se kreira termin
-const FieldConfirmAppointmentReservation = ({appointment, field, user}) => {
+const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, field, user}) => {
     const navigate = useNavigate();
     const [name, setName] = useState(null)
     const [appointmentToCreate, setAppointmentToCreate] = useState()
@@ -19,6 +19,10 @@ const FieldConfirmAppointmentReservation = ({appointment, field, user}) => {
     }, [appointment, field, user]);
 
 
+    const ownerCreate = (a) => {
+        confirmAppointment(a.id);
+        onCreateFunction();
+    }
     const createAppointment = () => {
         appointmentToCreate.bookerName = isOwner && name ?
             name :
@@ -31,7 +35,7 @@ const FieldConfirmAppointmentReservation = ({appointment, field, user}) => {
         appointmentToCreate.canceled = false
         appointmentToCreate.sport = Sport.FUTSAL
         DataStore.save(new Appointment(appointmentToCreate)).then(a => {
-                isOwner ? confirmAppointment(a.id) : navigate('/appointment/' + a.id);
+                isOwner ? ownerCreate(a): navigate('/appointment/' + a.id);
             }
         )
     }

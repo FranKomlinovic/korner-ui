@@ -1,5 +1,4 @@
 import {Appointment} from "../models";
-import React from "react";
 
 // unreserved, reserved, canceled, played
 export function getAppointmentStatus(appointment: Appointment): string {

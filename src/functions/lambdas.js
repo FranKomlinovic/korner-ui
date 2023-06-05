@@ -4,9 +4,7 @@ import {DataStore} from "aws-amplify";
 
 export function confirmAppointment(appointmentId): Appointment {
     DataStore.query(Appointment, appointmentId).then(appointment => {
-        appointment.canceled ?
-            window.location.reload()
-            :
+        !appointment.canceled &&
             // Confirm this appointment
             DataStore.save(Appointment.copyOf(appointment, (item) => {
                 item.confirmed = true;
@@ -25,7 +23,6 @@ export function confirmAppointment(appointmentId): Appointment {
                             item.canceled = true;
                         })).then();
                     }
-                    window.location.reload();
 
                 });
 

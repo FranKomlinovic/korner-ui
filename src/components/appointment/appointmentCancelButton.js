@@ -17,7 +17,7 @@ const AppointmentCancelButton = ({appointment}) => {
                     onClick: () => {
                         DataStore.save(Appointment.copyOf(appointment, (item) => {
                             item.canceled = true;
-                        })).then(() => window.location.reload())
+                        }))
                     }
                 },
                 {

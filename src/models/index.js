@@ -20,9 +20,10 @@ const Surface = {
   "WOOD": "WOOD"
 };
 
-const { User, Following, ReccuringAppointment, Response, Appointment, Fields } = initSchema(schema);
+const { Team, User, Following, ReccuringAppointment, Response, Appointment, Fields } = initSchema(schema);
 
 export {
+  Team,
   User,
   Following,
   ReccuringAppointment,
