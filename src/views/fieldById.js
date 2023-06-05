@@ -1,54 +1,42 @@
 import React, {useEffect, useState} from "react";
-import {DataStore} from "aws-amplify";
-import {Appointment, Fields} from "../models";
 import {useParams} from "react-router-dom";
 import {checkIfOwner, getCurrentDateInDynamoDbString} from "../functions/converters";
-import {Flex, Loader, withAuthenticator} from "@aws-amplify/ui-react";
+import {Flex, Placeholder, withAuthenticator} from "@aws-amplify/ui-react";
 import FigmaField from "../figma-components/FigmaField";
 import FieldOwnerFunctions from "../components/field/fieldOwnerFunctions";
 import FieldOwnerAppointments from "../components/field/fieldOwnerAppointments";
 import FieldFreeAppointmentsView from "../components/field/fieldFreeAppointmentsView";
+import useGetField from "../custom-hooks/field/useGetField";
+import useGetFieldAppointments from "../custom-hooks/field/useGetFieldAppointments";
 
 const FieldById = ({user}) => {
     const {fieldId} = useParams();
-    const [field, setField] = useState()
+    const field = useGetField(fieldId);
+    const appointments = useGetFieldAppointments(fieldId);
+
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
-    const [fieldAppointments, setFieldAppointments] = useState()
     const [isOwner, setIsOwner] = useState(false)
-
-    // Gets field by id
-    useEffect(() => {
-        DataStore.query(Fields, fieldId).then(a => {
-            setField(a);
-        })
-    }, [fieldId]);
-
-// Gets all appointments
-    useEffect(() => {
-        DataStore.observeQuery(Appointment, (c) => c.fieldsID.eq(fieldId)).subscribe(r => {
-            setFieldAppointments(r.items)
-        })
-
-    }, [fieldId]);
-
 
     // Sets if user is owner of field
     useEffect(() => {
-        setIsOwner(checkIfOwner(user, field?.ownerID));
-    }, [field, user]);
+        setIsOwner(checkIfOwner(user, field.data?.ownerID));
+    }, [field.data, user]);
+
+    if (field.loading || appointments.loading) {
+        return <Placeholder size={"large"}/>
+    }
 
     return (
-        field ?
         <Flex direction={"column"}>
             <Flex direction={"column"} alignSelf={"center"}>
-                <FigmaField field={field}/>
-                {isOwner && <FieldOwnerFunctions updateFieldFunction={setField} fieldParam={field}/>}
+                <FigmaField field={field.data}/>
+                {isOwner && <FieldOwnerFunctions fieldParam={field.data}/>}
             </Flex>
 
-            <FieldFreeAppointmentsView field={field} appointments={fieldAppointments} user={user} date={date}
+            <FieldFreeAppointmentsView field={field.data} appointments={appointments.data} user={user} date={date}
                                        setDate={setDate}/>
-            {isOwner && <FieldOwnerAppointments appointments={fieldAppointments} date={date}/>}
-        </Flex> : <Loader variation="linear"/>
+            {isOwner && <FieldOwnerAppointments appointments={appointments.data} date={date}/>}
+        </Flex>
     );
 }
 

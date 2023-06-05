@@ -15,7 +15,6 @@ import {
   Grid,
   Icon,
   ScrollView,
-  SelectField,
   Text,
   TextField,
   useTheme,
@@ -546,10 +545,10 @@ export default function TeamCreateForm(props) {
         hasError={errors.name?.hasError}
         {...getOverrideProps(overrides, "name")}
       ></TextField>
-      <SelectField
+      <TextField
         label="Color"
-        placeholder="Please select an option"
-        isDisabled={false}
+        isRequired={false}
+        isReadOnly={false}
         value={color}
         onChange={(e) => {
           let { value } = e.target;
@@ -572,33 +571,7 @@ export default function TeamCreateForm(props) {
         errorMessage={errors.color?.errorMessage}
         hasError={errors.color?.hasError}
         {...getOverrideProps(overrides, "color")}
-      >
-        <option
-          children="Black"
-          value="BLACK"
-          {...getOverrideProps(overrides, "coloroption0")}
-        ></option>
-        <option
-          children="White"
-          value="WHITE"
-          {...getOverrideProps(overrides, "coloroption1")}
-        ></option>
-        <option
-          children="Red"
-          value="RED"
-          {...getOverrideProps(overrides, "coloroption2")}
-        ></option>
-        <option
-          children="Yellow"
-          value="YELLOW"
-          {...getOverrideProps(overrides, "coloroption3")}
-        ></option>
-        <option
-          children="Blue"
-          value="BLUE"
-          {...getOverrideProps(overrides, "coloroption4")}
-        ></option>
-      </SelectField>
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

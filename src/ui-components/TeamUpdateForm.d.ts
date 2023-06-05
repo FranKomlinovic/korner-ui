@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Team, Response } from "../models";
 export declare type ValidationResponse = {
@@ -31,7 +31,7 @@ export declare type TeamUpdateFormOverridesProps = {
     appointmentID?: PrimitiveOverrideProps<AutocompleteProps>;
     Responses?: PrimitiveOverrideProps<AutocompleteProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
-    color?: PrimitiveOverrideProps<SelectFieldProps>;
+    color?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TeamUpdateFormProps = React.PropsWithChildren<{
     overrides?: TeamUpdateFormOverridesProps | undefined | null;

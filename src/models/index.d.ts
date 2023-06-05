@@ -2,14 +2,6 @@ import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
-export enum Color {
-  BLACK = "BLACK",
-  WHITE = "WHITE",
-  RED = "RED",
-  YELLOW = "YELLOW",
-  BLUE = "BLUE"
-}
-
 export enum Cities {
   PETRINJA = "PETRINJA",
   ZAGREB = "ZAGREB"
@@ -39,7 +31,7 @@ type EagerTeam = {
   readonly appointmentID: string;
   readonly Responses?: (Response | null)[] | null;
   readonly name?: string | null;
-  readonly color?: Color | keyof typeof Color | null;
+  readonly color?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -53,7 +45,7 @@ type LazyTeam = {
   readonly appointmentID: string;
   readonly Responses: AsyncCollection<Response>;
   readonly name?: string | null;
-  readonly color?: Color | keyof typeof Color | null;
+  readonly color?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

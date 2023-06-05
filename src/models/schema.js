@@ -43,9 +43,7 @@ export const schema = {
                 "color": {
                     "name": "color",
                     "isArray": false,
-                    "type": {
-                        "enum": "Color"
-                    },
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -832,16 +830,6 @@ export const schema = {
         }
     },
     "enums": {
-        "Color": {
-            "name": "Color",
-            "values": [
-                "BLACK",
-                "WHITE",
-                "RED",
-                "YELLOW",
-                "BLUE"
-            ]
-        },
         "Cities": {
             "name": "Cities",
             "values": [
@@ -869,5 +857,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.3",
-    "version": "126d36dc734105a173bc03e0d33d0f67"
+    "version": "de71aebb02be91b3008e749daede9994"
 };

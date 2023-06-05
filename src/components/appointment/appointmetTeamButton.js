@@ -21,17 +21,16 @@ const AppointmentTeamButton = ({teams, appointment, checked, checkedFunction, re
 
     useEffect(() => {
         setTeamsToCreate(getFirstNTeams(teamNumberToCreate))
-        responses ?
-            setResps(chunkIntoN(responses, teamNumberToCreate)) :
-            console.log("a")
+        responses &&
+            setResps(chunkIntoN(responses, teamNumberToCreate))
     }, [responses, teamNumberToCreate])
 
-    const TShirtButton = ({suggested}) => {
+    const TShirtButton = ({suggested, eKey}) => {
         const [name, setName] = useState(suggested.name);
         const [isChanged, setIsChanged] = useState(false);
         const [color, setColor] = useState(suggested.color);
 
-        return (<Flex alignItems={"end"}>
+        return (<Flex key={eKey} alignItems={"end"}>
             <TextField
                 value={name}
                 label="Ime ekipe:"
@@ -75,8 +74,8 @@ const AppointmentTeamButton = ({teams, appointment, checked, checkedFunction, re
                             label="Broj ekipa"
                         />
                     </Flex>
-                    {teamsToCreate.map(a => (
-                        <TShirtButton suggested={a}/>)
+                    {teamsToCreate.map((model, index) => (
+                        <TShirtButton eKey={index} suggested={model}/>)
                     )}
                     <Button backgroundColor={"green.80"} variation={"primary"} onClick={() => {
                         let map = teamsToCreate.map(a =>

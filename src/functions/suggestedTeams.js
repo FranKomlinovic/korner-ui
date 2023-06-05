@@ -2,23 +2,24 @@
 
 export function getFirstNTeams(count: number) {
     const suggestedFirstNTeams = [
-        {name: "Crni", color: "black"},
-        {name: "Bijeli", color: "#EDEADE"},
-        {name: "Crveni", color: "red"},
-        {name: "Žuti", color: "yellow"},
-        {name: "Plavi", color: "blue"},
+        {name: "Bijeli", color: "#EDF1FF"},
+        {name: "Crni", color: "#000000"},
+        {name: "Crveni", color: "#9B2335"},
+        {name: "Plavi", color: "#5B5EA6"},
+        {name: "Žuti", color: "#EFC050"},
+        {name: "Zeleni", color: "#009B77"},
     ]
     return suggestedFirstNTeams.slice(0, count);
 }
 
 export function suggestNextTeam(color: string, currentTeams) {
     const suggestedTeams = [
-        {name: "Crni", color: "black"},
-        {name: "Bijeli", color: "#EDEADE"},
-        {name: "Crveni", color: "red"},
-        {name: "Žuti", color: "yellow"},
-        {name: "Plavi", color: "blue"},
-        {name: "Zeleni", color: "green"},
+        {name: "Bijeli", color: "#EDF1FF"},
+        {name: "Crni", color: "#000000"},
+        {name: "Crveni", color: "#9B2335"},
+        {name: "Plavi", color: "#5B5EA6"},
+        {name: "Žuti", color: "#EFC050"},
+        {name: "Zeleni", color: "#009B77"},
     ]
 
     const colorIndex = suggestedTeams.findIndex(a => a.color === color);

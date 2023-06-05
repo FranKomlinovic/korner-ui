@@ -66,7 +66,7 @@ const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) =
             <Card variation={"elevated"} marginInline={"1rem"}>
             <Heading level={4}>Rezerviraj termin:</Heading>
                 <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
-                    <FieldConfirmAppointmentReservation appointment={appointmentToCreate} field={field} user={user}/>
+                    <FieldConfirmAppointmentReservation onCreateFunction={() => setModalOpen(false)} appointment={appointmentToCreate} field={field} user={user}/>
                 </Dialog>
                 {DateAndDurationDropdowns()}
                 {AppointmentButtons()}

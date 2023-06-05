@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {FaTshirt} from "react-icons/fa";
 import {Storage} from "aws-amplify";
-import {Flex, Heading, Image, MenuItem, Text} from "@aws-amplify/ui-react";
+import {Flex, Image, Text} from "@aws-amplify/ui-react";
 
-const FigmaTeamPlayer = ({response, team, teams}) => {
+const FigmaTeamPlayer = ({myKey, response}) => {
 
     const [photo, setPhoto] = useState(null);
     const [playerName, setPlayerName] = useState(null);
@@ -22,22 +21,12 @@ const FigmaTeamPlayer = ({response, team, teams}) => {
     }, [response]);
 
     return (
-        <Flex alignItems={"center"}>
-            <Flex gap={"0.2rem"} alignItems={"center"} direction={"column"}>
-                <Image src={photo} borderRadius={400} objectFit={"cover"} width={"3rem"} height={"3rem"}
-                       color={"white"} alt={"Slika"}/>
-                <Text textAlign={"center"} fontSize={"small"}>{playerName}</Text>
-            </Flex>
-            {/*{*/}
-            {/*    teams.map(a => {*/}
-            {/*        return (<Flex direction={"column"}>*/}
-            {/*            <FaTshirt color={a.color}/>*/}
-            {/*            <Heading>{a.name}</Heading>*/}
-            {/*        </Flex>*/}
-            {/*        )*/}
-            {/*    })*/}
-            {/*}*/}
-        </Flex>)
+        <Flex key={myKey} width={"4rem"} gap={"0.2rem"} alignItems={"center"} direction={"column"}>
+            <Image src={photo} borderRadius={400} objectFit={"cover"} width={"3rem"} height={"3rem"}
+                   color={"white"} alt={"Slika"}/>
+            <Text height={"3rem"} textAlign={"center"} fontSize={"smaller"}>{playerName}</Text>
+        </Flex>
+    )
 }
 
 export default FigmaTeamPlayer;

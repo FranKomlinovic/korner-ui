@@ -7,7 +7,7 @@ import UploadComponent from "../UploadComponent";
 import FieldsUpdateForm from "../../ui-components/FieldsUpdateForm";
 
 
-const FieldOwnerFunctions = ({fieldParam, updateFieldFunction}) => {
+const FieldOwnerFunctions = ({fieldParam}) => {
     const [modalOpen, setModalOpen] = useState(false)
     const [field, setField] = useState()
     const [showUpdateForm, setShowUpdateForm] = useState(false)
@@ -22,22 +22,20 @@ const FieldOwnerFunctions = ({fieldParam, updateFieldFunction}) => {
             item.photo = photo.key;
         })).then((a) => {
             setField(a);
-            updateFieldFunction(a);
             setModalOpen(false);
         });
     };
 
     return (
         <Flex alignItems={"center"} justifyContent={"center"}>
-            <Button onClick={() => setModalOpen(true)}>Učitaj sliku</Button>
-            <Button onClick={() => setShowUpdateForm(!showUpdateForm)}>Uredi informacije</Button>
+            <Button backgroundColor={"white"} onClick={() => setModalOpen(true)}>Učitaj sliku</Button>
+            <Button backgroundColor={"white"} onClick={() => setShowUpdateForm(!showUpdateForm)}>Uredi informacije</Button>
             <UploadComponent open={modalOpen} uploadSuccessFunction={addPhotoToField}
-                             handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
+                             handleClose={() => setModalOpen(false)} text={"Promijeni sliku terena"}/>
             <Dialog open={showUpdateForm} onClose={() => setShowUpdateForm(false)}>
                 <DialogTitle>Ažuriraj teren</DialogTitle>
                 <FieldsUpdateForm onCancel={() => setShowUpdateForm(false)}
                                   onSuccess={(a) => {
-                                      window.location.reload()
                                       setShowUpdateForm(false)
                                   }}
                                   fields={field}
