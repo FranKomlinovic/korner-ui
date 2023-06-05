@@ -21,7 +21,7 @@ Amplify.configure(awsExports);
 
 function App() {
     const navigate = useNavigate();
-    const [image, setImage] = useState("/no-picture.png");
+    const [image, setImage] = useState();
 
     const {user} = useAuthenticator((context) => [
         context.user
@@ -38,6 +38,8 @@ function App() {
             }).catch(() => {
                 setImage("/no-picture.png");
             })
+        } else {
+            setImage("/no-picture.png");
         }
     }, [user])
 

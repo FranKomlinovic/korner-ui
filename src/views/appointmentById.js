@@ -13,6 +13,7 @@ import {getAppointmentStatus} from "../functions/appointmentUItils";
 import useGetAppointmentTeams from "../custom-hooks/appointment/useGetAppointmentTeams";
 import useGetAppointment from "../custom-hooks/appointment/useGetAppointment";
 import useGetAppointmentResponses from "../custom-hooks/appointment/useGetAppointmentResponses";
+import {Storage} from 'aws-amplify';
 
 
 const AppointmentById = () => {
@@ -24,7 +25,7 @@ const AppointmentById = () => {
     const [field, setField] = useState();
     const [appointmentStatus, setAppointmentStatus] = useState();
     const [role, setRole] = useState();
-    const [photo, setPhoto] = useState("/no-field.jpg");
+    const [photo, setPhoto] = useState();
     const [open, setOpen] = useState(false);
     const [userModel, setUserModel] = useState();
     const [appointmentView, setAppointmentView] = useState();
@@ -36,6 +37,7 @@ const AppointmentById = () => {
     useEffect(() => {
         appointment.data?.Fields.then(a => {
             setField(a);
+            console.log(a)
             a.photo ?
                 Storage.get(a.photo).then(b => {
                     setPhoto(b);

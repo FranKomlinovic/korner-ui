@@ -5,7 +5,7 @@ import {Storage} from "aws-amplify";
 
 const FigmaAppointment = ({appointment}) => {
 
-    const [photo, setPhoto] = useState("/no-field.jpg");
+    const [photo, setPhoto] = useState();
     const [field, setField] = useState();
     const [responseNumber, setResponseNumber] = useState();
 
