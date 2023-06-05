@@ -1,6 +1,105 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateTeam = /* GraphQL */ `
+  subscription OnCreateTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onCreateTeam(filter: $filter) {
+      id
+      appointmentID
+      Responses {
+        items {
+          id
+          playerID
+          accepted
+          appointmentID
+          playerName
+          playerPhoto
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      name
+      color
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateTeam = /* GraphQL */ `
+  subscription OnUpdateTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onUpdateTeam(filter: $filter) {
+      id
+      appointmentID
+      Responses {
+        items {
+          id
+          playerID
+          accepted
+          appointmentID
+          playerName
+          playerPhoto
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      name
+      color
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteTeam = /* GraphQL */ `
+  subscription OnDeleteTeam($filter: ModelSubscriptionTeamFilterInput) {
+    onDeleteTeam(filter: $filter) {
+      id
+      appointmentID
+      Responses {
+        items {
+          id
+          playerID
+          accepted
+          appointmentID
+          playerName
+          playerPhoto
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      name
+      color
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
     onCreateUser(filter: $filter) {
@@ -166,6 +265,7 @@ export const onCreateResponse = /* GraphQL */ `
       appointmentID
       playerName
       playerPhoto
+      teamID
       createdAt
       updatedAt
       _version
@@ -183,6 +283,7 @@ export const onUpdateResponse = /* GraphQL */ `
       appointmentID
       playerName
       playerPhoto
+      teamID
       createdAt
       updatedAt
       _version
@@ -200,6 +301,7 @@ export const onDeleteResponse = /* GraphQL */ `
       appointmentID
       playerName
       playerPhoto
+      teamID
       createdAt
       updatedAt
       _version
@@ -225,6 +327,7 @@ export const onCreateAppointment = /* GraphQL */ `
           appointmentID
           playerName
           playerPhoto
+          teamID
           createdAt
           updatedAt
           _version
@@ -271,6 +374,21 @@ export const onCreateAppointment = /* GraphQL */ `
         _lastChangedAt
       }
       locked
+      Teams {
+        items {
+          id
+          appointmentID
+          name
+          color
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -296,6 +414,7 @@ export const onUpdateAppointment = /* GraphQL */ `
           appointmentID
           playerName
           playerPhoto
+          teamID
           createdAt
           updatedAt
           _version
@@ -342,6 +461,21 @@ export const onUpdateAppointment = /* GraphQL */ `
         _lastChangedAt
       }
       locked
+      Teams {
+        items {
+          id
+          appointmentID
+          name
+          color
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -367,6 +501,7 @@ export const onDeleteAppointment = /* GraphQL */ `
           appointmentID
           playerName
           playerPhoto
+          teamID
           createdAt
           updatedAt
           _version
@@ -413,6 +548,21 @@ export const onDeleteAppointment = /* GraphQL */ `
         _lastChangedAt
       }
       locked
+      Teams {
+        items {
+          id
+          appointmentID
+          name
+          color
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version

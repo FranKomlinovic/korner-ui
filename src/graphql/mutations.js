@@ -1,6 +1,114 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createTeam = /* GraphQL */ `
+  mutation CreateTeam(
+    $input: CreateTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    createTeam(input: $input, condition: $condition) {
+      id
+      appointmentID
+      Responses {
+        items {
+          id
+          playerID
+          accepted
+          appointmentID
+          playerName
+          playerPhoto
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      name
+      color
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeam = /* GraphQL */ `
+  mutation UpdateTeam(
+    $input: UpdateTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    updateTeam(input: $input, condition: $condition) {
+      id
+      appointmentID
+      Responses {
+        items {
+          id
+          playerID
+          accepted
+          appointmentID
+          playerName
+          playerPhoto
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      name
+      color
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeam = /* GraphQL */ `
+  mutation DeleteTeam(
+    $input: DeleteTeamInput!
+    $condition: ModelTeamConditionInput
+  ) {
+    deleteTeam(input: $input, condition: $condition) {
+      id
+      appointmentID
+      Responses {
+        items {
+          id
+          playerID
+          accepted
+          appointmentID
+          playerName
+          playerPhoto
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      name
+      color
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
@@ -184,6 +292,7 @@ export const createResponse = /* GraphQL */ `
       appointmentID
       playerName
       playerPhoto
+      teamID
       createdAt
       updatedAt
       _version
@@ -204,6 +313,7 @@ export const updateResponse = /* GraphQL */ `
       appointmentID
       playerName
       playerPhoto
+      teamID
       createdAt
       updatedAt
       _version
@@ -224,6 +334,7 @@ export const deleteResponse = /* GraphQL */ `
       appointmentID
       playerName
       playerPhoto
+      teamID
       createdAt
       updatedAt
       _version
@@ -250,6 +361,7 @@ export const createAppointment = /* GraphQL */ `
           appointmentID
           playerName
           playerPhoto
+          teamID
           createdAt
           updatedAt
           _version
@@ -296,6 +408,21 @@ export const createAppointment = /* GraphQL */ `
         _lastChangedAt
       }
       locked
+      Teams {
+        items {
+          id
+          appointmentID
+          name
+          color
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -322,6 +449,7 @@ export const updateAppointment = /* GraphQL */ `
           appointmentID
           playerName
           playerPhoto
+          teamID
           createdAt
           updatedAt
           _version
@@ -368,6 +496,21 @@ export const updateAppointment = /* GraphQL */ `
         _lastChangedAt
       }
       locked
+      Teams {
+        items {
+          id
+          appointmentID
+          name
+          color
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -394,6 +537,7 @@ export const deleteAppointment = /* GraphQL */ `
           appointmentID
           playerName
           playerPhoto
+          teamID
           createdAt
           updatedAt
           _version
@@ -440,6 +584,21 @@ export const deleteAppointment = /* GraphQL */ `
         _lastChangedAt
       }
       locked
+      Teams {
+        items {
+          id
+          appointmentID
+          name
+          color
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version

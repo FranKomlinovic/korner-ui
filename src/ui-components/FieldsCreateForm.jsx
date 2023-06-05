@@ -7,7 +7,6 @@
 /* eslint-disable */
 import * as React from "react";
 import {
-  Autocomplete,
   Badge,
   Button,
   Divider,
@@ -20,11 +19,8 @@ import {
   TextField,
   useTheme,
 } from "@aws-amplify/ui-react";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from "@aws-amplify/ui-react/internal";
-import { Fields, Appointment, ReccuringAppointment } from "../models";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { Fields } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -203,12 +199,10 @@ export default function FieldsCreateForm(props) {
     length: "",
     price: "",
     minPlayers: "",
-    Appointments: [],
     surface: "",
     photo: "",
     sports: [],
     city: "",
-    ReccuringAppointments: [],
     ownerID: "",
     workTimeStart: "",
     workTimeEnd: "",
@@ -219,16 +213,10 @@ export default function FieldsCreateForm(props) {
   const [length, setLength] = React.useState(initialValues.length);
   const [price, setPrice] = React.useState(initialValues.price);
   const [minPlayers, setMinPlayers] = React.useState(initialValues.minPlayers);
-  const [Appointments, setAppointments] = React.useState(
-    initialValues.Appointments
-  );
   const [surface, setSurface] = React.useState(initialValues.surface);
   const [photo, setPhoto] = React.useState(initialValues.photo);
   const [sports, setSports] = React.useState(initialValues.sports);
   const [city, setCity] = React.useState(initialValues.city);
-  const [ReccuringAppointments, setReccuringAppointments] = React.useState(
-    initialValues.ReccuringAppointments
-  );
   const [ownerID, setOwnerID] = React.useState(initialValues.ownerID);
   const [workTimeStart, setWorkTimeStart] = React.useState(
     initialValues.workTimeStart
@@ -244,62 +232,19 @@ export default function FieldsCreateForm(props) {
     setLength(initialValues.length);
     setPrice(initialValues.price);
     setMinPlayers(initialValues.minPlayers);
-    setAppointments(initialValues.Appointments);
-    setCurrentAppointmentsValue(undefined);
-    setCurrentAppointmentsDisplayValue("");
     setSurface(initialValues.surface);
     setPhoto(initialValues.photo);
     setSports(initialValues.sports);
     setCurrentSportsValue("");
     setCity(initialValues.city);
-    setReccuringAppointments(initialValues.ReccuringAppointments);
-    setCurrentReccuringAppointmentsValue(undefined);
-    setCurrentReccuringAppointmentsDisplayValue("");
     setOwnerID(initialValues.ownerID);
     setWorkTimeStart(initialValues.workTimeStart);
     setWorkTimeEnd(initialValues.workTimeEnd);
     setErrors({});
   };
-  const [currentAppointmentsDisplayValue, setCurrentAppointmentsDisplayValue] =
-    React.useState("");
-  const [currentAppointmentsValue, setCurrentAppointmentsValue] =
-    React.useState(undefined);
-  const AppointmentsRef = React.createRef();
   const [currentSportsValue, setCurrentSportsValue] = React.useState("");
   const sportsRef = React.createRef();
-  const [
-    currentReccuringAppointmentsDisplayValue,
-    setCurrentReccuringAppointmentsDisplayValue,
-  ] = React.useState("");
-  const [
-    currentReccuringAppointmentsValue,
-    setCurrentReccuringAppointmentsValue,
-  ] = React.useState(undefined);
-  const ReccuringAppointmentsRef = React.createRef();
-  const getIDValue = {
-    Appointments: (r) => JSON.stringify({ id: r?.id }),
-    ReccuringAppointments: (r) => JSON.stringify({ id: r?.id }),
-  };
-  const AppointmentsIdSet = new Set(
-    Array.isArray(Appointments)
-      ? Appointments.map((r) => getIDValue.Appointments?.(r))
-      : getIDValue.Appointments?.(Appointments)
-  );
-  const ReccuringAppointmentsIdSet = new Set(
-    Array.isArray(ReccuringAppointments)
-      ? ReccuringAppointments.map((r) => getIDValue.ReccuringAppointments?.(r))
-      : getIDValue.ReccuringAppointments?.(ReccuringAppointments)
-  );
-  const appointmentRecords = useDataStoreBinding({
-    type: "collection",
-    model: Appointment,
-  }).items;
-  const reccuringAppointmentRecords = useDataStoreBinding({
-    type: "collection",
-    model: ReccuringAppointment,
-  }).items;
   const getDisplayValue = {
-    Appointments: (r) => `${r?.confirmed ? r?.confirmed + " - " : ""}${r?.id}`,
     sports: (r) => {
       const enumDisplayValueMap = {
         FUTSAL: "Futsal",
@@ -308,22 +253,25 @@ export default function FieldsCreateForm(props) {
       };
       return enumDisplayValueMap[r];
     },
-    ReccuringAppointments: (r) =>
-      `${r?.dayOfTheWeek ? r?.dayOfTheWeek + " - " : ""}${r?.id}`,
   };
   const validations = {
-    name: [],
-    address: [],
+    name: [{ type: "Required" }],
+    address: [{ type: "Required" }],
     width: [],
     length: [],
     price: [],
-    minPlayers: [],
-    Appointments: [],
+    minPlayers: [
+      { type: "Required" },
+      {
+        type: "GreaterThanNum",
+        numValues: [2],
+        validationMessage: "Mora biti ve\u0107e od 2",
+      },
+    ],
     surface: [],
-    photo: [],
+    photo: [{ type: "URL" }],
     sports: [],
     city: [],
-    ReccuringAppointments: [],
     ownerID: [],
     workTimeStart: [],
     workTimeEnd: [],
@@ -360,12 +308,10 @@ export default function FieldsCreateForm(props) {
           length,
           price,
           minPlayers,
-          Appointments,
           surface,
           photo,
           sports,
           city,
-          ReccuringAppointments,
           ownerID,
           workTimeStart,
           workTimeEnd,
@@ -375,21 +321,13 @@ export default function FieldsCreateForm(props) {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(
-                    fieldName,
-                    item,
-                    getDisplayValue[fieldName]
-                  )
+                  runValidationTasks(fieldName, item)
                 )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(
-                fieldName,
-                modelFields[fieldName],
-                getDisplayValue[fieldName]
-              )
+              runValidationTasks(fieldName, modelFields[fieldName])
             );
             return promises;
           }, [])
@@ -406,48 +344,7 @@ export default function FieldsCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          const modelFieldsToSave = {
-            name: modelFields.name,
-            address: modelFields.address,
-            width: modelFields.width,
-            length: modelFields.length,
-            price: modelFields.price,
-            minPlayers: modelFields.minPlayers,
-            surface: modelFields.surface,
-            photo: modelFields.photo,
-            sports: modelFields.sports,
-            city: modelFields.city,
-            ownerID: modelFields.ownerID,
-            workTimeStart: modelFields.workTimeStart,
-            workTimeEnd: modelFields.workTimeEnd,
-          };
-          const fields = await DataStore.save(new Fields(modelFieldsToSave));
-          const promises = [];
-          promises.push(
-            ...Appointments.reduce((promises, original) => {
-              promises.push(
-                DataStore.save(
-                  Appointment.copyOf(original, (updated) => {
-                    updated.Fields = fields;
-                  })
-                )
-              );
-              return promises;
-            }, [])
-          );
-          promises.push(
-            ...ReccuringAppointments.reduce((promises, original) => {
-              promises.push(
-                DataStore.save(
-                  ReccuringAppointment.copyOf(original, (updated) => {
-                    updated.fieldsID = fields.id;
-                  })
-                )
-              );
-              return promises;
-            }, [])
-          );
-          await Promise.all(promises);
+          await DataStore.save(new Fields(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -464,9 +361,10 @@ export default function FieldsCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Name"
-        isRequired={false}
+        label="Naziv"
+        isRequired={true}
         isReadOnly={false}
+        placeholder="Dvorana u Petrinji"
         value={name}
         onChange={(e) => {
           let { value } = e.target;
@@ -478,12 +376,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -502,9 +398,10 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Address"
-        isRequired={false}
+        label="Adresa"
+        isRequired={true}
         isReadOnly={false}
+        placeholder="Ulica kornera 24, Petrinja"
         value={address}
         onChange={(e) => {
           let { value } = e.target;
@@ -516,12 +413,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -540,9 +435,10 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "address")}
       ></TextField>
       <TextField
-        label="Width"
+        label="Širina(m)"
         isRequired={false}
         isReadOnly={false}
+        placeholder="20"
         type="number"
         step="any"
         value={width}
@@ -558,12 +454,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -582,9 +476,10 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "width")}
       ></TextField>
       <TextField
-        label="Length"
+        label="Duljina(m)"
         isRequired={false}
         isReadOnly={false}
+        placeholder="40"
         type="number"
         step="any"
         value={length}
@@ -600,12 +495,10 @@ export default function FieldsCreateForm(props) {
               length: value,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -624,9 +517,10 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "length")}
       ></TextField>
       <TextField
-        label="Price"
+        label="Cijena sata (€)"
         isRequired={false}
         isReadOnly={false}
+        placeholder="40"
         type="number"
         step="any"
         value={price}
@@ -642,12 +536,10 @@ export default function FieldsCreateForm(props) {
               length,
               price: value,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -666,9 +558,10 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "price")}
       ></TextField>
       <TextField
-        label="Min players"
-        isRequired={false}
+        label="Minimalni broj igrača"
+        isRequired={true}
         isReadOnly={false}
+        placeholder="10"
         type="number"
         step="any"
         value={minPlayers}
@@ -684,12 +577,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers: value,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -707,96 +598,9 @@ export default function FieldsCreateForm(props) {
         hasError={errors.minPlayers?.hasError}
         {...getOverrideProps(overrides, "minPlayers")}
       ></TextField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              width,
-              length,
-              price,
-              minPlayers,
-              Appointments: values,
-              surface,
-              photo,
-              sports,
-              city,
-              ReccuringAppointments,
-              ownerID,
-              workTimeStart,
-              workTimeEnd,
-            };
-            const result = onChange(modelFields);
-            values = result?.Appointments ?? values;
-          }
-          setAppointments(values);
-          setCurrentAppointmentsValue(undefined);
-          setCurrentAppointmentsDisplayValue("");
-        }}
-        currentFieldValue={currentAppointmentsValue}
-        label={"Appointments"}
-        items={Appointments}
-        hasError={errors?.Appointments?.hasError}
-        errorMessage={errors?.Appointments?.errorMessage}
-        getBadgeText={getDisplayValue.Appointments}
-        setFieldValue={(model) => {
-          setCurrentAppointmentsDisplayValue(
-            model ? getDisplayValue.Appointments(model) : ""
-          );
-          setCurrentAppointmentsValue(model);
-        }}
-        inputFieldRef={AppointmentsRef}
-        defaultFieldValue={""}
-      >
-        <Autocomplete
-          label="Appointments"
-          isRequired={false}
-          isReadOnly={false}
-          placeholder="Search Appointment"
-          value={currentAppointmentsDisplayValue}
-          options={appointmentRecords
-            .filter((r) => !AppointmentsIdSet.has(getIDValue.Appointments?.(r)))
-            .map((r) => ({
-              id: getIDValue.Appointments?.(r),
-              label: getDisplayValue.Appointments?.(r),
-            }))}
-          onSelect={({ id, label }) => {
-            setCurrentAppointmentsValue(
-              appointmentRecords.find((r) =>
-                Object.entries(JSON.parse(id)).every(
-                  ([key, value]) => r[key] === value
-                )
-              )
-            );
-            setCurrentAppointmentsDisplayValue(label);
-            runValidationTasks("Appointments", label);
-          }}
-          onClear={() => {
-            setCurrentAppointmentsDisplayValue("");
-          }}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.Appointments?.hasError) {
-              runValidationTasks("Appointments", value);
-            }
-            setCurrentAppointmentsDisplayValue(value);
-            setCurrentAppointmentsValue(undefined);
-          }}
-          onBlur={() =>
-            runValidationTasks("Appointments", currentAppointmentsDisplayValue)
-          }
-          errorMessage={errors.Appointments?.errorMessage}
-          hasError={errors.Appointments?.hasError}
-          ref={AppointmentsRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "Appointments")}
-        ></Autocomplete>
-      </ArrayField>
       <SelectField
         label="Surface"
-        placeholder="Please select an option"
+        placeholder="Izaberite podlogu"
         isDisabled={false}
         value={surface}
         onChange={(e) => {
@@ -809,12 +613,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface: value,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -833,22 +635,22 @@ export default function FieldsCreateForm(props) {
         {...getOverrideProps(overrides, "surface")}
       >
         <option
-          children="Artificial grass"
+          children="Umjetna trava"
           value="ARTIFICIAL_GRASS"
           {...getOverrideProps(overrides, "surfaceoption0")}
         ></option>
         <option
-          children="Rubber"
+          children="Guma"
           value="RUBBER"
           {...getOverrideProps(overrides, "surfaceoption1")}
         ></option>
         <option
-          children="Concrete"
+          children="Beton"
           value="CONCRETE"
           {...getOverrideProps(overrides, "surfaceoption2")}
         ></option>
         <option
-          children="Wood"
+          children="Parket"
           value="WOOD"
           {...getOverrideProps(overrides, "surfaceoption3")}
         ></option>
@@ -868,12 +670,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo: value,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -902,12 +702,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports: values,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -930,7 +728,7 @@ export default function FieldsCreateForm(props) {
       >
         <SelectField
           label="Sports"
-          placeholder="Please select an option"
+          placeholder="Odaberite sportove"
           isDisabled={false}
           value={currentSportsValue}
           onChange={(e) => {
@@ -966,7 +764,7 @@ export default function FieldsCreateForm(props) {
       </ArrayField>
       <SelectField
         label="City"
-        placeholder="Please select an option"
+        placeholder="Odaberite grad"
         isDisabled={false}
         value={city}
         onChange={(e) => {
@@ -979,12 +777,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city: value,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd,
@@ -1013,101 +809,6 @@ export default function FieldsCreateForm(props) {
           {...getOverrideProps(overrides, "cityoption1")}
         ></option>
       </SelectField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              width,
-              length,
-              price,
-              minPlayers,
-              Appointments,
-              surface,
-              photo,
-              sports,
-              city,
-              ReccuringAppointments: values,
-              ownerID,
-              workTimeStart,
-              workTimeEnd,
-            };
-            const result = onChange(modelFields);
-            values = result?.ReccuringAppointments ?? values;
-          }
-          setReccuringAppointments(values);
-          setCurrentReccuringAppointmentsValue(undefined);
-          setCurrentReccuringAppointmentsDisplayValue("");
-        }}
-        currentFieldValue={currentReccuringAppointmentsValue}
-        label={"Reccuring appointments"}
-        items={ReccuringAppointments}
-        hasError={errors?.ReccuringAppointments?.hasError}
-        errorMessage={errors?.ReccuringAppointments?.errorMessage}
-        getBadgeText={getDisplayValue.ReccuringAppointments}
-        setFieldValue={(model) => {
-          setCurrentReccuringAppointmentsDisplayValue(
-            model ? getDisplayValue.ReccuringAppointments(model) : ""
-          );
-          setCurrentReccuringAppointmentsValue(model);
-        }}
-        inputFieldRef={ReccuringAppointmentsRef}
-        defaultFieldValue={""}
-      >
-        <Autocomplete
-          label="Reccuring appointments"
-          isRequired={false}
-          isReadOnly={false}
-          placeholder="Search ReccuringAppointment"
-          value={currentReccuringAppointmentsDisplayValue}
-          options={reccuringAppointmentRecords
-            .filter(
-              (r) =>
-                !ReccuringAppointmentsIdSet.has(
-                  getIDValue.ReccuringAppointments?.(r)
-                )
-            )
-            .map((r) => ({
-              id: getIDValue.ReccuringAppointments?.(r),
-              label: getDisplayValue.ReccuringAppointments?.(r),
-            }))}
-          onSelect={({ id, label }) => {
-            setCurrentReccuringAppointmentsValue(
-              reccuringAppointmentRecords.find((r) =>
-                Object.entries(JSON.parse(id)).every(
-                  ([key, value]) => r[key] === value
-                )
-              )
-            );
-            setCurrentReccuringAppointmentsDisplayValue(label);
-            runValidationTasks("ReccuringAppointments", label);
-          }}
-          onClear={() => {
-            setCurrentReccuringAppointmentsDisplayValue("");
-          }}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.ReccuringAppointments?.hasError) {
-              runValidationTasks("ReccuringAppointments", value);
-            }
-            setCurrentReccuringAppointmentsDisplayValue(value);
-            setCurrentReccuringAppointmentsValue(undefined);
-          }}
-          onBlur={() =>
-            runValidationTasks(
-              "ReccuringAppointments",
-              currentReccuringAppointmentsDisplayValue
-            )
-          }
-          errorMessage={errors.ReccuringAppointments?.errorMessage}
-          hasError={errors.ReccuringAppointments?.hasError}
-          ref={ReccuringAppointmentsRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "ReccuringAppointments")}
-        ></Autocomplete>
-      </ArrayField>
       <TextField
         label="Owner id"
         isRequired={false}
@@ -1123,12 +824,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID: value,
               workTimeStart,
               workTimeEnd,
@@ -1162,12 +861,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart: value,
               workTimeEnd,
@@ -1201,12 +898,10 @@ export default function FieldsCreateForm(props) {
               length,
               price,
               minPlayers,
-              Appointments,
               surface,
               photo,
               sports,
               city,
-              ReccuringAppointments,
               ownerID,
               workTimeStart,
               workTimeEnd: value,

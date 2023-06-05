@@ -1,6 +1,134 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getTeam = /* GraphQL */ `
+  query GetTeam($id: ID!) {
+    getTeam(id: $id) {
+      id
+      appointmentID
+      Responses {
+        items {
+          id
+          playerID
+          accepted
+          appointmentID
+          playerName
+          playerPhoto
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      name
+      color
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listTeams = /* GraphQL */ `
+  query ListTeams(
+    $filter: ModelTeamFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTeams(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        appointmentID
+        Responses {
+          nextToken
+          startedAt
+        }
+        name
+        color
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncTeams = /* GraphQL */ `
+  query SyncTeams(
+    $filter: ModelTeamFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncTeams(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        appointmentID
+        Responses {
+          nextToken
+          startedAt
+        }
+        name
+        color
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const teamsByAppointmentID = /* GraphQL */ `
+  query TeamsByAppointmentID(
+    $appointmentID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTeamFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    teamsByAppointmentID(
+      appointmentID: $appointmentID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        appointmentID
+        Responses {
+          nextToken
+          startedAt
+        }
+        name
+        color
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
@@ -258,6 +386,7 @@ export const getResponse = /* GraphQL */ `
       appointmentID
       playerName
       playerPhoto
+      teamID
       createdAt
       updatedAt
       _version
@@ -280,6 +409,7 @@ export const listResponses = /* GraphQL */ `
         appointmentID
         playerName
         playerPhoto
+        teamID
         createdAt
         updatedAt
         _version
@@ -311,6 +441,7 @@ export const syncResponses = /* GraphQL */ `
         appointmentID
         playerName
         playerPhoto
+        teamID
         createdAt
         updatedAt
         _version
@@ -344,6 +475,41 @@ export const responsesByAppointmentID = /* GraphQL */ `
         appointmentID
         playerName
         playerPhoto
+        teamID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const responsesByTeamID = /* GraphQL */ `
+  query ResponsesByTeamID(
+    $teamID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelResponseFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    responsesByTeamID(
+      teamID: $teamID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        playerID
+        accepted
+        appointmentID
+        playerName
+        playerPhoto
+        teamID
         createdAt
         updatedAt
         _version
@@ -370,6 +536,7 @@ export const getAppointment = /* GraphQL */ `
           appointmentID
           playerName
           playerPhoto
+          teamID
           createdAt
           updatedAt
           _version
@@ -416,6 +583,21 @@ export const getAppointment = /* GraphQL */ `
         _lastChangedAt
       }
       locked
+      Teams {
+        items {
+          id
+          appointmentID
+          name
+          color
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -469,6 +651,10 @@ export const listAppointments = /* GraphQL */ `
           _lastChangedAt
         }
         locked
+        Teams {
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version
@@ -531,6 +717,10 @@ export const syncAppointments = /* GraphQL */ `
           _lastChangedAt
         }
         locked
+        Teams {
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version
@@ -595,6 +785,10 @@ export const appointmentsByFieldsID = /* GraphQL */ `
           _lastChangedAt
         }
         locked
+        Teams {
+          nextToken
+          startedAt
+        }
         createdAt
         updatedAt
         _version
