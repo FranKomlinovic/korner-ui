@@ -24,7 +24,7 @@ Amplify.addPluggable(
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <ThemeProvider theme={studioTheme}>
+    <ThemeProvider theme={studioTheme} colorMode={"light"}>
         <React.StrictMode>
             <BrowserRouter>
                 <Authenticator.Provider>

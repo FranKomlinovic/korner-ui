@@ -5,7 +5,7 @@ import {Badge, Card, Flex, Grid, Heading, TabItem, Tabs, Text, useAuthenticator}
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
 import LandingPage from "./landing-page";
-import {FaPlusCircle, FaQuestion, FaRunning, FaUser} from "react-icons/fa";
+import {FaPlusCircle, FaQuestionCircle, FaRunning, FaUser} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 import {getCurrentDate, getCurrentTime} from "../functions/appointmentUItils";
 import {checkIfInOwnerGroup} from "../functions/converters";
@@ -123,7 +123,7 @@ const Home = () => {
         {url: "/fields", icon: <FaPlusCircle color={"#2E4732"} size={"3rem"}/>, text: "Rezerviraj"},
         {url: "/profile", icon: <FaUser color={"#2E4732"} size={"3rem"}/>, text: "Profil"},
         {url: "/played", icon: <FaRunning color={"#2E4732"} size={"3rem"}/>, text: "Odigrani termini"},
-        {url: "/help", icon: <FaQuestion color={"#2E4732"} size={"3rem"}/>, text: "Upute"},
+        {url: "/help", icon: <FaQuestionCircle color={"#2E4732"} size={"3rem"}/>, text: "Upute"},
     ]
     const MapToShortcut = () => {
         return (
