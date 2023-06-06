@@ -22,7 +22,7 @@ const AppointmentTeamButton = ({teams, appointment, checked, checkedFunction, re
     useEffect(() => {
         setTeamsToCreate(getFirstNTeams(teamNumberToCreate))
         responses &&
-            setResps(chunkIntoN(responses, teamNumberToCreate))
+        setResps(chunkIntoN(responses, teamNumberToCreate))
     }, [responses, teamNumberToCreate])
 
     const TShirtButton = ({suggested, eKey}) => {
@@ -101,20 +101,19 @@ const AppointmentTeamButton = ({teams, appointment, checked, checkedFunction, re
 
             </Dialog>
 
-            {appointment?.locked &&
-                <SwitchField
-                    label="Prikaži ekipe"
-                    labelPosition={"end"}
-                    isChecked={checked}
-                    variation={"quiet"}
-                    onChange={(a) => {
-                        if (teams?.length === 0 && !checked) {
-                            setOpen(true);
-                        } else {
-                            checkedFunction(!checked)
-                        }
-                    }}
-                />}
+            <SwitchField
+                label="Prikaži ekipe"
+                labelPosition={"end"}
+                isChecked={checked}
+                variation={"quiet"}
+                onChange={(a) => {
+                    if (teams?.length === 0 && !checked) {
+                        setOpen(true);
+                    } else {
+                        checkedFunction(!checked)
+                    }
+                }}
+            />
         </>)
 
 }

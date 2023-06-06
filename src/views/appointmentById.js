@@ -37,7 +37,6 @@ const AppointmentById = () => {
     useEffect(() => {
         appointment.data?.Fields.then(a => {
             setField(a);
-            console.log(a)
             a.photo ?
                 Storage.get(a.photo).then(b => {
                     setPhoto(b);
@@ -94,7 +93,7 @@ const AppointmentById = () => {
                 setAppointmentView(<CanceledAppointment responses={responses.data}/>)
                 break;
             case "played" :
-                setAppointmentView(<PlayedAppointment responses={responses.data}/>)
+                setAppointmentView(<PlayedAppointment appointment={appointment.data} teams={teams.data} role={role} responses={responses.data}/>)
                 break;
             default:
                 setAppointmentView(<Loader/>)

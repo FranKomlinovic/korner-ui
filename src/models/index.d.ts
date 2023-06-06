@@ -32,6 +32,7 @@ type EagerTeam = {
   readonly Responses?: (Response | null)[] | null;
   readonly name?: string | null;
   readonly color?: string | null;
+  readonly score?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -46,6 +47,7 @@ type LazyTeam = {
   readonly Responses: AsyncCollection<Response>;
   readonly name?: string | null;
   readonly color?: string | null;
+  readonly score?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

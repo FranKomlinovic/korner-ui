@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
-import {Button, Collection, Flex, Heading, ScrollView} from "@aws-amplify/ui-react";
+import {Button, Collection, Flex, Heading, ScrollView, SwitchField} from "@aws-amplify/ui-react";
 import {DataStore} from "aws-amplify";
 import {Response, Team} from "../../models";
 import {suggestNextTeam} from "../../functions/suggestedTeams";
@@ -11,6 +11,7 @@ import FigmaTeamPlayer from "../../figma-components/FigmaTeamPlayer";
 const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
     const [state, setState] = useState([]);
     const [responses, setResponses] = useState([]);
+    const [showDnd, setShowDnd] = useState(isOwner);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -248,7 +249,19 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
         );
     };
 
-    return (isOwner ? AdminView() : NoAdminView())
+    return (
+        <Flex direction={"column"}>
+            {isOwner && <SwitchField
+                label="Uredi ekipe"
+                labelPosition={"end"}
+                isChecked={showDnd}
+                variation={"quiet"}
+                onChange={(a) => {
+                    setShowDnd(a.target.checked)
+                }}
+            />}
+            {showDnd ? AdminView() : NoAdminView()}
+        </Flex>)
 
 }
 
