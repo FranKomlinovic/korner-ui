@@ -11,7 +11,7 @@ import FigmaTeamPlayer from "../../figma-components/FigmaTeamPlayer";
 const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
     const [state, setState] = useState([]);
     const [responses, setResponses] = useState([]);
-    const [showDnd, setShowDnd] = useState(isOwner);
+    const [showDnd, setShowDnd] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -107,9 +107,9 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
     }
 
     const NoAdminView = () => {
-        return state.map(a => {
+        return state.map((a,b) => {
             return (
-                <Flex direction={"column"} alignItems={"center"}>
+                <Flex key={b} direction={"column"} alignItems={"center"}>
                     <Flex alignItems={"center"}>
                         <FaTshirt size={"2rem"} color={a.team?.color}/>
                         <Heading level={5} textAlign={"center"}>{a.team?.name} ({a.responses?.length})</Heading>
