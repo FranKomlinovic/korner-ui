@@ -29,6 +29,7 @@ export const createTeam = /* GraphQL */ `
       }
       name
       color
+      score
       createdAt
       updatedAt
       _version
@@ -65,6 +66,7 @@ export const updateTeam = /* GraphQL */ `
       }
       name
       color
+      score
       createdAt
       updatedAt
       _version
@@ -101,6 +103,7 @@ export const deleteTeam = /* GraphQL */ `
       }
       name
       color
+      score
       createdAt
       updatedAt
       _version
@@ -414,6 +417,7 @@ export const createAppointment = /* GraphQL */ `
           appointmentID
           name
           color
+          score
           createdAt
           updatedAt
           _version
@@ -502,6 +506,7 @@ export const updateAppointment = /* GraphQL */ `
           appointmentID
           name
           color
+          score
           createdAt
           updatedAt
           _version
@@ -590,6 +595,7 @@ export const deleteAppointment = /* GraphQL */ `
           appointmentID
           name
           color
+          score
           createdAt
           updatedAt
           _version

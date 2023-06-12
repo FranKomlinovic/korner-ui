@@ -5,39 +5,45 @@
  **************************************************************************/
 
 import * as React from "react";
-import { AutocompleteProps, GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { ReccuringAppointment } from "../models";
+import { ReccuringAppointment, Appointment } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type ReccuringAppointmentUpdateFormInputValues = {
-    bookerId?: string;
-    dayOfTheWeek?: number;
+    bookerID?: string;
     start?: string;
     end?: string;
     fieldsID?: string;
-    active?: boolean;
+    startDate?: string;
+    endDate?: string;
+    bookerName?: string;
+    Appointments?: Appointment[];
 };
 export declare type ReccuringAppointmentUpdateFormValidationValues = {
-    bookerId?: ValidationFunction<string>;
-    dayOfTheWeek?: ValidationFunction<number>;
+    bookerID?: ValidationFunction<string>;
     start?: ValidationFunction<string>;
     end?: ValidationFunction<string>;
     fieldsID?: ValidationFunction<string>;
-    active?: ValidationFunction<boolean>;
+    startDate?: ValidationFunction<string>;
+    endDate?: ValidationFunction<string>;
+    bookerName?: ValidationFunction<string>;
+    Appointments?: ValidationFunction<Appointment>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ReccuringAppointmentUpdateFormOverridesProps = {
     ReccuringAppointmentUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    bookerId?: PrimitiveOverrideProps<TextFieldProps>;
-    dayOfTheWeek?: PrimitiveOverrideProps<TextFieldProps>;
+    bookerID?: PrimitiveOverrideProps<TextFieldProps>;
     start?: PrimitiveOverrideProps<TextFieldProps>;
     end?: PrimitiveOverrideProps<TextFieldProps>;
     fieldsID?: PrimitiveOverrideProps<AutocompleteProps>;
-    active?: PrimitiveOverrideProps<SwitchFieldProps>;
+    startDate?: PrimitiveOverrideProps<TextFieldProps>;
+    endDate?: PrimitiveOverrideProps<TextFieldProps>;
+    bookerName?: PrimitiveOverrideProps<TextFieldProps>;
+    Appointments?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type ReccuringAppointmentUpdateFormProps = React.PropsWithChildren<{
     overrides?: ReccuringAppointmentUpdateFormOverridesProps | undefined | null;

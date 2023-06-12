@@ -18,12 +18,14 @@ export declare type TeamUpdateFormInputValues = {
     Responses?: Response[];
     name?: string;
     color?: string;
+    score?: number;
 };
 export declare type TeamUpdateFormValidationValues = {
     appointmentID?: ValidationFunction<string>;
     Responses?: ValidationFunction<Response>;
     name?: ValidationFunction<string>;
     color?: ValidationFunction<string>;
+    score?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TeamUpdateFormOverridesProps = {
@@ -32,6 +34,7 @@ export declare type TeamUpdateFormOverridesProps = {
     Responses?: PrimitiveOverrideProps<AutocompleteProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
     color?: PrimitiveOverrideProps<TextFieldProps>;
+    score?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TeamUpdateFormProps = React.PropsWithChildren<{
     overrides?: TeamUpdateFormOverridesProps | undefined | null;

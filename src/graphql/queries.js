@@ -26,6 +26,7 @@ export const getTeam = /* GraphQL */ `
       }
       name
       color
+      score
       createdAt
       updatedAt
       _version
@@ -50,6 +51,7 @@ export const listTeams = /* GraphQL */ `
         }
         name
         color
+        score
         createdAt
         updatedAt
         _version
@@ -83,6 +85,7 @@ export const syncTeams = /* GraphQL */ `
         }
         name
         color
+        score
         createdAt
         updatedAt
         _version
@@ -118,6 +121,7 @@ export const teamsByAppointmentID = /* GraphQL */ `
         }
         name
         color
+        score
         createdAt
         updatedAt
         _version
@@ -589,6 +593,7 @@ export const getAppointment = /* GraphQL */ `
           appointmentID
           name
           color
+          score
           createdAt
           updatedAt
           _version

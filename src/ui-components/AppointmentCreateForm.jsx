@@ -25,7 +25,13 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Appointment, Response, Fields as Fields0, Team } from "../models";
+import {
+  Appointment,
+  Response,
+  Fields as Fields0,
+  Team,
+  ReccuringAppointment as ReccuringAppointment0,
+} from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -211,6 +217,7 @@ export default function AppointmentCreateForm(props) {
     Fields: undefined,
     locked: false,
     Teams: [],
+    ReccuringAppointment: undefined,
   };
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
@@ -225,6 +232,9 @@ export default function AppointmentCreateForm(props) {
   const [Fields, setFields] = React.useState(initialValues.Fields);
   const [locked, setLocked] = React.useState(initialValues.locked);
   const [Teams, setTeams] = React.useState(initialValues.Teams);
+  const [ReccuringAppointment, setReccuringAppointment] = React.useState(
+    initialValues.ReccuringAppointment
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setStart(initialValues.start);
@@ -246,6 +256,9 @@ export default function AppointmentCreateForm(props) {
     setTeams(initialValues.Teams);
     setCurrentTeamsValue(undefined);
     setCurrentTeamsDisplayValue("");
+    setReccuringAppointment(initialValues.ReccuringAppointment);
+    setCurrentReccuringAppointmentValue(undefined);
+    setCurrentReccuringAppointmentDisplayValue("");
     setErrors({});
   };
   const [currentResponsesDisplayValue, setCurrentResponsesDisplayValue] =
@@ -261,10 +274,20 @@ export default function AppointmentCreateForm(props) {
     React.useState("");
   const [currentTeamsValue, setCurrentTeamsValue] = React.useState(undefined);
   const TeamsRef = React.createRef();
+  const [
+    currentReccuringAppointmentDisplayValue,
+    setCurrentReccuringAppointmentDisplayValue,
+  ] = React.useState("");
+  const [
+    currentReccuringAppointmentValue,
+    setCurrentReccuringAppointmentValue,
+  ] = React.useState(undefined);
+  const ReccuringAppointmentRef = React.createRef();
   const getIDValue = {
     Responses: (r) => JSON.stringify({ id: r?.id }),
     Fields: (r) => JSON.stringify({ id: r?.id }),
     Teams: (r) => JSON.stringify({ id: r?.id }),
+    ReccuringAppointment: (r) => JSON.stringify({ id: r?.id }),
   };
   const ResponsesIdSet = new Set(
     Array.isArray(Responses)
@@ -281,6 +304,11 @@ export default function AppointmentCreateForm(props) {
       ? Teams.map((r) => getIDValue.Teams?.(r))
       : getIDValue.Teams?.(Teams)
   );
+  const ReccuringAppointmentIdSet = new Set(
+    Array.isArray(ReccuringAppointment)
+      ? ReccuringAppointment.map((r) => getIDValue.ReccuringAppointment?.(r))
+      : getIDValue.ReccuringAppointment?.(ReccuringAppointment)
+  );
   const responseRecords = useDataStoreBinding({
     type: "collection",
     model: Response,
@@ -293,10 +321,16 @@ export default function AppointmentCreateForm(props) {
     type: "collection",
     model: Team,
   }).items;
+  const reccuringAppointmentRecords = useDataStoreBinding({
+    type: "collection",
+    model: ReccuringAppointment0,
+  }).items;
   const getDisplayValue = {
     Responses: (r) => `${r?.accepted ? r?.accepted + " - " : ""}${r?.id}`,
     Fields: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
     Teams: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
+    ReccuringAppointment: (r) =>
+      `${r?.bookerName ? r?.bookerName + " - " : ""}${r?.id}`,
   };
   const validations = {
     start: [{ type: "Required" }],
@@ -312,6 +346,7 @@ export default function AppointmentCreateForm(props) {
     Fields: [],
     locked: [],
     Teams: [],
+    ReccuringAppointment: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -352,6 +387,7 @@ export default function AppointmentCreateForm(props) {
           Fields,
           locked,
           Teams,
+          ReccuringAppointment,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -401,6 +437,7 @@ export default function AppointmentCreateForm(props) {
             canceled: modelFields.canceled,
             Fields: modelFields.Fields,
             locked: modelFields.locked,
+            ReccuringAppointment: modelFields.ReccuringAppointment,
           };
           const appointment = await DataStore.save(
             new Appointment(modelFieldsToSave)
@@ -469,6 +506,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.start ?? value;
@@ -506,6 +544,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.end ?? value;
@@ -538,6 +577,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             values = result?.Responses ?? values;
@@ -628,6 +668,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.date ?? value;
@@ -664,6 +705,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.confirmed ?? value;
@@ -700,6 +742,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.bookerID ?? value;
@@ -736,6 +779,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.bookerName ?? value;
@@ -772,6 +816,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.sport ?? value;
@@ -828,6 +873,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -864,6 +910,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.canceled ?? value;
@@ -897,6 +944,7 @@ export default function AppointmentCreateForm(props) {
               Fields: value,
               locked,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.Fields ?? value;
@@ -984,6 +1032,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked: value,
               Teams,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             value = result?.locked ?? value;
@@ -1016,6 +1065,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams: values,
+              ReccuringAppointment,
             };
             const result = onChange(modelFields);
             values = result?.Teams ?? values;
@@ -1079,6 +1129,101 @@ export default function AppointmentCreateForm(props) {
           ref={TeamsRef}
           labelHidden={true}
           {...getOverrideProps(overrides, "Teams")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              start,
+              end,
+              Responses,
+              date,
+              confirmed,
+              bookerID,
+              bookerName,
+              sport,
+              price,
+              canceled,
+              Fields,
+              locked,
+              Teams,
+              ReccuringAppointment: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.ReccuringAppointment ?? value;
+          }
+          setReccuringAppointment(value);
+          setCurrentReccuringAppointmentValue(undefined);
+          setCurrentReccuringAppointmentDisplayValue("");
+        }}
+        currentFieldValue={currentReccuringAppointmentValue}
+        label={"Reccuring appointment"}
+        items={ReccuringAppointment ? [ReccuringAppointment] : []}
+        hasError={errors?.ReccuringAppointment?.hasError}
+        errorMessage={errors?.ReccuringAppointment?.errorMessage}
+        getBadgeText={getDisplayValue.ReccuringAppointment}
+        setFieldValue={(model) => {
+          setCurrentReccuringAppointmentDisplayValue(
+            model ? getDisplayValue.ReccuringAppointment(model) : ""
+          );
+          setCurrentReccuringAppointmentValue(model);
+        }}
+        inputFieldRef={ReccuringAppointmentRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Reccuring appointment"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search ReccuringAppointment"
+          value={currentReccuringAppointmentDisplayValue}
+          options={reccuringAppointmentRecords
+            .filter(
+              (r) =>
+                !ReccuringAppointmentIdSet.has(
+                  getIDValue.ReccuringAppointment?.(r)
+                )
+            )
+            .map((r) => ({
+              id: getIDValue.ReccuringAppointment?.(r),
+              label: getDisplayValue.ReccuringAppointment?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentReccuringAppointmentValue(
+              reccuringAppointmentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentReccuringAppointmentDisplayValue(label);
+            runValidationTasks("ReccuringAppointment", label);
+          }}
+          onClear={() => {
+            setCurrentReccuringAppointmentDisplayValue("");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.ReccuringAppointment?.hasError) {
+              runValidationTasks("ReccuringAppointment", value);
+            }
+            setCurrentReccuringAppointmentDisplayValue(value);
+            setCurrentReccuringAppointmentValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              "ReccuringAppointment",
+              currentReccuringAppointmentDisplayValue
+            )
+          }
+          errorMessage={errors.ReccuringAppointment?.errorMessage}
+          hasError={errors.ReccuringAppointment?.hasError}
+          ref={ReccuringAppointmentRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ReccuringAppointment")}
         ></Autocomplete>
       </ArrayField>
       <Flex

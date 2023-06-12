@@ -12,7 +12,7 @@ import AppointmentTeamButton from "../../components/appointment/appointmetTeamBu
 import AppointmentTeamsDnd from "../../components/appointment/appointmentTeamsDnd";
 
 const ReservedAppointment = ({responses, role, appointment, field, user, teams}) => {
-    const [isChecked, setIsChecked] = useState(teams.length !== 0);
+    const [isChecked, setIsChecked] = useState(teams? teams.length !== 0 : false);
 
     return (
         <Flex direction="column">

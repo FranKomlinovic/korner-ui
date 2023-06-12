@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Authenticator, Button, Card, Flex, Heading, Loader, Placeholder, useAuthenticator} from "@aws-amplify/ui-react";
+import {Authenticator, Button, Card, Flex, Heading, Placeholder, useAuthenticator} from "@aws-amplify/ui-react";
 import AppointmentStatusBadge from "../components/appointment/appointmentStatusBadge";
 import {getDayAndDateFromAppointment} from "../functions/converters";
 import {KornerFieldShort} from "../ui-components";
@@ -93,10 +93,11 @@ const AppointmentById = () => {
                 setAppointmentView(<CanceledAppointment responses={responses.data}/>)
                 break;
             case "played" :
-                setAppointmentView(<PlayedAppointment appointment={appointment.data} teams={teams.data} role={role} responses={responses.data}/>)
+                setAppointmentView(<PlayedAppointment appointment={appointment.data} teams={teams.data} role={role}
+                                                      responses={responses.data}/>)
                 break;
             default:
-                setAppointmentView(<Loader/>)
+                setAppointmentView()
         }
     }, [teams.data, appointment.data, appointmentStatus, field, responses.data, role, userModel]);
 
@@ -115,9 +116,22 @@ const AppointmentById = () => {
         );
     }
 
-    if (appointment.loading || responses.loading || teams.loading) {
-        return <Placeholder size={"large"}/>
+    const PlaceHolder = () => {
+        return (
+            <Flex width={"320px"} direction="column" alignItems={"center"} justifyContent={"space-around"}>
+                <Placeholder height={"15rem"} size={"large"}/>
+                <Placeholder height={"5rem"} size={"large"}/>
+                <Placeholder height={"5rem"} size={"large"}/>
+                <Placeholder height={"5rem"} size={"large"}/>
+                <Placeholder height={"5rem"} size={"large"}/>
+            </Flex>
+
+        );
     }
+
+    // if (appointment.loading || responses.loading || teams.loading) {
+    //     return <Placeholder size={"large"}/>
+    // }
     return (appointmentView ?
         <Flex direction={"column"}>
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
@@ -135,7 +149,7 @@ const AppointmentById = () => {
             {!user && <RegisterButton/>}
             {appointmentView}
         </Flex>
-        : <Loader variation="linear"/>)
+        : <PlaceHolder/>)
 
 }
 

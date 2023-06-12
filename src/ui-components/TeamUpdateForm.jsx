@@ -201,6 +201,7 @@ export default function TeamUpdateForm(props) {
     Responses: [],
     name: "",
     color: "",
+    score: "",
   };
   const [appointmentID, setAppointmentID] = React.useState(
     initialValues.appointmentID
@@ -208,6 +209,7 @@ export default function TeamUpdateForm(props) {
   const [Responses, setResponses] = React.useState(initialValues.Responses);
   const [name, setName] = React.useState(initialValues.name);
   const [color, setColor] = React.useState(initialValues.color);
+  const [score, setScore] = React.useState(initialValues.score);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = teamRecord
@@ -226,6 +228,7 @@ export default function TeamUpdateForm(props) {
     setCurrentResponsesDisplayValue("");
     setName(cleanValues.name);
     setColor(cleanValues.color);
+    setScore(cleanValues.score);
     setErrors({});
   };
   const [teamRecord, setTeamRecord] = React.useState(teamModelProp);
@@ -288,6 +291,7 @@ export default function TeamUpdateForm(props) {
     Responses: [],
     name: [],
     color: [],
+    score: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -319,6 +323,7 @@ export default function TeamUpdateForm(props) {
           Responses,
           name,
           color,
+          score,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -402,6 +407,7 @@ export default function TeamUpdateForm(props) {
             appointmentID: modelFields.appointmentID,
             name: modelFields.name,
             color: modelFields.color,
+            score: modelFields.score,
           };
           promises.push(
             DataStore.save(
@@ -433,6 +439,7 @@ export default function TeamUpdateForm(props) {
               Responses,
               name,
               color,
+              score,
             };
             const result = onChange(modelFields);
             value = result?.appointmentID ?? value;
@@ -516,6 +523,7 @@ export default function TeamUpdateForm(props) {
               Responses: values,
               name,
               color,
+              score,
             };
             const result = onChange(modelFields);
             values = result?.Responses ?? values;
@@ -596,6 +604,7 @@ export default function TeamUpdateForm(props) {
               Responses,
               name: value,
               color,
+              score,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -623,6 +632,7 @@ export default function TeamUpdateForm(props) {
               Responses,
               name,
               color: value,
+              score,
             };
             const result = onChange(modelFields);
             value = result?.color ?? value;
@@ -636,6 +646,38 @@ export default function TeamUpdateForm(props) {
         errorMessage={errors.color?.errorMessage}
         hasError={errors.color?.hasError}
         {...getOverrideProps(overrides, "color")}
+      ></TextField>
+      <TextField
+        label="Score"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={score}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              appointmentID,
+              Responses,
+              name,
+              color,
+              score: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.score ?? value;
+          }
+          if (errors.score?.hasError) {
+            runValidationTasks("score", value);
+          }
+          setScore(value);
+        }}
+        onBlur={() => runValidationTasks("score", score)}
+        errorMessage={errors.score?.errorMessage}
+        hasError={errors.score?.hasError}
+        {...getOverrideProps(overrides, "score")}
       ></TextField>
       <Flex
         justifyContent="space-between"

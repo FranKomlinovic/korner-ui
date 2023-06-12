@@ -2,6 +2,9 @@ import {Appointment} from "../models";
 
 // unreserved, reserved, canceled, played
 export function getAppointmentStatus(appointment: Appointment): string {
+    if (!appointment) {
+        return undefined
+    }
     const isOld = isAppointmentOld(appointment);
     if (appointment?.canceled) {
         return "canceled";

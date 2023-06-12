@@ -261,18 +261,11 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "bookerId": {
-                    "name": "bookerId",
+                "bookerID": {
+                    "name": "bookerID",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": false,
-                    "attributes": []
-                },
-                "dayOfTheWeek": {
-                    "name": "dayOfTheWeek",
-                    "isArray": false,
-                    "type": "Int",
-                    "isRequired": true,
                     "attributes": []
                 },
                 "start": {
@@ -296,12 +289,42 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "active": {
-                    "name": "active",
+                "startDate": {
+                    "name": "startDate",
                     "isArray": false,
-                    "type": "Boolean",
+                    "type": "AWSDate",
                     "isRequired": false,
                     "attributes": []
+                },
+                "endDate": {
+                    "name": "endDate",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "bookerName": {
+                    "name": "bookerName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Appointments": {
+                    "name": "Appointments",
+                    "isArray": true,
+                    "type": {
+                        "model": "Appointment"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "ReccuringAppointment"
+                        ]
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -602,6 +625,28 @@ export const schema = {
                         ]
                     }
                 },
+                "reccuringappointmentID": {
+                    "name": "reccuringappointmentID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "ReccuringAppointment": {
+                    "name": "ReccuringAppointment",
+                    "isArray": false,
+                    "type": {
+                        "model": "ReccuringAppointment"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetNames": [
+                            "reccuringappointmentID"
+                        ]
+                    }
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -632,6 +677,15 @@ export const schema = {
                         "name": "byFields",
                         "fields": [
                             "fieldsID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byReccuringAppointment",
+                        "fields": [
+                            "reccuringappointmentID"
                         ]
                     }
                 },
@@ -864,5 +918,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.3",
-    "version": "fe89ddfeae71312f5453e4f17e88f8c0"
+    "version": "bb3aec7fe518d25eeff797d91a8efdbc"
 };

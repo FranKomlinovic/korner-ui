@@ -15,7 +15,6 @@ import {
   Grid,
   Icon,
   ScrollView,
-  SwitchField,
   Text,
   TextField,
   useTheme,
@@ -24,7 +23,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { ReccuringAppointment, Fields } from "../models";
+import { ReccuringAppointment, Appointment, Fields } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -198,38 +197,53 @@ export default function ReccuringAppointmentUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    bookerId: "",
-    dayOfTheWeek: "",
+    bookerID: "",
     start: "",
     end: "",
     fieldsID: undefined,
-    active: false,
+    startDate: "",
+    endDate: "",
+    bookerName: "",
+    Appointments: [],
   };
-  const [bookerId, setBookerId] = React.useState(initialValues.bookerId);
-  const [dayOfTheWeek, setDayOfTheWeek] = React.useState(
-    initialValues.dayOfTheWeek
-  );
+  const [bookerID, setBookerID] = React.useState(initialValues.bookerID);
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
   const [fieldsID, setFieldsID] = React.useState(initialValues.fieldsID);
-  const [active, setActive] = React.useState(initialValues.active);
+  const [startDate, setStartDate] = React.useState(initialValues.startDate);
+  const [endDate, setEndDate] = React.useState(initialValues.endDate);
+  const [bookerName, setBookerName] = React.useState(initialValues.bookerName);
+  const [Appointments, setAppointments] = React.useState(
+    initialValues.Appointments
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = reccuringAppointmentRecord
-      ? { ...initialValues, ...reccuringAppointmentRecord, fieldsID }
+      ? {
+          ...initialValues,
+          ...reccuringAppointmentRecord,
+          fieldsID,
+          Appointments: linkedAppointments,
+        }
       : initialValues;
-    setBookerId(cleanValues.bookerId);
-    setDayOfTheWeek(cleanValues.dayOfTheWeek);
+    setBookerID(cleanValues.bookerID);
     setStart(cleanValues.start);
     setEnd(cleanValues.end);
     setFieldsID(cleanValues.fieldsID);
     setCurrentFieldsIDValue(undefined);
     setCurrentFieldsIDDisplayValue("");
-    setActive(cleanValues.active);
+    setStartDate(cleanValues.startDate);
+    setEndDate(cleanValues.endDate);
+    setBookerName(cleanValues.bookerName);
+    setAppointments(cleanValues.Appointments ?? []);
+    setCurrentAppointmentsValue(undefined);
+    setCurrentAppointmentsDisplayValue("");
     setErrors({});
   };
   const [reccuringAppointmentRecord, setReccuringAppointmentRecord] =
     React.useState(reccuringAppointmentModelProp);
+  const [linkedAppointments, setLinkedAppointments] = React.useState([]);
+  const canUnlinkAppointments = true;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
@@ -238,29 +252,57 @@ export default function ReccuringAppointmentUpdateForm(props) {
       setReccuringAppointmentRecord(record);
       const fieldsIDRecord = record ? await record.fieldsID : undefined;
       setFieldsID(fieldsIDRecord);
+      const linkedAppointments = record
+        ? await record.Appointments.toArray()
+        : [];
+      setLinkedAppointments(linkedAppointments);
     };
     queryData();
   }, [idProp, reccuringAppointmentModelProp]);
-  React.useEffect(resetStateValues, [reccuringAppointmentRecord, fieldsID]);
+  React.useEffect(resetStateValues, [
+    reccuringAppointmentRecord,
+    fieldsID,
+    linkedAppointments,
+  ]);
   const [currentFieldsIDDisplayValue, setCurrentFieldsIDDisplayValue] =
     React.useState("");
   const [currentFieldsIDValue, setCurrentFieldsIDValue] =
     React.useState(undefined);
   const fieldsIDRef = React.createRef();
+  const [currentAppointmentsDisplayValue, setCurrentAppointmentsDisplayValue] =
+    React.useState("");
+  const [currentAppointmentsValue, setCurrentAppointmentsValue] =
+    React.useState(undefined);
+  const AppointmentsRef = React.createRef();
+  const getIDValue = {
+    Appointments: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const AppointmentsIdSet = new Set(
+    Array.isArray(Appointments)
+      ? Appointments.map((r) => getIDValue.Appointments?.(r))
+      : getIDValue.Appointments?.(Appointments)
+  );
   const fieldsRecords = useDataStoreBinding({
     type: "collection",
     model: Fields,
   }).items;
+  const appointmentRecords = useDataStoreBinding({
+    type: "collection",
+    model: Appointment,
+  }).items;
   const getDisplayValue = {
     fieldsID: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
+    Appointments: (r) => `${r?.confirmed ? r?.confirmed + " - " : ""}${r?.id}`,
   };
   const validations = {
-    bookerId: [],
-    dayOfTheWeek: [{ type: "Required" }],
+    bookerID: [],
     start: [{ type: "Required" }],
     end: [{ type: "Required" }],
     fieldsID: [{ type: "Required" }],
-    active: [],
+    startDate: [],
+    endDate: [],
+    bookerName: [],
+    Appointments: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -288,25 +330,35 @@ export default function ReccuringAppointmentUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          bookerId,
-          dayOfTheWeek,
+          bookerID,
           start,
           end,
           fieldsID,
-          active,
+          startDate,
+          endDate,
+          bookerName,
+          Appointments,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
                 )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
             );
             return promises;
           }, [])
@@ -323,14 +375,70 @@ export default function ReccuringAppointmentUpdateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(
-            ReccuringAppointment.copyOf(
-              reccuringAppointmentRecord,
-              (updated) => {
-                Object.assign(updated, modelFields);
-              }
+          const promises = [];
+          const appointmentsToLink = [];
+          const appointmentsToUnLink = [];
+          const appointmentsSet = new Set();
+          const linkedAppointmentsSet = new Set();
+          Appointments.forEach((r) =>
+            appointmentsSet.add(getIDValue.Appointments?.(r))
+          );
+          linkedAppointments.forEach((r) =>
+            linkedAppointmentsSet.add(getIDValue.Appointments?.(r))
+          );
+          linkedAppointments.forEach((r) => {
+            if (!appointmentsSet.has(getIDValue.Appointments?.(r))) {
+              appointmentsToUnLink.push(r);
+            }
+          });
+          Appointments.forEach((r) => {
+            if (!linkedAppointmentsSet.has(getIDValue.Appointments?.(r))) {
+              appointmentsToLink.push(r);
+            }
+          });
+          appointmentsToUnLink.forEach((original) => {
+            if (!canUnlinkAppointments) {
+              throw Error(
+                `Appointment ${original.id} cannot be unlinked from ReccuringAppointment because undefined is a required field.`
+              );
+            }
+            promises.push(
+              DataStore.save(
+                Appointment.copyOf(original, (updated) => {
+                  updated.ReccuringAppointment = null;
+                })
+              )
+            );
+          });
+          appointmentsToLink.forEach((original) => {
+            promises.push(
+              DataStore.save(
+                Appointment.copyOf(original, (updated) => {
+                  updated.ReccuringAppointment = reccuringAppointmentRecord;
+                })
+              )
+            );
+          });
+          const modelFieldsToSave = {
+            bookerID: modelFields.bookerID,
+            start: modelFields.start,
+            end: modelFields.end,
+            fieldsID: modelFields.fieldsID,
+            startDate: modelFields.startDate,
+            endDate: modelFields.endDate,
+            bookerName: modelFields.bookerName,
+          };
+          promises.push(
+            DataStore.save(
+              ReccuringAppointment.copyOf(
+                reccuringAppointmentRecord,
+                (updated) => {
+                  Object.assign(updated, modelFieldsToSave);
+                }
+              )
             )
           );
+          await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -347,63 +455,32 @@ export default function ReccuringAppointmentUpdateForm(props) {
         label="Booker id"
         isRequired={false}
         isReadOnly={false}
-        value={bookerId}
+        value={bookerID}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              bookerId: value,
-              dayOfTheWeek,
+              bookerID: value,
               start,
               end,
               fieldsID,
-              active,
+              startDate,
+              endDate,
+              bookerName,
+              Appointments,
             };
             const result = onChange(modelFields);
-            value = result?.bookerId ?? value;
+            value = result?.bookerID ?? value;
           }
-          if (errors.bookerId?.hasError) {
-            runValidationTasks("bookerId", value);
+          if (errors.bookerID?.hasError) {
+            runValidationTasks("bookerID", value);
           }
-          setBookerId(value);
+          setBookerID(value);
         }}
-        onBlur={() => runValidationTasks("bookerId", bookerId)}
-        errorMessage={errors.bookerId?.errorMessage}
-        hasError={errors.bookerId?.hasError}
-        {...getOverrideProps(overrides, "bookerId")}
-      ></TextField>
-      <TextField
-        label="Day of the week"
-        isRequired={true}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={dayOfTheWeek}
-        onChange={(e) => {
-          let value = isNaN(parseInt(e.target.value))
-            ? e.target.value
-            : parseInt(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              bookerId,
-              dayOfTheWeek: value,
-              start,
-              end,
-              fieldsID,
-              active,
-            };
-            const result = onChange(modelFields);
-            value = result?.dayOfTheWeek ?? value;
-          }
-          if (errors.dayOfTheWeek?.hasError) {
-            runValidationTasks("dayOfTheWeek", value);
-          }
-          setDayOfTheWeek(value);
-        }}
-        onBlur={() => runValidationTasks("dayOfTheWeek", dayOfTheWeek)}
-        errorMessage={errors.dayOfTheWeek?.errorMessage}
-        hasError={errors.dayOfTheWeek?.hasError}
-        {...getOverrideProps(overrides, "dayOfTheWeek")}
+        onBlur={() => runValidationTasks("bookerID", bookerID)}
+        errorMessage={errors.bookerID?.errorMessage}
+        hasError={errors.bookerID?.hasError}
+        {...getOverrideProps(overrides, "bookerID")}
       ></TextField>
       <TextField
         label="Start"
@@ -415,12 +492,14 @@ export default function ReccuringAppointmentUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              bookerId,
-              dayOfTheWeek,
+              bookerID,
               start: value,
               end,
               fieldsID,
-              active,
+              startDate,
+              endDate,
+              bookerName,
+              Appointments,
             };
             const result = onChange(modelFields);
             value = result?.start ?? value;
@@ -445,12 +524,14 @@ export default function ReccuringAppointmentUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              bookerId,
-              dayOfTheWeek,
+              bookerID,
               start,
               end: value,
               fieldsID,
-              active,
+              startDate,
+              endDate,
+              bookerName,
+              Appointments,
             };
             const result = onChange(modelFields);
             value = result?.end ?? value;
@@ -471,12 +552,14 @@ export default function ReccuringAppointmentUpdateForm(props) {
           let value = items[0];
           if (onChange) {
             const modelFields = {
-              bookerId,
-              dayOfTheWeek,
+              bookerID,
               start,
               end,
               fieldsID: value,
-              active,
+              startDate,
+              endDate,
+              bookerName,
+              Appointments,
             };
             const result = onChange(modelFields);
             value = result?.fieldsID ?? value;
@@ -549,35 +632,181 @@ export default function ReccuringAppointmentUpdateForm(props) {
           {...getOverrideProps(overrides, "fieldsID")}
         ></Autocomplete>
       </ArrayField>
-      <SwitchField
-        label="Active"
-        defaultChecked={false}
-        isDisabled={false}
-        isChecked={active}
+      <TextField
+        label="Start date"
+        isRequired={false}
+        isReadOnly={false}
+        type="date"
+        value={startDate}
         onChange={(e) => {
-          let value = e.target.checked;
+          let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              bookerId,
-              dayOfTheWeek,
+              bookerID,
               start,
               end,
               fieldsID,
-              active: value,
+              startDate: value,
+              endDate,
+              bookerName,
+              Appointments,
             };
             const result = onChange(modelFields);
-            value = result?.active ?? value;
+            value = result?.startDate ?? value;
           }
-          if (errors.active?.hasError) {
-            runValidationTasks("active", value);
+          if (errors.startDate?.hasError) {
+            runValidationTasks("startDate", value);
           }
-          setActive(value);
+          setStartDate(value);
         }}
-        onBlur={() => runValidationTasks("active", active)}
-        errorMessage={errors.active?.errorMessage}
-        hasError={errors.active?.hasError}
-        {...getOverrideProps(overrides, "active")}
-      ></SwitchField>
+        onBlur={() => runValidationTasks("startDate", startDate)}
+        errorMessage={errors.startDate?.errorMessage}
+        hasError={errors.startDate?.hasError}
+        {...getOverrideProps(overrides, "startDate")}
+      ></TextField>
+      <TextField
+        label="End date"
+        isRequired={false}
+        isReadOnly={false}
+        type="date"
+        value={endDate}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              bookerID,
+              start,
+              end,
+              fieldsID,
+              startDate,
+              endDate: value,
+              bookerName,
+              Appointments,
+            };
+            const result = onChange(modelFields);
+            value = result?.endDate ?? value;
+          }
+          if (errors.endDate?.hasError) {
+            runValidationTasks("endDate", value);
+          }
+          setEndDate(value);
+        }}
+        onBlur={() => runValidationTasks("endDate", endDate)}
+        errorMessage={errors.endDate?.errorMessage}
+        hasError={errors.endDate?.hasError}
+        {...getOverrideProps(overrides, "endDate")}
+      ></TextField>
+      <TextField
+        label="Booker name"
+        isRequired={false}
+        isReadOnly={false}
+        value={bookerName}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              bookerID,
+              start,
+              end,
+              fieldsID,
+              startDate,
+              endDate,
+              bookerName: value,
+              Appointments,
+            };
+            const result = onChange(modelFields);
+            value = result?.bookerName ?? value;
+          }
+          if (errors.bookerName?.hasError) {
+            runValidationTasks("bookerName", value);
+          }
+          setBookerName(value);
+        }}
+        onBlur={() => runValidationTasks("bookerName", bookerName)}
+        errorMessage={errors.bookerName?.errorMessage}
+        hasError={errors.bookerName?.hasError}
+        {...getOverrideProps(overrides, "bookerName")}
+      ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              bookerID,
+              start,
+              end,
+              fieldsID,
+              startDate,
+              endDate,
+              bookerName,
+              Appointments: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.Appointments ?? values;
+          }
+          setAppointments(values);
+          setCurrentAppointmentsValue(undefined);
+          setCurrentAppointmentsDisplayValue("");
+        }}
+        currentFieldValue={currentAppointmentsValue}
+        label={"Appointments"}
+        items={Appointments}
+        hasError={errors?.Appointments?.hasError}
+        errorMessage={errors?.Appointments?.errorMessage}
+        getBadgeText={getDisplayValue.Appointments}
+        setFieldValue={(model) => {
+          setCurrentAppointmentsDisplayValue(
+            model ? getDisplayValue.Appointments(model) : ""
+          );
+          setCurrentAppointmentsValue(model);
+        }}
+        inputFieldRef={AppointmentsRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Appointments"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search Appointment"
+          value={currentAppointmentsDisplayValue}
+          options={appointmentRecords
+            .filter((r) => !AppointmentsIdSet.has(getIDValue.Appointments?.(r)))
+            .map((r) => ({
+              id: getIDValue.Appointments?.(r),
+              label: getDisplayValue.Appointments?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentAppointmentsValue(
+              appointmentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentAppointmentsDisplayValue(label);
+            runValidationTasks("Appointments", label);
+          }}
+          onClear={() => {
+            setCurrentAppointmentsDisplayValue("");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Appointments?.hasError) {
+              runValidationTasks("Appointments", value);
+            }
+            setCurrentAppointmentsDisplayValue(value);
+            setCurrentAppointmentsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks("Appointments", currentAppointmentsDisplayValue)
+          }
+          errorMessage={errors.Appointments?.errorMessage}
+          hasError={errors.Appointments?.hasError}
+          ref={AppointmentsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Appointments")}
+        ></Autocomplete>
+      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
