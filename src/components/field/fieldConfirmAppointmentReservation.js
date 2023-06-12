@@ -74,7 +74,6 @@ const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, fiel
                     sport : Sport.FUTSAL
                 }
                 DataStore.save(new Appointment(app)).then(ab => {
-                    console.log(new Appointment(ab))
 
                     // If first appointment, check for other reservation
                         if (date === a.date) {
@@ -87,31 +86,6 @@ const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, fiel
             }
             onCreateFunction();
         })
-        //
-        //
-        //         // If not confirmed by default, confirm it regular way
-        //         if (!a.confirmed) {
-        //             confirmAppointment(a.id);
-        //         }
-        //     }
-        // )
-
-        // // Iterates and increases date by one week
-        // while (date <= new Date().getFullYear()) {
-        //     appointmentToCreate.date = date.toISOString().split('T')[0]
-        //     DataStore.save(new Appointment(appointmentToCreate)).then(a => {
-        //             // If not confirmed by default, confirm it regular way
-        //             if (!a.confirmed) {
-        //                 confirmAppointment(a.id);
-        //             }
-        //         }
-        //     )
-        //     // Sets second one to confirmed to avoid uneccessary confirmations
-        //     appointmentToCreate.confirmed = true;
-        //     date.setDate(date.getDate() + 7);
-        // }
-        //
-        // onCreateFunction();
     }
     return (
         <Flex direction={"column"} alignItems={"center"} padding={"1rem"} alignSelf={"center"}>

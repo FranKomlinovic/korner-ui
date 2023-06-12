@@ -118,7 +118,7 @@ const AppointmentById = () => {
 
     const PlaceHolder = () => {
         return (
-            <Flex width={"320px"} direction="column" alignItems={"center"} justifyContent={"space-around"}>
+            <Flex marginInline={"2rem"} direction="column" alignItems={"center"} justifyContent={"center"}>
                 <Placeholder height={"15rem"} size={"large"}/>
                 <Placeholder height={"5rem"} size={"large"}/>
                 <Placeholder height={"5rem"} size={"large"}/>
@@ -129,10 +129,7 @@ const AppointmentById = () => {
         );
     }
 
-    // if (appointment.loading || responses.loading || teams.loading) {
-    //     return <Placeholder size={"large"}/>
-    // }
-    return (appointmentView ?
+    return (!appointmentView ?
         <Flex direction={"column"}>
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                 <KornerFieldShort
