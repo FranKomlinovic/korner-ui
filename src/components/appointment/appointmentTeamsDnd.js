@@ -4,7 +4,7 @@ import {Button, Collection, Flex, Heading, ScrollView, SwitchField} from "@aws-a
 import {DataStore} from "aws-amplify";
 import {Response, Team} from "../../models";
 import {suggestNextTeam} from "../../functions/suggestedTeams";
-import {FaPlus, FaTshirt} from "react-icons/fa";
+import {FaPlus, FaTrash, FaTshirt} from "react-icons/fa";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaTeamPlayer from "../../figma-components/FigmaTeamPlayer";
 
@@ -107,7 +107,7 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
     }
 
     const NoAdminView = () => {
-        return state.map((a,b) => {
+        return state.map((a, b) => {
             return (
                 <Flex key={b} direction={"column"} alignItems={"center"}>
                     <Flex alignItems={"center"}>
@@ -201,6 +201,9 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
                                             direction="column"
                                             alignItems="center"
                                         >
+                                            {el.responses?.length === 0 && <FaTrash onClick={() => {
+                                                DataStore.delete(Team, el.team.id);
+                                            }} size={"2rem"} color={"darkRed"}/>}
                                             {el.responses?.map((item, index) => (
                                                 <Draggable
                                                     key={item.id}
