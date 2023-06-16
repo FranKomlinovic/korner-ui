@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { AutocompleteProps, GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Appointment } from "../models";
 export declare type ValidationResponse = {
@@ -22,6 +22,7 @@ export declare type ReccuringAppointmentCreateFormInputValues = {
     endDate?: string;
     bookerName?: string;
     Appointments?: Appointment[];
+    canceled?: boolean;
 };
 export declare type ReccuringAppointmentCreateFormValidationValues = {
     bookerID?: ValidationFunction<string>;
@@ -32,6 +33,7 @@ export declare type ReccuringAppointmentCreateFormValidationValues = {
     endDate?: ValidationFunction<string>;
     bookerName?: ValidationFunction<string>;
     Appointments?: ValidationFunction<Appointment>;
+    canceled?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ReccuringAppointmentCreateFormOverridesProps = {
@@ -44,6 +46,7 @@ export declare type ReccuringAppointmentCreateFormOverridesProps = {
     endDate?: PrimitiveOverrideProps<TextFieldProps>;
     bookerName?: PrimitiveOverrideProps<TextFieldProps>;
     Appointments?: PrimitiveOverrideProps<AutocompleteProps>;
+    canceled?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type ReccuringAppointmentCreateFormProps = React.PropsWithChildren<{
     overrides?: ReccuringAppointmentCreateFormOverridesProps | undefined | null;

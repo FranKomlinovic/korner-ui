@@ -16,6 +16,7 @@ import AppointmentById from "./views/appointmentById";
 import {FaHome, FaPlusCircle, FaQuestion, FaRunning} from "react-icons/fa";
 import LandingPage from "./views/landing-page";
 import PlayedAppointments from "./views/playedAppointments";
+import RecurringById from "./views/recurringById";
 
 Amplify.configure(awsExports);
 
@@ -57,6 +58,7 @@ function App() {
             <Route path="/" element={<Home/>}/>
             <Route path="/fields/:fieldId" element={<FieldById/>}/>
             <Route path="/appointment/:appointmentId" element={<AppointmentById/>}/>
+            <Route path="/recurring/:recurringId" element={<RecurringById/>}/>
             <Route path="/fields" element={<FieldView/>}/>
             <Route path="/profile" element={<Profile/>}/>
             <Route path="/played" element={<PlayedAppointments/>}/>

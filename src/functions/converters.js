@@ -21,6 +21,11 @@ export function getDayOfWeek(date: Date) {
     return daysOfWeek[date.getDay()];
 }
 
+export function getDateInDdMmYyyy(date) {
+    const dt = new Date(date);
+    return dt.toLocaleDateString("de-AT")
+}
+
 export function getTimeFromTimestamp(timestamp) {
     let date = new Date(timestamp);
     return getTimeFromDate(date);

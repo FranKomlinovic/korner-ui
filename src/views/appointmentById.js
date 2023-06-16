@@ -129,7 +129,7 @@ const AppointmentById = () => {
         );
     }
 
-    return (!appointmentView ?
+    return (appointmentView ?
         <Flex direction={"column"}>
             <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                 <KornerFieldShort

@@ -136,6 +136,7 @@ type EagerReccuringAppointment = {
   readonly endDate?: string | null;
   readonly bookerName?: string | null;
   readonly Appointments?: (Appointment | null)[] | null;
+  readonly canceled?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -154,6 +155,7 @@ type LazyReccuringAppointment = {
   readonly endDate?: string | null;
   readonly bookerName?: string | null;
   readonly Appointments: AsyncCollection<Appointment>;
+  readonly canceled?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -223,7 +225,6 @@ type EagerAppointment = {
   readonly locked?: boolean | null;
   readonly Teams?: (Team | null)[] | null;
   readonly reccuringappointmentID?: string | null;
-  readonly ReccuringAppointment?: ReccuringAppointment | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -249,7 +250,6 @@ type LazyAppointment = {
   readonly locked?: boolean | null;
   readonly Teams: AsyncCollection<Team>;
   readonly reccuringappointmentID?: string | null;
-  readonly ReccuringAppointment: AsyncItem<ReccuringAppointment | undefined>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

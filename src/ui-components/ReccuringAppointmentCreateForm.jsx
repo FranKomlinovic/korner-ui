@@ -15,6 +15,7 @@ import {
   Grid,
   Icon,
   ScrollView,
+  SwitchField,
   Text,
   TextField,
   useTheme,
@@ -204,6 +205,7 @@ export default function ReccuringAppointmentCreateForm(props) {
     endDate: "",
     bookerName: "",
     Appointments: [],
+    canceled: false,
   };
   const [bookerID, setBookerID] = React.useState(initialValues.bookerID);
   const [start, setStart] = React.useState(initialValues.start);
@@ -215,6 +217,7 @@ export default function ReccuringAppointmentCreateForm(props) {
   const [Appointments, setAppointments] = React.useState(
     initialValues.Appointments
   );
+  const [canceled, setCanceled] = React.useState(initialValues.canceled);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setBookerID(initialValues.bookerID);
@@ -229,6 +232,7 @@ export default function ReccuringAppointmentCreateForm(props) {
     setAppointments(initialValues.Appointments);
     setCurrentAppointmentsValue(undefined);
     setCurrentAppointmentsDisplayValue("");
+    setCanceled(initialValues.canceled);
     setErrors({});
   };
   const [currentFieldsIDDisplayValue, setCurrentFieldsIDDisplayValue] =
@@ -270,6 +274,7 @@ export default function ReccuringAppointmentCreateForm(props) {
     endDate: [],
     bookerName: [],
     Appointments: [],
+    canceled: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -305,6 +310,7 @@ export default function ReccuringAppointmentCreateForm(props) {
           endDate,
           bookerName,
           Appointments,
+          canceled,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -350,6 +356,7 @@ export default function ReccuringAppointmentCreateForm(props) {
             startDate: modelFields.startDate,
             endDate: modelFields.endDate,
             bookerName: modelFields.bookerName,
+            canceled: modelFields.canceled,
           };
           const reccuringAppointment = await DataStore.save(
             new ReccuringAppointment(modelFieldsToSave)
@@ -360,7 +367,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               promises.push(
                 DataStore.save(
                   Appointment.copyOf(original, (updated) => {
-                    updated.ReccuringAppointment = reccuringAppointment;
+                    updated.reccuringappointmentID = reccuringAppointment.id;
                   })
                 )
               );
@@ -400,6 +407,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               endDate,
               bookerName,
               Appointments,
+              canceled,
             };
             const result = onChange(modelFields);
             value = result?.bookerID ?? value;
@@ -432,6 +440,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               endDate,
               bookerName,
               Appointments,
+              canceled,
             };
             const result = onChange(modelFields);
             value = result?.start ?? value;
@@ -464,6 +473,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               endDate,
               bookerName,
               Appointments,
+              canceled,
             };
             const result = onChange(modelFields);
             value = result?.end ?? value;
@@ -492,6 +502,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               endDate,
               bookerName,
               Appointments,
+              canceled,
             };
             const result = onChange(modelFields);
             value = result?.fieldsID ?? value;
@@ -581,6 +592,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               endDate,
               bookerName,
               Appointments,
+              canceled,
             };
             const result = onChange(modelFields);
             value = result?.startDate ?? value;
@@ -613,6 +625,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               endDate: value,
               bookerName,
               Appointments,
+              canceled,
             };
             const result = onChange(modelFields);
             value = result?.endDate ?? value;
@@ -644,6 +657,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               endDate,
               bookerName: value,
               Appointments,
+              canceled,
             };
             const result = onChange(modelFields);
             value = result?.bookerName ?? value;
@@ -671,6 +685,7 @@ export default function ReccuringAppointmentCreateForm(props) {
               endDate,
               bookerName,
               Appointments: values,
+              canceled,
             };
             const result = onChange(modelFields);
             values = result?.Appointments ?? values;
@@ -738,6 +753,38 @@ export default function ReccuringAppointmentCreateForm(props) {
           {...getOverrideProps(overrides, "Appointments")}
         ></Autocomplete>
       </ArrayField>
+      <SwitchField
+        label="Canceled"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={canceled}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              bookerID,
+              start,
+              end,
+              fieldsID,
+              startDate,
+              endDate,
+              bookerName,
+              Appointments,
+              canceled: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.canceled ?? value;
+          }
+          if (errors.canceled?.hasError) {
+            runValidationTasks("canceled", value);
+          }
+          setCanceled(value);
+        }}
+        onBlur={() => runValidationTasks("canceled", canceled)}
+        errorMessage={errors.canceled?.errorMessage}
+        hasError={errors.canceled?.hasError}
+        {...getOverrideProps(overrides, "canceled")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

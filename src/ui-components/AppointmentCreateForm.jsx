@@ -30,7 +30,7 @@ import {
   Response,
   Fields as Fields0,
   Team,
-  ReccuringAppointment as ReccuringAppointment0,
+  ReccuringAppointment,
 } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
@@ -217,7 +217,7 @@ export default function AppointmentCreateForm(props) {
     Fields: undefined,
     locked: false,
     Teams: [],
-    ReccuringAppointment: undefined,
+    reccuringappointmentID: undefined,
   };
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
@@ -232,8 +232,8 @@ export default function AppointmentCreateForm(props) {
   const [Fields, setFields] = React.useState(initialValues.Fields);
   const [locked, setLocked] = React.useState(initialValues.locked);
   const [Teams, setTeams] = React.useState(initialValues.Teams);
-  const [ReccuringAppointment, setReccuringAppointment] = React.useState(
-    initialValues.ReccuringAppointment
+  const [reccuringappointmentID, setReccuringappointmentID] = React.useState(
+    initialValues.reccuringappointmentID
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -256,9 +256,9 @@ export default function AppointmentCreateForm(props) {
     setTeams(initialValues.Teams);
     setCurrentTeamsValue(undefined);
     setCurrentTeamsDisplayValue("");
-    setReccuringAppointment(initialValues.ReccuringAppointment);
-    setCurrentReccuringAppointmentValue(undefined);
-    setCurrentReccuringAppointmentDisplayValue("");
+    setReccuringappointmentID(initialValues.reccuringappointmentID);
+    setCurrentReccuringappointmentIDValue(undefined);
+    setCurrentReccuringappointmentIDDisplayValue("");
     setErrors({});
   };
   const [currentResponsesDisplayValue, setCurrentResponsesDisplayValue] =
@@ -275,19 +275,18 @@ export default function AppointmentCreateForm(props) {
   const [currentTeamsValue, setCurrentTeamsValue] = React.useState(undefined);
   const TeamsRef = React.createRef();
   const [
-    currentReccuringAppointmentDisplayValue,
-    setCurrentReccuringAppointmentDisplayValue,
+    currentReccuringappointmentIDDisplayValue,
+    setCurrentReccuringappointmentIDDisplayValue,
   ] = React.useState("");
   const [
-    currentReccuringAppointmentValue,
-    setCurrentReccuringAppointmentValue,
+    currentReccuringappointmentIDValue,
+    setCurrentReccuringappointmentIDValue,
   ] = React.useState(undefined);
-  const ReccuringAppointmentRef = React.createRef();
+  const reccuringappointmentIDRef = React.createRef();
   const getIDValue = {
     Responses: (r) => JSON.stringify({ id: r?.id }),
     Fields: (r) => JSON.stringify({ id: r?.id }),
     Teams: (r) => JSON.stringify({ id: r?.id }),
-    ReccuringAppointment: (r) => JSON.stringify({ id: r?.id }),
   };
   const ResponsesIdSet = new Set(
     Array.isArray(Responses)
@@ -304,11 +303,6 @@ export default function AppointmentCreateForm(props) {
       ? Teams.map((r) => getIDValue.Teams?.(r))
       : getIDValue.Teams?.(Teams)
   );
-  const ReccuringAppointmentIdSet = new Set(
-    Array.isArray(ReccuringAppointment)
-      ? ReccuringAppointment.map((r) => getIDValue.ReccuringAppointment?.(r))
-      : getIDValue.ReccuringAppointment?.(ReccuringAppointment)
-  );
   const responseRecords = useDataStoreBinding({
     type: "collection",
     model: Response,
@@ -323,13 +317,13 @@ export default function AppointmentCreateForm(props) {
   }).items;
   const reccuringAppointmentRecords = useDataStoreBinding({
     type: "collection",
-    model: ReccuringAppointment0,
+    model: ReccuringAppointment,
   }).items;
   const getDisplayValue = {
     Responses: (r) => `${r?.accepted ? r?.accepted + " - " : ""}${r?.id}`,
     Fields: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
     Teams: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
-    ReccuringAppointment: (r) =>
+    reccuringappointmentID: (r) =>
       `${r?.bookerName ? r?.bookerName + " - " : ""}${r?.id}`,
   };
   const validations = {
@@ -346,7 +340,7 @@ export default function AppointmentCreateForm(props) {
     Fields: [],
     locked: [],
     Teams: [],
-    ReccuringAppointment: [],
+    reccuringappointmentID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -387,7 +381,7 @@ export default function AppointmentCreateForm(props) {
           Fields,
           locked,
           Teams,
-          ReccuringAppointment,
+          reccuringappointmentID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -437,7 +431,7 @@ export default function AppointmentCreateForm(props) {
             canceled: modelFields.canceled,
             Fields: modelFields.Fields,
             locked: modelFields.locked,
-            ReccuringAppointment: modelFields.ReccuringAppointment,
+            reccuringappointmentID: modelFields.reccuringappointmentID,
           };
           const appointment = await DataStore.save(
             new Appointment(modelFieldsToSave)
@@ -506,7 +500,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.start ?? value;
@@ -544,7 +538,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.end ?? value;
@@ -577,7 +571,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             values = result?.Responses ?? values;
@@ -668,7 +662,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.date ?? value;
@@ -705,7 +699,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.confirmed ?? value;
@@ -742,7 +736,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.bookerID ?? value;
@@ -779,7 +773,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.bookerName ?? value;
@@ -816,7 +810,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.sport ?? value;
@@ -873,7 +867,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -910,7 +904,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.canceled ?? value;
@@ -944,7 +938,7 @@ export default function AppointmentCreateForm(props) {
               Fields: value,
               locked,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.Fields ?? value;
@@ -1032,7 +1026,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked: value,
               Teams,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             value = result?.locked ?? value;
@@ -1065,7 +1059,7 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams: values,
-              ReccuringAppointment,
+              reccuringappointmentID,
             };
             const result = onChange(modelFields);
             values = result?.Teams ?? values;
@@ -1150,80 +1144,81 @@ export default function AppointmentCreateForm(props) {
               Fields,
               locked,
               Teams,
-              ReccuringAppointment: value,
+              reccuringappointmentID: value,
             };
             const result = onChange(modelFields);
-            value = result?.ReccuringAppointment ?? value;
+            value = result?.reccuringappointmentID ?? value;
           }
-          setReccuringAppointment(value);
-          setCurrentReccuringAppointmentValue(undefined);
-          setCurrentReccuringAppointmentDisplayValue("");
+          setReccuringappointmentID(value);
+          setCurrentReccuringappointmentIDValue(undefined);
         }}
-        currentFieldValue={currentReccuringAppointmentValue}
-        label={"Reccuring appointment"}
-        items={ReccuringAppointment ? [ReccuringAppointment] : []}
-        hasError={errors?.ReccuringAppointment?.hasError}
-        errorMessage={errors?.ReccuringAppointment?.errorMessage}
-        getBadgeText={getDisplayValue.ReccuringAppointment}
-        setFieldValue={(model) => {
-          setCurrentReccuringAppointmentDisplayValue(
-            model ? getDisplayValue.ReccuringAppointment(model) : ""
+        currentFieldValue={currentReccuringappointmentIDValue}
+        label={"Reccuringappointment id"}
+        items={reccuringappointmentID ? [reccuringappointmentID] : []}
+        hasError={errors?.reccuringappointmentID?.hasError}
+        errorMessage={errors?.reccuringappointmentID?.errorMessage}
+        getBadgeText={(value) =>
+          value
+            ? getDisplayValue.reccuringappointmentID(
+                reccuringAppointmentRecords.find((r) => r.id === value)
+              )
+            : ""
+        }
+        setFieldValue={(value) => {
+          setCurrentReccuringappointmentIDDisplayValue(
+            value
+              ? getDisplayValue.reccuringappointmentID(
+                  reccuringAppointmentRecords.find((r) => r.id === value)
+                )
+              : ""
           );
-          setCurrentReccuringAppointmentValue(model);
+          setCurrentReccuringappointmentIDValue(value);
         }}
-        inputFieldRef={ReccuringAppointmentRef}
+        inputFieldRef={reccuringappointmentIDRef}
         defaultFieldValue={""}
       >
         <Autocomplete
-          label="Reccuring appointment"
+          label="Reccuringappointment id"
           isRequired={false}
           isReadOnly={false}
           placeholder="Search ReccuringAppointment"
-          value={currentReccuringAppointmentDisplayValue}
+          value={currentReccuringappointmentIDDisplayValue}
           options={reccuringAppointmentRecords
             .filter(
-              (r) =>
-                !ReccuringAppointmentIdSet.has(
-                  getIDValue.ReccuringAppointment?.(r)
-                )
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
             )
             .map((r) => ({
-              id: getIDValue.ReccuringAppointment?.(r),
-              label: getDisplayValue.ReccuringAppointment?.(r),
+              id: r?.id,
+              label: getDisplayValue.reccuringappointmentID?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentReccuringAppointmentValue(
-              reccuringAppointmentRecords.find((r) =>
-                Object.entries(JSON.parse(id)).every(
-                  ([key, value]) => r[key] === value
-                )
-              )
-            );
-            setCurrentReccuringAppointmentDisplayValue(label);
-            runValidationTasks("ReccuringAppointment", label);
+            setCurrentReccuringappointmentIDValue(id);
+            setCurrentReccuringappointmentIDDisplayValue(label);
+            runValidationTasks("reccuringappointmentID", label);
           }}
           onClear={() => {
-            setCurrentReccuringAppointmentDisplayValue("");
+            setCurrentReccuringappointmentIDDisplayValue("");
           }}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.ReccuringAppointment?.hasError) {
-              runValidationTasks("ReccuringAppointment", value);
+            if (errors.reccuringappointmentID?.hasError) {
+              runValidationTasks("reccuringappointmentID", value);
             }
-            setCurrentReccuringAppointmentDisplayValue(value);
-            setCurrentReccuringAppointmentValue(undefined);
+            setCurrentReccuringappointmentIDDisplayValue(value);
+            setCurrentReccuringappointmentIDValue(undefined);
           }}
           onBlur={() =>
             runValidationTasks(
-              "ReccuringAppointment",
-              currentReccuringAppointmentDisplayValue
+              "reccuringappointmentID",
+              currentReccuringappointmentIDValue
             )
           }
-          errorMessage={errors.ReccuringAppointment?.errorMessage}
-          hasError={errors.ReccuringAppointment?.hasError}
-          ref={ReccuringAppointmentRef}
+          errorMessage={errors.reccuringappointmentID?.errorMessage}
+          hasError={errors.reccuringappointmentID?.hasError}
+          ref={reccuringappointmentIDRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, "ReccuringAppointment")}
+          {...getOverrideProps(overrides, "reccuringappointmentID")}
         ></Autocomplete>
       </ArrayField>
       <Flex

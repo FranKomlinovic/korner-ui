@@ -322,9 +322,16 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "ReccuringAppointment"
+                            "reccuringappointmentID"
                         ]
                     }
+                },
+                "canceled": {
+                    "name": "canceled",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -632,21 +639,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "ReccuringAppointment": {
-                    "name": "ReccuringAppointment",
-                    "isArray": false,
-                    "type": {
-                        "model": "ReccuringAppointment"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "reccuringappointmentID"
-                        ]
-                    }
-                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -918,5 +910,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.3",
-    "version": "bb3aec7fe518d25eeff797d91a8efdbc"
+    "version": "97844053ba20f921e112d3f5f88fc5cc"
 };

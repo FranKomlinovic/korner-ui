@@ -8,11 +8,13 @@ import FieldOwnerAppointments from "../components/field/fieldOwnerAppointments";
 import FieldFreeAppointmentsView from "../components/field/fieldFreeAppointmentsView";
 import useGetField from "../custom-hooks/field/useGetField";
 import useGetFieldAppointments from "../custom-hooks/field/useGetFieldAppointments";
+import useGetFieldRecurringAppointments from "../custom-hooks/field/useGetFieldRecurringAppointments";
 
 const FieldById = ({user}) => {
     const {fieldId} = useParams();
     const field = useGetField(fieldId);
     const appointments = useGetFieldAppointments(fieldId);
+    const recurringAppointments = useGetFieldRecurringAppointments(fieldId);
 
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
     const [isOwner, setIsOwner] = useState(false)
@@ -35,7 +37,7 @@ const FieldById = ({user}) => {
 
             <FieldFreeAppointmentsView field={field.data} appointments={appointments.data} user={user} date={date}
                                        setDate={setDate}/>
-            {isOwner && <FieldOwnerAppointments appointments={appointments.data} date={date}/>}
+            {isOwner && <FieldOwnerAppointments appointments={appointments.data} recurringAppointments={recurringAppointments.data} date={date}/>}
         </Flex>
     );
 }

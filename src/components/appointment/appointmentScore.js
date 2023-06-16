@@ -51,7 +51,7 @@ const AppointmentScore = ({teams, role}) => {
     };
 
     const ScoreDialog = () => {
-        const [scores, setScores] = useState(teams.map(team => team.score));
+        const [scores, setScores] = useState(teams?.map(team => team.score));
 
         const handleScoreChange = (index, score) => {
             const newScores = [...scores];
@@ -74,7 +74,7 @@ const AppointmentScore = ({teams, role}) => {
             <Dialog fullWidth open={open} onClose={() => setOpen(false)}>
                 <DialogTitle>Dodaj rezultat</DialogTitle>
                 <Flex margin="1rem" direction="column">
-                    {teams.map((team, index) => (
+                    {teams?.map((team, index) => (
                         <EditScore
                             key={team.id}
                             team={team}
@@ -93,7 +93,7 @@ const AppointmentScore = ({teams, role}) => {
     return (
         <Flex direction={"column"}>
             <Heading level={4}>Rezultat:</Heading>
-            {teams.map((a, b) => (
+            {teams?.map((a, b) => (
                 <Flex key={a.id} alignItems={"center"} justifyContent={"space-between"}>
                     <DisplayScore team={a}/>
                 </Flex>
