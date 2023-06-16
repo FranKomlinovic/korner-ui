@@ -17,7 +17,6 @@ const RecurringById = () => {
     useEffect(() => {
         DataStore.query(ReccuringAppointment, recurringId).then(a => {
             setRecurringAppointment(a)
-            console.log(a)
         })
     }, [recurringId])
 

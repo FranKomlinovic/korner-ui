@@ -14,7 +14,6 @@ const FieldOwnerAppointments = ({appointments, date, recurringAppointments}) => 
     }, [appointments, date]);
 
     useEffect(() => {
-        console.log(recurringAppointments)
         if (recurringAppointments) {
             setRecAppointments(Object.entries(
                 // What you have done
