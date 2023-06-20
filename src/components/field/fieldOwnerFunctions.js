@@ -35,7 +35,7 @@ const FieldOwnerFunctions = ({fieldParam}) => {
             <Dialog open={showUpdateForm} onClose={() => setShowUpdateForm(false)}>
                 <DialogTitle>Ažuriraj teren</DialogTitle>
                 <FieldsUpdateForm onCancel={() => setShowUpdateForm(false)}
-                                  onSuccess={(a) => {
+                                  onSuccess={() => {
                                       setShowUpdateForm(false)
                                   }}
                                   fields={field}

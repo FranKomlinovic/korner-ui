@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Button, Flex, Heading, Text, TextField} from "@aws-amplify/ui-react";
 import {Response, Team} from "../../models";
 import {DataStore} from "aws-amplify";
 import {FaTshirt} from "react-icons/fa";
+import AlertContext from "../../context/alertContext";
 
 const AppointmentReservationForm = ({user, appointment, responses}) => {
     const [name, setName] = useState();
     const [responseToUpdate, setResponseToUpdate] = useState();
     const [team, setTeam] = useState();
-
+    const alertContext = useContext(AlertContext);
 
     useEffect(() => {
         setName(user?.name);
@@ -38,7 +39,12 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
             playerName: name,
             playerPhoto: user?.photo,
         });
-        DataStore.save(response)
+        DataStore.save(response).then(a => {
+            a.accepted ? alertContext.success("Prihvatili ste termin") :
+                alertContext.warning("Odbili ste termin")
+        }).catch(() => {
+            alertContext.error("Greška prihvaćanja termina, pokušajte ponovno")
+        });
     };
 
     function updateResponse(accepted) {
@@ -46,7 +52,12 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
             item.team = undefined;
             item.accepted = accepted;
             item.playerPhoto = user?.photo
-        }))
+        })).then(a => {
+            a.accepted ? alertContext.success("Prihvatili ste termin") :
+                alertContext.warning("Odbili ste termin")
+        }).catch(() => {
+            alertContext.error("Greška prihvaćanja termina, pokušajte ponovno")
+        });
     }
 
     const commingButton = (

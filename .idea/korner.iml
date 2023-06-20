@@ -14,6 +14,10 @@
       <excludeFolder url="file://$MODULE_DIR$/amplify/backend/function/availableAppointments/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/amplify/backend/storage/s3kornerfieldpictures/build" />
       <excludeFolder url="file://$MODULE_DIR$/amplify/#current-cloud-backend" />
+      <excludeFolder url="file://$MODULE_DIR$/src/ui-components" />
+      <excludeFolder url="file://$MODULE_DIR$/amplify" />
+      <excludeFolder url="file://$MODULE_DIR$/src/models" />
+      <excludeFolder url="file://$MODULE_DIR$/src/graphql" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

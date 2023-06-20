@@ -22,7 +22,7 @@ const UploadComponent = ({uploadSuccessFunction, text, open, handleClose}) => {
                 dropFilesText: text,
                 browseFilesText: 'Učitaj fotografiju',
                 // others are functions that take an argument
-                getFilesUploadedText(count) {
+                getFilesUploadedText() {
                     return `Fotografija učitana`;
                 },
             }}

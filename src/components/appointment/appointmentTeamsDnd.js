@@ -1,3 +1,5 @@
+// noinspection JSIgnoredPromiseFromCall
+
 import React, {useEffect, useState} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import {Button, Collection, Flex, Heading, ScrollView, SwitchField} from "@aws-amplify/ui-react";
@@ -16,7 +18,7 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
     useEffect(() => {
         const fetchData = async () => {
             let msps = await Promise.all(
-                tms.map(async (a) => {
+                tms?.map(async (a) => {
                     const obje = {team: a};
                     obje.responses = await DataStore.query(Response, (c) => c.and(e => [
                         e.teamID.eq(a.id),
@@ -42,7 +44,10 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
             setState(msps);
         };
 
-        fetchData();
+        if (tms) {
+            fetchData();
+
+        }
     }, [appointmentID, tms]);
 
 
@@ -116,7 +121,7 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
                     </Flex>
                     <Collection type="grid" templateColumns="1fr 1fr 1fr 1fr 1fr" items={a.responses}
                                 justifyContent={"space-between"} alignItems={"center"}>
-                        {(item, index) => {
+                        {(item) => {
                             return (
                                 <FigmaTeamPlayer response={item}/>
                             );
@@ -158,7 +163,7 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
                                                     draggableId={item.id}
                                                     index={index}
                                                 >
-                                                    {(provided, snapshot) => (
+                                                    {(provided) => (
                                                         <Flex
                                                             ref={provided.innerRef}
                                                             {...provided.draggableProps}
@@ -210,7 +215,7 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
                                                     draggableId={item.id}
                                                     index={index}
                                                 >
-                                                    {(provided, snapshot) => (
+                                                    {(provided) => (
                                                         <Flex
                                                             padding="0px"
                                                             ref={provided.innerRef}

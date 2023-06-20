@@ -106,7 +106,7 @@ const AppointmentTeamButton = ({teams, appointment, checked, checkedFunction, re
                 labelPosition={"end"}
                 isChecked={checked}
                 variation={"quiet"}
-                onChange={(a) => {
+                onChange={() => {
                     if (teams?.length === 0 && !checked) {
                         setOpen(true);
                     } else {

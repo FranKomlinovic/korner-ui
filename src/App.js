@@ -17,6 +17,8 @@ import {FaHome, FaPlusCircle, FaQuestion, FaRunning} from "react-icons/fa";
 import LandingPage from "./views/landing-page";
 import PlayedAppointments from "./views/playedAppointments";
 import RecurringById from "./views/recurringById";
+import {AlertProvider} from "./context/alertContext";
+import AlertComponent from "./components/alertComponent";
 
 Amplify.configure(awsExports);
 
@@ -114,10 +116,13 @@ function App() {
 
     return (
         <Flex style={bg} height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
-            <TopHeader/>
-            <ScrollView paddingBottom={"1rem"} direction={"column"}>
-                {routes()}
-            </ScrollView>
+            <AlertProvider>
+                <AlertComponent />
+                <TopHeader/>
+                <ScrollView paddingBottom={"1rem"} direction={"column"}>
+                    {routes()}
+                </ScrollView>
+            </AlertProvider>
         </Flex>
 
     )

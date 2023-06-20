@@ -64,7 +64,7 @@ const AppointmentScore = ({teams, role}) => {
             teams.forEach((team, index) => {
                 DataStore.save(Team.copyOf(team, a => {
                     a.score = scores[index] ? scores[index] : 0;
-                })).then(a => {
+                })).then(() => {
                     setOpen(false);
                 });
             });
@@ -93,7 +93,7 @@ const AppointmentScore = ({teams, role}) => {
     return (
         <Flex direction={"column"}>
             <Heading level={4}>Rezultat:</Heading>
-            {teams?.map((a, b) => (
+            {teams?.map((a) => (
                 <Flex key={a.id} alignItems={"center"} justifyContent={"space-between"}>
                     <DisplayScore team={a}/>
                 </Flex>

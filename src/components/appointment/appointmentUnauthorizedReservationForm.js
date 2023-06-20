@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
 import {DataStore} from "aws-amplify";
+import AlertContext from "../../context/alertContext";
 
 const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
     const [name, setName] = useState();
     const [answered, setAnswered] = useState(false);
-
+    const alertContext = useContext(AlertContext);
     useEffect(() => {
         responses && name && setAnswered(responses.find((response) => response.playerName === name));
     }, [name, responses]);
@@ -24,7 +25,12 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
             appointmentID: appointment.id,
             playerName: nm,
         });
-        DataStore.save(response).then();
+        DataStore.save(response).then(a => {
+            a.accepted ? alertContext.success("Prihvatili ste termin") :
+                alertContext.warning("Odbili ste termin")
+        }).catch(() => {
+            alertContext.error("Greška prihvaćanja termina, pokušajte ponovno")
+        });
     }
 
 
@@ -40,10 +46,10 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
                         <Heading>Već postoji odgovor s imenom {name}</Heading>
                     </Flex>
                     : <Flex>
-                        <Button variation={"primary"} onClick={() => createResponse(true)}>
+                        <Button isDisabled={!name} variation={"primary"} onClick={() => createResponse(true)}>
                             Dolazim
                         </Button>
-                        <Button onClick={() => createResponse(false)} variation={"warning"}>
+                        <Button isDisabled={!name} onClick={() => createResponse(false)} variation={"warning"}>
                             Ne Dolazim
                         </Button>
                     </Flex>

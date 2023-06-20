@@ -3,8 +3,12 @@ import {FaTrash} from "react-icons/fa";
 import {confirmAlert} from "react-confirm-alert";
 import {DataStore} from "aws-amplify";
 import {Appointment} from "../../models";
+import {useContext} from "react";
+import AlertContext from "../../context/alertContext";
 
 const AppointmentCancelButton = ({appointment}) => {
+
+    const alertContext = useContext(AlertContext);
 
     // Dialog for deleting appointment
     const cancelAppointment = () => {
@@ -17,7 +21,11 @@ const AppointmentCancelButton = ({appointment}) => {
                     onClick: () => {
                         DataStore.save(Appointment.copyOf(appointment, (item) => {
                             item.canceled = true;
-                        }))
+                        })).then(() => {
+                            alertContext.warning("Otkazali ste termin!")
+                        }).catch(() => {
+                            alertContext.error("Greška brisanja termina, pokušajte ponovno")
+                        })
                     }
                 },
                 {

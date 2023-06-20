@@ -39,11 +39,12 @@ const RecurringById = () => {
                         DataStore.save(ReccuringAppointment.copyOf(recurringAppointment, a => {
                             a.canceled = true;
                             a.endDate = getCurrentDateInDynamoDbString(0)
-                        })).then(a => {
+                        })).then(() => {
                             navigate("/fields/" + recurringAppointment?.fieldsID)
                         });
                         for (let a of upcomingAppointments) {
-                            DataStore.delete(Appointment, a.id);
+                            // noinspection JSIgnoredPromiseFromCall
+                            DataStore.delete(Appointment, a?.id);
                         }
                     }
                 },

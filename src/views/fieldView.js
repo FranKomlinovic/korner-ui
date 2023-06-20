@@ -30,7 +30,7 @@ const FieldView = () => {
                            onChange={(a) => setFilter(a.currentTarget.value)}/>
             </Flex>
             <Collection items={fields}>
-                {(item, index) => (
+                {(item) => (
                     <Flex key={item.id}>
                         <FigmaField field={item}/>
                     </Flex>

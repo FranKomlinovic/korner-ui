@@ -49,8 +49,8 @@ const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, fiel
 
         const reccuringAppointment = new ReccuringAppointment({
             bookerID: user?.attributes.sub,
-            start: appointmentToCreate.start,
-            end: appointmentToCreate.end,
+            start: appointmentToCreate?.start,
+            end: appointmentToCreate?.end,
             startDate: date.toISOString().split('T')[0],
             endDate: afterYear.toISOString().split('T')[0],
             fieldsID: field?.id,
@@ -73,7 +73,7 @@ const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, fiel
                     reccuringappointmentID: a.id,
                     sport : Sport.FUTSAL
                 }
-                DataStore.save(new Appointment(app)).then(ab => {
+                DataStore.save(new Appointment(app)).then(() => {
 
                     // If first appointment, check for other reservation
                         if (date === a.date) {
