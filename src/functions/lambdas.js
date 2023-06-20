@@ -1,5 +1,6 @@
 import {Appointment} from "../models";
 import {DataStore} from "aws-amplify";
+import {getCurrentDate} from "./appointmentUItils";
 
 
 export function confirmAppointment(appointmentId): Appointment {
@@ -81,11 +82,7 @@ export function isOverlapping(app: Appointment, fieldAppointments: Appointment[]
 }
 
 function isToday(dt): boolean {
-    const date = new Date(dt);
-    const today = new Date();
-    return date.getDate() === today.getDate() &&
-        date.getMonth() === today.getMonth() &&
-        date.getFullYear() === today.getFullYear();
+    return dt === getCurrentDate();
 }
 
 
