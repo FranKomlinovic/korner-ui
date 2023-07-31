@@ -24,21 +24,27 @@ export default function UserUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
+    sub: "",
     name: "",
     email: "",
-    cognitoID: "",
+    picture: "",
+    score: "",
   };
+  const [sub, setSub] = React.useState(initialValues.sub);
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
-  const [cognitoID, setCognitoID] = React.useState(initialValues.cognitoID);
+  const [picture, setPicture] = React.useState(initialValues.picture);
+  const [score, setScore] = React.useState(initialValues.score);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = userRecord
       ? { ...initialValues, ...userRecord }
       : initialValues;
+    setSub(cleanValues.sub);
     setName(cleanValues.name);
     setEmail(cleanValues.email);
-    setCognitoID(cleanValues.cognitoID);
+    setPicture(cleanValues.picture);
+    setScore(cleanValues.score);
     setErrors({});
   };
   const [userRecord, setUserRecord] = React.useState(userModelProp);
@@ -53,9 +59,11 @@ export default function UserUpdateForm(props) {
   }, [idProp, userModelProp]);
   React.useEffect(resetStateValues, [userRecord]);
   const validations = {
+    sub: [{ type: "Required" }],
     name: [],
     email: [],
-    cognitoID: [],
+    picture: [],
+    score: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -83,9 +91,11 @@ export default function UserUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
+          sub,
           name,
           email,
-          cognitoID,
+          picture,
+          score,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -133,6 +143,34 @@ export default function UserUpdateForm(props) {
       {...rest}
     >
       <TextField
+        label="Sub"
+        isRequired={true}
+        isReadOnly={false}
+        value={sub}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              sub: value,
+              name,
+              email,
+              picture,
+              score,
+            };
+            const result = onChange(modelFields);
+            value = result?.sub ?? value;
+          }
+          if (errors.sub?.hasError) {
+            runValidationTasks("sub", value);
+          }
+          setSub(value);
+        }}
+        onBlur={() => runValidationTasks("sub", sub)}
+        errorMessage={errors.sub?.errorMessage}
+        hasError={errors.sub?.hasError}
+        {...getOverrideProps(overrides, "sub")}
+      ></TextField>
+      <TextField
         label="Name"
         isRequired={false}
         isReadOnly={false}
@@ -141,9 +179,11 @@ export default function UserUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              sub,
               name: value,
               email,
-              cognitoID,
+              picture,
+              score,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -167,9 +207,11 @@ export default function UserUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              sub,
               name,
               email: value,
-              cognitoID,
+              picture,
+              score,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -185,30 +227,64 @@ export default function UserUpdateForm(props) {
         {...getOverrideProps(overrides, "email")}
       ></TextField>
       <TextField
-        label="Cognito id"
+        label="Picture"
         isRequired={false}
         isReadOnly={false}
-        value={cognitoID}
+        value={picture}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              sub,
               name,
               email,
-              cognitoID: value,
+              picture: value,
+              score,
             };
             const result = onChange(modelFields);
-            value = result?.cognitoID ?? value;
+            value = result?.picture ?? value;
           }
-          if (errors.cognitoID?.hasError) {
-            runValidationTasks("cognitoID", value);
+          if (errors.picture?.hasError) {
+            runValidationTasks("picture", value);
           }
-          setCognitoID(value);
+          setPicture(value);
         }}
-        onBlur={() => runValidationTasks("cognitoID", cognitoID)}
-        errorMessage={errors.cognitoID?.errorMessage}
-        hasError={errors.cognitoID?.hasError}
-        {...getOverrideProps(overrides, "cognitoID")}
+        onBlur={() => runValidationTasks("picture", picture)}
+        errorMessage={errors.picture?.errorMessage}
+        hasError={errors.picture?.hasError}
+        {...getOverrideProps(overrides, "picture")}
+      ></TextField>
+      <TextField
+        label="Score"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={score}
+        onChange={(e) => {
+          let value = isNaN(parseFloat(e.target.value))
+            ? e.target.value
+            : parseFloat(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              sub,
+              name,
+              email,
+              picture,
+              score: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.score ?? value;
+          }
+          if (errors.score?.hasError) {
+            runValidationTasks("score", value);
+          }
+          setScore(value);
+        }}
+        onBlur={() => runValidationTasks("score", score)}
+        errorMessage={errors.score?.errorMessage}
+        hasError={errors.score?.hasError}
+        {...getOverrideProps(overrides, "score")}
       ></TextField>
       <Flex
         justifyContent="space-between"

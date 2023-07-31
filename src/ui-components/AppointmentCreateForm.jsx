@@ -442,7 +442,7 @@ export default function AppointmentCreateForm(props) {
               promises.push(
                 DataStore.save(
                   Response.copyOf(original, (updated) => {
-                    updated.appointmentID = appointment.id;
+                    updated.Appointment = appointment;
                   })
                 )
               );

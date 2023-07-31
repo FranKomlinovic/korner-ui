@@ -26,7 +26,6 @@ const AppointmentShareLink = ({appointment, field}) => {
             </Tooltip>
             <WhatsappShareButton url={copyLink()}><WhatsappIcon round size={"2rem"}/> </WhatsappShareButton>
             <ViberShareButton url={copyLink()}><ViberIcon round size={"2rem"}/> </ViberShareButton>
-
         </Flex>
 
     </Flex>

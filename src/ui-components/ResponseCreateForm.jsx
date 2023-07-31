@@ -24,7 +24,11 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Response, Appointment, Team } from "../models";
+import {
+  Response,
+  Team as Team0,
+  Appointment as Appointment0,
+} from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -199,65 +203,77 @@ export default function ResponseCreateForm(props) {
   const initialValues = {
     playerID: "",
     accepted: false,
-    appointmentID: undefined,
     playerName: "",
     playerPhoto: "",
-    teamID: undefined,
+    Team: undefined,
+    Appointment: undefined,
   };
   const [playerID, setPlayerID] = React.useState(initialValues.playerID);
   const [accepted, setAccepted] = React.useState(initialValues.accepted);
-  const [appointmentID, setAppointmentID] = React.useState(
-    initialValues.appointmentID
-  );
   const [playerName, setPlayerName] = React.useState(initialValues.playerName);
   const [playerPhoto, setPlayerPhoto] = React.useState(
     initialValues.playerPhoto
   );
-  const [teamID, setTeamID] = React.useState(initialValues.teamID);
+  const [Team, setTeam] = React.useState(initialValues.Team);
+  const [Appointment, setAppointment] = React.useState(
+    initialValues.Appointment
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setPlayerID(initialValues.playerID);
     setAccepted(initialValues.accepted);
-    setAppointmentID(initialValues.appointmentID);
-    setCurrentAppointmentIDValue(undefined);
-    setCurrentAppointmentIDDisplayValue("");
     setPlayerName(initialValues.playerName);
     setPlayerPhoto(initialValues.playerPhoto);
-    setTeamID(initialValues.teamID);
-    setCurrentTeamIDValue(undefined);
-    setCurrentTeamIDDisplayValue("");
+    setTeam(initialValues.Team);
+    setCurrentTeamValue(undefined);
+    setCurrentTeamDisplayValue("");
+    setAppointment(initialValues.Appointment);
+    setCurrentAppointmentValue(undefined);
+    setCurrentAppointmentDisplayValue("");
     setErrors({});
   };
-  const [
-    currentAppointmentIDDisplayValue,
-    setCurrentAppointmentIDDisplayValue,
-  ] = React.useState("");
-  const [currentAppointmentIDValue, setCurrentAppointmentIDValue] =
-    React.useState(undefined);
-  const appointmentIDRef = React.createRef();
-  const [currentTeamIDDisplayValue, setCurrentTeamIDDisplayValue] =
+  const [currentTeamDisplayValue, setCurrentTeamDisplayValue] =
     React.useState("");
-  const [currentTeamIDValue, setCurrentTeamIDValue] = React.useState(undefined);
-  const teamIDRef = React.createRef();
-  const appointmentRecords = useDataStoreBinding({
-    type: "collection",
-    model: Appointment,
-  }).items;
+  const [currentTeamValue, setCurrentTeamValue] = React.useState(undefined);
+  const TeamRef = React.createRef();
+  const [currentAppointmentDisplayValue, setCurrentAppointmentDisplayValue] =
+    React.useState("");
+  const [currentAppointmentValue, setCurrentAppointmentValue] =
+    React.useState(undefined);
+  const AppointmentRef = React.createRef();
+  const getIDValue = {
+    Team: (r) => JSON.stringify({ id: r?.id }),
+    Appointment: (r) => JSON.stringify({ id: r?.id }),
+  };
+  const TeamIdSet = new Set(
+    Array.isArray(Team)
+      ? Team.map((r) => getIDValue.Team?.(r))
+      : getIDValue.Team?.(Team)
+  );
+  const AppointmentIdSet = new Set(
+    Array.isArray(Appointment)
+      ? Appointment.map((r) => getIDValue.Appointment?.(r))
+      : getIDValue.Appointment?.(Appointment)
+  );
   const teamRecords = useDataStoreBinding({
     type: "collection",
-    model: Team,
+    model: Team0,
+  }).items;
+  const appointmentRecords = useDataStoreBinding({
+    type: "collection",
+    model: Appointment0,
   }).items;
   const getDisplayValue = {
-    appointmentID: (r) => `${r?.confirmed ? r?.confirmed + " - " : ""}${r?.id}`,
-    teamID: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
+    Team: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
+    Appointment: (r) => `${r?.confirmed ? r?.confirmed + " - " : ""}${r?.id}`,
   };
   const validations = {
     playerID: [],
     accepted: [],
-    appointmentID: [{ type: "Required" }],
     playerName: [{ type: "Required" }],
     playerPhoto: [],
-    teamID: [],
+    Team: [],
+    Appointment: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -287,23 +303,31 @@ export default function ResponseCreateForm(props) {
         let modelFields = {
           playerID,
           accepted,
-          appointmentID,
           playerName,
           playerPhoto,
-          teamID,
+          Team,
+          Appointment,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(fieldName, item)
+                  runValidationTasks(
+                    fieldName,
+                    item,
+                    getDisplayValue[fieldName]
+                  )
                 )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(fieldName, modelFields[fieldName])
+              runValidationTasks(
+                fieldName,
+                modelFields[fieldName],
+                getDisplayValue[fieldName]
+              )
             );
             return promises;
           }, [])
@@ -347,10 +371,10 @@ export default function ResponseCreateForm(props) {
             const modelFields = {
               playerID: value,
               accepted,
-              appointmentID,
               playerName,
               playerPhoto,
-              teamID,
+              Team,
+              Appointment,
             };
             const result = onChange(modelFields);
             value = result?.playerID ?? value;
@@ -376,10 +400,10 @@ export default function ResponseCreateForm(props) {
             const modelFields = {
               playerID,
               accepted: value,
-              appointmentID,
               playerName,
               playerPhoto,
-              teamID,
+              Team,
+              Appointment,
             };
             const result = onChange(modelFields);
             value = result?.accepted ?? value;
@@ -394,91 +418,6 @@ export default function ResponseCreateForm(props) {
         hasError={errors.accepted?.hasError}
         {...getOverrideProps(overrides, "accepted")}
       ></SwitchField>
-      <ArrayField
-        lengthLimit={1}
-        onChange={async (items) => {
-          let value = items[0];
-          if (onChange) {
-            const modelFields = {
-              playerID,
-              accepted,
-              appointmentID: value,
-              playerName,
-              playerPhoto,
-              teamID,
-            };
-            const result = onChange(modelFields);
-            value = result?.appointmentID ?? value;
-          }
-          setAppointmentID(value);
-          setCurrentAppointmentIDValue(undefined);
-        }}
-        currentFieldValue={currentAppointmentIDValue}
-        label={"Appointment id"}
-        items={appointmentID ? [appointmentID] : []}
-        hasError={errors?.appointmentID?.hasError}
-        errorMessage={errors?.appointmentID?.errorMessage}
-        getBadgeText={(value) =>
-          value
-            ? getDisplayValue.appointmentID(
-                appointmentRecords.find((r) => r.id === value)
-              )
-            : ""
-        }
-        setFieldValue={(value) => {
-          setCurrentAppointmentIDDisplayValue(
-            value
-              ? getDisplayValue.appointmentID(
-                  appointmentRecords.find((r) => r.id === value)
-                )
-              : ""
-          );
-          setCurrentAppointmentIDValue(value);
-        }}
-        inputFieldRef={appointmentIDRef}
-        defaultFieldValue={""}
-      >
-        <Autocomplete
-          label="Appointment id"
-          isRequired={true}
-          isReadOnly={false}
-          placeholder="Search Appointment"
-          value={currentAppointmentIDDisplayValue}
-          options={appointmentRecords
-            .filter(
-              (r, i, arr) =>
-                arr.findIndex((member) => member?.id === r?.id) === i
-            )
-            .map((r) => ({
-              id: r?.id,
-              label: getDisplayValue.appointmentID?.(r),
-            }))}
-          onSelect={({ id, label }) => {
-            setCurrentAppointmentIDValue(id);
-            setCurrentAppointmentIDDisplayValue(label);
-            runValidationTasks("appointmentID", label);
-          }}
-          onClear={() => {
-            setCurrentAppointmentIDDisplayValue("");
-          }}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.appointmentID?.hasError) {
-              runValidationTasks("appointmentID", value);
-            }
-            setCurrentAppointmentIDDisplayValue(value);
-            setCurrentAppointmentIDValue(undefined);
-          }}
-          onBlur={() =>
-            runValidationTasks("appointmentID", currentAppointmentIDValue)
-          }
-          errorMessage={errors.appointmentID?.errorMessage}
-          hasError={errors.appointmentID?.hasError}
-          ref={appointmentIDRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "appointmentID")}
-        ></Autocomplete>
-      </ArrayField>
       <TextField
         label="Player name"
         isRequired={true}
@@ -490,10 +429,10 @@ export default function ResponseCreateForm(props) {
             const modelFields = {
               playerID,
               accepted,
-              appointmentID,
               playerName: value,
               playerPhoto,
-              teamID,
+              Team,
+              Appointment,
             };
             const result = onChange(modelFields);
             value = result?.playerName ?? value;
@@ -519,10 +458,10 @@ export default function ResponseCreateForm(props) {
             const modelFields = {
               playerID,
               accepted,
-              appointmentID,
               playerName,
               playerPhoto: value,
-              teamID,
+              Team,
+              Appointment,
             };
             const result = onChange(modelFields);
             value = result?.playerPhoto ?? value;
@@ -545,75 +484,150 @@ export default function ResponseCreateForm(props) {
             const modelFields = {
               playerID,
               accepted,
-              appointmentID,
               playerName,
               playerPhoto,
-              teamID: value,
+              Team: value,
+              Appointment,
             };
             const result = onChange(modelFields);
-            value = result?.teamID ?? value;
+            value = result?.Team ?? value;
           }
-          setTeamID(value);
-          setCurrentTeamIDValue(undefined);
+          setTeam(value);
+          setCurrentTeamValue(undefined);
+          setCurrentTeamDisplayValue("");
         }}
-        currentFieldValue={currentTeamIDValue}
-        label={"Team id"}
-        items={teamID ? [teamID] : []}
-        hasError={errors?.teamID?.hasError}
-        errorMessage={errors?.teamID?.errorMessage}
-        getBadgeText={(value) =>
-          value
-            ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
-            : ""
-        }
-        setFieldValue={(value) => {
-          setCurrentTeamIDDisplayValue(
-            value
-              ? getDisplayValue.teamID(teamRecords.find((r) => r.id === value))
-              : ""
-          );
-          setCurrentTeamIDValue(value);
+        currentFieldValue={currentTeamValue}
+        label={"Team"}
+        items={Team ? [Team] : []}
+        hasError={errors?.Team?.hasError}
+        errorMessage={errors?.Team?.errorMessage}
+        getBadgeText={getDisplayValue.Team}
+        setFieldValue={(model) => {
+          setCurrentTeamDisplayValue(model ? getDisplayValue.Team(model) : "");
+          setCurrentTeamValue(model);
         }}
-        inputFieldRef={teamIDRef}
+        inputFieldRef={TeamRef}
         defaultFieldValue={""}
       >
         <Autocomplete
-          label="Team id"
+          label="Team"
           isRequired={false}
           isReadOnly={false}
           placeholder="Search Team"
-          value={currentTeamIDDisplayValue}
+          value={currentTeamDisplayValue}
           options={teamRecords
-            .filter(
-              (r, i, arr) =>
-                arr.findIndex((member) => member?.id === r?.id) === i
-            )
+            .filter((r) => !TeamIdSet.has(getIDValue.Team?.(r)))
             .map((r) => ({
-              id: r?.id,
-              label: getDisplayValue.teamID?.(r),
+              id: getIDValue.Team?.(r),
+              label: getDisplayValue.Team?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentTeamIDValue(id);
-            setCurrentTeamIDDisplayValue(label);
-            runValidationTasks("teamID", label);
+            setCurrentTeamValue(
+              teamRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentTeamDisplayValue(label);
+            runValidationTasks("Team", label);
           }}
           onClear={() => {
-            setCurrentTeamIDDisplayValue("");
+            setCurrentTeamDisplayValue("");
           }}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.teamID?.hasError) {
-              runValidationTasks("teamID", value);
+            if (errors.Team?.hasError) {
+              runValidationTasks("Team", value);
             }
-            setCurrentTeamIDDisplayValue(value);
-            setCurrentTeamIDValue(undefined);
+            setCurrentTeamDisplayValue(value);
+            setCurrentTeamValue(undefined);
           }}
-          onBlur={() => runValidationTasks("teamID", currentTeamIDValue)}
-          errorMessage={errors.teamID?.errorMessage}
-          hasError={errors.teamID?.hasError}
-          ref={teamIDRef}
+          onBlur={() => runValidationTasks("Team", currentTeamDisplayValue)}
+          errorMessage={errors.Team?.errorMessage}
+          hasError={errors.Team?.hasError}
+          ref={TeamRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, "teamID")}
+          {...getOverrideProps(overrides, "Team")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              playerID,
+              accepted,
+              playerName,
+              playerPhoto,
+              Team,
+              Appointment: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.Appointment ?? value;
+          }
+          setAppointment(value);
+          setCurrentAppointmentValue(undefined);
+          setCurrentAppointmentDisplayValue("");
+        }}
+        currentFieldValue={currentAppointmentValue}
+        label={"Appointment"}
+        items={Appointment ? [Appointment] : []}
+        hasError={errors?.Appointment?.hasError}
+        errorMessage={errors?.Appointment?.errorMessage}
+        getBadgeText={getDisplayValue.Appointment}
+        setFieldValue={(model) => {
+          setCurrentAppointmentDisplayValue(
+            model ? getDisplayValue.Appointment(model) : ""
+          );
+          setCurrentAppointmentValue(model);
+        }}
+        inputFieldRef={AppointmentRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Appointment"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search Appointment"
+          value={currentAppointmentDisplayValue}
+          options={appointmentRecords
+            .filter((r) => !AppointmentIdSet.has(getIDValue.Appointment?.(r)))
+            .map((r) => ({
+              id: getIDValue.Appointment?.(r),
+              label: getDisplayValue.Appointment?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentAppointmentValue(
+              appointmentRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentAppointmentDisplayValue(label);
+            runValidationTasks("Appointment", label);
+          }}
+          onClear={() => {
+            setCurrentAppointmentDisplayValue("");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Appointment?.hasError) {
+              runValidationTasks("Appointment", value);
+            }
+            setCurrentAppointmentDisplayValue(value);
+            setCurrentAppointmentValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks("Appointment", currentAppointmentDisplayValue)
+          }
+          errorMessage={errors.Appointment?.errorMessage}
+          hasError={errors.Appointment?.hasError}
+          ref={AppointmentRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Appointment")}
         ></Autocomplete>
       </ArrayField>
       <Flex

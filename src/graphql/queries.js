@@ -20,9 +20,11 @@ export const getTeam = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       name
       color
@@ -32,6 +34,7 @@ export const getTeam = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -48,6 +51,7 @@ export const listTeams = /* GraphQL */ `
         Responses {
           nextToken
           startedAt
+          __typename
         }
         name
         color
@@ -57,9 +61,11 @@ export const listTeams = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -82,6 +88,7 @@ export const syncTeams = /* GraphQL */ `
         Responses {
           nextToken
           startedAt
+          __typename
         }
         name
         color
@@ -91,9 +98,11 @@ export const syncTeams = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -118,6 +127,7 @@ export const teamsByAppointmentID = /* GraphQL */ `
         Responses {
           nextToken
           startedAt
+          __typename
         }
         name
         color
@@ -127,24 +137,29 @@ export const teamsByAppointmentID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
-      id
+      sub
       name
       email
-      cognitoID
+      picture
+      score
+      id
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -156,18 +171,22 @@ export const listUsers = /* GraphQL */ `
   ) {
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        id
+        sub
         name
         email
-        cognitoID
+        picture
+        score
+        id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -185,18 +204,22 @@ export const syncUsers = /* GraphQL */ `
       lastSync: $lastSync
     ) {
       items {
-        id
+        sub
         name
         email
-        cognitoID
+        picture
+        score
+        id
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -212,6 +235,7 @@ export const getFollowing = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -232,9 +256,11 @@ export const listFollowings = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -261,9 +287,11 @@ export const syncFollowings = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -271,17 +299,46 @@ export const getReccuringAppointment = /* GraphQL */ `
   query GetReccuringAppointment($id: ID!) {
     getReccuringAppointment(id: $id) {
       id
-      bookerId
-      dayOfTheWeek
+      bookerID
       start
       end
       fieldsID
-      active
+      startDate
+      endDate
+      bookerName
+      Appointments {
+        items {
+          id
+          start
+          end
+          fieldsID
+          date
+          confirmed
+          bookerID
+          bookerName
+          sport
+          price
+          canceled
+          locked
+          reccuringappointmentID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        nextToken
+        startedAt
+        __typename
+      }
+      canceled
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -298,20 +355,29 @@ export const listReccuringAppointments = /* GraphQL */ `
     ) {
       items {
         id
-        bookerId
-        dayOfTheWeek
+        bookerID
         start
         end
         fieldsID
-        active
+        startDate
+        endDate
+        bookerName
+        Appointments {
+          nextToken
+          startedAt
+          __typename
+        }
+        canceled
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -330,20 +396,29 @@ export const syncReccuringAppointments = /* GraphQL */ `
     ) {
       items {
         id
-        bookerId
-        dayOfTheWeek
+        bookerID
         start
         end
         fieldsID
-        active
+        startDate
+        endDate
+        bookerName
+        Appointments {
+          nextToken
+          startedAt
+          __typename
+        }
+        canceled
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -364,20 +439,29 @@ export const reccuringAppointmentsByFieldsID = /* GraphQL */ `
     ) {
       items {
         id
-        bookerId
-        dayOfTheWeek
+        bookerID
         start
         end
         fieldsID
-        active
+        startDate
+        endDate
+        bookerName
+        Appointments {
+          nextToken
+          startedAt
+          __typename
+        }
+        canceled
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -396,6 +480,7 @@ export const getResponse = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -419,9 +504,11 @@ export const listResponses = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -451,9 +538,11 @@ export const syncResponses = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -485,9 +574,11 @@ export const responsesByAppointmentID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -519,9 +610,11 @@ export const responsesByTeamID = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -546,9 +639,11 @@ export const getAppointment = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       date
       confirmed
@@ -568,6 +663,7 @@ export const getAppointment = /* GraphQL */ `
         Appointments {
           nextToken
           startedAt
+          __typename
         }
         surface
         photo
@@ -576,6 +672,7 @@ export const getAppointment = /* GraphQL */ `
         ReccuringAppointments {
           nextToken
           startedAt
+          __typename
         }
         ownerID
         workTimeStart
@@ -585,6 +682,7 @@ export const getAppointment = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       locked
       Teams {
@@ -599,15 +697,19 @@ export const getAppointment = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
+      reccuringappointmentID
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -626,6 +728,7 @@ export const listAppointments = /* GraphQL */ `
         Responses {
           nextToken
           startedAt
+          __typename
         }
         date
         confirmed
@@ -654,20 +757,25 @@ export const listAppointments = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         locked
         Teams {
           nextToken
           startedAt
+          __typename
         }
+        reccuringappointmentID
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -692,6 +800,7 @@ export const syncAppointments = /* GraphQL */ `
         Responses {
           nextToken
           startedAt
+          __typename
         }
         date
         confirmed
@@ -720,20 +829,25 @@ export const syncAppointments = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         locked
         Teams {
           nextToken
           startedAt
+          __typename
         }
+        reccuringappointmentID
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -760,6 +874,7 @@ export const appointmentsByFieldsID = /* GraphQL */ `
         Responses {
           nextToken
           startedAt
+          __typename
         }
         date
         confirmed
@@ -788,20 +903,99 @@ export const appointmentsByFieldsID = /* GraphQL */ `
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         locked
         Teams {
           nextToken
           startedAt
+          __typename
         }
+        reccuringappointmentID
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
+    }
+  }
+`;
+export const appointmentsByReccuringappointmentID = /* GraphQL */ `
+  query AppointmentsByReccuringappointmentID(
+    $reccuringappointmentID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelAppointmentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    appointmentsByReccuringappointmentID(
+      reccuringappointmentID: $reccuringappointmentID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        start
+        end
+        fieldsID
+        Responses {
+          nextToken
+          startedAt
+          __typename
+        }
+        date
+        confirmed
+        bookerID
+        bookerName
+        sport
+        price
+        canceled
+        Fields {
+          id
+          name
+          address
+          width
+          length
+          price
+          minPlayers
+          surface
+          photo
+          sports
+          city
+          ownerID
+          workTimeStart
+          workTimeEnd
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          __typename
+        }
+        locked
+        Teams {
+          nextToken
+          startedAt
+          __typename
+        }
+        reccuringappointmentID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      nextToken
+      startedAt
+      __typename
     }
   }
 `;
@@ -829,14 +1023,17 @@ export const getFields = /* GraphQL */ `
           price
           canceled
           locked
+          reccuringappointmentID
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       surface
       photo
@@ -845,20 +1042,24 @@ export const getFields = /* GraphQL */ `
       ReccuringAppointments {
         items {
           id
-          bookerId
-          dayOfTheWeek
+          bookerID
           start
           end
           fieldsID
-          active
+          startDate
+          endDate
+          bookerName
+          canceled
           createdAt
           updatedAt
           _version
           _deleted
           _lastChangedAt
+          __typename
         }
         nextToken
         startedAt
+        __typename
       }
       ownerID
       workTimeStart
@@ -868,6 +1069,7 @@ export const getFields = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
   }
 `;
@@ -889,6 +1091,7 @@ export const listFields = /* GraphQL */ `
         Appointments {
           nextToken
           startedAt
+          __typename
         }
         surface
         photo
@@ -897,6 +1100,7 @@ export const listFields = /* GraphQL */ `
         ReccuringAppointments {
           nextToken
           startedAt
+          __typename
         }
         ownerID
         workTimeStart
@@ -906,9 +1110,11 @@ export const listFields = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;
@@ -936,6 +1142,7 @@ export const syncFields = /* GraphQL */ `
         Appointments {
           nextToken
           startedAt
+          __typename
         }
         surface
         photo
@@ -944,6 +1151,7 @@ export const syncFields = /* GraphQL */ `
         ReccuringAppointments {
           nextToken
           startedAt
+          __typename
         }
         ownerID
         workTimeStart
@@ -953,9 +1161,11 @@ export const syncFields = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        __typename
       }
       nextToken
       startedAt
+      __typename
     }
   }
 `;

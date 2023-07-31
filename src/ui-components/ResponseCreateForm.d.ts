@@ -7,6 +7,7 @@
 import * as React from "react";
 import { AutocompleteProps, GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
+import { Team as Team0, Appointment as Appointment0 } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -15,28 +16,28 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type ResponseCreateFormInputValues = {
     playerID?: string;
     accepted?: boolean;
-    appointmentID?: string;
     playerName?: string;
     playerPhoto?: string;
-    teamID?: string;
+    Team?: Team0;
+    Appointment?: Appointment0;
 };
 export declare type ResponseCreateFormValidationValues = {
     playerID?: ValidationFunction<string>;
     accepted?: ValidationFunction<boolean>;
-    appointmentID?: ValidationFunction<string>;
     playerName?: ValidationFunction<string>;
     playerPhoto?: ValidationFunction<string>;
-    teamID?: ValidationFunction<string>;
+    Team?: ValidationFunction<Team0>;
+    Appointment?: ValidationFunction<Appointment0>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ResponseCreateFormOverridesProps = {
     ResponseCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     playerID?: PrimitiveOverrideProps<TextFieldProps>;
     accepted?: PrimitiveOverrideProps<SwitchFieldProps>;
-    appointmentID?: PrimitiveOverrideProps<AutocompleteProps>;
     playerName?: PrimitiveOverrideProps<TextFieldProps>;
     playerPhoto?: PrimitiveOverrideProps<TextFieldProps>;
-    teamID?: PrimitiveOverrideProps<AutocompleteProps>;
+    Team?: PrimitiveOverrideProps<AutocompleteProps>;
+    Appointment?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type ResponseCreateFormProps = React.PropsWithChildren<{
     overrides?: ResponseCreateFormOverridesProps | undefined | null;

@@ -275,7 +275,7 @@ export default function AppointmentUpdateForm(props) {
   const [appointmentRecord, setAppointmentRecord] =
     React.useState(appointmentModelProp);
   const [linkedResponses, setLinkedResponses] = React.useState([]);
-  const canUnlinkResponses = false;
+  const canUnlinkResponses = true;
   const [linkedTeams, setLinkedTeams] = React.useState([]);
   const canUnlinkTeams = false;
   React.useEffect(() => {
@@ -484,13 +484,13 @@ export default function AppointmentUpdateForm(props) {
           responsesToUnLink.forEach((original) => {
             if (!canUnlinkResponses) {
               throw Error(
-                `Response ${original.id} cannot be unlinked from Appointment because appointmentID is a required field.`
+                `Response ${original.id} cannot be unlinked from Appointment because undefined is a required field.`
               );
             }
             promises.push(
               DataStore.save(
                 Response.copyOf(original, (updated) => {
-                  updated.appointmentID = null;
+                  updated.Appointment = null;
                 })
               )
             );
@@ -499,7 +499,7 @@ export default function AppointmentUpdateForm(props) {
             promises.push(
               DataStore.save(
                 Response.copyOf(original, (updated) => {
-                  updated.appointmentID = appointmentRecord.id;
+                  updated.Appointment = appointmentRecord;
                 })
               )
             );
