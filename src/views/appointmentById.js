@@ -129,24 +129,27 @@ const AppointmentById = () => {
         );
     }
 
-    return (appointmentView ?
+    return (
         <Flex direction={"column"}>
-            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                <KornerFieldShort
-                    responseNumber={responses.data?.filter(a => a.accepted).length}
-                    photo={photo}
-                    fields={field}
-                    date={getDayAndDateFromAppointment(appointment.data?.date)}
-                    appointment={appointment.data}/>
-                <AppointmentStatusBadge appointmentStatus={appointmentStatus}/>
-            </Flex>
-            <Dialog open={open} onClose={() => setOpen(false)}>
-                <Authenticator/>
-            </Dialog>
-            {!user && <RegisterButton/>}
+
+            {!appointment.loading ?
+                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                    <KornerFieldShort
+                        responseNumber={responses.data?.filter(a => a.accepted).length}
+                        photo={photo}
+                        fields={field}
+                        date={getDayAndDateFromAppointment(appointment.data?.date)}
+                        appointment={appointment.data}/>
+                    <AppointmentStatusBadge appointmentStatus={appointmentStatus}/>
+                    <Dialog open={open} onClose={() => setOpen(false)}>
+                        <Authenticator/>
+                    </Dialog>
+                    {!user && <RegisterButton/>}
+                </Flex>
+                : <PlaceHolder/>}
+
             {appointmentView}
-        </Flex>
-        : <PlaceHolder/>)
+        </Flex>)
 
 }
 

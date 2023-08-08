@@ -15,8 +15,8 @@ function useGetAppointment(id) {
 
     useEffect(() => {
         query();
-        const subscription = DataStore.observe(Appointment, id).subscribe(() => {
-            query()
+        const subscription = DataStore.observe(Appointment, id).subscribe(message => {
+            setData(message.element);
         });
 
         return () => {
