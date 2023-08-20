@@ -132,7 +132,7 @@ const AppointmentById = () => {
     return (
         <Flex direction={"column"}>
 
-            {!appointment.loading ?
+            {!appointment.loading && appointment.data ?
                 <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
                     <KornerFieldShort
                         responseNumber={responses.data?.filter(a => a.accepted).length}
