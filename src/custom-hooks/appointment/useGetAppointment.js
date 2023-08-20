@@ -6,23 +6,27 @@ function useGetAppointment(id) {
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
 
-    const query = useCallback(() => {
-        DataStore.query(Appointment, id).then(a => {
+    const query = useCallback((appId) => {
+        DataStore.query(Appointment, appId).then(a => {
             setData(a);
             setLoading(false);
         });
-    }, [id])
+    }, [])
 
     useEffect(() => {
-        query();
-        const subscription = DataStore.observe(Appointment, id).subscribe(() => {
-            query()
+        query(id);
+    }, [id, query]);
+
+    useEffect(() => {
+        const subscription = DataStore.observe(Appointment, id).subscribe((model) => {
+            setData(model.element);
+            setLoading(false)
         });
 
         return () => {
             subscription.unsubscribe();
         }
-    }, [id, query]);
+    }, [id]);
 
 
     return {data: data, loading: loading}
