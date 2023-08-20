@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
 import {Appointment} from "../../models";
 
@@ -6,7 +6,15 @@ function useGetAppointmentResponses(fieldId, date) {
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
 
+    const query = useCallback(() => {
+        DataStore.query(Appointment, (a) => a.and((l) => [l.fieldsID.eq(fieldId), l.date.eq(date)])).then(a => {
+            setData(a);
+            setLoading(false);
+        });
+    }, [fieldId, date])
+
     useEffect(() => {
+        query();
         const sub = DataStore.observeQuery(Appointment, (a) => a.and((l) => [l.fieldsID.eq(fieldId), l.date.eq(date)])).subscribe(({items}) => {
             setData(items);
             setLoading(false)
@@ -15,7 +23,7 @@ function useGetAppointmentResponses(fieldId, date) {
         return () => {
             sub.unsubscribe();
         };
-    }, [date, fieldId]);
+    }, [date, fieldId, query]);
 
 
     return {data: data, loading: loading}
