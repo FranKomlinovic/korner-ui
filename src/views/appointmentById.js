@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Authenticator, Button, Card, Flex, Heading, Placeholder, useAuthenticator} from "@aws-amplify/ui-react";
+import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
 import AppointmentStatusBadge from "../components/appointment/appointmentStatusBadge";
 import {getDayAndDateFromAppointment} from "../functions/converters";
 import {KornerFieldShort} from "../ui-components";
@@ -14,6 +14,7 @@ import useGetAppointmentTeams from "../custom-hooks/appointment/useGetAppointmen
 import useGetAppointment from "../custom-hooks/appointment/useGetAppointment";
 import useGetAppointmentResponses from "../custom-hooks/appointment/useGetAppointmentResponses";
 import {Storage} from 'aws-amplify';
+import LoaderComponent from "../components/loaderComponent";
 
 
 const AppointmentById = () => {
@@ -116,19 +117,6 @@ const AppointmentById = () => {
         );
     }
 
-    const PlaceHolder = () => {
-        return (
-            <Flex marginInline={"2rem"} direction="column" alignItems={"center"} justifyContent={"center"}>
-                <Placeholder height={"15rem"} size={"large"}/>
-                <Placeholder height={"5rem"} size={"large"}/>
-                <Placeholder height={"5rem"} size={"large"}/>
-                <Placeholder height={"5rem"} size={"large"}/>
-                <Placeholder height={"5rem"} size={"large"}/>
-            </Flex>
-
-        );
-    }
-
     return (
         <Flex direction={"column"}>
 
@@ -146,7 +134,7 @@ const AppointmentById = () => {
                     </Dialog>
                     {!user && <RegisterButton/>}
                 </Flex>
-                : <PlaceHolder/>}
+                : <LoaderComponent/>}
 
             {appointmentView}
         </Flex>)
