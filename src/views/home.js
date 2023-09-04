@@ -10,7 +10,6 @@ import {useNavigate} from "react-router-dom";
 import {getCurrentDate, getCurrentTime} from "../functions/appointmentUItils";
 import {checkIfInOwnerGroup} from "../functions/converters";
 import FigmaField from "../figma-components/FigmaField";
-import ProfileSummaryComponent from "../components/profileSummaryComponent";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -152,7 +151,6 @@ const Home = () => {
 
     return (
         <Flex direction={"column"} gap={"1rem"} marginTop={"1rem"}>
-            {user && <ProfileSummaryComponent userResponses={responses} cognitoUser={user}/>}
             {user ? <AppointmentTabs/> : <LandingPage/>}
             {isOwner && <AllFields/>}
             {user && <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Prečaci:</Heading>}

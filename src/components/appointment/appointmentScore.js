@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import {Dialog, DialogTitle} from "@mui/material";
 import {Button, Flex, Heading, StepperField} from "@aws-amplify/ui-react";
 import {FaQuestion, FaTrophy, FaTshirt} from "react-icons/fa";
-import {Outcome, Team} from "../../models";
 import {DataStore} from "aws-amplify";
+import {Team} from "../../models";
 
 const AppointmentScore = ({teams, role}) => {
     const [open, setOpen] = useState(false)
@@ -59,34 +59,11 @@ const AppointmentScore = ({teams, role}) => {
             setScores(newScores);
         };
 
-        const getOutcomes = (index) => {
-            const targetNumber = scores[index]
-            const outcomes = []
-
-            for (let i = 0; i < scores.length; i++) {
-                if (index === i) {
-                    continue;
-                }
-                if (scores[i] > targetNumber) {
-                    outcomes.push(Outcome.LOSE)
-                } else if (scores[i] === targetNumber) {
-                    outcomes.push(Outcome.DRAW)
-                } else {
-                    outcomes.push(Outcome.WIN)
-                }
-            }
-
-            return outcomes;
-
-        };
-
-
         const handleSaveScores = () => {
             // Save scores and trigger the update logic
             teams.forEach((team, index) => {
                 DataStore.save(Team.copyOf(team, a => {
                     a.score = scores[index] ? scores[index] : 0;
-                    a.outcome = getOutcomes(index)
                 })).then(() => {
                     setOpen(false);
                 });

@@ -29,7 +29,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "Team"
+                            "teamID"
                         ]
                     }
                 },
@@ -53,16 +53,6 @@ export const schema = {
                     "type": "Int",
                     "isRequired": false,
                     "attributes": []
-                },
-                "outcome": {
-                    "name": "outcome",
-                    "isArray": true,
-                    "type": {
-                        "enum": "Outcome"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -125,13 +115,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "sub": {
-                    "name": "sub",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
                 "name": {
                     "name": "name",
                     "isArray": false,
@@ -146,17 +129,10 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "picture": {
-                    "name": "picture",
+                "cognitoID": {
+                    "name": "cognitoID",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "score": {
-                    "name": "score",
-                    "isArray": false,
-                    "type": "Float",
+                    "type": "ID",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -460,36 +436,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Team": {
-                    "name": "Team",
-                    "isArray": false,
-                    "type": {
-                        "model": "Team"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "teamID"
-                        ]
-                    }
-                },
-                "Appointment": {
-                    "name": "Appointment",
-                    "isArray": false,
-                    "type": {
-                        "model": "Appointment"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetNames": [
-                            "appointmentID"
-                        ]
-                    }
-                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -593,7 +539,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "Appointment"
+                            "appointmentID"
                         ]
                     }
                 },
@@ -937,14 +883,6 @@ export const schema = {
         }
     },
     "enums": {
-        "Outcome": {
-            "name": "Outcome",
-            "values": [
-                "WIN",
-                "LOSE",
-                "DRAW"
-            ]
-        },
         "Cities": {
             "name": "Cities",
             "values": [
@@ -972,5 +910,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "f485ee437ea7e4730627c7ae85835f11"
+    "version": "97844053ba20f921e112d3f5f88fc5cc"
 };

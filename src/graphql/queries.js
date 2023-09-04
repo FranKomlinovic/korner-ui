@@ -148,12 +148,10 @@ export const teamsByAppointmentID = /* GraphQL */ `
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
-      sub
+      id
       name
       email
-      picture
-      score
-      id
+      cognitoID
       createdAt
       updatedAt
       _version
@@ -171,12 +169,10 @@ export const listUsers = /* GraphQL */ `
   ) {
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        sub
+        id
         name
         email
-        picture
-        score
-        id
+        cognitoID
         createdAt
         updatedAt
         _version
@@ -204,12 +200,10 @@ export const syncUsers = /* GraphQL */ `
       lastSync: $lastSync
     ) {
       items {
-        sub
+        id
         name
         email
-        picture
-        score
-        id
+        cognitoID
         createdAt
         updatedAt
         _version

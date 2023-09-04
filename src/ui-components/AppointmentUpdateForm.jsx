@@ -46,6 +46,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -69,6 +70,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -178,12 +180,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size="small" variation="link" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -275,7 +272,7 @@ export default function AppointmentUpdateForm(props) {
   const [appointmentRecord, setAppointmentRecord] =
     React.useState(appointmentModelProp);
   const [linkedResponses, setLinkedResponses] = React.useState([]);
-  const canUnlinkResponses = true;
+  const canUnlinkResponses = false;
   const [linkedTeams, setLinkedTeams] = React.useState([]);
   const canUnlinkTeams = false;
   React.useEffect(() => {
@@ -458,8 +455,8 @@ export default function AppointmentUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -484,13 +481,13 @@ export default function AppointmentUpdateForm(props) {
           responsesToUnLink.forEach((original) => {
             if (!canUnlinkResponses) {
               throw Error(
-                `Response ${original.id} cannot be unlinked from Appointment because undefined is a required field.`
+                `Response ${original.id} cannot be unlinked from Appointment because appointmentID is a required field.`
               );
             }
             promises.push(
               DataStore.save(
                 Response.copyOf(original, (updated) => {
-                  updated.Appointment = null;
+                  updated.appointmentID = null;
                 })
               )
             );
@@ -499,7 +496,7 @@ export default function AppointmentUpdateForm(props) {
             promises.push(
               DataStore.save(
                 Response.copyOf(original, (updated) => {
-                  updated.Appointment = appointmentRecord;
+                  updated.appointmentID = appointmentRecord.id;
                 })
               )
             );
@@ -687,6 +684,9 @@ export default function AppointmentUpdateForm(props) {
         label={"Responses"}
         items={Responses}
         hasError={errors?.Responses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Responses", currentResponsesValue)
+        }
         errorMessage={errors?.Responses?.errorMessage}
         getBadgeText={getDisplayValue.Responses}
         setFieldValue={(model) => {
@@ -1054,6 +1054,9 @@ export default function AppointmentUpdateForm(props) {
         label={"Fields"}
         items={Fields ? [Fields] : []}
         hasError={errors?.Fields?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Fields", currentFieldsValue)
+        }
         errorMessage={errors?.Fields?.errorMessage}
         getBadgeText={getDisplayValue.Fields}
         setFieldValue={(model) => {
@@ -1176,6 +1179,9 @@ export default function AppointmentUpdateForm(props) {
         label={"Teams"}
         items={Teams}
         hasError={errors?.Teams?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Teams", currentTeamsValue)
+        }
         errorMessage={errors?.Teams?.errorMessage}
         getBadgeText={getDisplayValue.Teams}
         setFieldValue={(model) => {
@@ -1260,6 +1266,12 @@ export default function AppointmentUpdateForm(props) {
         label={"Reccuringappointment id"}
         items={reccuringappointmentID ? [reccuringappointmentID] : []}
         hasError={errors?.reccuringappointmentID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            "reccuringappointmentID",
+            currentReccuringappointmentIDValue
+          )
+        }
         errorMessage={errors?.reccuringappointmentID?.errorMessage}
         getBadgeText={(value) =>
           value

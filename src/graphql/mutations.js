@@ -127,12 +127,10 @@ export const createUser = /* GraphQL */ `
     $condition: ModelUserConditionInput
   ) {
     createUser(input: $input, condition: $condition) {
-      sub
+      id
       name
       email
-      picture
-      score
-      id
+      cognitoID
       createdAt
       updatedAt
       _version
@@ -148,12 +146,10 @@ export const updateUser = /* GraphQL */ `
     $condition: ModelUserConditionInput
   ) {
     updateUser(input: $input, condition: $condition) {
-      sub
+      id
       name
       email
-      picture
-      score
-      id
+      cognitoID
       createdAt
       updatedAt
       _version
@@ -169,12 +165,10 @@ export const deleteUser = /* GraphQL */ `
     $condition: ModelUserConditionInput
   ) {
     deleteUser(input: $input, condition: $condition) {
-      sub
+      id
       name
       email
-      picture
-      score
-      id
+      cognitoID
       createdAt
       updatedAt
       _version

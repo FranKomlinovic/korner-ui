@@ -15,7 +15,6 @@ import {
   Grid,
   Icon,
   ScrollView,
-  SelectField,
   Text,
   TextField,
   useTheme,
@@ -39,6 +38,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -62,6 +62,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -171,12 +172,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size="small" variation="link" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -203,7 +199,6 @@ export default function TeamUpdateForm(props) {
     name: "",
     color: "",
     score: "",
-    outcome: [],
   };
   const [appointmentID, setAppointmentID] = React.useState(
     initialValues.appointmentID
@@ -212,7 +207,6 @@ export default function TeamUpdateForm(props) {
   const [name, setName] = React.useState(initialValues.name);
   const [color, setColor] = React.useState(initialValues.color);
   const [score, setScore] = React.useState(initialValues.score);
-  const [outcome, setOutcome] = React.useState(initialValues.outcome);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = teamRecord
@@ -232,8 +226,6 @@ export default function TeamUpdateForm(props) {
     setName(cleanValues.name);
     setColor(cleanValues.color);
     setScore(cleanValues.score);
-    setOutcome(cleanValues.outcome ?? []);
-    setCurrentOutcomeValue("");
     setErrors({});
   };
   const [teamRecord, setTeamRecord] = React.useState(teamModelProp);
@@ -271,8 +263,6 @@ export default function TeamUpdateForm(props) {
   const [currentResponsesValue, setCurrentResponsesValue] =
     React.useState(undefined);
   const ResponsesRef = React.createRef();
-  const [currentOutcomeValue, setCurrentOutcomeValue] = React.useState("");
-  const outcomeRef = React.createRef();
   const getIDValue = {
     Responses: (r) => JSON.stringify({ id: r?.id }),
   };
@@ -292,14 +282,6 @@ export default function TeamUpdateForm(props) {
   const getDisplayValue = {
     appointmentID: (r) => `${r?.confirmed ? r?.confirmed + " - " : ""}${r?.id}`,
     Responses: (r) => `${r?.accepted ? r?.accepted + " - " : ""}${r?.id}`,
-    outcome: (r) => {
-      const enumDisplayValueMap = {
-        WIN: "Win",
-        LOSE: "Lose",
-        DRAW: "Draw",
-      };
-      return enumDisplayValueMap[r];
-    },
   };
   const validations = {
     appointmentID: [{ type: "Required" }],
@@ -307,7 +289,6 @@ export default function TeamUpdateForm(props) {
     name: [],
     color: [],
     score: [],
-    outcome: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -340,7 +321,6 @@ export default function TeamUpdateForm(props) {
           name,
           color,
           score,
-          outcome,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -374,8 +354,8 @@ export default function TeamUpdateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           const promises = [];
@@ -400,13 +380,13 @@ export default function TeamUpdateForm(props) {
           responsesToUnLink.forEach((original) => {
             if (!canUnlinkResponses) {
               throw Error(
-                `Response ${original.id} cannot be unlinked from Team because undefined is a required field.`
+                `Response ${original.id} cannot be unlinked from Team because teamID is a required field.`
               );
             }
             promises.push(
               DataStore.save(
                 Response.copyOf(original, (updated) => {
-                  updated.Team = null;
+                  updated.teamID = null;
                 })
               )
             );
@@ -415,7 +395,7 @@ export default function TeamUpdateForm(props) {
             promises.push(
               DataStore.save(
                 Response.copyOf(original, (updated) => {
-                  updated.Team = teamRecord;
+                  updated.teamID = teamRecord.id;
                 })
               )
             );
@@ -425,7 +405,6 @@ export default function TeamUpdateForm(props) {
             name: modelFields.name,
             color: modelFields.color,
             score: modelFields.score,
-            outcome: modelFields.outcome,
           };
           promises.push(
             DataStore.save(
@@ -458,7 +437,6 @@ export default function TeamUpdateForm(props) {
               name,
               color,
               score,
-              outcome,
             };
             const result = onChange(modelFields);
             value = result?.appointmentID ?? value;
@@ -470,6 +448,9 @@ export default function TeamUpdateForm(props) {
         label={"Appointment id"}
         items={appointmentID ? [appointmentID] : []}
         hasError={errors?.appointmentID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("appointmentID", currentAppointmentIDValue)
+        }
         errorMessage={errors?.appointmentID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -543,7 +524,6 @@ export default function TeamUpdateForm(props) {
               name,
               color,
               score,
-              outcome,
             };
             const result = onChange(modelFields);
             values = result?.Responses ?? values;
@@ -556,6 +536,9 @@ export default function TeamUpdateForm(props) {
         label={"Responses"}
         items={Responses}
         hasError={errors?.Responses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Responses", currentResponsesValue)
+        }
         errorMessage={errors?.Responses?.errorMessage}
         getBadgeText={getDisplayValue.Responses}
         setFieldValue={(model) => {
@@ -625,7 +608,6 @@ export default function TeamUpdateForm(props) {
               name: value,
               color,
               score,
-              outcome,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -654,7 +636,6 @@ export default function TeamUpdateForm(props) {
               name,
               color: value,
               score,
-              outcome,
             };
             const result = onChange(modelFields);
             value = result?.color ?? value;
@@ -687,7 +668,6 @@ export default function TeamUpdateForm(props) {
               name,
               color,
               score: value,
-              outcome,
             };
             const result = onChange(modelFields);
             value = result?.score ?? value;
@@ -702,70 +682,6 @@ export default function TeamUpdateForm(props) {
         hasError={errors.score?.hasError}
         {...getOverrideProps(overrides, "score")}
       ></TextField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              appointmentID,
-              Responses,
-              name,
-              color,
-              score,
-              outcome: values,
-            };
-            const result = onChange(modelFields);
-            values = result?.outcome ?? values;
-          }
-          setOutcome(values);
-          setCurrentOutcomeValue("");
-        }}
-        currentFieldValue={currentOutcomeValue}
-        label={"Outcome"}
-        items={outcome}
-        hasError={errors?.outcome?.hasError}
-        errorMessage={errors?.outcome?.errorMessage}
-        getBadgeText={getDisplayValue.outcome}
-        setFieldValue={setCurrentOutcomeValue}
-        inputFieldRef={outcomeRef}
-        defaultFieldValue={""}
-      >
-        <SelectField
-          label="Outcome"
-          placeholder="Please select an option"
-          isDisabled={false}
-          value={currentOutcomeValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.outcome?.hasError) {
-              runValidationTasks("outcome", value);
-            }
-            setCurrentOutcomeValue(value);
-          }}
-          onBlur={() => runValidationTasks("outcome", currentOutcomeValue)}
-          errorMessage={errors.outcome?.errorMessage}
-          hasError={errors.outcome?.hasError}
-          ref={outcomeRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "outcome")}
-        >
-          <option
-            children="Win"
-            value="WIN"
-            {...getOverrideProps(overrides, "outcomeoption0")}
-          ></option>
-          <option
-            children="Lose"
-            value="LOSE"
-            {...getOverrideProps(overrides, "outcomeoption1")}
-          ></option>
-          <option
-            children="Draw"
-            value="DRAW"
-            {...getOverrideProps(overrides, "outcomeoption2")}
-          ></option>
-        </SelectField>
-      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

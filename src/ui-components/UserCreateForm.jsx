@@ -23,32 +23,24 @@ export default function UserCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    sub: "",
     name: "",
     email: "",
-    picture: "",
-    score: "",
+    cognitoID: "",
   };
-  const [sub, setSub] = React.useState(initialValues.sub);
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
-  const [picture, setPicture] = React.useState(initialValues.picture);
-  const [score, setScore] = React.useState(initialValues.score);
+  const [cognitoID, setCognitoID] = React.useState(initialValues.cognitoID);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setSub(initialValues.sub);
     setName(initialValues.name);
     setEmail(initialValues.email);
-    setPicture(initialValues.picture);
-    setScore(initialValues.score);
+    setCognitoID(initialValues.cognitoID);
     setErrors({});
   };
   const validations = {
-    sub: [{ type: "Required" }],
     name: [],
     email: [],
-    picture: [],
-    score: [],
+    cognitoID: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -76,11 +68,9 @@ export default function UserCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          sub,
           name,
           email,
-          picture,
-          score,
+          cognitoID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -106,8 +96,8 @@ export default function UserCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(new User(modelFields));
@@ -127,34 +117,6 @@ export default function UserCreateForm(props) {
       {...rest}
     >
       <TextField
-        label="Sub"
-        isRequired={true}
-        isReadOnly={false}
-        value={sub}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              sub: value,
-              name,
-              email,
-              picture,
-              score,
-            };
-            const result = onChange(modelFields);
-            value = result?.sub ?? value;
-          }
-          if (errors.sub?.hasError) {
-            runValidationTasks("sub", value);
-          }
-          setSub(value);
-        }}
-        onBlur={() => runValidationTasks("sub", sub)}
-        errorMessage={errors.sub?.errorMessage}
-        hasError={errors.sub?.hasError}
-        {...getOverrideProps(overrides, "sub")}
-      ></TextField>
-      <TextField
         label="Name"
         isRequired={false}
         isReadOnly={false}
@@ -163,11 +125,9 @@ export default function UserCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              sub,
               name: value,
               email,
-              picture,
-              score,
+              cognitoID,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -191,11 +151,9 @@ export default function UserCreateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              sub,
               name,
               email: value,
-              picture,
-              score,
+              cognitoID,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -211,64 +169,30 @@ export default function UserCreateForm(props) {
         {...getOverrideProps(overrides, "email")}
       ></TextField>
       <TextField
-        label="Picture"
+        label="Cognito id"
         isRequired={false}
         isReadOnly={false}
-        value={picture}
+        value={cognitoID}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              sub,
               name,
               email,
-              picture: value,
-              score,
+              cognitoID: value,
             };
             const result = onChange(modelFields);
-            value = result?.picture ?? value;
+            value = result?.cognitoID ?? value;
           }
-          if (errors.picture?.hasError) {
-            runValidationTasks("picture", value);
+          if (errors.cognitoID?.hasError) {
+            runValidationTasks("cognitoID", value);
           }
-          setPicture(value);
+          setCognitoID(value);
         }}
-        onBlur={() => runValidationTasks("picture", picture)}
-        errorMessage={errors.picture?.errorMessage}
-        hasError={errors.picture?.hasError}
-        {...getOverrideProps(overrides, "picture")}
-      ></TextField>
-      <TextField
-        label="Score"
-        isRequired={false}
-        isReadOnly={false}
-        type="number"
-        step="any"
-        value={score}
-        onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
-          if (onChange) {
-            const modelFields = {
-              sub,
-              name,
-              email,
-              picture,
-              score: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.score ?? value;
-          }
-          if (errors.score?.hasError) {
-            runValidationTasks("score", value);
-          }
-          setScore(value);
-        }}
-        onBlur={() => runValidationTasks("score", score)}
-        errorMessage={errors.score?.errorMessage}
-        hasError={errors.score?.hasError}
-        {...getOverrideProps(overrides, "score")}
+        onBlur={() => runValidationTasks("cognitoID", cognitoID)}
+        errorMessage={errors.cognitoID?.errorMessage}
+        hasError={errors.cognitoID?.hasError}
+        {...getOverrideProps(overrides, "cognitoID")}
       ></TextField>
       <Flex
         justifyContent="space-between"

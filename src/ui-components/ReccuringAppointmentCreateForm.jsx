@@ -39,6 +39,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -62,6 +63,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -171,12 +173,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size="small" variation="link" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -344,8 +341,8 @@ export default function ReccuringAppointmentCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -514,6 +511,9 @@ export default function ReccuringAppointmentCreateForm(props) {
         label={"Fields id"}
         items={fieldsID ? [fieldsID] : []}
         hasError={errors?.fieldsID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("fieldsID", currentFieldsIDValue)
+        }
         errorMessage={errors?.fieldsID?.errorMessage}
         getBadgeText={(value) =>
           value
@@ -698,6 +698,9 @@ export default function ReccuringAppointmentCreateForm(props) {
         label={"Appointments"}
         items={Appointments}
         hasError={errors?.Appointments?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Appointments", currentAppointmentsValue)
+        }
         errorMessage={errors?.Appointments?.errorMessage}
         getBadgeText={getDisplayValue.Appointments}
         setFieldValue={(model) => {

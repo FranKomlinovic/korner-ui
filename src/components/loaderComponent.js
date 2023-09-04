@@ -29,7 +29,7 @@ const LoaderComponent = () => {
                 />
                 {randomItem && <>
                     <Heading>Jeste li znali?</Heading>
-                    <Text>{randomItem}</Text>
+                    <Text textAlign={"center"}>{randomItem}</Text>
                 </>}
 
             </Flex>

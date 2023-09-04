@@ -2,12 +2,6 @@ import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
-export enum Outcome {
-  WIN = "WIN",
-  LOSE = "LOSE",
-  DRAW = "DRAW"
-}
-
 export enum Cities {
   PETRINJA = "PETRINJA",
   ZAGREB = "ZAGREB"
@@ -39,7 +33,6 @@ type EagerTeam = {
   readonly name?: string | null;
   readonly color?: string | null;
   readonly score?: number | null;
-  readonly outcome?: (Outcome | null)[] | keyof typeof Outcome | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -55,7 +48,6 @@ type LazyTeam = {
   readonly name?: string | null;
   readonly color?: string | null;
   readonly score?: number | null;
-  readonly outcome?: (Outcome | null)[] | keyof typeof Outcome | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -72,11 +64,9 @@ type EagerUser = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly sub: string;
   readonly name?: string | null;
   readonly email?: string | null;
-  readonly picture?: string | null;
-  readonly score?: number | null;
+  readonly cognitoID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -87,11 +77,9 @@ type LazyUser = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly sub: string;
   readonly name?: string | null;
   readonly email?: string | null;
-  readonly picture?: string | null;
-  readonly score?: number | null;
+  readonly cognitoID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -190,8 +178,6 @@ type EagerResponse = {
   readonly playerName: string;
   readonly playerPhoto?: string | null;
   readonly teamID?: string | null;
-  readonly Team?: Team | null;
-  readonly Appointment?: Appointment | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -208,8 +194,6 @@ type LazyResponse = {
   readonly playerName: string;
   readonly playerPhoto?: string | null;
   readonly teamID?: string | null;
-  readonly Team: AsyncItem<Team | undefined>;
-  readonly Appointment: AsyncItem<Appointment | undefined>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

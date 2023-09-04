@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Response } from "../models";
 export declare type ValidationResponse = {
@@ -19,7 +19,6 @@ export declare type TeamCreateFormInputValues = {
     name?: string;
     color?: string;
     score?: number;
-    outcome?: string[];
 };
 export declare type TeamCreateFormValidationValues = {
     appointmentID?: ValidationFunction<string>;
@@ -27,7 +26,6 @@ export declare type TeamCreateFormValidationValues = {
     name?: ValidationFunction<string>;
     color?: ValidationFunction<string>;
     score?: ValidationFunction<number>;
-    outcome?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TeamCreateFormOverridesProps = {
@@ -37,7 +35,6 @@ export declare type TeamCreateFormOverridesProps = {
     name?: PrimitiveOverrideProps<TextFieldProps>;
     color?: PrimitiveOverrideProps<TextFieldProps>;
     score?: PrimitiveOverrideProps<TextFieldProps>;
-    outcome?: PrimitiveOverrideProps<SelectFieldProps>;
 } & EscapeHatchProps;
 export declare type TeamCreateFormProps = React.PropsWithChildren<{
     overrides?: TeamCreateFormOverridesProps | undefined | null;

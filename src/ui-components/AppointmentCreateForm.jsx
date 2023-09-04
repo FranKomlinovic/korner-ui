@@ -46,6 +46,7 @@ function ArrayField({
   defaultFieldValue,
   lengthLimit,
   getBadgeText,
+  runValidationTasks,
   errorMessage,
 }) {
   const labelElement = <Text>{label}</Text>;
@@ -69,6 +70,7 @@ function ArrayField({
     setSelectedBadgeIndex(undefined);
   };
   const addItem = async () => {
+    const { hasError } = runValidationTasks();
     if (
       currentFieldValue !== undefined &&
       currentFieldValue !== null &&
@@ -178,12 +180,7 @@ function ArrayField({
               }}
             ></Button>
           )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
+          <Button size="small" variation="link" onClick={addItem}>
             {selectedBadgeIndex !== undefined ? "Save" : "Add"}
           </Button>
         </Flex>
@@ -415,8 +412,8 @@ export default function AppointmentCreateForm(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           const modelFieldsToSave = {
@@ -442,7 +439,7 @@ export default function AppointmentCreateForm(props) {
               promises.push(
                 DataStore.save(
                   Response.copyOf(original, (updated) => {
-                    updated.Appointment = appointment;
+                    updated.appointmentID = appointment.id;
                   })
                 )
               );
@@ -584,6 +581,9 @@ export default function AppointmentCreateForm(props) {
         label={"Responses"}
         items={Responses}
         hasError={errors?.Responses?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Responses", currentResponsesValue)
+        }
         errorMessage={errors?.Responses?.errorMessage}
         getBadgeText={getDisplayValue.Responses}
         setFieldValue={(model) => {
@@ -951,6 +951,9 @@ export default function AppointmentCreateForm(props) {
         label={"Fields"}
         items={Fields ? [Fields] : []}
         hasError={errors?.Fields?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Fields", currentFieldsValue)
+        }
         errorMessage={errors?.Fields?.errorMessage}
         getBadgeText={getDisplayValue.Fields}
         setFieldValue={(model) => {
@@ -1072,6 +1075,9 @@ export default function AppointmentCreateForm(props) {
         label={"Teams"}
         items={Teams}
         hasError={errors?.Teams?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks("Teams", currentTeamsValue)
+        }
         errorMessage={errors?.Teams?.errorMessage}
         getBadgeText={getDisplayValue.Teams}
         setFieldValue={(model) => {
@@ -1156,6 +1162,12 @@ export default function AppointmentCreateForm(props) {
         label={"Reccuringappointment id"}
         items={reccuringappointmentID ? [reccuringappointmentID] : []}
         hasError={errors?.reccuringappointmentID?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            "reccuringappointmentID",
+            currentReccuringappointmentIDValue
+          )
+        }
         errorMessage={errors?.reccuringappointmentID?.errorMessage}
         getBadgeText={(value) =>
           value

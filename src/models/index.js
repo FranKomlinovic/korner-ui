@@ -2,12 +2,6 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
-const Outcome = {
-  "WIN": "WIN",
-  "LOSE": "LOSE",
-  "DRAW": "DRAW"
-};
-
 const Cities = {
   "PETRINJA": "PETRINJA",
   "ZAGREB": "ZAGREB"
@@ -36,7 +30,6 @@ export {
   Response,
   Appointment,
   Fields,
-  Outcome,
   Cities,
   Sport,
   Surface
