@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {Authenticator, Button, Card, Flex, Heading, Placeholder, useAuthenticator} from "@aws-amplify/ui-react";
+import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
 import AppointmentStatusBadge from "../components/appointment/appointmentStatusBadge";
 import {getDayAndDateFromAppointment} from "../functions/converters";
 import {KornerFieldShort} from "../ui-components";
@@ -14,6 +14,7 @@ import useGetAppointmentTeams from "../custom-hooks/appointment/useGetAppointmen
 import useGetAppointment from "../custom-hooks/appointment/useGetAppointment";
 import useGetAppointmentResponses from "../custom-hooks/appointment/useGetAppointmentResponses";
 import {Storage} from 'aws-amplify';
+import LoaderComponent from "../components/loaderComponent";
 
 
 const AppointmentById = () => {
@@ -116,37 +117,27 @@ const AppointmentById = () => {
         );
     }
 
-    const PlaceHolder = () => {
-        return (
-            <Flex marginInline={"2rem"} direction="column" alignItems={"center"} justifyContent={"center"}>
-                <Placeholder height={"15rem"} size={"large"}/>
-                <Placeholder height={"5rem"} size={"large"}/>
-                <Placeholder height={"5rem"} size={"large"}/>
-                <Placeholder height={"5rem"} size={"large"}/>
-                <Placeholder height={"5rem"} size={"large"}/>
-            </Flex>
-
-        );
-    }
-
-    return (appointmentView ?
+    return (
         <Flex direction={"column"}>
-            <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
-                <KornerFieldShort
-                    responseNumber={responses.data?.filter(a => a.accepted).length}
-                    photo={photo}
-                    fields={field}
-                    date={getDayAndDateFromAppointment(appointment.data?.date)}
-                    appointment={appointment.data}/>
-                <AppointmentStatusBadge appointmentStatus={appointmentStatus}/>
-            </Flex>
-            <Dialog open={open} onClose={() => setOpen(false)}>
-                <Authenticator/>
-            </Dialog>
-            {!user && <RegisterButton/>}
+
+            {!appointment.loading && appointment.data ?
+                <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
+                    <KornerFieldShort
+                        responseNumber={responses.data?.filter(a => a.accepted).length}
+                        photo={photo}
+                        fields={field}
+                        date={getDayAndDateFromAppointment(appointment.data?.date)}
+                        appointment={appointment.data}/>
+                    <AppointmentStatusBadge appointmentStatus={appointmentStatus}/>
+                    <Dialog open={open} onClose={() => setOpen(false)}>
+                        <Authenticator/>
+                    </Dialog>
+                    {!user && <RegisterButton/>}
+                </Flex>
+                : <LoaderComponent/>}
+
             {appointmentView}
-        </Flex>
-        : <PlaceHolder/>)
+        </Flex>)
 
 }
 

@@ -13,10 +13,11 @@ import useGetFieldRecurringAppointments from "../custom-hooks/field/useGetFieldR
 const FieldById = ({user}) => {
     const {fieldId} = useParams();
     const field = useGetField(fieldId);
-    const appointments = useGetFieldAppointments(fieldId);
-    const recurringAppointments = useGetFieldRecurringAppointments(fieldId);
 
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
+    const appointments = useGetFieldAppointments(fieldId, date);
+    const recurringAppointments = useGetFieldRecurringAppointments(fieldId);
+
     const [isOwner, setIsOwner] = useState(false)
 
     // Sets if user is owner of field

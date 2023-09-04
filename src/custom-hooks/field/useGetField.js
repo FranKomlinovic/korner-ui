@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
 import {Fields} from "../../models";
 
-function useGetAppointment(id) {
+function useGetField(id) {
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
 
@@ -20,5 +20,5 @@ function useGetAppointment(id) {
     return {data: data, loading: loading}
 }
 
-export default useGetAppointment;
+export default useGetField;
 
