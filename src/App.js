@@ -1,6 +1,6 @@
 import './App.css';
 
-import {Amplify, Storage} from 'aws-amplify';
+import {Amplify, I18n, Storage} from 'aws-amplify';
 
 import {Flex, Heading, Image, Menu, MenuItem, ScrollView, useAuthenticator} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
@@ -21,6 +21,23 @@ import {AlertProvider} from "./context/alertContext";
 import AlertComponent from "./components/alertComponent";
 
 Amplify.configure(awsExports);
+
+I18n.setLanguage('hr');
+I18n.putVocabulariesForLanguage('hr', {
+    'Sign in': 'Prijava',
+    'Sign In': 'Prijava',
+    'Create Account': 'Napravi račun',
+    'Password': 'Lozinka',
+    'Confirm Password': 'Potvrdi lozinku',
+    'Forgot your password?': 'Zaboravili ste lozinku?',
+    'Enter your Email': 'Unesi email',
+    'Enter your Password': 'Unesi lozinku',
+    'Please confirm your Password': 'Potvrdi lozinku',
+    'Confirm your password': 'Potvrdi lozinku',
+    'Given Name': 'Ime',
+    'Enter your Given Name': 'Unesi ime',
+    'Enter your Family Name': 'Unesi prezime',
+});
 
 function App() {
     const navigate = useNavigate();
