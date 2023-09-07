@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
-import {Appointment, Fields, Response, User} from "../models";
-import {Badge, Button, Card, Flex, Grid, Heading, TabItem, Tabs, Text, useAuthenticator} from "@aws-amplify/ui-react";
+import {Appointment, Fields, Response} from "../models";
+import {Badge, Card, Flex, Grid, Heading, TabItem, Tabs, Text, useAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
 import LandingPage from "./landing-page";
@@ -76,27 +76,6 @@ const Home = () => {
         });
 
     }, [responses, sub])
-
-    // // Already played appointments
-    // useEffect(() => {
-    //     let accepted = responses?.filter(a => a.accepted).map(a => a.appointmentID);
-    //     if (!accepted || accepted?.length === 0) {
-    //         return;
-    //     }
-    //     DataStore.query(Appointment, b => b.and(
-    //             c => [
-    //                 c.or(c => accepted?.map(a => c.id.eq(a))),
-    //                 c.date.lt(getCurrentDate()),
-    //                 c.confirmed.eq(true),
-    //                 c.canceled.eq(false)
-    //             ]), {
-    //             sort: (sort) => sort.date(SortDirection.DESCENDING)
-    //         }
-    //     ).then((app) => {
-    //         setPlayedAppointment(app);
-    //     });
-    //
-    // }, [responses, sub])
 
     const tabList = [
         {title: "Rezervirano", variation: "success", data: <ReservedAppointment/>, length: reservedAppointment.length},
