@@ -1,7 +1,7 @@
 import {Flex, Heading, Image, Menu, MenuItem} from "@aws-amplify/ui-react";
 import {FaHome, FaPlusCircle, FaQuestion, FaRunning} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
-import useGetPhoto from "../custom-hooks/field/useGetPhoto";
+import useGetPhoto from "../custom-hooks/useGetPhoto";
 
 const MenuComponent = ({user}) => {
     const navigate = useNavigate();
