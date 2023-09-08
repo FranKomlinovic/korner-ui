@@ -209,6 +209,7 @@ export default function FieldsCreateForm(props) {
     ownerID: "",
     workTimeStart: "",
     workTimeEnd: "",
+    phoneNumber: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
@@ -233,6 +234,9 @@ export default function FieldsCreateForm(props) {
   const [workTimeEnd, setWorkTimeEnd] = React.useState(
     initialValues.workTimeEnd
   );
+  const [phoneNumber, setPhoneNumber] = React.useState(
+    initialValues.phoneNumber
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -255,6 +259,7 @@ export default function FieldsCreateForm(props) {
     setOwnerID(initialValues.ownerID);
     setWorkTimeStart(initialValues.workTimeStart);
     setWorkTimeEnd(initialValues.workTimeEnd);
+    setPhoneNumber(initialValues.phoneNumber);
     setErrors({});
   };
   const [currentAppointmentsDisplayValue, setCurrentAppointmentsDisplayValue] =
@@ -302,6 +307,8 @@ export default function FieldsCreateForm(props) {
         FUTSAL: "Futsal",
         TENNIS: "Tennis",
         BASKETBALL: "Basketball",
+        PING_PONG: "Ping pong",
+        BADMINTON: "Badminton",
       };
       return enumDisplayValueMap[r];
     },
@@ -324,6 +331,7 @@ export default function FieldsCreateForm(props) {
     ownerID: [],
     workTimeStart: [],
     workTimeEnd: [],
+    phoneNumber: [{ type: "Phone" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -366,6 +374,7 @@ export default function FieldsCreateForm(props) {
           ownerID,
           workTimeStart,
           workTimeEnd,
+          phoneNumber,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -417,6 +426,7 @@ export default function FieldsCreateForm(props) {
             ownerID: modelFields.ownerID,
             workTimeStart: modelFields.workTimeStart,
             workTimeEnd: modelFields.workTimeEnd,
+            phoneNumber: modelFields.phoneNumber,
           };
           const fields = await DataStore.save(new Fields(modelFieldsToSave));
           const promises = [];
@@ -484,6 +494,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -522,6 +533,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -564,6 +576,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.width ?? value;
@@ -606,6 +619,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.length ?? value;
@@ -648,6 +662,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -690,6 +705,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.minPlayers ?? value;
@@ -724,6 +740,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             values = result?.Appointments ?? values;
@@ -818,6 +835,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.surface ?? value;
@@ -852,6 +870,11 @@ export default function FieldsCreateForm(props) {
           value="WOOD"
           {...getOverrideProps(overrides, "surfaceoption3")}
         ></option>
+        <option
+          children="Grass"
+          value="GRASS"
+          {...getOverrideProps(overrides, "surfaceoption4")}
+        ></option>
       </SelectField>
       <TextField
         label="Photo"
@@ -877,6 +900,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.photo ?? value;
@@ -911,6 +935,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             values = result?.sports ?? values;
@@ -965,6 +990,16 @@ export default function FieldsCreateForm(props) {
             value="BASKETBALL"
             {...getOverrideProps(overrides, "sportsoption2")}
           ></option>
+          <option
+            children="Ping pong"
+            value="PING_PONG"
+            {...getOverrideProps(overrides, "sportsoption3")}
+          ></option>
+          <option
+            children="Badminton"
+            value="BADMINTON"
+            {...getOverrideProps(overrides, "sportsoption4")}
+          ></option>
         </SelectField>
       </ArrayField>
       <SelectField
@@ -991,6 +1026,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -1015,6 +1051,31 @@ export default function FieldsCreateForm(props) {
           value="ZAGREB"
           {...getOverrideProps(overrides, "cityoption1")}
         ></option>
+        <option
+          children="Sisak"
+          value="SISAK"
+          {...getOverrideProps(overrides, "cityoption2")}
+        ></option>
+        <option
+          children="Velika gorica"
+          value="VELIKA_GORICA"
+          {...getOverrideProps(overrides, "cityoption3")}
+        ></option>
+        <option
+          children="Split"
+          value="SPLIT"
+          {...getOverrideProps(overrides, "cityoption4")}
+        ></option>
+        <option
+          children="Rijeka"
+          value="RIJEKA"
+          {...getOverrideProps(overrides, "cityoption5")}
+        ></option>
+        <option
+          children="Osijek"
+          value="OSIJEK"
+          {...getOverrideProps(overrides, "cityoption6")}
+        ></option>
       </SelectField>
       <ArrayField
         onChange={async (items) => {
@@ -1036,6 +1097,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             values = result?.ReccuringAppointments ?? values;
@@ -1141,6 +1203,7 @@ export default function FieldsCreateForm(props) {
               ownerID: value,
               workTimeStart,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.ownerID ?? value;
@@ -1180,6 +1243,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart: value,
               workTimeEnd,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.workTimeStart ?? value;
@@ -1219,6 +1283,7 @@ export default function FieldsCreateForm(props) {
               ownerID,
               workTimeStart,
               workTimeEnd: value,
+              phoneNumber,
             };
             const result = onChange(modelFields);
             value = result?.workTimeEnd ?? value;
@@ -1232,6 +1297,46 @@ export default function FieldsCreateForm(props) {
         errorMessage={errors.workTimeEnd?.errorMessage}
         hasError={errors.workTimeEnd?.hasError}
         {...getOverrideProps(overrides, "workTimeEnd")}
+      ></TextField>
+      <TextField
+        label="Phone number"
+        isRequired={false}
+        isReadOnly={false}
+        type="tel"
+        value={phoneNumber}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              address,
+              width,
+              length,
+              price,
+              minPlayers,
+              Appointments,
+              surface,
+              photo,
+              sports,
+              city,
+              ReccuringAppointments,
+              ownerID,
+              workTimeStart,
+              workTimeEnd,
+              phoneNumber: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phoneNumber ?? value;
+          }
+          if (errors.phoneNumber?.hasError) {
+            runValidationTasks("phoneNumber", value);
+          }
+          setPhoneNumber(value);
+        }}
+        onBlur={() => runValidationTasks("phoneNumber", phoneNumber)}
+        errorMessage={errors.phoneNumber?.errorMessage}
+        hasError={errors.phoneNumber?.hasError}
+        {...getOverrideProps(overrides, "phoneNumber")}
       ></TextField>
       <Flex
         justifyContent="space-between"
