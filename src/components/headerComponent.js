@@ -5,7 +5,7 @@ import MenuComponent from "./menuComponent";
 const HeaderComponent = ({user}) => {
     const navigate = useNavigate();
 
-    const goToHome = () => navigate("/")
+    const goToHome = () => navigate("/home")
 
     const LogoAndAppName = () => (
         <Heading level={"2"} color={"brand.primary.100"} fontWeight={"bold"} fontStyle={"italic"} onClick={goToHome}>

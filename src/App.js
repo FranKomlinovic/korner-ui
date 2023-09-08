@@ -47,7 +47,8 @@ function App() {
 
     const routes = () => (
         <Routes>
-            <Route path="/" element={<Home/>}/>
+            <Route path="/" element={<LandingPage isHelp={false}/>}/>
+            <Route path="/home" element={<Home/>}/>
             <Route path="/fields/:fieldId" element={<FieldById/>}/>
             <Route path="/appointment/:appointmentId" element={<AppointmentById/>}/>
             <Route path="/recurring/:recurringId" element={<RecurringById/>}/>

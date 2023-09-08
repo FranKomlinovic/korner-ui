@@ -190,7 +190,7 @@ const LandingPage = ({isHelp}) => {
                     <Heading fontWeight={"bold"} color={"brand.primary.100"} level={2}>Jednostavno rezerviraj sportske
                         terene</Heading>
                 </Card>
-                <Button variation={"primary"} onClick={() => navigate('/fields')}>Prijava/Registracija</Button>
+                <Button variation={"primary"} onClick={() => navigate('/home')}>Prijava/Registracija</Button>
             </Flex>}
 
             <Tabs
