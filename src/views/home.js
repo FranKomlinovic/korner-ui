@@ -1,58 +1,39 @@
 import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
-import {Appointment, Fields, Response} from "../models";
-import {Badge, Card, Flex, Grid, Heading, TabItem, Tabs, Text, useAuthenticator} from "@aws-amplify/ui-react";
+import {Appointment, Response} from "../models";
+import {Badge, Flex, Heading, TabItem, Tabs, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
-import LandingPage from "./landing-page";
-import {FaPlusCircle, FaQuestionCircle, FaRunning, FaUser} from "react-icons/fa";
-import {useNavigate} from "react-router-dom";
 import {getCurrentDate, getCurrentTime} from "../functions/appointmentUItils";
-import {checkIfInOwnerGroup} from "../functions/converters";
-import FigmaField from "../figma-components/FigmaField";
+import OwnerFieldListComponent from "../components/ownerFieldListComponent";
+import ShortcutsComponent from "../components/shortcutsComponent";
 
-const Home = () => {
-    const navigate = useNavigate();
-    const {user} = useAuthenticator((context) => [
-        context.user
-    ]);
+const Home = ({user}) => {
 
     const [reservedAppointment, setReservedAppointment] = useState([]);
     const [acceptedAppointment, setAcceptedAppointment] = useState([]);
     const [canceledAppointment, setCanceledAppointment] = useState([]);
     const [responses, setResponses] = useState();
-    const [isOwner, setIsOwner] = useState();
-    const [fields, setFields] = useState();
 
     const sub = user?.attributes.sub;
-    const ReservedAppointment = () => mapToView(reservedAppointment, "Rezervirani Termini", "Trenutno nema rezerviranih termina");
-    const AcceptedAppointment = () => mapToView(acceptedAppointment, "Prihvaćeni termini", "Trenurno nema prihvaćenih termina");
-    const CanceledAppointment = () => mapToView(canceledAppointment, "Otkazani termini", "Trenurno nema otkazanih termina");
 
-    //Checks if user is in owner group
-    useEffect(() => {
-        setIsOwner(checkIfInOwnerGroup(user));
-    }, [user]);
+    const MapToView = ({appointments, noReservedText}) => (
+        <Flex alignItems={"center"} direction={"column"} marginTop={"1rem"}>
+            {appointments.length === 0 ? <Heading level={6}>{noReservedText}</Heading> :
+                appointments.map(a => {
+                    return <Flex key={a.id}>
+                        <FigmaAppointment appointment={a}/>
+                    </Flex>;
+                })}
+        </Flex>)
 
-    //Gets owners fields
-    useEffect(() => {
-        if (isOwner) {
-            DataStore.query(Fields, a =>
-                a.ownerID.eq(sub)
-            ).then(a => {
-                setFields(a);
-            })
-        }
-    }, [isOwner, sub]);
 
     // Set responses
     useEffect(() => {
-        const subscription = DataStore.observeQuery(Response, (c) => c.playerID.eq(sub), {sort: (s) => s.createdAt(SortDirection.ASCENDING)})
-            .subscribe((resp) => {
-                setResponses(resp.items);
+        DataStore.query(Response, (c) => c.playerID.eq(sub), {sort: (s) => s.createdAt(SortDirection.ASCENDING)})
+            .then((resp) => {
+                setResponses(resp);
             });
-
-        return () => subscription.unsubscribe();
     }, [sub]);
 
     // Reserved appointment and acceptedAppointment
@@ -78,10 +59,24 @@ const Home = () => {
     }, [responses, sub])
 
     const tabList = [
-        {title: "Rezervirano", variation: "success", data: <ReservedAppointment/>, length: reservedAppointment.length},
-        {title: "U najavi", variation: "warning", data: <AcceptedAppointment/>, length: acceptedAppointment.length},
-        {title: "Otkazano", variation: "error", data: <CanceledAppointment/>, length: canceledAppointment.length}
-    ]
+        {
+            title: "Rezervirano", variation: "success",
+            data: <MapToView appointments={reservedAppointment}
+                             noReservedText={"Trenutno nema rezerviranih termina"}/>,
+            length: reservedAppointment.length
+        },
+        {
+            title: "U najavi", variation: "warning",
+            data: <MapToView appointments={acceptedAppointment}
+                             noReservedText={"Trenutno nema termina u najavi"}/>,
+            length: acceptedAppointment.length
+        },
+        {
+            title: "Odbijeno", variation: "error",
+            data: <MapToView appointments={canceledAppointment}
+                             noReservedText={"Trenutno nema otkazanih termina"}/>,
+            length: canceledAppointment.length
+        }]
 
     const AppointmentTabs = () => (
         <Flex gap={"0rem"} direction={"column"} paddingTop={"0px"}>
@@ -98,58 +93,15 @@ const Home = () => {
             </Tabs>
         </Flex>)
 
-    const gridList = [
-        {url: "/fields", icon: <FaPlusCircle color={"#2E4732"} size={"3rem"}/>, text: "Rezerviraj"},
-        {url: "/profile", icon: <FaUser color={"#2E4732"} size={"3rem"}/>, text: "Profil"},
-        {url: "/played", icon: <FaRunning color={"#2E4732"} size={"3rem"}/>, text: "Odigrani termini"},
-        {url: "/help", icon: <FaQuestionCircle color={"#2E4732"} size={"3rem"}/>, text: "Upute"},
-    ]
-    const MapToShortcut = () => {
-        return (
-            <Grid gap={"1rem"} marginInline={"1rem"} templateColumns="1fr 1fr">
-                {gridList.map(grid => (
-                    <Card key={grid.text} variation={"elevated"} onClick={() => navigate(grid?.url)}>
-                        <Flex direction={"column"} alignItems={"center"} justifyContent={"center"}>
-                            {grid.icon}
-                            <Text textAlign={"center"}>{grid?.text}</Text>
-                        </Flex>
-                    </Card>)
-                )}
-            </Grid>)
-    }
-
-    const AllFields = () => {
-        return (
-            <Flex direction={"column"}>
-                <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Moji tereni:</Heading>
-                <Flex direction={"column"} alignItems={"center"}>
-                    {fields?.map(a => <Flex key={a.id}><FigmaField field={a}/></Flex>)}
-                </Flex>
-            </Flex>)
-    };
-
     return (
         <Flex direction={"column"} gap={"1rem"} marginTop={"1rem"}>
-            {user ? <AppointmentTabs/> : <LandingPage/>}
-            {isOwner && <AllFields/>}
-            {user && <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Prečaci:</Heading>}
-            {user && <MapToShortcut/>}
+            <AppointmentTabs/>
+            <OwnerFieldListComponent user={user}/>
+            <ShortcutsComponent/>
         </Flex>
     );
 
-    function mapToView(appointments: [], text, noReservedText) {
-        return (
-            <Flex alignItems={"center"} direction={"column"} marginTop={"1rem"}>
-                {appointments.length === 0 ? <Heading level={6}>{noReservedText}</Heading> :
-                    appointments.map(a => {
-                        return <Flex key={a.id}>
-                            <FigmaAppointment appointment={a}/>
-                        </Flex>;
-                    })}
-            </Flex>)
 
-
-    }
 }
 
-export default Home;
+export default withAuthenticator(Home);

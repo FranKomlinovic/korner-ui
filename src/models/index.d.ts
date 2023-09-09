@@ -4,20 +4,28 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 export enum Cities {
   PETRINJA = "PETRINJA",
-  ZAGREB = "ZAGREB"
+  ZAGREB = "ZAGREB",
+  SISAK = "SISAK",
+  VELIKA_GORICA = "VELIKA_GORICA",
+  SPLIT = "SPLIT",
+  RIJEKA = "RIJEKA",
+  OSIJEK = "OSIJEK"
 }
 
 export enum Sport {
   FUTSAL = "FUTSAL",
   TENNIS = "TENNIS",
-  BASKETBALL = "BASKETBALL"
+  BASKETBALL = "BASKETBALL",
+  PING_PONG = "PING_PONG",
+  BADMINTON = "BADMINTON"
 }
 
 export enum Surface {
   ARTIFICIAL_GRASS = "ARTIFICIAL_GRASS",
   RUBBER = "RUBBER",
   CONCRETE = "CONCRETE",
-  WOOD = "WOOD"
+  WOOD = "WOOD",
+  GRASS = "GRASS"
 }
 
 
@@ -281,6 +289,7 @@ type EagerFields = {
   readonly ownerID?: string | null;
   readonly workTimeStart?: string | null;
   readonly workTimeEnd?: string | null;
+  readonly phoneNumber?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -306,6 +315,7 @@ type LazyFields = {
   readonly ownerID?: string | null;
   readonly workTimeStart?: string | null;
   readonly workTimeEnd?: string | null;
+  readonly phoneNumber?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

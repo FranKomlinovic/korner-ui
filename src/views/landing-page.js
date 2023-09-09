@@ -2,6 +2,7 @@ import React from "react";
 import {Button, Card, Expander, ExpanderItem, Flex, Heading, Image, TabItem, Tabs, Text} from "@aws-amplify/ui-react";
 import {useNavigate} from "react-router-dom";
 import {List, ListItem} from "@mui/material";
+import ContactForm from "../components/contactFormComponent";
 
 const LandingPage = ({isHelp}) => {
     const navigate = useNavigate();
@@ -71,7 +72,7 @@ const LandingPage = ({isHelp}) => {
             alt: "play",
             img: "/korner-logo.png",
             heading: "Slušamo Vas",
-            text: "Sve prijedloge slobodno pošaljite, želimo da Korner bude najbolji što može biti"
+            text: "Sve prijedloge slobodno pošaljite u obrazac na dnu stranice, želimo da Korner bude najbolji što može biti"
         },
 
     ]
@@ -189,7 +190,7 @@ const LandingPage = ({isHelp}) => {
                     <Heading fontWeight={"bold"} color={"brand.primary.100"} level={2}>Jednostavno rezerviraj sportske
                         terene</Heading>
                 </Card>
-                <Button variation={"primary"} onClick={() => navigate('/fields')}>Prijava/Registracija</Button>
+                <Button variation={"primary"} onClick={() => navigate('/home')}>Prijava/Registracija</Button>
             </Flex>}
 
             <Tabs
@@ -213,6 +214,7 @@ const LandingPage = ({isHelp}) => {
 
             </Tabs>
 
+            <ContactForm/>
 
         </Flex>)
 }

@@ -840,6 +840,16 @@ export default function AppointmentCreateForm(props) {
           value="BASKETBALL"
           {...getOverrideProps(overrides, "sportoption2")}
         ></option>
+        <option
+          children="Ping pong"
+          value="PING_PONG"
+          {...getOverrideProps(overrides, "sportoption3")}
+        ></option>
+        <option
+          children="Badminton"
+          value="BADMINTON"
+          {...getOverrideProps(overrides, "sportoption4")}
+        ></option>
       </SelectField>
       <TextField
         label="Price"

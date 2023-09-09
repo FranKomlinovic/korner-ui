@@ -29,6 +29,7 @@ export declare type FieldsUpdateFormInputValues = {
     ownerID?: string;
     workTimeStart?: string;
     workTimeEnd?: string;
+    phoneNumber?: string;
 };
 export declare type FieldsUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -46,6 +47,7 @@ export declare type FieldsUpdateFormValidationValues = {
     ownerID?: ValidationFunction<string>;
     workTimeStart?: ValidationFunction<string>;
     workTimeEnd?: ValidationFunction<string>;
+    phoneNumber?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FieldsUpdateFormOverridesProps = {
@@ -65,6 +67,7 @@ export declare type FieldsUpdateFormOverridesProps = {
     ownerID?: PrimitiveOverrideProps<TextFieldProps>;
     workTimeStart?: PrimitiveOverrideProps<TextFieldProps>;
     workTimeEnd?: PrimitiveOverrideProps<TextFieldProps>;
+    phoneNumber?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type FieldsUpdateFormProps = React.PropsWithChildren<{
     overrides?: FieldsUpdateFormOverridesProps | undefined | null;

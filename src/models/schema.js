@@ -839,6 +839,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "phoneNumber": {
+                    "name": "phoneNumber",
+                    "isArray": false,
+                    "type": "AWSPhone",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -887,7 +894,12 @@ export const schema = {
             "name": "Cities",
             "values": [
                 "PETRINJA",
-                "ZAGREB"
+                "ZAGREB",
+                "SISAK",
+                "VELIKA_GORICA",
+                "SPLIT",
+                "RIJEKA",
+                "OSIJEK"
             ]
         },
         "Sport": {
@@ -895,7 +907,9 @@ export const schema = {
             "values": [
                 "FUTSAL",
                 "TENNIS",
-                "BASKETBALL"
+                "BASKETBALL",
+                "PING_PONG",
+                "BADMINTON"
             ]
         },
         "Surface": {
@@ -904,11 +918,12 @@ export const schema = {
                 "ARTIFICIAL_GRASS",
                 "RUBBER",
                 "CONCRETE",
-                "WOOD"
+                "WOOD",
+                "GRASS"
             ]
         }
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "97844053ba20f921e112d3f5f88fc5cc"
+    "version": "47e69e09722e57aa5c51d163f2a58460"
 };

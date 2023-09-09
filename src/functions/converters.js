@@ -9,6 +9,8 @@ const surfaces = new Map(
 const sports = new Map(
     [
         ["FUTSAL", "Futsal"],
+        ["PING_PONG", "Ping-Pong"],
+        ["BADMINTON", "Badminton"],
         ["TENNIS", "Tenis"],
         ["BASKETBALL", "Košarka"],
     ]);

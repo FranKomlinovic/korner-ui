@@ -16,7 +16,7 @@ export function getAppointmentStatus(appointment: Appointment): string {
 }
 
 export function getCurrentDate() {
-    return new Date().toLocaleDateString("sv-SE", {dateStyle: 'short'})
+    return new Date().toJSON().slice(0, 10)
 }
 
 export function getCurrentTime() {
