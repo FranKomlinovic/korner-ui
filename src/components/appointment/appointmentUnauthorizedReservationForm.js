@@ -14,7 +14,6 @@ const AppointmentUnauthorizedReservationForm = ({responses, appointment}) => {
 
     useEffect(() => {
         if (session) {
-            console.log("run")
             setLoading(true)
             // setResponseToUpdate(responses?.find((response) => response.id === session))
             DataStore.query(Response, session).then(a => {

@@ -18,8 +18,7 @@ const AlreadyAnsweredView = ({responseToUpdate, appointment, team, updateRespons
             updateResponseToUpdate(a);
             a.accepted ? alertContext.success("Prihvatili ste termin") :
                 alertContext.warning("Odbili ste termin")
-        }).catch((a) => {
-            console.log(a)
+        }).catch(() => {
             alertContext.error("Greška prihvaćanja termina, pokušajte ponovno")
         });
     }

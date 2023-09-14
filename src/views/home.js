@@ -4,7 +4,7 @@ import {Appointment, Response} from "../models";
 import {Badge, Flex, Heading, TabItem, Tabs, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
-import {getCurrentDate, getCurrentTime} from "../functions/appointmentUItils";
+import {getCurrentDate, isAppointmentOld} from "../functions/appointmentUItils";
 import OwnerFieldListComponent from "../components/ownerFieldListComponent";
 import ShortcutsComponent from "../components/shortcutsComponent";
 
@@ -44,16 +44,17 @@ const Home = ({user}) => {
         }
         DataStore.query(Appointment, b => b.and(
                 c => [
-                    c.or(c => accepted.map(a => c.id.eq(a))),
-                    c.end.ge(getCurrentTime()),
+                    c.or(d => accepted.map(a => d.id.eq(a))),
                     c.date.ge(getCurrentDate())
+
                 ]), {
                 sort: (sort) => sort.date(SortDirection.DESCENDING)
             }
         ).then((app) => {
-            setReservedAppointment(app.filter(a => a.confirmed && !a.canceled));
-            setAcceptedAppointment(app.filter(a => !a.confirmed && !a.canceled));
-            setCanceledAppointment(app.filter(a => a.canceled));
+            const filtered = app.filter(a => !isAppointmentOld(a));
+            setReservedAppointment(filtered.filter(a => a.confirmed && !a.canceled));
+            setAcceptedAppointment(filtered.filter(a => !a.confirmed && !a.canceled));
+            setCanceledAppointment(filtered.filter(a => a.canceled));
         });
 
     }, [responses, sub])
@@ -72,7 +73,7 @@ const Home = ({user}) => {
             length: acceptedAppointment.length
         },
         {
-            title: "Odbijeno", variation: "error",
+            title: "Otkazano", variation: "error",
             data: <MapToView appointments={canceledAppointment}
                              noReservedText={"Trenutno nema otkazanih termina"}/>,
             length: canceledAppointment.length
