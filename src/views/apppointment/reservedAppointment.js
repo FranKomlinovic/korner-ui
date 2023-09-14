@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Card, Flex} from "@aws-amplify/ui-react";
 import AppointmentPlayerList from "../../components/appointment/appointmentPlayerList";
 import AppointmentShareLink from "../../components/appointment/appointmetShareLink";
@@ -12,8 +12,12 @@ import AppointmentTeamButton from "../../components/appointment/appointmetTeamBu
 import AppointmentTeamsDnd from "../../components/appointment/appointmentTeamsDnd";
 
 const ReservedAppointment = ({responses, role, appointment, field, user, teams}) => {
-    const [isChecked, setIsChecked] = useState(teams? teams.length !== 0 : false);
+    const [isChecked, setIsChecked] = useState(false);
 
+    useEffect(() => {
+        setIsChecked(teams ? teams.length !== 0 : false);
+    }, [teams]
+)
     return (
         <Flex direction="column">
             {role === "APPOINTMENT_OWNER" &&
@@ -35,7 +39,8 @@ const ReservedAppointment = ({responses, role, appointment, field, user, teams})
                                                appointment={appointment} teams={teams} responses={responses}/>
                     </Flex>
                 }
-                {isChecked ? <AppointmentTeamsDnd resp={responses} tms={teams} appointmentID={appointment.id} isOwner={role === "APPOINTMENT_OWNER"}/> :
+                {isChecked ? <AppointmentTeamsDnd resp={responses} tms={teams} appointmentID={appointment.id}
+                                                  isOwner={role === "APPOINTMENT_OWNER"}/> :
                     <AppointmentPlayerList responses={responses} showDelete={role === "APPOINTMENT_OWNER"}/>}
             </Card>
 

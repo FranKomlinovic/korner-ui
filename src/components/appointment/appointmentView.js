@@ -4,11 +4,8 @@ import UnreservedAppointment from "../../views/apppointment/unreservedAppointmen
 import ReservedAppointment from "../../views/apppointment/reservedAppointment";
 import CanceledAppointment from "../../views/apppointment/canceledAppointment";
 import PlayedAppointment from "../../views/apppointment/playedAppointment";
-import useGetAppointmentTeams from "../../custom-hooks/appointment/useGetAppointmentTeams";
 
-const AppointmentView = ({appointment, responses, field, user, appointmentStatus}) => {
-
-    const teams = useGetAppointmentTeams(appointment?.appointmentID);
+const AppointmentView = ({appointment, responses, field, user, appointmentStatus, teams}) => {
 
     const role = useMemo(() => {
         const sub = user?.attributes?.sub;
@@ -40,6 +37,7 @@ const AppointmentView = ({appointment, responses, field, user, appointmentStatus
         };
     }, [appointment, user, role]);
 
+    console.log(teams)
     return useMemo(() => {
             switch (appointmentStatus) {
                 case "unreserved" :
@@ -49,12 +47,12 @@ const AppointmentView = ({appointment, responses, field, user, appointmentStatus
                 case "reserved" :
                     return <ReservedAppointment role={userModel?.role} responses={responses}
                                                 appointment={appointment}
-                                                field={field} user={userModel} teams={teams?.data}/>
+                                                field={field} user={userModel} teams={teams}/>
                 case "canceled" :
                     return <CanceledAppointment responses={responses}/>
 
                 case "played" :
-                    return <PlayedAppointment appointment={appointment} teams={teams?.data}
+                    return <PlayedAppointment appointment={appointment} teams={teams}
                                               role={userModel?.role}
                                               responses={responses}/>
 
@@ -62,7 +60,7 @@ const AppointmentView = ({appointment, responses, field, user, appointmentStatus
                     return <></>
             }
         }
-        , [appointment, appointmentStatus, field, responses, teams?.data, userModel]);
+        , [appointment, appointmentStatus, field, responses, teams, userModel]);
 
 }
 

@@ -9,10 +9,12 @@ import useGetAppointment from "../custom-hooks/appointment/useGetAppointment";
 import useGetAppointmentResponses from "../custom-hooks/appointment/useGetAppointmentResponses";
 import LoaderComponent from "../components/loaderComponent";
 import AppointmentView from "../components/appointment/appointmentView";
+import useGetAppointmentTeams from "../custom-hooks/appointment/useGetAppointmentTeams";
 
 
 const AppointmentById = () => {
     const {appointmentId} = useParams();
+    const teams = useGetAppointmentTeams(appointmentId);
     const appointment = useGetAppointment(appointmentId);
     const responses = useGetAppointmentResponses(appointmentId);
     const [open, setOpen] = useState(false);
@@ -53,7 +55,7 @@ const AppointmentById = () => {
                 </Flex>
                 : <LoaderComponent/>}
             <AppointmentView appointment={appointment?.appointment} user={user} responses={responses?.data}
-                             field={appointment?.field} appointmentStatus={appointment?.status}/>
+                             field={appointment?.field} teams={teams?.data} appointmentStatus={appointment?.status}/>
         </Flex>)
 
 }
