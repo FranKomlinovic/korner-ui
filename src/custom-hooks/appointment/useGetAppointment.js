@@ -1,26 +1,45 @@
 import {useCallback, useEffect, useState} from "react";
-import {DataStore} from "aws-amplify";
+import {DataStore, Storage} from "aws-amplify";
 import {Appointment} from "../../models";
+import {getAppointmentStatus} from "../../functions/appointmentUItils";
 
 function useGetAppointment(id) {
-    const [data, setData] = useState();
+    const [appointment, setAppointment] = useState();
+    const [field, setField] = useState();
+    const [photo, setPhoto] = useState();
+    const [status, setStatus] = useState();
     const [loading, setLoading] = useState(true);
 
-    const query = useCallback((appId) => {
-        DataStore.query(Appointment, appId).then(a => {
-            setData(a);
+    const query = useCallback(() => {
+        id && DataStore.query(Appointment, id).then(a => {
+            setAppointment(a)
+            setStatus(getAppointmentStatus(a))
             setLoading(false);
         });
-    }, [])
+    }, [id])
 
     useEffect(() => {
-        query(id);
-    }, [id, query]);
+        query();
+    }, [query]);
+
+    useEffect(() => {
+        appointment?.Fields?.then(field => {
+            setField(field)
+        })
+    }, [appointment]);
+
+    useEffect(() => {
+        field?.photo ?
+            Storage.get(field.photo).then(b => {
+                setPhoto(b);
+            }) :
+            setPhoto("/no-field.jpg")
+    }, [field]);
 
     useEffect(() => {
         const subscription = DataStore.observe(Appointment, id).subscribe((model) => {
-            setData(model.element);
-            setLoading(false)
+            setAppointment(model.element);
+            setStatus(getAppointmentStatus(model.element))
         });
 
         return () => {
@@ -29,7 +48,7 @@ function useGetAppointment(id) {
     }, [id]);
 
 
-    return {data: data, loading: loading}
+    return {appointment: appointment, field: field, photo: photo, status: status, loading: loading}
 }
 
 
