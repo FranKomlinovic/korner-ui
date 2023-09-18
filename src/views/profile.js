@@ -78,7 +78,7 @@ const Profile = ({user, signOut}) => {
                     {ProfileDetails()}
                     <UploadComponent open={modalOpen} uploadSuccessFunction={uploadProfilePicture}
                                      handleClose={() => setModalOpen(false)} text={"Promijeni sliku profila"}/>
-                    <Button variation={"destructive"} onClick={signOut}>Odjavi se</Button>
+                    <Button variation={"destructive"} onClick={() => signOut()}>Odjavi se</Button>
                 </Flex>
             </Card>
         </Flex>

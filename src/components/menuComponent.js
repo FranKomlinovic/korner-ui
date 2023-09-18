@@ -12,7 +12,7 @@ const MenuComponent = ({user}) => {
     return (
         <Flex marginBlock={"0.5rem"}>
             <Menu marginRight={"1rem"} border={"none"} padding={"0.1rem"}>
-                <MenuItem onClick={() => navigate("/")}>
+                <MenuItem onClick={() => navigate("/home")}>
                     <Flex alignItems={"center"}>
                         <FaHome size={"1.5rem"}/><Heading>Home</Heading>
                     </Flex>

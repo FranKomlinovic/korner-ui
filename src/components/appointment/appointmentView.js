@@ -37,7 +37,6 @@ const AppointmentView = ({appointment, responses, field, user, appointmentStatus
         };
     }, [appointment, user, role]);
 
-    console.log(teams)
     return useMemo(() => {
             switch (appointmentStatus) {
                 case "unreserved" :
