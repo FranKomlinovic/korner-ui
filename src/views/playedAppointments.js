@@ -47,7 +47,7 @@ const PlayedAppointments = ({user}) => {
 
     return (
         <Flex alignItems={"center"} direction={"column"} marginTop={"1rem"}>
-            <Heading level={4} variation={"primary"}>Odigrani termini:</Heading>
+            <Heading level={4} variation={"primary"}>Odigrani termini: {playedAppointment.length}</Heading>
             {playedAppointment.length === 0 ? <Heading level={6}>Nemate odigranih termina</Heading> :
                 playedAppointment.map(a => {
                     return <Flex key={a.id}>
