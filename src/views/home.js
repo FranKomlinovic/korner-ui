@@ -7,6 +7,7 @@ import FigmaAppointment from "../figma-components/FigmaAppointment";
 import {getCurrentDate, isAppointmentOld} from "../functions/appointmentUItils";
 import OwnerFieldListComponent from "../components/ownerFieldListComponent";
 import ShortcutsComponent from "../components/shortcutsComponent";
+import runOneSignal from "../custom-hooks/runOneSignal";
 
 const Home = ({user}) => {
 
@@ -27,6 +28,9 @@ const Home = ({user}) => {
                 })}
         </Flex>)
 
+    useEffect(() => {
+        user && runOneSignal(user);
+    }, [user])
 
     // Set responses
     useEffect(() => {
