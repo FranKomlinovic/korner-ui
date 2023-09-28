@@ -20,7 +20,7 @@ const UnreservedAppointment = ({responses, role, appointment, field, user}) => {
             <Card variation={"elevated"} marginInline={"1rem"}>
                 {role === "GUEST_USER" ?
                     <AppointmentUnauthorizedReservationForm responses={responses} appointment={appointment}/> :
-                    <AppointmentReservationForm user={user} appointment={appointment} responses={responses}/>
+                    <AppointmentReservationForm user={user} appointment={appointment} responses={responses} field={field}/>
                 }
             </Card>
 

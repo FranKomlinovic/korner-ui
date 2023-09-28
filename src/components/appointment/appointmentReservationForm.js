@@ -5,8 +5,9 @@ import {DataStore} from "aws-amplify";
 import AlertContext from "../../context/alertContext";
 import LoaderComponent from "../loaderComponent";
 import AppointmentAlreadyAnweredView from "./appointmentAlreadyAnweredView";
+import sendAppointmentNotification from "../../custom-hooks/sendAppointmentNotification";
 
-const AppointmentReservationForm = ({user, appointment, responses}) => {
+const AppointmentReservationForm = ({user, appointment, responses, field}) => {
     const [name, setName] = useState();
     const [responseToUpdate, setResponseToUpdate] = useState();
     const [team, setTeam] = useState();
@@ -48,6 +49,12 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
             setLoading(false);
             a.accepted ? alertContext.success("Prihvatili ste termin") :
                 alertContext.warning("Odbili ste termin")
+            appointment.Responses.toArray().then(responses => {
+                if (response.accepted && responses.length >= field?.minPlayers - 2) {
+                    const msg = `Korisnik ${name} je prihvatio termin, sada vas je ${responses.length}`;
+                    sendAppointmentNotification(msg, [appointment?.bookerID])
+                }
+            })
         }).catch(() => {
             alertContext.error("Greška prihvaćanja termina, pokušajte ponovno")
         });
@@ -87,7 +94,8 @@ const AppointmentReservationForm = ({user, appointment, responses}) => {
     return (
         <Flex direction="column" alignItems={"center"} justifyContent={"center"}>
             {responseToUpdate ? <AppointmentAlreadyAnweredView appointment={appointment} team={team}
-                                                                updateResponseToUpdate={setResponseToUpdate} responseToUpdate={responseToUpdate}/> : createForm()}
+                                                               updateResponseToUpdate={setResponseToUpdate}
+                                                               responseToUpdate={responseToUpdate}/> : createForm()}
         </Flex>
 
 
