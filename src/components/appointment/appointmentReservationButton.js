@@ -13,8 +13,11 @@ const AppointmentReservationButton = ({responses, field, appointment}) => {
     }
 
     const reserveAppointment = () => {
-        const msg = `Vaš teren ${field?.name} je rezerviran u ${getDateTimeFromAppointment(appointment)}`;
-        sendAppointmentNotification(msg, [field?.ownerID])
+        const msgOwner = `Vaš teren ${field?.name} je rezerviran u ${getDateTimeFromAppointment(appointment)}`;
+        const msgUser = `Termin ${field?.name} je rezerviran u ${getDateTimeFromAppointment(appointment)}`;
+        const acceptedIDs = responses?.filter(a => a.accepted).map(a => a?.playerID)
+        sendAppointmentNotification(msgOwner, [field?.ownerID])
+        sendAppointmentNotification(msgUser, acceptedIDs)
         confirmAppointment(appointment.id)
     }
 
