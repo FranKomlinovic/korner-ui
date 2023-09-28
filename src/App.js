@@ -18,6 +18,8 @@ import RecurringById from "./views/recurringById";
 import {AlertProvider} from "./context/alertContext";
 import AlertComponent from "./components/alertComponent";
 import HeaderComponent from "./components/headerComponent";
+import {useEffect} from "react";
+import runOneSignal from "./custom-hooks/runOneSignal";
 
 Amplify.configure(awsExports);
 
@@ -44,6 +46,10 @@ function App() {
     const {user} = useAuthenticator((context) => [
         context.user
     ]);
+
+    useEffect(() => {
+        user && runOneSignal(user);
+    }, [user])
 
     const routes = () => (
         <Routes>
