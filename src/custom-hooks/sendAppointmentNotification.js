@@ -12,7 +12,7 @@ export default function sendAppointmentNotification(message, userIDs) {
                 external_id: userIDs
             },
             target_channel: "push",
-            contents: {en: message},
+            contents: {en: message, hr: message},
             name: 'Potvrđen dolazak'
         })
     };
