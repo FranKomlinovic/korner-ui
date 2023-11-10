@@ -24,7 +24,12 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Fields, Appointment, ReccuringAppointment } from "../models";
+import {
+  Fields,
+  Appointment,
+  ReccuringAppointment,
+  PossibleAppointments as PossibleAppointments0,
+} from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -211,6 +216,7 @@ export default function FieldsUpdateForm(props) {
     workTimeStart: "",
     workTimeEnd: "",
     phoneNumber: "",
+    PossibleAppointments: [],
   };
   const [name, setName] = React.useState(initialValues.name);
   const [address, setAddress] = React.useState(initialValues.address);
@@ -238,6 +244,9 @@ export default function FieldsUpdateForm(props) {
   const [phoneNumber, setPhoneNumber] = React.useState(
     initialValues.phoneNumber
   );
+  const [PossibleAppointments, setPossibleAppointments] = React.useState(
+    initialValues.PossibleAppointments
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = fieldsRecord
@@ -246,6 +255,7 @@ export default function FieldsUpdateForm(props) {
           ...fieldsRecord,
           Appointments: linkedAppointments,
           ReccuringAppointments: linkedReccuringAppointments,
+          PossibleAppointments: linkedPossibleAppointments,
         }
       : initialValues;
     setName(cleanValues.name);
@@ -269,6 +279,9 @@ export default function FieldsUpdateForm(props) {
     setWorkTimeStart(cleanValues.workTimeStart);
     setWorkTimeEnd(cleanValues.workTimeEnd);
     setPhoneNumber(cleanValues.phoneNumber);
+    setPossibleAppointments(cleanValues.PossibleAppointments ?? []);
+    setCurrentPossibleAppointmentsValue(undefined);
+    setCurrentPossibleAppointmentsDisplayValue("");
     setErrors({});
   };
   const [fieldsRecord, setFieldsRecord] = React.useState(fieldsModelProp);
@@ -277,6 +290,9 @@ export default function FieldsUpdateForm(props) {
   const [linkedReccuringAppointments, setLinkedReccuringAppointments] =
     React.useState([]);
   const canUnlinkReccuringAppointments = false;
+  const [linkedPossibleAppointments, setLinkedPossibleAppointments] =
+    React.useState([]);
+  const canUnlinkPossibleAppointments = false;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
@@ -291,6 +307,10 @@ export default function FieldsUpdateForm(props) {
         ? await record.ReccuringAppointments.toArray()
         : [];
       setLinkedReccuringAppointments(linkedReccuringAppointments);
+      const linkedPossibleAppointments = record
+        ? await record.PossibleAppointments.toArray()
+        : [];
+      setLinkedPossibleAppointments(linkedPossibleAppointments);
     };
     queryData();
   }, [idProp, fieldsModelProp]);
@@ -298,6 +318,7 @@ export default function FieldsUpdateForm(props) {
     fieldsRecord,
     linkedAppointments,
     linkedReccuringAppointments,
+    linkedPossibleAppointments,
   ]);
   const [currentAppointmentsDisplayValue, setCurrentAppointmentsDisplayValue] =
     React.useState("");
@@ -315,9 +336,19 @@ export default function FieldsUpdateForm(props) {
     setCurrentReccuringAppointmentsValue,
   ] = React.useState(undefined);
   const ReccuringAppointmentsRef = React.createRef();
+  const [
+    currentPossibleAppointmentsDisplayValue,
+    setCurrentPossibleAppointmentsDisplayValue,
+  ] = React.useState("");
+  const [
+    currentPossibleAppointmentsValue,
+    setCurrentPossibleAppointmentsValue,
+  ] = React.useState(undefined);
+  const PossibleAppointmentsRef = React.createRef();
   const getIDValue = {
     Appointments: (r) => JSON.stringify({ id: r?.id }),
     ReccuringAppointments: (r) => JSON.stringify({ id: r?.id }),
+    PossibleAppointments: (r) => JSON.stringify({ id: r?.id }),
   };
   const AppointmentsIdSet = new Set(
     Array.isArray(Appointments)
@@ -329,6 +360,11 @@ export default function FieldsUpdateForm(props) {
       ? ReccuringAppointments.map((r) => getIDValue.ReccuringAppointments?.(r))
       : getIDValue.ReccuringAppointments?.(ReccuringAppointments)
   );
+  const PossibleAppointmentsIdSet = new Set(
+    Array.isArray(PossibleAppointments)
+      ? PossibleAppointments.map((r) => getIDValue.PossibleAppointments?.(r))
+      : getIDValue.PossibleAppointments?.(PossibleAppointments)
+  );
   const appointmentRecords = useDataStoreBinding({
     type: "collection",
     model: Appointment,
@@ -336,6 +372,10 @@ export default function FieldsUpdateForm(props) {
   const reccuringAppointmentRecords = useDataStoreBinding({
     type: "collection",
     model: ReccuringAppointment,
+  }).items;
+  const possibleAppointmentsRecords = useDataStoreBinding({
+    type: "collection",
+    model: PossibleAppointments0,
   }).items;
   const getDisplayValue = {
     Appointments: (r) => `${r?.confirmed ? r?.confirmed + " - " : ""}${r?.id}`,
@@ -351,6 +391,8 @@ export default function FieldsUpdateForm(props) {
     },
     ReccuringAppointments: (r) =>
       `${r?.bookerName ? r?.bookerName + " - " : ""}${r?.id}`,
+    PossibleAppointments: (r) =>
+      `${r?.priceForHour ? r?.priceForHour + " - " : ""}${r?.id}`,
   };
   const validations = {
     name: [],
@@ -369,6 +411,7 @@ export default function FieldsUpdateForm(props) {
     workTimeStart: [],
     workTimeEnd: [],
     phoneNumber: [{ type: "Phone" }],
+    PossibleAppointments: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -412,6 +455,7 @@ export default function FieldsUpdateForm(props) {
           workTimeStart,
           workTimeEnd,
           phoneNumber,
+          PossibleAppointments,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -546,6 +590,57 @@ export default function FieldsUpdateForm(props) {
               )
             );
           });
+          const possibleAppointmentsToLink = [];
+          const possibleAppointmentsToUnLink = [];
+          const possibleAppointmentsSet = new Set();
+          const linkedPossibleAppointmentsSet = new Set();
+          PossibleAppointments.forEach((r) =>
+            possibleAppointmentsSet.add(getIDValue.PossibleAppointments?.(r))
+          );
+          linkedPossibleAppointments.forEach((r) =>
+            linkedPossibleAppointmentsSet.add(
+              getIDValue.PossibleAppointments?.(r)
+            )
+          );
+          linkedPossibleAppointments.forEach((r) => {
+            if (
+              !possibleAppointmentsSet.has(getIDValue.PossibleAppointments?.(r))
+            ) {
+              possibleAppointmentsToUnLink.push(r);
+            }
+          });
+          PossibleAppointments.forEach((r) => {
+            if (
+              !linkedPossibleAppointmentsSet.has(
+                getIDValue.PossibleAppointments?.(r)
+              )
+            ) {
+              possibleAppointmentsToLink.push(r);
+            }
+          });
+          possibleAppointmentsToUnLink.forEach((original) => {
+            if (!canUnlinkPossibleAppointments) {
+              throw Error(
+                `PossibleAppointments ${original.id} cannot be unlinked from Fields because fieldsID is a required field.`
+              );
+            }
+            promises.push(
+              DataStore.save(
+                PossibleAppointments0.copyOf(original, (updated) => {
+                  updated.fieldsID = null;
+                })
+              )
+            );
+          });
+          possibleAppointmentsToLink.forEach((original) => {
+            promises.push(
+              DataStore.save(
+                PossibleAppointments0.copyOf(original, (updated) => {
+                  updated.fieldsID = fieldsRecord.id;
+                })
+              )
+            );
+          });
           const modelFieldsToSave = {
             name: modelFields.name,
             address: modelFields.address,
@@ -607,6 +702,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -646,6 +742,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.address ?? value;
@@ -689,6 +786,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.width ?? value;
@@ -732,6 +830,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.length ?? value;
@@ -775,6 +874,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.price ?? value;
@@ -818,6 +918,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.minPlayers ?? value;
@@ -853,6 +954,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             values = result?.Appointments ?? values;
@@ -948,6 +1050,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.surface ?? value;
@@ -1013,6 +1116,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.photo ?? value;
@@ -1048,6 +1152,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             values = result?.sports ?? values;
@@ -1139,6 +1244,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.city ?? value;
@@ -1210,6 +1316,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             values = result?.ReccuringAppointments ?? values;
@@ -1316,6 +1423,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.ownerID ?? value;
@@ -1356,6 +1464,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart: value,
               workTimeEnd,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.workTimeStart ?? value;
@@ -1396,6 +1505,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd: value,
               phoneNumber,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.workTimeEnd ?? value;
@@ -1436,6 +1546,7 @@ export default function FieldsUpdateForm(props) {
               workTimeStart,
               workTimeEnd,
               phoneNumber: value,
+              PossibleAppointments,
             };
             const result = onChange(modelFields);
             value = result?.phoneNumber ?? value;
@@ -1450,6 +1561,109 @@ export default function FieldsUpdateForm(props) {
         hasError={errors.phoneNumber?.hasError}
         {...getOverrideProps(overrides, "phoneNumber")}
       ></TextField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              name,
+              address,
+              width,
+              length,
+              price,
+              minPlayers,
+              Appointments,
+              surface,
+              photo,
+              sports,
+              city,
+              ReccuringAppointments,
+              ownerID,
+              workTimeStart,
+              workTimeEnd,
+              phoneNumber,
+              PossibleAppointments: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.PossibleAppointments ?? values;
+          }
+          setPossibleAppointments(values);
+          setCurrentPossibleAppointmentsValue(undefined);
+          setCurrentPossibleAppointmentsDisplayValue("");
+        }}
+        currentFieldValue={currentPossibleAppointmentsValue}
+        label={"Possible appointments"}
+        items={PossibleAppointments}
+        hasError={errors?.PossibleAppointments?.hasError}
+        runValidationTasks={async () =>
+          await runValidationTasks(
+            "PossibleAppointments",
+            currentPossibleAppointmentsValue
+          )
+        }
+        errorMessage={errors?.PossibleAppointments?.errorMessage}
+        getBadgeText={getDisplayValue.PossibleAppointments}
+        setFieldValue={(model) => {
+          setCurrentPossibleAppointmentsDisplayValue(
+            model ? getDisplayValue.PossibleAppointments(model) : ""
+          );
+          setCurrentPossibleAppointmentsValue(model);
+        }}
+        inputFieldRef={PossibleAppointmentsRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Possible appointments"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search PossibleAppointments"
+          value={currentPossibleAppointmentsDisplayValue}
+          options={possibleAppointmentsRecords
+            .filter(
+              (r) =>
+                !PossibleAppointmentsIdSet.has(
+                  getIDValue.PossibleAppointments?.(r)
+                )
+            )
+            .map((r) => ({
+              id: getIDValue.PossibleAppointments?.(r),
+              label: getDisplayValue.PossibleAppointments?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentPossibleAppointmentsValue(
+              possibleAppointmentsRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentPossibleAppointmentsDisplayValue(label);
+            runValidationTasks("PossibleAppointments", label);
+          }}
+          onClear={() => {
+            setCurrentPossibleAppointmentsDisplayValue("");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.PossibleAppointments?.hasError) {
+              runValidationTasks("PossibleAppointments", value);
+            }
+            setCurrentPossibleAppointmentsDisplayValue(value);
+            setCurrentPossibleAppointmentsValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              "PossibleAppointments",
+              currentPossibleAppointmentsDisplayValue
+            )
+          }
+          errorMessage={errors.PossibleAppointments?.errorMessage}
+          hasError={errors.PossibleAppointments?.hasError}
+          ref={PossibleAppointmentsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "PossibleAppointments")}
+        ></Autocomplete>
+      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

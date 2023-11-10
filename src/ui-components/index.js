@@ -13,6 +13,8 @@ export { default as FollowingUpdateForm } from "./FollowingUpdateForm";
 export { default as KornerFieldInfoNew } from "./KornerFieldInfoNew";
 export { default as KornerFieldShort } from "./KornerFieldShort";
 export { default as KornerResponseUser } from "./KornerResponseUser";
+export { default as PossibleAppointmentsCreateForm } from "./PossibleAppointmentsCreateForm";
+export { default as PossibleAppointmentsUpdateForm } from "./PossibleAppointmentsUpdateForm";
 export { default as ReccuringAppointmentCreateForm } from "./ReccuringAppointmentCreateForm";
 export { default as ReccuringAppointmentUpdateForm } from "./ReccuringAppointmentUpdateForm";
 export { default as ResponseCreateForm } from "./ResponseCreateForm";

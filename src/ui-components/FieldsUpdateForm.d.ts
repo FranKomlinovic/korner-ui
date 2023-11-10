@@ -7,7 +7,7 @@
 import * as React from "react";
 import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Fields, Appointment, ReccuringAppointment } from "../models";
+import { Fields, Appointment, ReccuringAppointment, PossibleAppointments as PossibleAppointments0 } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -30,6 +30,7 @@ export declare type FieldsUpdateFormInputValues = {
     workTimeStart?: string;
     workTimeEnd?: string;
     phoneNumber?: string;
+    PossibleAppointments?: PossibleAppointments0[];
 };
 export declare type FieldsUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -48,6 +49,7 @@ export declare type FieldsUpdateFormValidationValues = {
     workTimeStart?: ValidationFunction<string>;
     workTimeEnd?: ValidationFunction<string>;
     phoneNumber?: ValidationFunction<string>;
+    PossibleAppointments?: ValidationFunction<PossibleAppointments0>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FieldsUpdateFormOverridesProps = {
@@ -68,6 +70,7 @@ export declare type FieldsUpdateFormOverridesProps = {
     workTimeStart?: PrimitiveOverrideProps<TextFieldProps>;
     workTimeEnd?: PrimitiveOverrideProps<TextFieldProps>;
     phoneNumber?: PrimitiveOverrideProps<TextFieldProps>;
+    PossibleAppointments?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type FieldsUpdateFormProps = React.PropsWithChildren<{
     overrides?: FieldsUpdateFormOverridesProps | undefined | null;

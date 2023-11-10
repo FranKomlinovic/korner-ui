@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {Button, Card, Flex, Heading, Image, TextField, withAuthenticator} from "@aws-amplify/ui-react";
-import {Auth, Storage} from "aws-amplify";
+import React, {useState} from "react";
+import {Button, Card, Flex, Heading, TextField, withAuthenticator} from "@aws-amplify/ui-react";
+import {Auth} from "aws-amplify";
+import {StorageImage} from '@aws-amplify/ui-react-storage';
 import UploadComponent from "../components/UploadComponent";
 
 
@@ -9,16 +10,6 @@ const Profile = ({user, signOut}) => {
     const [familyName, setFamilyName] = useState(family_name);
     const [givenName, setGivenName] = useState(given_name);
     const [modalOpen, setModalOpen] = useState(false);
-    const [photo, setPhoto] = useState("/no-picture.png");
-
-    //Gets user picture
-    useEffect(() => {
-        Storage.get(picture).then(b => {
-            setPhoto(b);
-        }).catch(() => {
-            setPhoto("/no-picture.png")
-        })
-    }, [picture]);
 
     const uploadProfilePicture = (pic) => {
         Auth.updateUserAttributes(user, {
@@ -51,8 +42,8 @@ const Profile = ({user, signOut}) => {
         return (
             <Flex>
                 <Flex direction={"column"}>
-                    <Image alt={"Profile photo"} width={"140px"} height={"140px"} objectFit={"cover"} borderRadius={400}
-                           src={photo}/>
+                    <StorageImage imgKey={picture} accessLevel={"public"} alt={"Profile photo"} width={"140px"}
+                                  height={"140px"} objectFit={"cover"} borderRadius={400}/>
                     <Button size={"small"} variation={"link"} onClick={() => setModalOpen(true)}>Promijeni
                         sliku</Button>
 

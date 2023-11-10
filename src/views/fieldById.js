@@ -31,7 +31,7 @@ const FieldById = ({user}) => {
 
     return (
         <Flex direction={"column"}>
-            <Flex direction={"column"} alignSelf={"center"}>
+            <Flex direction={"column"} justifyContent={"center"} alignItems={"center"} alignSelf={"center"}>
                 <FigmaField field={field.data}/>
                 {isOwner && <FieldOwnerFunctions fieldParam={field.data}/>}
             </Flex>

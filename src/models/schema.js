@@ -1,5 +1,123 @@
 export const schema = {
     "models": {
+        "PossibleAppointments": {
+            "name": "PossibleAppointments",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "start": {
+                    "name": "start",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "end": {
+                    "name": "end",
+                    "isArray": false,
+                    "type": "AWSTime",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "priceForHour": {
+                    "name": "priceForHour",
+                    "isArray": false,
+                    "type": "Float",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "interval": {
+                    "name": "interval",
+                    "isArray": false,
+                    "type": {
+                        "enum": "Lengths"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "possibleLengths": {
+                    "name": "possibleLengths",
+                    "isArray": true,
+                    "type": {
+                        "enum": "Lengths"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
+                "days": {
+                    "name": "days",
+                    "isArray": true,
+                    "type": {
+                        "enum": "Days"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "isArrayNullable": false
+                },
+                "fieldsID": {
+                    "name": "fieldsID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "PossibleAppointments",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byFields",
+                        "fields": [
+                            "fieldsID"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Team": {
             "name": "Team",
             "fields": {
@@ -846,6 +964,22 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "PossibleAppointments": {
+                    "name": "PossibleAppointments",
+                    "isArray": true,
+                    "type": {
+                        "model": "PossibleAppointments"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "fieldsID"
+                        ]
+                    }
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -890,6 +1024,27 @@ export const schema = {
         }
     },
     "enums": {
+        "Lengths": {
+            "name": "Lengths",
+            "values": [
+                "HALF_HOUR",
+                "HOUR",
+                "HOUR_AND_HALF",
+                "TWO_HOURS"
+            ]
+        },
+        "Days": {
+            "name": "Days",
+            "values": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+            ]
+        },
         "Cities": {
             "name": "Cities",
             "values": [
@@ -925,5 +1080,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "47e69e09722e57aa5c51d163f2a58460"
+    "version": "5b649af23cc0303ace49f9f7c9957189"
 };

@@ -2,6 +2,23 @@ import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
+export enum Lengths {
+  HALF_HOUR = "HALF_HOUR",
+  HOUR = "HOUR",
+  HOUR_AND_HALF = "HOUR_AND_HALF",
+  TWO_HOURS = "TWO_HOURS"
+}
+
+export enum Days {
+  MONDAY = "MONDAY",
+  TUESDAY = "TUESDAY",
+  WEDNESDAY = "WEDNESDAY",
+  THURSDAY = "THURSDAY",
+  FRIDAY = "FRIDAY",
+  SATURDAY = "SATURDAY",
+  SUNDAY = "SUNDAY"
+}
+
 export enum Cities {
   PETRINJA = "PETRINJA",
   ZAGREB = "ZAGREB",
@@ -29,6 +46,46 @@ export enum Surface {
 }
 
 
+
+type EagerPossibleAppointments = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<PossibleAppointments, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly start: string;
+  readonly end: string;
+  readonly priceForHour: number;
+  readonly interval: Lengths | keyof typeof Lengths;
+  readonly possibleLengths?: Lengths[] | keyof typeof Lengths | null;
+  readonly days: Days[] | keyof typeof Days;
+  readonly fieldsID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyPossibleAppointments = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<PossibleAppointments, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly start: string;
+  readonly end: string;
+  readonly priceForHour: number;
+  readonly interval: Lengths | keyof typeof Lengths;
+  readonly possibleLengths?: Lengths[] | keyof typeof Lengths | null;
+  readonly days: Days[] | keyof typeof Days;
+  readonly fieldsID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type PossibleAppointments = LazyLoading extends LazyLoadingDisabled ? EagerPossibleAppointments : LazyPossibleAppointments
+
+export declare const PossibleAppointments: (new (init: ModelInit<PossibleAppointments>) => PossibleAppointments) & {
+  copyOf(source: PossibleAppointments, mutator: (draft: MutableModel<PossibleAppointments>) => MutableModel<PossibleAppointments> | void): PossibleAppointments;
+}
 
 type EagerTeam = {
   readonly [__modelMeta__]: {
@@ -290,6 +347,7 @@ type EagerFields = {
   readonly workTimeStart?: string | null;
   readonly workTimeEnd?: string | null;
   readonly phoneNumber?: string | null;
+  readonly PossibleAppointments?: (PossibleAppointments | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -316,6 +374,7 @@ type LazyFields = {
   readonly workTimeStart?: string | null;
   readonly workTimeEnd?: string | null;
   readonly phoneNumber?: string | null;
+  readonly PossibleAppointments: AsyncCollection<PossibleAppointments>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
