@@ -49,9 +49,11 @@ const AppointmentReservationForm = ({user, appointment, responses, field}) => {
             setLoading(false);
             a.accepted ? alertContext.success("Prihvatili ste termin") :
                 alertContext.warning("Odbili ste termin")
-            appointment.Responses.toArray().then(responses => {
-                if (response.accepted && responses.length >= field?.minPlayers - 2) {
-                    const msg = `Korisnik ${name} je prihvatio termin, sada vas je ${responses.length}`;
+            appointment.Responses.toArray().then(resps => {
+                const acceptedResponses = resps?.filter(a => a.accepted);
+
+                if (response.accepted && acceptedResponses.length >= field?.minPlayers - 2) {
+                    const msg = `Korisnik ${name} je prihvatio termin, sada vas je ${acceptedResponses.length}`;
                     sendAppointmentNotification(msg, [appointment?.bookerID])
                 }
             })

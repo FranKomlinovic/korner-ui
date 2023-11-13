@@ -20,7 +20,7 @@ const duration = new Map(
     [
         ["HOUR", 60],
         ["HOUR_AND_HALF", 90],
-        ["TWO_HOUR", 120],
+        ["TWO_HOURS", 120],
         ["HALF_HOUR", 30]
     ]);
 const daysOfWeek = ["Nedjelja", "Ponedjeljak", "Utorak", "Srijeda", "Četvrtak", "Petak", "Subota"]
