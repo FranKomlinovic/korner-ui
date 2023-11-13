@@ -1,27 +1,78 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreatePossibleAppointments = /* GraphQL */ `
+  subscription OnCreatePossibleAppointments(
+    $filter: ModelSubscriptionPossibleAppointmentsFilterInput
+  ) {
+    onCreatePossibleAppointments(filter: $filter) {
+      id
+      start
+      end
+      priceForHour
+      interval
+      possibleLengths
+      days
+      fieldsID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;
+export const onUpdatePossibleAppointments = /* GraphQL */ `
+  subscription OnUpdatePossibleAppointments(
+    $filter: ModelSubscriptionPossibleAppointmentsFilterInput
+  ) {
+    onUpdatePossibleAppointments(filter: $filter) {
+      id
+      start
+      end
+      priceForHour
+      interval
+      possibleLengths
+      days
+      fieldsID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;
+export const onDeletePossibleAppointments = /* GraphQL */ `
+  subscription OnDeletePossibleAppointments(
+    $filter: ModelSubscriptionPossibleAppointmentsFilterInput
+  ) {
+    onDeletePossibleAppointments(filter: $filter) {
+      id
+      start
+      end
+      priceForHour
+      interval
+      possibleLengths
+      days
+      fieldsID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;
 export const onCreateTeam = /* GraphQL */ `
   subscription OnCreateTeam($filter: ModelSubscriptionTeamFilterInput) {
     onCreateTeam(filter: $filter) {
       id
       appointmentID
       Responses {
-        items {
-          id
-          playerID
-          accepted
-          appointmentID
-          playerName
-          playerPhoto
-          teamID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -44,21 +95,6 @@ export const onUpdateTeam = /* GraphQL */ `
       id
       appointmentID
       Responses {
-        items {
-          id
-          playerID
-          accepted
-          appointmentID
-          playerName
-          playerPhoto
-          teamID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -81,21 +117,6 @@ export const onDeleteTeam = /* GraphQL */ `
       id
       appointmentID
       Responses {
-        items {
-          id
-          playerID
-          accepted
-          appointmentID
-          playerName
-          playerPhoto
-          teamID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -228,27 +249,6 @@ export const onCreateReccuringAppointment = /* GraphQL */ `
       endDate
       bookerName
       Appointments {
-        items {
-          id
-          start
-          end
-          fieldsID
-          date
-          confirmed
-          bookerID
-          bookerName
-          sport
-          price
-          canceled
-          locked
-          reccuringappointmentID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -277,27 +277,6 @@ export const onUpdateReccuringAppointment = /* GraphQL */ `
       endDate
       bookerName
       Appointments {
-        items {
-          id
-          start
-          end
-          fieldsID
-          date
-          confirmed
-          bookerID
-          bookerName
-          sport
-          price
-          canceled
-          locked
-          reccuringappointmentID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -326,27 +305,6 @@ export const onDeleteReccuringAppointment = /* GraphQL */ `
       endDate
       bookerName
       Appointments {
-        items {
-          id
-          start
-          end
-          fieldsID
-          date
-          confirmed
-          bookerID
-          bookerName
-          sport
-          price
-          canceled
-          locked
-          reccuringappointmentID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -428,21 +386,6 @@ export const onCreateAppointment = /* GraphQL */ `
       end
       fieldsID
       Responses {
-        items {
-          id
-          playerID
-          accepted
-          appointmentID
-          playerName
-          playerPhoto
-          teamID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -462,23 +405,14 @@ export const onCreateAppointment = /* GraphQL */ `
         length
         price
         minPlayers
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         surface
         photo
         sports
         city
-        ReccuringAppointments {
-          nextToken
-          startedAt
-          __typename
-        }
         ownerID
         workTimeStart
         workTimeEnd
+        phoneNumber
         createdAt
         updatedAt
         _version
@@ -488,19 +422,6 @@ export const onCreateAppointment = /* GraphQL */ `
       }
       locked
       Teams {
-        items {
-          id
-          appointmentID
-          name
-          color
-          score
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -525,21 +446,6 @@ export const onUpdateAppointment = /* GraphQL */ `
       end
       fieldsID
       Responses {
-        items {
-          id
-          playerID
-          accepted
-          appointmentID
-          playerName
-          playerPhoto
-          teamID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -559,23 +465,14 @@ export const onUpdateAppointment = /* GraphQL */ `
         length
         price
         minPlayers
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         surface
         photo
         sports
         city
-        ReccuringAppointments {
-          nextToken
-          startedAt
-          __typename
-        }
         ownerID
         workTimeStart
         workTimeEnd
+        phoneNumber
         createdAt
         updatedAt
         _version
@@ -585,19 +482,6 @@ export const onUpdateAppointment = /* GraphQL */ `
       }
       locked
       Teams {
-        items {
-          id
-          appointmentID
-          name
-          color
-          score
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -622,21 +506,6 @@ export const onDeleteAppointment = /* GraphQL */ `
       end
       fieldsID
       Responses {
-        items {
-          id
-          playerID
-          accepted
-          appointmentID
-          playerName
-          playerPhoto
-          teamID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -656,23 +525,14 @@ export const onDeleteAppointment = /* GraphQL */ `
         length
         price
         minPlayers
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         surface
         photo
         sports
         city
-        ReccuringAppointments {
-          nextToken
-          startedAt
-          __typename
-        }
         ownerID
         workTimeStart
         workTimeEnd
+        phoneNumber
         createdAt
         updatedAt
         _version
@@ -682,19 +542,6 @@ export const onDeleteAppointment = /* GraphQL */ `
       }
       locked
       Teams {
-        items {
-          id
-          appointmentID
-          name
-          color
-          score
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -720,27 +567,6 @@ export const onCreateFields = /* GraphQL */ `
       price
       minPlayers
       Appointments {
-        items {
-          id
-          start
-          end
-          fieldsID
-          date
-          confirmed
-          bookerID
-          bookerName
-          sport
-          price
-          canceled
-          locked
-          reccuringappointmentID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -750,23 +576,6 @@ export const onCreateFields = /* GraphQL */ `
       sports
       city
       ReccuringAppointments {
-        items {
-          id
-          bookerID
-          start
-          end
-          fieldsID
-          startDate
-          endDate
-          bookerName
-          canceled
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -774,6 +583,12 @@ export const onCreateFields = /* GraphQL */ `
       ownerID
       workTimeStart
       workTimeEnd
+      phoneNumber
+      PossibleAppointments {
+        nextToken
+        startedAt
+        __typename
+      }
       createdAt
       updatedAt
       _version
@@ -794,27 +609,6 @@ export const onUpdateFields = /* GraphQL */ `
       price
       minPlayers
       Appointments {
-        items {
-          id
-          start
-          end
-          fieldsID
-          date
-          confirmed
-          bookerID
-          bookerName
-          sport
-          price
-          canceled
-          locked
-          reccuringappointmentID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -824,23 +618,6 @@ export const onUpdateFields = /* GraphQL */ `
       sports
       city
       ReccuringAppointments {
-        items {
-          id
-          bookerID
-          start
-          end
-          fieldsID
-          startDate
-          endDate
-          bookerName
-          canceled
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -848,6 +625,12 @@ export const onUpdateFields = /* GraphQL */ `
       ownerID
       workTimeStart
       workTimeEnd
+      phoneNumber
+      PossibleAppointments {
+        nextToken
+        startedAt
+        __typename
+      }
       createdAt
       updatedAt
       _version
@@ -868,27 +651,6 @@ export const onDeleteFields = /* GraphQL */ `
       price
       minPlayers
       Appointments {
-        items {
-          id
-          start
-          end
-          fieldsID
-          date
-          confirmed
-          bookerID
-          bookerName
-          sport
-          price
-          canceled
-          locked
-          reccuringappointmentID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -898,23 +660,6 @@ export const onDeleteFields = /* GraphQL */ `
       sports
       city
       ReccuringAppointments {
-        items {
-          id
-          bookerID
-          start
-          end
-          fieldsID
-          startDate
-          endDate
-          bookerName
-          canceled
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -922,6 +667,12 @@ export const onDeleteFields = /* GraphQL */ `
       ownerID
       workTimeStart
       workTimeEnd
+      phoneNumber
+      PossibleAppointments {
+        nextToken
+        startedAt
+        __typename
+      }
       createdAt
       updatedAt
       _version

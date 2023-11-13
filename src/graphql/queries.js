@@ -1,27 +1,137 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getPossibleAppointments = /* GraphQL */ `
+  query GetPossibleAppointments($id: ID!) {
+    getPossibleAppointments(id: $id) {
+      id
+      start
+      end
+      priceForHour
+      interval
+      possibleLengths
+      days
+      fieldsID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+  }
+`;
+export const listPossibleAppointments = /* GraphQL */ `
+  query ListPossibleAppointments(
+    $filter: ModelPossibleAppointmentsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPossibleAppointments(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        start
+        end
+        priceForHour
+        interval
+        possibleLengths
+        days
+        fieldsID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
+export const syncPossibleAppointments = /* GraphQL */ `
+  query SyncPossibleAppointments(
+    $filter: ModelPossibleAppointmentsFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPossibleAppointments(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        start
+        end
+        priceForHour
+        interval
+        possibleLengths
+        days
+        fieldsID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
+export const possibleAppointmentsByFieldsID = /* GraphQL */ `
+  query PossibleAppointmentsByFieldsID(
+    $fieldsID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPossibleAppointmentsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    possibleAppointmentsByFieldsID(
+      fieldsID: $fieldsID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        start
+        end
+        priceForHour
+        interval
+        possibleLengths
+        days
+        fieldsID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        __typename
+      }
+      nextToken
+      startedAt
+      __typename
+    }
+  }
+`;
 export const getTeam = /* GraphQL */ `
   query GetTeam($id: ID!) {
     getTeam(id: $id) {
       id
       appointmentID
       Responses {
-        items {
-          id
-          playerID
-          accepted
-          appointmentID
-          playerName
-          playerPhoto
-          teamID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -48,11 +158,6 @@ export const listTeams = /* GraphQL */ `
       items {
         id
         appointmentID
-        Responses {
-          nextToken
-          startedAt
-          __typename
-        }
         name
         color
         score
@@ -85,11 +190,6 @@ export const syncTeams = /* GraphQL */ `
       items {
         id
         appointmentID
-        Responses {
-          nextToken
-          startedAt
-          __typename
-        }
         name
         color
         score
@@ -124,11 +224,6 @@ export const teamsByAppointmentID = /* GraphQL */ `
       items {
         id
         appointmentID
-        Responses {
-          nextToken
-          startedAt
-          __typename
-        }
         name
         color
         score
@@ -301,27 +396,6 @@ export const getReccuringAppointment = /* GraphQL */ `
       endDate
       bookerName
       Appointments {
-        items {
-          id
-          start
-          end
-          fieldsID
-          date
-          confirmed
-          bookerID
-          bookerName
-          sport
-          price
-          canceled
-          locked
-          reccuringappointmentID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -356,11 +430,6 @@ export const listReccuringAppointments = /* GraphQL */ `
         startDate
         endDate
         bookerName
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         canceled
         createdAt
         updatedAt
@@ -397,11 +466,6 @@ export const syncReccuringAppointments = /* GraphQL */ `
         startDate
         endDate
         bookerName
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         canceled
         createdAt
         updatedAt
@@ -440,11 +504,6 @@ export const reccuringAppointmentsByFieldsID = /* GraphQL */ `
         startDate
         endDate
         bookerName
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         canceled
         createdAt
         updatedAt
@@ -620,21 +679,6 @@ export const getAppointment = /* GraphQL */ `
       end
       fieldsID
       Responses {
-        items {
-          id
-          playerID
-          accepted
-          appointmentID
-          playerName
-          playerPhoto
-          teamID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -654,23 +698,14 @@ export const getAppointment = /* GraphQL */ `
         length
         price
         minPlayers
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         surface
         photo
         sports
         city
-        ReccuringAppointments {
-          nextToken
-          startedAt
-          __typename
-        }
         ownerID
         workTimeStart
         workTimeEnd
+        phoneNumber
         createdAt
         updatedAt
         _version
@@ -680,19 +715,6 @@ export const getAppointment = /* GraphQL */ `
       }
       locked
       Teams {
-        items {
-          id
-          appointmentID
-          name
-          color
-          score
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -719,11 +741,6 @@ export const listAppointments = /* GraphQL */ `
         start
         end
         fieldsID
-        Responses {
-          nextToken
-          startedAt
-          __typename
-        }
         date
         confirmed
         bookerID
@@ -731,34 +748,7 @@ export const listAppointments = /* GraphQL */ `
         sport
         price
         canceled
-        Fields {
-          id
-          name
-          address
-          width
-          length
-          price
-          minPlayers
-          surface
-          photo
-          sports
-          city
-          ownerID
-          workTimeStart
-          workTimeEnd
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         locked
-        Teams {
-          nextToken
-          startedAt
-          __typename
-        }
         reccuringappointmentID
         createdAt
         updatedAt
@@ -791,11 +781,6 @@ export const syncAppointments = /* GraphQL */ `
         start
         end
         fieldsID
-        Responses {
-          nextToken
-          startedAt
-          __typename
-        }
         date
         confirmed
         bookerID
@@ -803,34 +788,7 @@ export const syncAppointments = /* GraphQL */ `
         sport
         price
         canceled
-        Fields {
-          id
-          name
-          address
-          width
-          length
-          price
-          minPlayers
-          surface
-          photo
-          sports
-          city
-          ownerID
-          workTimeStart
-          workTimeEnd
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         locked
-        Teams {
-          nextToken
-          startedAt
-          __typename
-        }
         reccuringappointmentID
         createdAt
         updatedAt
@@ -865,11 +823,6 @@ export const appointmentsByFieldsID = /* GraphQL */ `
         start
         end
         fieldsID
-        Responses {
-          nextToken
-          startedAt
-          __typename
-        }
         date
         confirmed
         bookerID
@@ -877,34 +830,7 @@ export const appointmentsByFieldsID = /* GraphQL */ `
         sport
         price
         canceled
-        Fields {
-          id
-          name
-          address
-          width
-          length
-          price
-          minPlayers
-          surface
-          photo
-          sports
-          city
-          ownerID
-          workTimeStart
-          workTimeEnd
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         locked
-        Teams {
-          nextToken
-          startedAt
-          __typename
-        }
         reccuringappointmentID
         createdAt
         updatedAt
@@ -939,11 +865,6 @@ export const appointmentsByReccuringappointmentID = /* GraphQL */ `
         start
         end
         fieldsID
-        Responses {
-          nextToken
-          startedAt
-          __typename
-        }
         date
         confirmed
         bookerID
@@ -951,34 +872,7 @@ export const appointmentsByReccuringappointmentID = /* GraphQL */ `
         sport
         price
         canceled
-        Fields {
-          id
-          name
-          address
-          width
-          length
-          price
-          minPlayers
-          surface
-          photo
-          sports
-          city
-          ownerID
-          workTimeStart
-          workTimeEnd
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         locked
-        Teams {
-          nextToken
-          startedAt
-          __typename
-        }
         reccuringappointmentID
         createdAt
         updatedAt
@@ -1004,27 +898,6 @@ export const getFields = /* GraphQL */ `
       price
       minPlayers
       Appointments {
-        items {
-          id
-          start
-          end
-          fieldsID
-          date
-          confirmed
-          bookerID
-          bookerName
-          sport
-          price
-          canceled
-          locked
-          reccuringappointmentID
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -1034,23 +907,6 @@ export const getFields = /* GraphQL */ `
       sports
       city
       ReccuringAppointments {
-        items {
-          id
-          bookerID
-          start
-          end
-          fieldsID
-          startDate
-          endDate
-          bookerName
-          canceled
-          createdAt
-          updatedAt
-          _version
-          _deleted
-          _lastChangedAt
-          __typename
-        }
         nextToken
         startedAt
         __typename
@@ -1058,6 +914,12 @@ export const getFields = /* GraphQL */ `
       ownerID
       workTimeStart
       workTimeEnd
+      phoneNumber
+      PossibleAppointments {
+        nextToken
+        startedAt
+        __typename
+      }
       createdAt
       updatedAt
       _version
@@ -1082,23 +944,14 @@ export const listFields = /* GraphQL */ `
         length
         price
         minPlayers
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         surface
         photo
         sports
         city
-        ReccuringAppointments {
-          nextToken
-          startedAt
-          __typename
-        }
         ownerID
         workTimeStart
         workTimeEnd
+        phoneNumber
         createdAt
         updatedAt
         _version
@@ -1133,23 +986,14 @@ export const syncFields = /* GraphQL */ `
         length
         price
         minPlayers
-        Appointments {
-          nextToken
-          startedAt
-          __typename
-        }
         surface
         photo
         sports
         city
-        ReccuringAppointments {
-          nextToken
-          startedAt
-          __typename
-        }
         ownerID
         workTimeStart
         workTimeEnd
+        phoneNumber
         createdAt
         updatedAt
         _version
