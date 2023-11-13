@@ -89,7 +89,7 @@ export function getAvailableAppointments2(possibleAppointments: PossibleAppointm
             a.days.includes(getDayOfWeekEnum(dateObject))
     }).sort((a, b) => a.start < b.start ? -1 : 1);
 
-    const isTodayDay = isToday(dateObject);
+    const isTodayDay = isToday(date);
 
     possibleAppointmentsByDayAndLength.forEach(a => {
 
@@ -97,10 +97,11 @@ export function getAvailableAppointments2(possibleAppointments: PossibleAppointm
         let [endHours, endMinutes] = a?.end && a?.end.split(':');
 
         const workTimeStart = new Date();
-        if (isToday(dateObject)) {
+        if (isTodayDay) {
             workTimeStart.getHours() > +startHours ?
                 workTimeStart.setHours(new Date().getHours() + 1) :
                 workTimeStart.setHours(startHours)
+            workTimeStart.setMinutes(0)
         } else {
             workTimeStart.setHours(startHours)
             workTimeStart.setMinutes(startMinutes)
