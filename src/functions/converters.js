@@ -13,6 +13,8 @@ const sports = new Map(
         ["BADMINTON", "Badminton"],
         ["TENNIS", "Tenis"],
         ["BASKETBALL", "Košarka"],
+        ["PADEL", "Padel"],
+        ["CAGEBALL", "Cageball"],
     ]);
 const duration = new Map(
     [
