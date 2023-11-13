@@ -34,7 +34,9 @@ export enum Sport {
   TENNIS = "TENNIS",
   BASKETBALL = "BASKETBALL",
   PING_PONG = "PING_PONG",
-  BADMINTON = "BADMINTON"
+  BADMINTON = "BADMINTON",
+  PADEL = "PADEL",
+  CAGEBALL = "CAGEBALL"
 }
 
 export enum Surface {

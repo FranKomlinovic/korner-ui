@@ -249,6 +249,8 @@ export default function FieldsUpdateForm(props) {
         BASKETBALL: "Ko\u0161arka",
         PING_PONG: "Ping Pong",
         BADMINTON: "Badminton",
+        PADEL: "Padel",
+        CAGEBALL: "Cageball",
       };
       return enumDisplayValueMap[r];
     },
@@ -652,6 +654,16 @@ export default function FieldsUpdateForm(props) {
             children="Badminton"
             value="BADMINTON"
             {...getOverrideProps(overrides, "sportsoption4")}
+          ></option>
+          <option
+            children="Padel"
+            value="PADEL"
+            {...getOverrideProps(overrides, "sportsoption5")}
+          ></option>
+          <option
+            children="Cageball"
+            value="CAGEBALL"
+            {...getOverrideProps(overrides, "sportsoption6")}
           ></option>
         </SelectField>
       </ArrayField>

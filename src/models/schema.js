@@ -1064,7 +1064,9 @@ export const schema = {
                 "TENNIS",
                 "BASKETBALL",
                 "PING_PONG",
-                "BADMINTON"
+                "BADMINTON",
+                "PADEL",
+                "CAGEBALL"
             ]
         },
         "Surface": {

@@ -341,6 +341,8 @@ export default function FieldsCreateForm(props) {
         BASKETBALL: "Basketball",
         PING_PONG: "Ping pong",
         BADMINTON: "Badminton",
+        PADEL: "Padel",
+        CAGEBALL: "Cageball",
       };
       return enumDisplayValueMap[r];
     },
@@ -1057,6 +1059,16 @@ export default function FieldsCreateForm(props) {
             children="Badminton"
             value="BADMINTON"
             {...getOverrideProps(overrides, "sportsoption4")}
+          ></option>
+          <option
+            children="Padel"
+            value="PADEL"
+            {...getOverrideProps(overrides, "sportsoption5")}
+          ></option>
+          <option
+            children="Cageball"
+            value="CAGEBALL"
+            {...getOverrideProps(overrides, "sportsoption6")}
           ></option>
         </SelectField>
       </ArrayField>
