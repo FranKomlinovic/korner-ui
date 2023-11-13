@@ -7,7 +7,8 @@ import {
     Input,
     Label,
     SelectField,
-    StepperField, Text
+    StepperField,
+    Text
 } from "@aws-amplify/ui-react";
 import {useEffect, useState} from "react";
 import {FaCheck, FaPen, FaSave, FaTimes, FaTrash, FaUndo} from "react-icons/fa";
@@ -25,10 +26,27 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
     const [possibleLengths, setPossibleLengths] = useState([])
     const [appointmentDays, setAppointmentDays] = useState([])
     const [disabled, setDisabled] = useState(true)
+    const [isOverlaping, setIsOverlaping] = useState(true)
+    const isNew = !possibleAppointment?.start;
 
     useEffect(() => {
-        if (!possibleApp?.start) {
+        setIsOverlaping(!disabled && allPossibleAppointments.filter(obj => {
+            return obj.id !== possibleAppointment.id && obj.days?.some(item => appointmentDays.includes(item))
+        }).some(a => {
+            const end = a.end === "00:00" ? "24:00" : a.end;
+            return a.start < endTime && startTime < end
+        }))
+    }, [allPossibleAppointments, appointmentDays, disabled, endTime, possibleAppointment.id, startTime])
+
+    useEffect(() => {
+        if (isNew) {
             setDisabled(false);
+            setStartTime("16:00")
+            setEndTime("23:00")
+            setPrice(30)
+            setInterval("HALF_HOUR")
+            setPossibleLengths([])
+            setAppointmentDays([possibleApp.days])
             return;
         }
         setStartTime(possibleApp.start)
@@ -37,7 +55,7 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
         setInterval(possibleApp.interval)
         setPossibleLengths(possibleApp.possibleLengths)
         setAppointmentDays(possibleApp.days)
-    }, [possibleApp, disabled]);
+    }, [possibleApp, disabled, isNew]);
 
     function possibleLengthContains(a) {
         return possibleLengths?.includes(a);
@@ -61,19 +79,17 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
         setDisabled(!disabled);
     }
 
-    const hasOverlap = allPossibleAppointments.filter(obj => {
-        return obj.id !== possibleAppointment.id && obj.days?.some(item => appointmentDays.includes(item))
-    }).some(a => {
-        return a.start < endTime && startTime < a.end
-    });
-
     const isFormValid = () => {
         return startTime && endTime && price
-            && interval && possibleLengths.length > 0 && appointmentDays.length > 0 && !hasOverlap;
+            && interval && possibleLengths.length > 0 && appointmentDays.length > 0 && !isOverlaping;
     }
 
 
     const deletePossibleAppointment = () => {
+        if (isNew) {
+            setPossibleApp(null)
+            return;
+        }
         confirmAlert({
             title: 'Potvrdi brisanje',
             message: 'Želite li obrisati ovo radno vrijeme?',
@@ -156,7 +172,7 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
 
     return (
         possibleApp &&
-        <Card variation={"elevated"} marginInline={"1rem"}>
+        <Card variation={"elevated"}>
             <Flex direction={"column"}>
                 <Flex justifyContent={"space-between"}>
                     <Fieldset legendHidden variation={"plain"} direction={"row"} legend={"Moguća trajanja"}>
@@ -170,7 +186,7 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
                     </Fieldset>
                     <Flex alignSelf={"start"}>
                         <Button onClick={editToggle}
-                                variation={disabled ? "link" : "warning"}>
+                                variation={disabled ? "primary" : "menu"} backgroundColor={!disabled && "yellow.60"}>
                             {disabled ? <FaPen/> : <FaUndo/>}
                         </Button>
                     </Flex>
@@ -181,7 +197,7 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
                         <Label fontSize={"small"} htmlFor="startTime">Početak</Label>
                         <Input onChange={(a) => setStartTime(a.currentTarget.value)}
                                value={startTime}
-                               hasError={startTime >= endTime}
+                               hasError={startTime >= endTime && endTime !== "00:00"}
                                isDisabled={disabled}
                                id={"startTime"} size={"small"} type={"time"}/>
                     </Flex>
@@ -189,7 +205,7 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
                         <Label fontSize={"small"} htmlFor="endTime">Kraj</Label>
                         <Input onChange={(a) => setEndTime(a.currentTarget.value)}
                                value={endTime}
-                               hasError={startTime >= endTime}
+                               hasError={startTime >= endTime && endTime !== "00:00"}
                                isDisabled={disabled}
                                id={"endTime"} size={"small"} type={"time"}/>
                     </Flex>
@@ -202,7 +218,7 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
                         size={"small"}
                     />
                 </Flex>
-                <Flex justifyContent={"center"}>
+                <Flex justifyContent={"start"}>
                     <SelectField
                         size={"small"}
                         label="Interval"
@@ -225,7 +241,7 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
                         </Fieldset>
                     </Flex>
                 </Flex>
-                {hasOverlap && <Text variation={"warning"}>Radno vrijeme se preklapa</Text>}
+                {isOverlaping && <Text variation={"warning"}>Radno vrijeme se preklapa</Text>}
                 {!disabled &&
                     <Flex justifyContent={"space-between"}>
                         <Button isDisabled={!isFormValid()} onClick={updatePossibleAppointment}

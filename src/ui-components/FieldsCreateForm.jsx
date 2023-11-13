@@ -21,16 +21,17 @@ import {
   useTheme,
 } from "@aws-amplify/ui-react";
 import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from "@aws-amplify/ui-react/internal";
-import {
   Fields,
   Appointment,
   ReccuringAppointment,
   PossibleAppointments as PossibleAppointments0,
 } from "../models";
-import { fetchByPath, validateField } from "./utils";
+import {
+  fetchByPath,
+  getOverrideProps,
+  useDataStoreBinding,
+  validateField,
+} from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
   items = [],

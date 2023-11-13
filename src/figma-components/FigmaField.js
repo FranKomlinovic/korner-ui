@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Storage} from "aws-amplify";
 import {KornerFieldInfoNew} from "../ui-components";
 import {convertSportsEnumListToString, convertSurfaceEnumToString} from "../functions/converters";
+import {Flex} from "@aws-amplify/ui-react";
 
 const FigmaField = ({field}) => {
 
@@ -21,12 +22,14 @@ const FigmaField = ({field}) => {
     }, [field]);
 
 
-    return (
-        <KornerFieldInfoNew
-            fields={field}
-            photo={photo}
-            surface={surface}
-            sports={sports}/>
+    return (<Flex justifyContent={"center"}>
+            <KornerFieldInfoNew
+                fields={field}
+                photo={photo}
+                surface={surface}
+                sports={sports}/>
+        </Flex>
+
     );
 
 

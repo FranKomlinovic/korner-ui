@@ -9,12 +9,15 @@ import FieldFreeAppointmentsView from "../components/field/fieldFreeAppointments
 import useGetField from "../custom-hooks/field/useGetField";
 import useGetFieldAppointments from "../custom-hooks/field/useGetFieldAppointments";
 import useGetFieldRecurringAppointments from "../custom-hooks/field/useGetFieldRecurringAppointments";
+import {DataStore} from "aws-amplify";
+import {PossibleAppointments} from "../models";
 
 const FieldById = ({user}) => {
     const {fieldId} = useParams();
     const field = useGetField(fieldId);
 
     const [date, setDate] = useState(getCurrentDateInDynamoDbString(0));
+    const [possibleAppointments, setPossibleAppointments] = useState();
     const appointments = useGetFieldAppointments(fieldId, date);
     const recurringAppointments = useGetFieldRecurringAppointments(fieldId);
 
@@ -25,20 +28,24 @@ const FieldById = ({user}) => {
         setIsOwner(checkIfOwner(user, field.data?.ownerID));
     }, [field.data, user]);
 
+    useEffect(() => {
+        DataStore.query(PossibleAppointments, (c) => c.fieldsID.eq(fieldId)).then(a => {
+            setPossibleAppointments(a);
+        })
+    }, [fieldId]);
+
     if (field.loading || appointments.loading) {
         return <Placeholder size={"large"}/>
     }
 
     return (
         <Flex direction={"column"}>
-            <Flex direction={"column"} justifyContent={"center"} alignItems={"center"} alignSelf={"center"}>
-                <FigmaField field={field.data}/>
-                {isOwner && <FieldOwnerFunctions fieldParam={field.data}/>}
-            </Flex>
-
+            <FigmaField field={field.data}/>
             <FieldFreeAppointmentsView field={field.data} appointments={appointments.data} user={user} date={date}
-                                       setDate={setDate}/>
-            {isOwner && <FieldOwnerAppointments appointments={appointments.data} recurringAppointments={recurringAppointments.data} date={date}/>}
+                                       setDate={setDate} possibleAppointments={possibleAppointments}/>
+            {isOwner && <FieldOwnerAppointments appointments={appointments.data}
+                                                recurringAppointments={recurringAppointments.data} date={date}/>}
+            {isOwner && <FieldOwnerFunctions fieldParam={field.data}/>}
         </Flex>
     );
 }

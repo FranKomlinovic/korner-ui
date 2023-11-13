@@ -1,17 +1,35 @@
 import React, {useEffect, useState} from "react";
-import {Button, Card, Flex, Heading, Text, View, withAuthenticator} from "@aws-amplify/ui-react";
+import {
+    Button,
+    Card,
+    Flex,
+    Heading,
+    SelectField,
+    SwitchField,
+    Text,
+    View,
+    withAuthenticator
+} from "@aws-amplify/ui-react";
 import {useNavigate} from "react-router-dom";
-import {getDayAndDateFromAppointment, getDayOfWeek} from "../../functions/converters";
+import {getCurrentDateInDynamoDbString, getDateInStringFromOffset, getDayOfWeek} from "../../functions/converters";
+import {FaCalendarCheck, FaEye, FaRecycle} from "react-icons/fa";
 
 
 const FieldOwnerAppointments = ({appointments, date, recurringAppointments}) => {
     const [displayAppointments, setDisplayAppointments] = useState();
     const [recAppointments, setRecAppointments] = useState();
+    const [showReserved, setShowReserved] = useState(true);
+    const [showRecurring, setShowRecurring] = useState(false);
+    const [dateToShow, setDateToShow] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        setDisplayAppointments(appointments.sort((a, b) => a.start > b.start ? 1 : -1).filter(a => a.date === date && !a.canceled))
-    }, [appointments, date]);
+        setDateToShow(date)
+    }, [date]);
+
+    useEffect(() => {
+        setDisplayAppointments(appointments.sort((a, b) => a.start > b.start ? 1 : -1).filter(a => a.date === dateToShow && !a.canceled))
+    }, [appointments, dateToShow]);
 
     useEffect(() => {
         if (recurringAppointments) {
@@ -56,8 +74,7 @@ const FieldOwnerAppointments = ({appointments, date, recurringAppointments}) => 
 
     const RecurringAppointments = () => {
         return (
-            <Flex gap={"0.5rem"} marginTop={"10px"} direction={"column"} alignItems={"center"}
-                  justifyContent={"center"}>
+            <Flex gap={"0.5rem"} marginTop={"1rem"} direction={"column"} justifyContent={"center"}>
                 {recAppointments?.length === 0 ? <Heading>Nema termina</Heading>
                     : recAppointments?.map(item => (
                         <Flex alignItems={"stretch"} direction={"column"} key={item.label}>
@@ -78,18 +95,59 @@ const FieldOwnerAppointments = ({appointments, date, recurringAppointments}) => 
     }
 
     return (
-        <Flex direction={"column"} justifyContent={"space-around"}>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <Heading level={4}>Rezervirano: </Heading>
-                <Heading alignSelf={"center"} level={5}>{getDayAndDateFromAppointment(date)}</Heading>
-                {AppointmentButtons()}
+        <Flex direction={"column"}>
+            <Card marginInline={"1rem"}>
+                <Flex alignItems={"center"} justifyContent={"space-between"}>
+                    <FaCalendarCheck onClick={() => setShowReserved(!showReserved)} size={"1.5rem"}/>
+                    <Heading level={5}>Rezervirano</Heading>
+                    <SwitchField
+                        size={"large"}
+                        label={<Flex><FaEye/></Flex>}
+                        isChecked={showReserved}
+                        onChange={(e) => {
+                            setShowReserved(e.target.checked);
+                        }}
+                    />
+                </Flex>
+                {showReserved && <Flex direction={"column"} marginTop={"1rem"}>
+                    <SelectField size={"small"} label="Odaberi datum"
+                                 value={new Date(dateToShow).getUTCDate() - new Date().getUTCDate()}
+                                 onChange={(e) => setDateToShow(getCurrentDateInDynamoDbString(e.target.value))}>
+                        <option value={0}>{getDateInStringFromOffset(0)}</option>
+                        <option value={1}>{getDateInStringFromOffset(1)}</option>
+                        <option value={2}>{getDateInStringFromOffset(2)}</option>
+                        <option value={3}>{getDateInStringFromOffset(3)}</option>
+                        <option value={4}>{getDateInStringFromOffset(4)}</option>
+                        <option value={5}>{getDateInStringFromOffset(5)}</option>
+                        <option value={6}>{getDateInStringFromOffset(6)}</option>
+                    </SelectField>
+                    {
+                        AppointmentButtons()
+                    }
+                </Flex>}
+
             </Card>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-                <Heading level={4}>Stalni termini: </Heading>
-                {RecurringAppointments()}
+            <Card marginInline={"1rem"}>
+                <Flex alignItems={"center"} justifyContent={"space-between"}>
+                    <FaRecycle onClick={() => setShowRecurring(!showRecurring)} size={"1.5rem"}/>
+                    <Heading level={5}>Stalni termini</Heading>
+                    <SwitchField
+                        size={"large"}
+                        label={<Flex><FaEye/></Flex>}
+                        isChecked={showRecurring}
+                        onChange={(e) => {
+                            setShowRecurring(e.target.checked);
+                        }}
+                    />
+                </Flex>
+                {showRecurring && <Flex direction={"column"} marginTop={"1rem"}>
+                    {RecurringAppointments()}
+                </Flex>}
+
             </Card>
         </Flex>
-    );
+    )
+        ;
 
 
 }

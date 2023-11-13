@@ -6,10 +6,7 @@
 
 /* eslint-disable */
 import * as React from "react";
-import {
-  getOverrideProps,
-  useNavigateAction,
-} from "@aws-amplify/ui-react/internal";
+import { getOverrideProps, useNavigateAction } from "./utils";
 import { Flex, Image, Text, View } from "@aws-amplify/ui-react";
 export default function KornerFieldInfoNew(props) {
   const { fields, photo, surface, sports, overrides, ...rest } = props;

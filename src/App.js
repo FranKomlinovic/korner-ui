@@ -72,7 +72,7 @@ function App() {
     }
 
     return (
-        <Flex style={bg} height={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
+        <Flex style={bg} minHeight={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
             <AlertProvider>
                 <AlertComponent/>
                 <HeaderComponent user={user}/>

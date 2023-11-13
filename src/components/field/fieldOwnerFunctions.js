@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify";
-import {Button, Flex, SwitchField, withAuthenticator} from "@aws-amplify/ui-react";
-import {Dialog, DialogTitle} from "@mui/material";
+import {Button, Card, Flex, Heading, Label, SwitchField, withAuthenticator} from "@aws-amplify/ui-react";
 import {Fields, PossibleAppointments} from "../../models";
 import UploadComponent from "../UploadComponent";
 import {FieldsUpdateForm} from "../../ui-components";
-import {FaCamera, FaInfo, FaPlus, FaClock} from "react-icons/fa";
+import {FaCamera, FaClock, FaEye, FaInfo, FaPlus} from "react-icons/fa";
 import PossibleAppointmentsView from "./possibleAppointmentsView";
 
 const FieldOwnerFunctions = ({fieldParam}) => {
@@ -21,11 +20,13 @@ const FieldOwnerFunctions = ({fieldParam}) => {
     }, [fieldParam]);
 
     useEffect(() => {
-        DataStore.query(PossibleAppointments, (c) => c.fieldsID.eq(fieldParam.id)).then(a => {
-            setPossibleAppointments(a);
-        })
-    }, [fieldParam, showWorkTime]);
+        const subscription = DataStore.observeQuery(PossibleAppointments, (c) => c.fieldsID.eq(fieldParam.id))
+            .subscribe((resp) => {
+                setPossibleAppointments(resp.items);
+            });
 
+        return () => subscription.unsubscribe();
+    }, [fieldParam]);
 
     const addPhotoToField = (photo) => {
         DataStore.save(Fields.copyOf(field, (item) => {
@@ -44,40 +45,68 @@ const FieldOwnerFunctions = ({fieldParam}) => {
     };
 
     return (
-        <Flex direction={"column"} marginInline={"1rem"}>
-            <Flex alignItems={"center"} justifyContent={"center"}>
-                <Button backgroundColor={"white"} onClick={() => setModalOpen(true)}><FaCamera/></Button>
-                <Button  backgroundColor={"white"} onClick={() => setShowUpdateForm(!showUpdateForm)}><FaInfo/></Button>
-                <UploadComponent open={modalOpen} uploadSuccessFunction={addPhotoToField}
-                                 handleClose={() => setModalOpen(false)} text={"Promijeni sliku terena"}/>
-                <Dialog open={showUpdateForm} onClose={() => setShowUpdateForm(false)}>
-                    <DialogTitle>Ažuriraj teren</DialogTitle>
-                    <FieldsUpdateForm onCancel={() => setShowUpdateForm(false)}
-                                      onSuccess={() => {
-                                          setShowUpdateForm(false)
-                                      }}
-                                      fields={field}
-                    />
-                </Dialog>
-                <SwitchField
-                    label={<FaClock/>}
-                    isChecked={showWorkTime}
-                    onChange={(e) => {
-                        setShowWorkTime(e.target.checked);
-                    }}
-                />
-            </Flex>
+        <Flex direction={"column"}>
 
-            {showWorkTime && <Flex direction={"column"}>
-                {possibleAppointments.map((pA, index) => {
-                    return <PossibleAppointmentsView key={index} possibleAppointment={pA}
-                                                     allPossibleAppointments={possibleAppointments}/>
-                })}
-                <Flex justifyContent={"center"}>
-                    <Button onClick={addNewPossibleAppointment} variation={"primary"}
-                            size={"small"}><FaPlus/></Button>
+            <UploadComponent open={modalOpen} uploadSuccessFunction={addPhotoToField}
+                             handleClose={() => setModalOpen(false)} text={"Promijeni sliku terena"}/>
+            <Card marginInline={"1rem"}>
+                <Flex alignItems={"center"} justifyContent={"space-between"}>
+                    <FaInfo onClick={() => setShowUpdateForm(!showUpdateForm)} size={"1.5rem"}/>
+                    <Heading level={5}>Informacije</Heading>
+                    <SwitchField
+                        alignSelf={"center"}
+                        label={<Flex><FaEye/></Flex>}
+                        size={"large"}
+                        isChecked={showUpdateForm}
+                        onChange={(e) => {
+                            setShowUpdateForm(e.target.checked);
+                        }}
+                    />
                 </Flex>
-            </Flex>}
+
+                {showUpdateForm &&
+                    <Flex gap={"0rem"} marginTop={"1rem"} direction={"column"}>
+                        <Flex paddingInline={"20px"} gap={"0.1rem"} alignItems={"start"} direction={"column"} justifyContent={"start"}>
+                         <Label>Učitaj fotografiju</Label>
+                            <Button variation={"primary"} onClick={() => setModalOpen(true)}><FaCamera/></Button>
+                        </Flex>
+                        <FieldsUpdateForm onCancel={() => setShowUpdateForm(false)}
+                                          onSuccess={() => {
+                                              setShowUpdateForm(false)
+                                          }}
+                                          fields={field}/>
+                    </Flex>}
+            </Card>
+
+            <Card marginInline={"1rem"}>
+                <Flex direction={"column"}>
+                    <Flex alignItems={"center"} justifyContent={"space-between"}>
+                        <FaClock onClick={() => setShowWorkTime(!showWorkTime)} size={"1.5rem"}/>
+                        <Heading level={5}>Radno vrijeme</Heading>
+                        <SwitchField
+                            label={<Flex><FaEye/></Flex>}
+                            size={"large"}
+                            isChecked={showWorkTime}
+                            onChange={(e) => {
+                                setShowWorkTime(e.target.checked);
+                            }}
+                        />
+                    </Flex>
+
+                    {showWorkTime && <Flex direction={"column"}>
+                        {possibleAppointments.map((pA, index) => {
+                            return <PossibleAppointmentsView key={index} possibleAppointment={pA}
+                                                             allPossibleAppointments={possibleAppointments}/>
+                        })}
+                        <Flex justifyContent={"center"}>
+                            <Button onClick={addNewPossibleAppointment} variation={"primary"}
+                                    size={"small"}><FaPlus/></Button>
+                        </Flex>
+                    </Flex>}
+                </Flex>
+
+            </Card>
+
 
         </Flex>
     );

@@ -5,9 +5,18 @@
  **************************************************************************/
 
 import * as React from "react";
-import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Fields, Appointment, ReccuringAppointment, PossibleAppointments as PossibleAppointments0 } from "../models";
+import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { Fields } from "../models";
+export declare type EscapeHatchProps = {
+    [elementHierarchy: string]: Record<string, unknown>;
+} | null;
+export declare type VariantValues = {
+    [key: string]: string;
+};
+export declare type Variant = {
+    variantValues: VariantValues;
+    overrides: EscapeHatchProps;
+};
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -16,61 +25,37 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type FieldsUpdateFormInputValues = {
     name?: string;
     address?: string;
-    width?: number;
     length?: number;
-    price?: number;
+    width?: number;
     minPlayers?: number;
-    Appointments?: Appointment[];
     surface?: string;
-    photo?: string;
     sports?: string[];
     city?: string;
-    ReccuringAppointments?: ReccuringAppointment[];
-    ownerID?: string;
-    workTimeStart?: string;
-    workTimeEnd?: string;
     phoneNumber?: string;
-    PossibleAppointments?: PossibleAppointments0[];
 };
 export declare type FieldsUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
     address?: ValidationFunction<string>;
-    width?: ValidationFunction<number>;
     length?: ValidationFunction<number>;
-    price?: ValidationFunction<number>;
+    width?: ValidationFunction<number>;
     minPlayers?: ValidationFunction<number>;
-    Appointments?: ValidationFunction<Appointment>;
     surface?: ValidationFunction<string>;
-    photo?: ValidationFunction<string>;
     sports?: ValidationFunction<string>;
     city?: ValidationFunction<string>;
-    ReccuringAppointments?: ValidationFunction<ReccuringAppointment>;
-    ownerID?: ValidationFunction<string>;
-    workTimeStart?: ValidationFunction<string>;
-    workTimeEnd?: ValidationFunction<string>;
     phoneNumber?: ValidationFunction<string>;
-    PossibleAppointments?: ValidationFunction<PossibleAppointments0>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FieldsUpdateFormOverridesProps = {
     FieldsUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
     address?: PrimitiveOverrideProps<TextFieldProps>;
-    width?: PrimitiveOverrideProps<TextFieldProps>;
     length?: PrimitiveOverrideProps<TextFieldProps>;
-    price?: PrimitiveOverrideProps<TextFieldProps>;
+    width?: PrimitiveOverrideProps<TextFieldProps>;
     minPlayers?: PrimitiveOverrideProps<TextFieldProps>;
-    Appointments?: PrimitiveOverrideProps<AutocompleteProps>;
     surface?: PrimitiveOverrideProps<SelectFieldProps>;
-    photo?: PrimitiveOverrideProps<TextFieldProps>;
     sports?: PrimitiveOverrideProps<SelectFieldProps>;
     city?: PrimitiveOverrideProps<SelectFieldProps>;
-    ReccuringAppointments?: PrimitiveOverrideProps<AutocompleteProps>;
-    ownerID?: PrimitiveOverrideProps<TextFieldProps>;
-    workTimeStart?: PrimitiveOverrideProps<TextFieldProps>;
-    workTimeEnd?: PrimitiveOverrideProps<TextFieldProps>;
     phoneNumber?: PrimitiveOverrideProps<TextFieldProps>;
-    PossibleAppointments?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type FieldsUpdateFormProps = React.PropsWithChildren<{
     overrides?: FieldsUpdateFormOverridesProps | undefined | null;

@@ -57,8 +57,8 @@ type EagerPossibleAppointments = {
   readonly end: string;
   readonly priceForHour: number;
   readonly interval: Lengths | keyof typeof Lengths;
-  readonly possibleLengths?: Lengths[] | keyof typeof Lengths | null;
-  readonly days: Days[] | keyof typeof Days;
+  readonly possibleLengths?: Lengths[] | Array<keyof typeof Lengths> | null;
+  readonly days: Days[] | Array<keyof typeof Days>;
   readonly fieldsID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -74,8 +74,8 @@ type LazyPossibleAppointments = {
   readonly end: string;
   readonly priceForHour: number;
   readonly interval: Lengths | keyof typeof Lengths;
-  readonly possibleLengths?: Lengths[] | keyof typeof Lengths | null;
-  readonly days: Days[] | keyof typeof Days;
+  readonly possibleLengths?: Lengths[] | Array<keyof typeof Lengths> | null;
+  readonly days: Days[] | Array<keyof typeof Days>;
   readonly fieldsID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -340,7 +340,7 @@ type EagerFields = {
   readonly Appointments?: (Appointment | null)[] | null;
   readonly surface?: Surface | keyof typeof Surface | null;
   readonly photo?: string | null;
-  readonly sports?: (Sport | null)[] | keyof typeof Sport | null;
+  readonly sports?: (Sport | null)[] | Array<keyof typeof Sport> | null;
   readonly city?: Cities | keyof typeof Cities | null;
   readonly ReccuringAppointments?: (ReccuringAppointment | null)[] | null;
   readonly ownerID?: string | null;
@@ -367,7 +367,7 @@ type LazyFields = {
   readonly Appointments: AsyncCollection<Appointment>;
   readonly surface?: Surface | keyof typeof Surface | null;
   readonly photo?: string | null;
-  readonly sports?: (Sport | null)[] | keyof typeof Sport | null;
+  readonly sports?: (Sport | null)[] | Array<keyof typeof Sport> | null;
   readonly city?: Cities | keyof typeof Cities | null;
   readonly ReccuringAppointments: AsyncCollection<ReccuringAppointment>;
   readonly ownerID?: string | null;

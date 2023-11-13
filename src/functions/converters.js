@@ -14,11 +14,22 @@ const sports = new Map(
         ["TENNIS", "Tenis"],
         ["BASKETBALL", "Košarka"],
     ]);
-
+const duration = new Map(
+    [
+        ["HOUR", 60],
+        ["HOUR_AND_HALF", 90],
+        ["TWO_HOUR", 120],
+        ["HALF_HOUR", 30]
+    ]);
 const daysOfWeek = ["Nedjelja", "Ponedjeljak", "Utorak", "Srijeda", "Četvrtak", "Petak", "Subota"]
+const daysOfWeekEnum = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"]
 
 export function getDayOfWeek(date: Date) {
     return daysOfWeek[date.getDay()];
+}
+
+export function getDayOfWeekEnum(date: Date) {
+    return daysOfWeekEnum[date.getDay()];
 }
 
 export function getDateInDdMmYyyy(date) {
@@ -94,4 +105,8 @@ export function convertSportsEnumListToString(a: []): string {
 
 export function convertSportsEnumToString(a): string {
     return sports.has(a) ? sports.get(a) : a;
+}
+
+export function convertDurationEnumToNumber(a): number {
+    return duration.has(a) ? duration.get(a) : a;
 }

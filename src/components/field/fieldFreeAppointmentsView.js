@@ -1,19 +1,21 @@
 import React, {useEffect, useState} from "react";
-import {Button, Card, Flex, Grid, Heading, SelectField, Text, View} from "@aws-amplify/ui-react";
+import {Button, Card, Flex, Grid, Heading, SelectField, SwitchField, Text, View} from "@aws-amplify/ui-react";
 import {getCurrentDateInDynamoDbString, getDateInStringFromOffset} from "../../functions/converters";
-import {getAvailableAppointments} from "../../functions/lambdas";
+import {getAvailableAppointments2} from "../../functions/lambdas";
 import FieldConfirmAppointmentReservation from "./fieldConfirmAppointmentReservation";
 import {Dialog} from "@mui/material";
+import {FaCalendarPlus, FaEye} from "react-icons/fa";
 
-const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) => {
-    const [duration, setDuration] = useState(60);
+const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate, possibleAppointments}) => {
+    const [duration, setDuration] = useState("HOUR");
     const [displayAppointments, setDisplayAppointments] = useState();
     const [appointmentToCreate, setAppointmentToCreate] = useState();
     const [modalOpen, setModalOpen] = useState(false);
+    const [showAppointments, setShowAppointments] = useState(true);
 
     useEffect(() => {
-        setDisplayAppointments(getAvailableAppointments(appointments, date, duration, field));
-    }, [date, duration, appointments, field]);
+        setDisplayAppointments(getAvailableAppointments2(possibleAppointments, date, duration, appointments));
+    }, [possibleAppointments, date, duration, appointments]);
 
     useEffect(() => {
         setModalOpen(!!appointmentToCreate);
@@ -33,10 +35,10 @@ const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) =
                     <option value={5}>{getDateInStringFromOffset(5)}</option>
                     <option value={6}>{getDateInStringFromOffset(6)}</option>
                 </SelectField>
-                <SelectField size={"small"} label="Odaberi trajanje" onChange={(e) => setDuration(+e.target.value)}>
-                    <option value={60}>1:00h</option>
-                    <option value={90}>1:30h</option>
-                    <option value={120}>2:00h</option>
+                <SelectField size={"small"} label="Odaberi trajanje" onChange={(e) => setDuration(e.target.value)}>
+                    <option value={"HOUR"}>1:00h</option>
+                    <option value={"HOUR_AND_HALF"}>1:30h</option>
+                    <option value={"TWO_HOURS"}>2:00h</option>
                 </SelectField>
             </Flex>
         )
@@ -63,13 +65,29 @@ const FieldFreeAppointmentsView = ({appointments, user, field, date, setDate}) =
 
     return (
         <Flex direction={"column"}>
-            <Card variation={"elevated"} marginInline={"1rem"}>
-            <Heading level={4}>Rezerviraj termin:</Heading>
+            <Card marginInline={"1rem"}>
+                <Flex alignItems={"center"} justifyContent={"space-between"}>
+                    <FaCalendarPlus onClick={() => setShowAppointments(!showAppointments)} size={"1.5rem"}/>
+                    <Heading level={5}>Rezerviraj termin</Heading>
+                    <SwitchField
+                        size={"large"}
+                        label={<Flex><FaEye/></Flex>}
+                        isChecked={showAppointments}
+                        onChange={(e) => {
+                            setShowAppointments(e.target.checked);
+                        }}
+                    />
+                </Flex>
                 <Dialog fullWidth open={modalOpen} onClose={() => setModalOpen(false)}>
-                    <FieldConfirmAppointmentReservation onCreateFunction={() => setModalOpen(false)} appointment={appointmentToCreate} field={field} user={user}/>
+                    <FieldConfirmAppointmentReservation onCreateFunction={() => setModalOpen(false)}
+                                                        appointment={appointmentToCreate} field={field} user={user}/>
                 </Dialog>
-                {DateAndDurationDropdowns()}
-                {AppointmentButtons()}
+                {showAppointments && <Flex direction={"column"}>
+                    {DateAndDurationDropdowns()}
+                    {AppointmentButtons()}
+                </Flex>
+                }
+
             </Card>
         </Flex>
 
