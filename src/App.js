@@ -48,12 +48,6 @@ function App() {
     ]);
 
     useEffect(() => {
-        DataStore.start().then(() => {
-            console.log("started");
-        });
-    }, [])
-
-    useEffect(() => {
         user && runOneSignal(user);
     }, [user])
 

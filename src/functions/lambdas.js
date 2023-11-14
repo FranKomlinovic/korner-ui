@@ -84,7 +84,7 @@ function isToday(dt): boolean {
 export function getAvailableAppointments2(possibleAppointments: PossibleAppointments[], date: string, duration, fieldAppointments): Appointment[] {
     const appointments = [];
     const dateObject = new Date(date);
-    const possibleAppointmentsByDayAndLength = possibleAppointments.filter(a => {
+    const possibleAppointmentsByDayAndLength = possibleAppointments?.filter(a => {
         return a.possibleLengths.includes(duration) &&
             a.days.includes(getDayOfWeekEnum(dateObject))
     }).sort((a, b) => a.start < b.start ? -1 : 1);

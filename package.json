@@ -30,7 +30,7 @@
     "react-modal": "^3.16.1",
     "react-onesignal": "^3.0.1",
     "react-router-dom": "^6.9.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react-share": "^4.4.1",
     "react-time-picker": "^6.5.2",
     "styled-components": "^5.3.9",

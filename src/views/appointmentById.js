@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Authenticator, Button, Card, Flex, Heading, useAuthenticator} from "@aws-amplify/ui-react";
 import AppointmentStatusBadge from "../components/appointment/appointmentStatusBadge";
@@ -10,6 +10,7 @@ import useGetAppointmentResponses from "../custom-hooks/appointment/useGetAppoin
 import LoaderComponent from "../components/loaderComponent";
 import AppointmentView from "../components/appointment/appointmentView";
 import useGetAppointmentTeams from "../custom-hooks/appointment/useGetAppointmentTeams";
+import {DataStore} from "aws-amplify";
 
 
 const AppointmentById = () => {
@@ -21,6 +22,13 @@ const AppointmentById = () => {
     const {user} = useAuthenticator((context) => [
         context.user
     ]);
+
+    useEffect(() => {
+        DataStore.start().then(() => {
+            console.log("started");
+        });
+    }, [])
+
 
     const RegisterButton = () => {
         return (
