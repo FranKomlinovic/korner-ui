@@ -5,7 +5,8 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { AutocompleteProps, GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { Appointment, ReccuringAppointment, PossibleAppointments as PossibleAppointments0 } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -28,14 +29,17 @@ export declare type FieldsCreateFormInputValues = {
     length?: number;
     price?: number;
     minPlayers?: number;
+    Appointments?: Appointment[];
     surface?: string;
     photo?: string;
     sports?: string[];
     city?: string;
+    ReccuringAppointments?: ReccuringAppointment[];
     ownerID?: string;
     workTimeStart?: string;
     workTimeEnd?: string;
     phoneNumber?: string;
+    PossibleAppointments?: PossibleAppointments0[];
 };
 export declare type FieldsCreateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -44,14 +48,17 @@ export declare type FieldsCreateFormValidationValues = {
     length?: ValidationFunction<number>;
     price?: ValidationFunction<number>;
     minPlayers?: ValidationFunction<number>;
+    Appointments?: ValidationFunction<Appointment>;
     surface?: ValidationFunction<string>;
     photo?: ValidationFunction<string>;
     sports?: ValidationFunction<string>;
     city?: ValidationFunction<string>;
+    ReccuringAppointments?: ValidationFunction<ReccuringAppointment>;
     ownerID?: ValidationFunction<string>;
     workTimeStart?: ValidationFunction<string>;
     workTimeEnd?: ValidationFunction<string>;
     phoneNumber?: ValidationFunction<string>;
+    PossibleAppointments?: ValidationFunction<PossibleAppointments0>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FieldsCreateFormOverridesProps = {
@@ -62,14 +69,17 @@ export declare type FieldsCreateFormOverridesProps = {
     length?: PrimitiveOverrideProps<TextFieldProps>;
     price?: PrimitiveOverrideProps<TextFieldProps>;
     minPlayers?: PrimitiveOverrideProps<TextFieldProps>;
+    Appointments?: PrimitiveOverrideProps<AutocompleteProps>;
     surface?: PrimitiveOverrideProps<SelectFieldProps>;
     photo?: PrimitiveOverrideProps<TextFieldProps>;
     sports?: PrimitiveOverrideProps<SelectFieldProps>;
     city?: PrimitiveOverrideProps<SelectFieldProps>;
+    ReccuringAppointments?: PrimitiveOverrideProps<AutocompleteProps>;
     ownerID?: PrimitiveOverrideProps<TextFieldProps>;
     workTimeStart?: PrimitiveOverrideProps<TextFieldProps>;
     workTimeEnd?: PrimitiveOverrideProps<TextFieldProps>;
     phoneNumber?: PrimitiveOverrideProps<TextFieldProps>;
+    PossibleAppointments?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type FieldsCreateFormProps = React.PropsWithChildren<{
     overrides?: FieldsCreateFormOverridesProps | undefined | null;

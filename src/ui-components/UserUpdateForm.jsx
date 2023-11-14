@@ -12,7 +12,7 @@ import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function UserUpdateForm(props) {
   const {
-    id: idProp,
+    cognitoID: cognitoIDProp,
     user: userModelProp,
     onSuccess,
     onError,
@@ -23,38 +23,42 @@ export default function UserUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
+    cognitoID: "",
     name: "",
     email: "",
-    cognitoID: "",
+    picture: "",
   };
+  const [cognitoID, setCognitoID] = React.useState(initialValues.cognitoID);
   const [name, setName] = React.useState(initialValues.name);
   const [email, setEmail] = React.useState(initialValues.email);
-  const [cognitoID, setCognitoID] = React.useState(initialValues.cognitoID);
+  const [picture, setPicture] = React.useState(initialValues.picture);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = userRecord
       ? { ...initialValues, ...userRecord }
       : initialValues;
+    setCognitoID(cleanValues.cognitoID);
     setName(cleanValues.name);
     setEmail(cleanValues.email);
-    setCognitoID(cleanValues.cognitoID);
+    setPicture(cleanValues.picture);
     setErrors({});
   };
   const [userRecord, setUserRecord] = React.useState(userModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp
-        ? await DataStore.query(User, idProp)
+      const record = cognitoIDProp
+        ? await DataStore.query(User, cognitoIDProp)
         : userModelProp;
       setUserRecord(record);
     };
     queryData();
-  }, [idProp, userModelProp]);
+  }, [cognitoIDProp, userModelProp]);
   React.useEffect(resetStateValues, [userRecord]);
   const validations = {
+    cognitoID: [{ type: "Required" }],
     name: [],
     email: [],
-    cognitoID: [],
+    picture: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -82,9 +86,10 @@ export default function UserUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
+          cognitoID,
           name,
           email,
-          cognitoID,
+          picture,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -132,6 +137,33 @@ export default function UserUpdateForm(props) {
       {...rest}
     >
       <TextField
+        label="Cognito id"
+        isRequired={true}
+        isReadOnly={true}
+        value={cognitoID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              cognitoID: value,
+              name,
+              email,
+              picture,
+            };
+            const result = onChange(modelFields);
+            value = result?.cognitoID ?? value;
+          }
+          if (errors.cognitoID?.hasError) {
+            runValidationTasks("cognitoID", value);
+          }
+          setCognitoID(value);
+        }}
+        onBlur={() => runValidationTasks("cognitoID", cognitoID)}
+        errorMessage={errors.cognitoID?.errorMessage}
+        hasError={errors.cognitoID?.hasError}
+        {...getOverrideProps(overrides, "cognitoID")}
+      ></TextField>
+      <TextField
         label="Name"
         isRequired={false}
         isReadOnly={false}
@@ -140,9 +172,10 @@ export default function UserUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              cognitoID,
               name: value,
               email,
-              cognitoID,
+              picture,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -166,9 +199,10 @@ export default function UserUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              cognitoID,
               name,
               email: value,
-              cognitoID,
+              picture,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -184,30 +218,31 @@ export default function UserUpdateForm(props) {
         {...getOverrideProps(overrides, "email")}
       ></TextField>
       <TextField
-        label="Cognito id"
+        label="Picture"
         isRequired={false}
         isReadOnly={false}
-        value={cognitoID}
+        value={picture}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              cognitoID,
               name,
               email,
-              cognitoID: value,
+              picture: value,
             };
             const result = onChange(modelFields);
-            value = result?.cognitoID ?? value;
+            value = result?.picture ?? value;
           }
-          if (errors.cognitoID?.hasError) {
-            runValidationTasks("cognitoID", value);
+          if (errors.picture?.hasError) {
+            runValidationTasks("picture", value);
           }
-          setCognitoID(value);
+          setPicture(value);
         }}
-        onBlur={() => runValidationTasks("cognitoID", cognitoID)}
-        errorMessage={errors.cognitoID?.errorMessage}
-        hasError={errors.cognitoID?.hasError}
-        {...getOverrideProps(overrides, "cognitoID")}
+        onBlur={() => runValidationTasks("picture", picture)}
+        errorMessage={errors.picture?.errorMessage}
+        hasError={errors.picture?.hasError}
+        {...getOverrideProps(overrides, "picture")}
       ></TextField>
       <Flex
         justifyContent="space-between"
@@ -220,7 +255,7 @@ export default function UserUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || userModelProp)}
+          isDisabled={!(cognitoIDProp || userModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -232,7 +267,7 @@ export default function UserUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || userModelProp) ||
+              !(cognitoIDProp || userModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

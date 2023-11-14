@@ -23,47 +23,38 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type FieldsUpdateFormInputValues = {
-    price?: number;
-    workTimeStart?: string;
-    workTimeEnd?: string;
-    minPlayers?: number;
-    city?: string;
     name?: string;
     address?: string;
-    width?: number;
     length?: number;
+    width?: number;
+    minPlayers?: number;
     surface?: string;
     sports?: string[];
+    city?: string;
     phoneNumber?: string;
 };
 export declare type FieldsUpdateFormValidationValues = {
-    price?: ValidationFunction<number>;
-    workTimeStart?: ValidationFunction<string>;
-    workTimeEnd?: ValidationFunction<string>;
-    minPlayers?: ValidationFunction<number>;
-    city?: ValidationFunction<string>;
     name?: ValidationFunction<string>;
     address?: ValidationFunction<string>;
-    width?: ValidationFunction<number>;
     length?: ValidationFunction<number>;
+    width?: ValidationFunction<number>;
+    minPlayers?: ValidationFunction<number>;
     surface?: ValidationFunction<string>;
     sports?: ValidationFunction<string>;
+    city?: ValidationFunction<string>;
     phoneNumber?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type FieldsUpdateFormOverridesProps = {
     FieldsUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    price?: PrimitiveOverrideProps<TextFieldProps>;
-    workTimeStart?: PrimitiveOverrideProps<TextFieldProps>;
-    workTimeEnd?: PrimitiveOverrideProps<TextFieldProps>;
-    minPlayers?: PrimitiveOverrideProps<TextFieldProps>;
-    city?: PrimitiveOverrideProps<SelectFieldProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
     address?: PrimitiveOverrideProps<TextFieldProps>;
-    width?: PrimitiveOverrideProps<TextFieldProps>;
     length?: PrimitiveOverrideProps<TextFieldProps>;
+    width?: PrimitiveOverrideProps<TextFieldProps>;
+    minPlayers?: PrimitiveOverrideProps<TextFieldProps>;
     surface?: PrimitiveOverrideProps<SelectFieldProps>;
     sports?: PrimitiveOverrideProps<SelectFieldProps>;
+    city?: PrimitiveOverrideProps<SelectFieldProps>;
     phoneNumber?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type FieldsUpdateFormProps = React.PropsWithChildren<{
@@ -74,7 +65,6 @@ export declare type FieldsUpdateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: FieldsUpdateFormInputValues) => FieldsUpdateFormInputValues;
     onSuccess?: (fields: FieldsUpdateFormInputValues) => void;
     onError?: (fields: FieldsUpdateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: FieldsUpdateFormInputValues) => FieldsUpdateFormInputValues;
     onValidate?: FieldsUpdateFormValidationValues;
 } & React.CSSProperties>;

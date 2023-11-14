@@ -1,4 +1,4 @@
-import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-amplify/datastore";
+import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier, CustomIdentifier } from "@aws-amplify/datastore";
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
@@ -127,26 +127,26 @@ export declare const Team: (new (init: ModelInit<Team>) => Team) & {
 
 type EagerUser = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<User, 'id'>;
+    identifier: CustomIdentifier<User, 'cognitoID'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
-  readonly id: string;
+  readonly cognitoID: string;
   readonly name?: string | null;
   readonly email?: string | null;
-  readonly cognitoID?: string | null;
+  readonly picture?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
 type LazyUser = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<User, 'id'>;
+    identifier: CustomIdentifier<User, 'cognitoID'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
-  readonly id: string;
+  readonly cognitoID: string;
   readonly name?: string | null;
   readonly email?: string | null;
-  readonly cognitoID?: string | null;
+  readonly picture?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

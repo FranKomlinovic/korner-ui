@@ -136,10 +136,10 @@ export const onDeleteTeam = /* GraphQL */ `
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
     onCreateUser(filter: $filter) {
-      id
+      cognitoID
       name
       email
-      cognitoID
+      picture
       createdAt
       updatedAt
       _version
@@ -152,10 +152,10 @@ export const onCreateUser = /* GraphQL */ `
 export const onUpdateUser = /* GraphQL */ `
   subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
     onUpdateUser(filter: $filter) {
-      id
+      cognitoID
       name
       email
-      cognitoID
+      picture
       createdAt
       updatedAt
       _version
@@ -168,10 +168,10 @@ export const onUpdateUser = /* GraphQL */ `
 export const onDeleteUser = /* GraphQL */ `
   subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
     onDeleteUser(filter: $filter) {
-      id
+      cognitoID
       name
       email
-      cognitoID
+      picture
       createdAt
       updatedAt
       _version

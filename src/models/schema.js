@@ -226,8 +226,8 @@ export const schema = {
         "User": {
             "name": "User",
             "fields": {
-                "id": {
-                    "name": "id",
+                "cognitoID": {
+                    "name": "cognitoID",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
@@ -247,10 +247,10 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "cognitoID": {
-                    "name": "cognitoID",
+                "picture": {
+                    "name": "picture",
                     "isArray": false,
-                    "type": "ID",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -277,6 +277,14 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "fields": [
+                            "cognitoID"
+                        ]
+                    }
                 },
                 {
                     "type": "auth",
@@ -1082,5 +1090,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "5b649af23cc0303ace49f9f7c9957189"
+    "version": "0a9812a4b113106b38d1a86ccc9ea376"
 };

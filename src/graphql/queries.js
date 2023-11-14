@@ -241,12 +241,12 @@ export const teamsByAppointmentID = /* GraphQL */ `
   }
 `;
 export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
-      id
+  query GetUser($cognitoID: ID!) {
+    getUser(cognitoID: $cognitoID) {
+      cognitoID
       name
       email
-      cognitoID
+      picture
       createdAt
       updatedAt
       _version
@@ -258,16 +258,24 @@ export const getUser = /* GraphQL */ `
 `;
 export const listUsers = /* GraphQL */ `
   query ListUsers(
+    $cognitoID: ID
     $filter: ModelUserFilterInput
     $limit: Int
     $nextToken: String
+    $sortDirection: ModelSortDirection
   ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listUsers(
+      cognitoID: $cognitoID
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
       items {
-        id
+        cognitoID
         name
         email
-        cognitoID
+        picture
         createdAt
         updatedAt
         _version
@@ -295,10 +303,10 @@ export const syncUsers = /* GraphQL */ `
       lastSync: $lastSync
     ) {
       items {
-        id
+        cognitoID
         name
         email
-        cognitoID
+        picture
         createdAt
         updatedAt
         _version
