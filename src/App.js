@@ -1,6 +1,6 @@
 import './App.css';
 
-import {Amplify, I18n} from 'aws-amplify';
+import {Amplify, DataStore, I18n} from 'aws-amplify';
 
 import {Flex, ScrollView, useAuthenticator} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
@@ -48,6 +48,12 @@ function App() {
     ]);
 
     useEffect(() => {
+        DataStore.start().then(() => {
+            console.log("started");
+        });
+    }, [])
+
+    useEffect(() => {
         user && runOneSignal(user);
     }, [user])
 
@@ -72,7 +78,8 @@ function App() {
     }
 
     return (
-        <Flex style={bg} minHeight={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"} alignContent={"center"}>
+        <Flex style={bg} minHeight={"100vh"} gap={"0px"} maxWidth={"500px"} direction={"column"}
+              alignContent={"center"}>
             <AlertProvider>
                 <AlertComponent/>
                 <HeaderComponent user={user}/>
