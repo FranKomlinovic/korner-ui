@@ -1,27 +1,33 @@
 import React, {useEffect, useState} from "react";
 import {Flex, Heading, withAuthenticator} from "@aws-amplify/ui-react";
-import {DataStore} from "aws-amplify";
+import {DataStore} from "aws-amplify/datastore";
+
 import {Appointment, Response} from "../models";
 import {getCurrentDate} from "../functions/appointmentUItils";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
+import useGetCurrentUser from "../custom-hooks/useGetCurrentUser";
 
 
-const PlayedAppointments = ({user}) => {
+const PlayedAppointments = () => {
     const [playedAppointment, setPlayedAppointment] = useState([]);
     const [responses, setResponses] = useState();
-
-    const sub = user?.attributes.sub;
+    const [cognitoID, setCognitoID] = useState();
+    const {user} = useGetCurrentUser();
 
     // Set responses
     useEffect(() => {
-        const subscription = DataStore.observeQuery(Response, (c) => c.playerID.eq(sub))
+        setCognitoID(user?.cognitoID)
+    }, [user]);
+    // Set responses
+    useEffect(() => {
+        const subscription = DataStore.observeQuery(Response, (c) => c.playerID.eq(cognitoID))
             .subscribe((resp) => {
                 setResponses(resp.items);
             });
 
         return () => subscription.unsubscribe();
-    }, [sub]);
+    }, [cognitoID]);
 
     // Already played appointments
     useEffect(() => {
@@ -42,7 +48,7 @@ const PlayedAppointments = ({user}) => {
             setPlayedAppointment(app);
         });
 
-    }, [responses, sub])
+    }, [responses])
 
 
     return (

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Storage} from "aws-amplify";
+import {getUrl} from "aws-amplify/storage";
 import {KornerFieldInfoNew} from "../ui-components";
 import {convertSportsEnumListToString, convertSurfaceEnumToString} from "../functions/converters";
 import {Flex} from "@aws-amplify/ui-react";
@@ -11,11 +11,14 @@ const FigmaField = ({field}) => {
     const [surface, setSurface] = useState();
 
     useEffect(() => {
-        field?.photo ?
-            Storage.get(field?.photo).then(b => {
-                setPhoto(b);
-            }) :
-            setPhoto("/no-field.jpg")
+        getUrl({
+            key: field?.photo,
+            options: {
+                validateObjectExistence: true
+            },
+        }).then(a => {
+            setPhoto(a.url);
+        });
         setSports(convertSportsEnumListToString(field?.sports));
         setSurface(convertSurfaceEnumToString(field?.surface))
 

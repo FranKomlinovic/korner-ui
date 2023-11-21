@@ -1,6 +1,6 @@
 import {Button, Flex, Heading, Text} from "@aws-amplify/ui-react";
 import React, {useContext, useState} from "react";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
 import AlertContext from "../../context/alertContext";
 import {FaTshirt} from "react-icons/fa";
 import {Response} from "../../models";

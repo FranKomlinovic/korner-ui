@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Storage} from "aws-amplify";
 import {Flex, Image, Text} from "@aws-amplify/ui-react";
+import {getUrl} from "aws-amplify/storage";
 
 const FigmaTeamPlayer = ({myKey, response}) => {
 
@@ -11,7 +11,7 @@ const FigmaTeamPlayer = ({myKey, response}) => {
         setPlayerName(response?.playerName)
         let playerPhoto = response?.playerPhoto;
         if (playerPhoto) {
-            Storage.get(playerPhoto).then(b => setPhoto(b))
+            getUrl({key: playerPhoto}).then(b => setPhoto(b.url))
                 .catch(() => {
                     setPhoto("/no-picture.png")
                 });

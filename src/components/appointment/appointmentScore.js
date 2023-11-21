@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Dialog, DialogTitle} from "@mui/material";
 import {Button, Flex, Heading, StepperField} from "@aws-amplify/ui-react";
 import {FaQuestion, FaTrophy, FaTshirt} from "react-icons/fa";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
 import {Team} from "../../models";
 
 const AppointmentScore = ({teams, role}) => {

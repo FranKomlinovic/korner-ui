@@ -1,11 +1,8 @@
 import './App.css';
 
-import {Amplify, DataStore, I18n} from 'aws-amplify';
 
-import {Flex, ScrollView, useAuthenticator} from '@aws-amplify/ui-react';
+import {Flex, ScrollView} from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-
-import awsExports from './aws-exports';
 import {Route, Routes} from "react-router-dom";
 import Home from "./views/home";
 import FieldById from "./views/fieldById";
@@ -20,32 +17,10 @@ import AlertComponent from "./components/alertComponent";
 import HeaderComponent from "./components/headerComponent";
 import {useEffect} from "react";
 import runOneSignal from "./custom-hooks/runOneSignal";
-
-Amplify.configure(awsExports);
-
-I18n.setLanguage('hr');
-I18n.putVocabulariesForLanguage('hr', {
-    'Sign in': 'Prijava',
-    'Sign In': 'Prijava',
-    'Create Account': 'Napravi račun',
-    'Password': 'Lozinka',
-    'Confirm Password': 'Potvrdi lozinku',
-    'Forgot your password?': 'Zaboravili ste lozinku?',
-    'Enter your Email': 'Unesi email',
-    'Enter your Password': 'Unesi lozinku',
-    'Your passwords must match': 'Lozinke moraju biti jednake',
-    'Please confirm your Password': 'Potvrdi lozinku',
-    'Confirm your password': 'Potvrdi lozinku',
-    'Given Name': 'Ime',
-    'Family Name': 'Prezime',
-    'Enter your Given Name': 'Unesi ime',
-    'Enter your Family Name': 'Unesi prezime',
-});
+import useGetCurrentUser from "./custom-hooks/useGetCurrentUser";
 
 function App() {
-    const {user} = useAuthenticator((context) => [
-        context.user
-    ]);
+    const {user} = useGetCurrentUser();
 
     useEffect(() => {
         user && runOneSignal(user);

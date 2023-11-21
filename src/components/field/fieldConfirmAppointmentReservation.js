@@ -4,7 +4,8 @@ import {useNavigate} from "react-router-dom";
 import {getDateTimeFromAppointment} from "../../functions/converters";
 import {Appointment, ReccuringAppointment, Sport} from "../../models";
 import {confirmAppointment} from "../../functions/lambdas";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
+
 
 // Ovo je komponenta koja prikazuje i stvara button da se kreira termin
 const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, field, user}) => {
@@ -15,7 +16,7 @@ const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, fiel
     const [isOwner, setIsOwner] = useState(false)
 
     useEffect(() => {
-        setIsOwner(field?.ownerID === user?.attributes.sub);
+        setIsOwner(field?.ownerID === user?.cognitoID);
         setAppointmentToCreate(appointment);
     }, [appointment, field, user]);
 
@@ -25,13 +26,10 @@ const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, fiel
         onCreateFunction();
     }
     const createAppointment = () => {
-        appointmentToCreate.bookerName = isOwner && name ?
-            name :
-            user?.attributes.given_name + " " + user?.attributes.family_name;
-
+        appointmentToCreate.bookerName = isOwner && name ? name : user?.name;
         appointmentToCreate.fieldsID = field?.id
         appointmentToCreate.confirmed = isOwner
-        appointmentToCreate.bookerID = user?.attributes.sub
+        appointmentToCreate.bookerID = user?.cognitoID
         appointmentToCreate.price = field?.price
         appointmentToCreate.canceled = false
         appointmentToCreate.sport = Sport.FUTSAL
@@ -48,13 +46,13 @@ const FieldConfirmAppointmentReservation = ({onCreateFunction, appointment, fiel
         afterYear.setMonth(11, 31)
 
         const reccuringAppointment = new ReccuringAppointment({
-            bookerID: user?.attributes.sub,
+            bookerID: user?.cognitoID,
             start: appointmentToCreate?.start,
             end: appointmentToCreate?.end,
             startDate: date.toISOString().split('T')[0],
             endDate: afterYear.toISOString().split('T')[0],
             fieldsID: field?.id,
-            bookerName: isOwner && name ? name : user?.attributes.given_name + " " + user?.attributes.family_name,
+            bookerName: isOwner && name ? name : user?.name,
 
         });
 

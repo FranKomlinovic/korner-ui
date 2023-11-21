@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
 import AlertContext from "../../context/alertContext";
 import LoaderComponent from "../loaderComponent";
 import AppointmentAlreadyAnweredView from "./appointmentAlreadyAnweredView";

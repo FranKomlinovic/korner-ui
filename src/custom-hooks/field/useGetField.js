@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
+
 import {Fields} from "../../models";
 
 function useGetField(id) {

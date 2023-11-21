@@ -1,62 +1,65 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Card, Flex, Heading, TextField, withAuthenticator} from "@aws-amplify/ui-react";
-import {Auth} from "aws-amplify";
+import {DataStore} from "aws-amplify/datastore";
+
 import {StorageImage} from '@aws-amplify/ui-react-storage';
 import UploadComponent from "../components/UploadComponent";
+import {User} from "../models";
+import useGetCurrentUser from "../custom-hooks/useGetCurrentUser";
+import LoaderComponent from "../components/loaderComponent";
 
 
-const Profile = ({user, signOut}) => {
-    const {given_name, family_name, picture} = user.getSignInUserSession().getIdToken().payload
-    const [familyName, setFamilyName] = useState(family_name);
-    const [givenName, setGivenName] = useState(given_name);
+const Profile = ({signOut}) => {
+    const [name, setName] = useState();
+    const [image, setImage] = useState();
     const [modalOpen, setModalOpen] = useState(false);
+    const {userLoading, user} = useGetCurrentUser();
+
+    useEffect(() => {
+        setName(user?.name);
+        user?.picture && setImage(user?.picture)
+    }, [user])
 
     const uploadProfilePicture = (pic) => {
-        Auth.updateUserAttributes(user, {
-            'picture': pic.key
-        }).then(a => {
-            setModalOpen(false)
-            user = a;
-        });
+        DataStore.query(User, user?.cognitoID).then(usr => {
+            DataStore.save(User.copyOf(usr, (item) => {
+                item.picture = pic.key;
+            })).then(a => {
+                setImage(a.picture)
+                setModalOpen(false)
+            })
+        })
     }
 
     const updateUserData = () => {
-        Auth.updateUserAttributes(user, {
-            'given_name': givenName,
-            'family_name': familyName
-        }).then(a => {
-            user = a;
-        });
-    }
-
-
-    const changeFirstName = (a) => {
-        setGivenName(a.currentTarget.value)
-    }
-
-    const changeLastName = (a) => {
-        setFamilyName(a.currentTarget.value)
+        DataStore.query(User, user?.cognitoID).then(usr => {
+            DataStore.save(User.copyOf(usr, (item) => {
+                item.name = name;
+            })).then(a => {
+                setName(a.name);
+                setModalOpen(false)
+            })
+        })
     }
 
     const ProfileDetails = () => {
         return (
-            <Flex>
-                <Flex direction={"column"}>
-                    <StorageImage imgKey={picture} accessLevel={"public"} alt={"Profile photo"} width={"140px"}
-                                  height={"140px"} objectFit={"cover"} borderRadius={400}/>
-                    <Button size={"small"} variation={"link"} onClick={() => setModalOpen(true)}>Promijeni
-                        sliku</Button>
+            userLoading ?
+                <LoaderComponent/> :
+                <Flex>
+                    <Flex direction={"column"}>
+                        <StorageImage imgKey={image} accessLevel={"public"} alt={"Profile photo"} width={"140px"}
+                                      height={"140px"} objectFit={"cover"} borderRadius={400}/>
+                        <Button size={"small"} variation={"link"} onClick={() => setModalOpen(true)}>Promijeni
+                            sliku</Button>
 
+                    </Flex>
+                    <Flex direction={"column"}>
+                        <TextField size={"small"} defaultValue={name}
+                                   onChange={a => setName(a.currentTarget.value)} label={"Ime"}></TextField>
+                        <Button variation={"primary"} size={"small"} onClick={updateUserData}>Spremi</Button>
+                    </Flex>
                 </Flex>
-                <Flex direction={"column"}>
-                    <TextField size={"small"} defaultValue={givenName}
-                               onChange={changeFirstName} label={"Ime"}></TextField>
-                    <TextField size={"small"} defaultValue={familyName}
-                               onChange={changeLastName} label={"Prezime"}></TextField>
-                    <Button variation={"primary"} size={"small"} onClick={updateUserData}>Spremi</Button>
-                </Flex>
-
-            </Flex>
         )
     }
 

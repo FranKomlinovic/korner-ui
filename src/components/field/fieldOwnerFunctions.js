@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
+
 import {Button, Card, Flex, Heading, Label, SwitchField, withAuthenticator} from "@aws-amplify/ui-react";
 import {Fields, PossibleAppointments} from "../../models";
 import UploadComponent from "../UploadComponent";

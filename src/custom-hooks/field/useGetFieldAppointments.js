@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
+
 import {Appointment} from "../../models";
 
 function useGetAppointmentResponses(fieldId, date) {

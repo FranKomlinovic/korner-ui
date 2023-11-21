@@ -1,6 +1,7 @@
 import {SwitchField} from "@aws-amplify/ui-react";
 import React, {useState} from "react";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
+
 import {Appointment} from "../../models";
 
 const AppointmentLockButton = ({appointment}) => {

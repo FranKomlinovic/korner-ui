@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import {Button, Collection, Flex, Heading, ScrollView, SwitchField} from "@aws-amplify/ui-react";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
 import {Response, Team} from "../../models";
 import {suggestNextTeam} from "../../functions/suggestedTeams";
 import {FaPlus, FaTrash, FaTshirt} from "react-icons/fa";

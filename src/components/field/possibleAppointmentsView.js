@@ -12,7 +12,7 @@ import {
 } from "@aws-amplify/ui-react";
 import {useEffect, useState} from "react";
 import {FaCheck, FaPen, FaSave, FaTimes, FaTrash, FaUndo} from "react-icons/fa";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
 import {PossibleAppointments} from "../../models";
 import {confirmAlert} from "react-confirm-alert";
 

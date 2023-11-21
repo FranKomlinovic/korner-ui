@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
-import {DataStore, Storage} from "aws-amplify";
+import {DataStore} from "aws-amplify/datastore";
+import { getUrl } from 'aws-amplify/storage';
 import {Appointment} from "../../models";
 import {getAppointmentStatus} from "../../functions/appointmentUItils";
 
@@ -30,8 +31,8 @@ function useGetAppointment(id) {
 
     useEffect(() => {
         field?.photo ?
-            Storage.get(field.photo).then(b => {
-                setPhoto(b);
+            getUrl({key: field?.photo}).then(b => {
+                setPhoto(b.url);
             }) :
             setPhoto("/no-field.jpg")
     }, [field]);

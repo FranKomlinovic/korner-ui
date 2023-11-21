@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {FaCheck, FaMinus, FaTrash} from "react-icons/fa";
 import {getTimeFromDate, getTimeFromTimestamp} from "../functions/converters";
-import {DataStore, Storage} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
+import {getUrl} from "aws-amplify/storage";
+
 import {confirmAlert} from "react-confirm-alert";
 import {Response} from "../models";
 import {Flex, Image, Text} from "@aws-amplify/ui-react";
@@ -41,7 +43,7 @@ const FigmaResponse = ({response, showDelete}) => {
         setPlayerName(response.playerName)
         let playerPhoto = response.playerPhoto;
         if (playerPhoto) {
-            Storage.get(playerPhoto).then(b => setPhoto(b))
+            getUrl({key: playerPhoto}).then(b => setPhoto(b))
                 .catch(() => {
                     setPhoto("/no-picture.png")
                 });

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response} from "../../models";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
 import {FaPlus} from "react-icons/fa";
 
 const AppointmentGuestForm = ({appointment}) => {

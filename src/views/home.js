@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from "react";
-import {DataStore} from "aws-amplify";
+import {DataStore} from "aws-amplify/datastore";
+
 import {Appointment, Response} from "../models";
-import {Badge, Flex, Heading, TabItem, Tabs, withAuthenticator} from "@aws-amplify/ui-react";
+import {Badge, Flex, Heading, Tabs, withAuthenticator} from "@aws-amplify/ui-react";
 import {SortDirection} from "@aws-amplify/datastore";
 import FigmaAppointment from "../figma-components/FigmaAppointment";
 import {getCurrentDate, isAppointmentOld} from "../functions/appointmentUItils";
 import OwnerFieldListComponent from "../components/ownerFieldListComponent";
 import ShortcutsComponent from "../components/shortcutsComponent";
+import useGetCurrentUser from "../custom-hooks/useGetCurrentUser";
 
-const Home = ({user}) => {
+const Home = () => {
 
     const [reservedAppointment, setReservedAppointment] = useState([]);
     const [acceptedAppointment, setAcceptedAppointment] = useState([]);
     const [canceledAppointment, setCanceledAppointment] = useState([]);
     const [responses, setResponses] = useState();
-
-    const sub = user?.attributes.sub;
+    const {user} = useGetCurrentUser();
 
     const MapToView = ({appointments, noReservedText}) => (
         <Flex alignItems={"center"} direction={"column"} marginTop={"1rem"}>
@@ -29,11 +30,11 @@ const Home = ({user}) => {
 
     // Set responses
     useEffect(() => {
-        DataStore.query(Response, (c) => c.playerID.eq(sub), {sort: (s) => s.createdAt(SortDirection.ASCENDING)})
+        user && DataStore.query(Response, (c) => c.playerID.eq(user?.cognitoID), {sort: (s) => s.createdAt(SortDirection.ASCENDING)})
             .then((resp) => {
                 setResponses(resp);
             });
-    }, [sub]);
+    }, [user]);
 
     // Reserved appointment and acceptedAppointment
     useEffect(() => {
@@ -56,7 +57,7 @@ const Home = ({user}) => {
             setCanceledAppointment(filtered.filter(a => a.canceled));
         });
 
-    }, [responses, sub])
+    }, [responses])
 
     const tabList = [
         {
@@ -82,14 +83,19 @@ const Home = ({user}) => {
         <Flex gap={"0rem"} direction={"column"} paddingTop={"0px"}>
             <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Termini:</Heading>
             <Tabs
-                justifyContent="flex-start">
-                {tabList.map(a => (
-                    <TabItem key={a.title} fontSize={"small"} title={
-                        <>
+                justifyContent="flex-start"
+                defaultValue={"Rezervirano"}
+                items={tabList.map(a => {
+                    return ({
+                        label: <>
                             {a.title + ' '}
                             <Badge size={"small"} variation={a.variation}>{a.length}</Badge>
-                        </>
-                    }>{a.data}</TabItem>))}
+                        </>,
+                        value: a.title,
+                        content: a.data
+                    })
+                })}
+            >
             </Tabs>
         </Flex>)
 

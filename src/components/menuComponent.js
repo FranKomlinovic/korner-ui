@@ -6,7 +6,7 @@ import useGetPhoto from "../custom-hooks/useGetPhoto";
 const MenuComponent = ({user}) => {
     const navigate = useNavigate();
 
-    const photo = useGetPhoto(user.attributes.picture);
+    const photo = useGetPhoto(user.picture);
     const goToProfile = () => navigate("/profile")
 
     return (

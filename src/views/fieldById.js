@@ -9,10 +9,11 @@ import FieldFreeAppointmentsView from "../components/field/fieldFreeAppointments
 import useGetField from "../custom-hooks/field/useGetField";
 import useGetFieldAppointments from "../custom-hooks/field/useGetFieldAppointments";
 import useGetFieldRecurringAppointments from "../custom-hooks/field/useGetFieldRecurringAppointments";
-import {DataStore} from "aws-amplify";
+import {DataStore} from "aws-amplify/datastore";
 import {PossibleAppointments} from "../models";
+import useGetCurrentUser from "../custom-hooks/useGetCurrentUser";
 
-const FieldById = ({user}) => {
+const FieldById = () => {
     const {fieldId} = useParams();
     const field = useGetField(fieldId);
 
@@ -20,7 +21,7 @@ const FieldById = ({user}) => {
     const [possibleAppointments, setPossibleAppointments] = useState();
     const appointments = useGetFieldAppointments(fieldId, date);
     const recurringAppointments = useGetFieldRecurringAppointments(fieldId);
-
+    const {user} = useGetCurrentUser();
     const [isOwner, setIsOwner] = useState(false)
 
     // Sets if user is owner of field

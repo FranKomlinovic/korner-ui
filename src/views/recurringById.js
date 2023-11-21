@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {DataStore} from "aws-amplify";
+import {DataStore} from "aws-amplify/datastore";
+
 import {Appointment, ReccuringAppointment} from "../models";
-import {Button, Card, Flex, Heading, TabItem, Tabs} from "@aws-amplify/ui-react";
+import {Button, Card, Flex, Heading, Tabs} from "@aws-amplify/ui-react";
 import {getCurrentDateInDynamoDbString, getDateInDdMmYyyy, getDayOfWeek} from "../functions/converters";
 import {confirmAlert} from "react-confirm-alert";
 
@@ -55,6 +56,15 @@ const RecurringById = () => {
         });
     }
 
+    const getTabContent = (appointments) => {
+        return <Flex direction={"column"}>
+            {appointments?.map(a => (
+                    <Button onClick={() => navigate('/appointment/' + a.id)} variation={"primary"}
+                            level={5}>{getDateInDdMmYyyy(a?.date)}</Button>
+                )
+            )}
+        </Flex>
+    }
 
     return (
         <Flex margin={"2rem"} direction={"column"}>
@@ -68,25 +78,13 @@ const RecurringById = () => {
             <Card variation={"elevated"}>
                 <Heading level={4}>Termini:</Heading>
 
-                <Tabs gap={"0.5rem"}>
-                    <TabItem title={"Odigrani"}>
-                        <Flex direction={"column"}>
-                            {playedAppointments?.map(a => (
-                                    <Button onClick={() => navigate('/appointment/' + a.id)} variation={"primary"}
-                                            level={5}>{getDateInDdMmYyyy(a?.date)}</Button>
-                                )
-                            )}
-                        </Flex>
-                    </TabItem>
-                    <TabItem title={"Budući"}>
-                        <Flex direction={"column"}>
-                            {upcomingAppointments?.map(a => (
-                                    <Button onClick={() => navigate('/appointment/' + a.id)} variation={"primary"}
-                                            level={5}>{getDateInDdMmYyyy(a?.date)}</Button>
-                                )
-                            )}
-                        </Flex>
-                    </TabItem>
+                <Tabs gap={"0.5rem"}
+                      defaultValue={"future"}
+                      items={[
+                          {label: "Odigrani", value: "played", content: getTabContent(playedAppointments)},
+                          {label: "Budući", value: "future", content: getTabContent(upcomingAppointments)}
+                      ]}
+                >
                 </Tabs>
 
 

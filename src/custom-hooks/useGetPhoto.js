@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
-import {Storage} from "aws-amplify";
+import {getUrl} from "aws-amplify/storage";
 
 function useGetPhoto(pic) {
     const [data, setData] = useState("/loader.gif");
 
     useEffect(() => {
-        pic ?
-            Storage.get(pic).then(a => {
-                setData(a);
+
+        pic ? getUrl({key: pic}).then(a => {
+                setData(a.url);
             }).catch(() => {
                 setData("/image-not-found.png")
             }) :

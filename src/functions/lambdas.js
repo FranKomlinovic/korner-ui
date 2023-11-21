@@ -1,5 +1,5 @@
 import {Appointment, PossibleAppointments} from "../models";
-import {DataStore} from "aws-amplify";
+import {DataStore} from "aws-amplify/datastore";
 import {getCurrentDate} from "./appointmentUItils";
 import {convertDurationEnumToNumber, getDayOfWeekEnum} from "./converters";
 

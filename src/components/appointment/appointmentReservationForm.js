@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Button, Flex, Heading, TextField} from "@aws-amplify/ui-react";
 import {Response, Team} from "../../models";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
 import AlertContext from "../../context/alertContext";
 import LoaderComponent from "../loaderComponent";
 import AppointmentAlreadyAnweredView from "./appointmentAlreadyAnweredView";
@@ -20,7 +20,7 @@ const AppointmentReservationForm = ({user, appointment, responses, field}) => {
     }, [user]);
 
     useEffect(() => {
-        setResponseToUpdate(responses?.find((response) => response.playerID === user?.sub));
+        setResponseToUpdate(responses?.find((response) => response.playerID === user?.cognitoID));
     }, [responses, user]);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const AppointmentReservationForm = ({user, appointment, responses, field}) => {
 
     const saveResp = (accepted) => {
         const response = new Response({
-            playerID: user?.sub,
+            playerID: user?.cognitoID,
             accepted: accepted,
             appointmentID: appointment.id,
             playerName: name,

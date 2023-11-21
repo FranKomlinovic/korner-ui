@@ -4,7 +4,8 @@ import {Dialog, DialogTitle} from "@mui/material";
 import {FaTshirt} from "react-icons/fa";
 import {getFirstNTeams, suggestNextTeam} from "../../functions/suggestedTeams";
 import {Response, Team} from "../../models";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
+
 
 const AppointmentTeamButton = ({teams, appointment, checked, checkedFunction, responses}) => {
     const [open, setOpen] = useState(false);

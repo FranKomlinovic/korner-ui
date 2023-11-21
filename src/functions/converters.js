@@ -61,25 +61,8 @@ export function getDateInString(date: Date) {
     return getDayOfWeek(date) + ' ' + date.getDate() + '.' + month + '.';
 }
 
-export function checkIfInOwnerGroup(user): boolean {
-    if (!user) {
-        return false;
-    }
-    let signInUserSession = user.getSignInUserSession().getAccessToken().payload;
-    let payloadElement = signInUserSession['cognito:groups'];
-    if (!payloadElement) {
-        return false
-    }
-    return payloadElement.includes("owners");
-}
-
-
 export function checkIfOwner(user, fieldOwnerId): boolean {
-    let signInUserSession = user.getSignInUserSession().getAccessToken().payload;
-    if (!fieldOwnerId) {
-        return false;
-    }
-    return checkIfInOwnerGroup(user) && fieldOwnerId === signInUserSession.sub;
+    return user && fieldOwnerId === user.cognitoID;
 }
 
 export function getCurrentDateInDynamoDbString(plusDays: number) {

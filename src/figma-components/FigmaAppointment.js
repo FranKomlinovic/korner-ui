@@ -1,7 +1,7 @@
 import {KornerFieldShort} from "../ui-components";
 import React, {useEffect, useState} from "react";
 import {getDayAndDateFromAppointment} from "../functions/converters";
-import {Storage} from "aws-amplify";
+import {getUrl} from "aws-amplify/storage";
 
 const FigmaAppointment = ({appointment}) => {
 
@@ -16,8 +16,8 @@ const FigmaAppointment = ({appointment}) => {
         appointment?.Fields?.then(a => {
             setField(a)
             a?.photo ?
-                Storage.get(a.photo).then(b => {
-                    setPhoto(b);
+                getUrl({key: a.photo}).then(b => {
+                    setPhoto(b.url);
                 }) :
                 setPhoto("/no-field.jpg")
 

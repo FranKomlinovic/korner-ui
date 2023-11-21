@@ -1,36 +1,26 @@
 import {Flex, Heading} from "@aws-amplify/ui-react";
 import FigmaField from "../figma-components/FigmaField";
 import React, {useEffect, useState} from "react";
-import {checkIfInOwnerGroup} from "../functions/converters";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
+
 import {Fields} from "../models";
 
 
 const OwnerFieldListComponent = ({user}) => {
 
     const [fields, setFields] = useState();
-    const [isOwner, setIsOwner] = useState(false);
-
-    const sub = user?.attributes.sub;
-
-    //Checks if user is in owner group
-    useEffect(() => {
-        setIsOwner(checkIfInOwnerGroup(user));
-    }, [user]);
 
     //Gets owners fields
     useEffect(() => {
-        if (isOwner) {
-            DataStore.query(Fields, a =>
-                a.ownerID.eq(sub)
-            ).then(a => {
-                setFields(a);
-            })
-        }
-    }, [isOwner, sub]);
+        DataStore.query(Fields, a =>
+            a.ownerID.eq(user?.cognitoID)
+        ).then(b => {
+            setFields(b);
+        })
+    }, [user]);
 
     return (
-        isOwner &&
+        fields?.length > 0 &&
         <Flex direction={"column"}>
             <Heading marginLeft={"1rem"} level={4} variation={"primary"}>Moji tereni:</Heading>
             <Flex direction={"column"} alignItems={"center"}>

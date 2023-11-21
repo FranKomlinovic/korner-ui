@@ -1,7 +1,7 @@
 import {Button, Flex} from "@aws-amplify/ui-react";
 import {FaTrash} from "react-icons/fa";
 import {confirmAlert} from "react-confirm-alert";
-import {DataStore} from "aws-amplify";
+import {DataStore} from 'aws-amplify/datastore';
 import {Appointment} from "../../models";
 import {useContext} from "react";
 import AlertContext from "../../context/alertContext";

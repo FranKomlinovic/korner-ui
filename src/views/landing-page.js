@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Card, Expander, ExpanderItem, Flex, Heading, Image, TabItem, Tabs, Text} from "@aws-amplify/ui-react";
+import {Accordion, Button, Card, Flex, Heading, Image, Tabs, Text} from "@aws-amplify/ui-react";
 import {useNavigate} from "react-router-dom";
 import {List, ListItem} from "@mui/material";
 import ContactForm from "../components/contactFormComponent";
@@ -173,13 +173,16 @@ const LandingPage = ({isHelp}) => {
 
     const mapToFaq = (faq) => {
         return (
-            <ExpanderItem key={faq.title} title={faq.title} value={faq.title}>
-                {faq.text.map(a => (
+            {
+                trigger: faq.title,
+                value: faq.title,
+                content: faq.text.map(a => (
                     <Text key={a} marginBottom={"1rem"}>
                         {a}
                     </Text>
-                ))}
-            </ExpanderItem>
+                ))
+
+            }
         )
     }
 
@@ -194,23 +197,29 @@ const LandingPage = ({isHelp}) => {
             </Flex>}
 
             <Tabs
-                gap={"0.5rem"}
-                justifyContent="flex-start">
-                <TabItem title="Igrači">
-                    {userCardList.map(mapToCard)}
-                    <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
-                    <Expander type="single" isCollapsible>
-                        {userFaq.map(mapToFaq)}
-                    </Expander>
-                </TabItem>
+                defaultValue={"players"}
+                items={[
+                    {
+                        label: "Igrači", value: "players", content: <>
+                            {userCardList.map(mapToCard)}
+                            <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
+                            <Accordion type="single" isCollapsible
+                                       items={userFaq.map(mapToFaq)}>
+                            </Accordion>
+                        </>
+                    },
+                    {
+                        label: "Vlasnici terena", value: "owners", content: <>
+                            {ownerCardList.map(mapToCard)}
+                            <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
+                            <Accordion type="single" isCollapsible
+                                       items={ownerFaq.map(mapToFaq)}>
+                            </Accordion>
+                        </>
+                    },
+                    {}
+                ]}>
 
-                <TabItem title="Vlasnici terena">
-                    {ownerCardList.map(mapToCard)}
-                    <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
-                    <Expander type="single" isCollapsible>
-                        {ownerFaq.map(mapToFaq)}
-                    </Expander>
-                </TabItem>
 
             </Tabs>
 
