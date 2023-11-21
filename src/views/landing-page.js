@@ -203,7 +203,7 @@ const LandingPage = ({isHelp}) => {
                         label: "Igrači", value: "players", content: <>
                             {userCardList.map(mapToCard)}
                             <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
-                            <Accordion type="single" isCollapsible
+                            <Accordion type="single"
                                        items={userFaq.map(mapToFaq)}>
                             </Accordion>
                         </>
@@ -212,7 +212,7 @@ const LandingPage = ({isHelp}) => {
                         label: "Vlasnici terena", value: "owners", content: <>
                             {ownerCardList.map(mapToCard)}
                             <Heading margin={"1rem"} level={3}>Često postavljena pitanja</Heading>
-                            <Accordion type="single" isCollapsible
+                            <Accordion type="single"
                                        items={ownerFaq.map(mapToFaq)}>
                             </Accordion>
                         </>

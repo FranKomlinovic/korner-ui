@@ -31,7 +31,7 @@ const AppointmentView = ({appointment, responses, field, user, appointmentStatus
        setUserModel({
                 name: user?.name,
                 cognitoID: user?.cognitoID,
-                photo: user?.photo,
+                picture: user?.picture,
                 isOwner: appointment?.bookerID === user?.cognitoID,
                 role: role
         })

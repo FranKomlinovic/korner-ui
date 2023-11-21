@@ -43,7 +43,7 @@ const AppointmentReservationForm = ({user, appointment, responses, field}) => {
             accepted: accepted,
             appointmentID: appointment.id,
             playerName: name,
-            playerPhoto: user?.photo,
+            playerPhoto: user?.picture,
         });
         DataStore.save(response).then(a => {
             setLoading(false);

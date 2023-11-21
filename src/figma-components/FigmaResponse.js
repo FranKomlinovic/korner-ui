@@ -43,7 +43,7 @@ const FigmaResponse = ({response, showDelete}) => {
         setPlayerName(response.playerName)
         let playerPhoto = response.playerPhoto;
         if (playerPhoto) {
-            getUrl({key: playerPhoto}).then(b => setPhoto(b))
+            getUrl({key: playerPhoto}).then(b => setPhoto(b.url))
                 .catch(() => {
                     setPhoto("/no-picture.png")
                 });
