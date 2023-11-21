@@ -39,7 +39,7 @@ I18n.putVocabulariesForLanguage('hr', {
 Hub.listen('auth', data => {
     if (data.payload.event === "signedIn") {
         fetchUserAttributes().then(a => {
-            DataStore.query(User, a.sub).then(user => {
+            a && DataStore.query(User, a.sub).then(user => {
                 !user &&
                 DataStore.save(new User({
                     email: a.email,
