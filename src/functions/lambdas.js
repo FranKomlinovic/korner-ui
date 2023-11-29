@@ -5,14 +5,14 @@ import {convertDurationEnumToNumber, getDayOfWeekEnum} from "./converters";
 
 
 export function confirmAppointment(appointmentId): Appointment {
-    DataStore.query(Appointment, appointmentId).then(appointment => {
+    appointmentId && DataStore.query(Appointment, appointmentId).then(appointment => {
         !appointment.canceled &&
         // Confirm this appointment
         DataStore.save(Appointment.copyOf(appointment, (item) => {
             item.confirmed = true;
         })).then(() => {
             // Gets all appointments for day and field
-            DataStore.query(Appointment, b => b.and(
+            appointment && DataStore.query(Appointment, b => b.and(
                 c => [
                     c.id.ne(appointment.id),
                     c.fieldsID.eq(appointment.fieldsID),

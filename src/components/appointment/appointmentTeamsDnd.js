@@ -31,7 +31,7 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
                 })
             );
 
-            DataStore.query(Response, (c) => c.and(e => [
+            appointmentID && DataStore.query(Response, (c) => c.and(e => [
                 e.teamID.eq(undefined),
                 e.accepted.eq(true),
                 e.appointmentID.eq(appointmentID)
@@ -61,7 +61,7 @@ const AppointmentTeamsDnd = ({tms, appointmentID, isOwner}) => {
 
         destClone.splice(droppableDestination.index, 0, removed);
 
-        DataStore.query(Response, draggableId).then(a => {
+        draggableId && DataStore.query(Response, draggableId).then(a => {
             DataStore.save(Response.copyOf(a, b => {
                 b.teamID = destination.team?.id
             }))

@@ -12,7 +12,7 @@ const OwnerFieldListComponent = ({user}) => {
 
     //Gets owners fields
     useEffect(() => {
-        DataStore.query(Fields, a =>
+        user?.cognitoID && DataStore.query(Fields, a =>
             a.ownerID.eq(user?.cognitoID)
         ).then(b => {
             setFields(b);

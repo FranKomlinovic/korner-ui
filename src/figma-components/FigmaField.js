@@ -11,14 +11,15 @@ const FigmaField = ({field}) => {
     const [surface, setSurface] = useState();
 
     useEffect(() => {
-        getUrl({
+        field?.photo ? getUrl({
             key: field?.photo,
             options: {
                 validateObjectExistence: true
             },
         }).then(a => {
             setPhoto(a.url);
-        });
+        }) :
+            setPhoto("/no-field.jpg")
         setSports(convertSportsEnumListToString(field?.sports));
         setSurface(convertSurfaceEnumToString(field?.surface))
 

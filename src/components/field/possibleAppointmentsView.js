@@ -109,7 +109,7 @@ const PossibleAppointmentsView = ({possibleAppointment, allPossibleAppointments}
         });
     }
     const updatePossibleAppointment = () => {
-        DataStore.query(PossibleAppointments, possibleApp.id).then(possibleAppointmentToUpdate => {
+        possibleApp.id && DataStore.query(PossibleAppointments, possibleApp.id).then(possibleAppointmentToUpdate => {
             possibleAppointmentToUpdate ?
                 DataStore.save(PossibleAppointments.copyOf(possibleAppointmentToUpdate, (item) => {
                     item.start = startTime;

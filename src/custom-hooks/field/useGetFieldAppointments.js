@@ -8,7 +8,7 @@ function useGetAppointmentResponses(fieldId, date) {
     const [loading, setLoading] = useState(true);
 
     const query = useCallback(() => {
-        DataStore.query(Appointment, (a) => a.and((l) => [l.fieldsID.eq(fieldId), l.date.eq(date)])).then(a => {
+        fieldId && date && DataStore.query(Appointment, (a) => a.and((l) => [l.fieldsID.eq(fieldId), l.date.eq(date)])).then(a => {
             setData(a);
             setLoading(false);
         });

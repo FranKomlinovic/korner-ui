@@ -30,7 +30,7 @@ const FieldById = () => {
     }, [field.data, user]);
 
     useEffect(() => {
-        DataStore.query(PossibleAppointments, (c) => c.fieldsID.eq(fieldId)).then(a => {
+        fieldId && DataStore.query(PossibleAppointments, (c) => c.fieldsID.eq(fieldId)).then(a => {
             setPossibleAppointments(a);
         })
     }, [fieldId]);

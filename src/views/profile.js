@@ -21,7 +21,7 @@ const Profile = ({signOut}) => {
     }, [user])
 
     const uploadProfilePicture = (pic) => {
-        DataStore.query(User, user?.cognitoID).then(usr => {
+        user?.cognitoID && DataStore.query(User, user?.cognitoID).then(usr => {
             DataStore.save(User.copyOf(usr, (item) => {
                 item.picture = pic.key;
             })).then(a => {
@@ -32,7 +32,7 @@ const Profile = ({signOut}) => {
     }
 
     const updateUserData = () => {
-        DataStore.query(User, user?.cognitoID).then(usr => {
+        user?.cognitoID && DataStore.query(User, user?.cognitoID).then(usr => {
             DataStore.save(User.copyOf(usr, (item) => {
                 item.name = name;
             })).then(a => {

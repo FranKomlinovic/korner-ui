@@ -30,7 +30,7 @@ const Home = () => {
 
     // Set responses
     useEffect(() => {
-        user && DataStore.query(Response, (c) => c.playerID.eq(user?.cognitoID), {sort: (s) => s.createdAt(SortDirection.ASCENDING)})
+        user?.cognitoID && DataStore.query(Response, (c) => c.playerID.eq(user?.cognitoID), {sort: (s) => s.createdAt(SortDirection.ASCENDING)})
             .then((resp) => {
                 setResponses(resp);
             });

@@ -1,6 +1,6 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {DataStore} from "aws-amplify/datastore";
-import { getUrl } from 'aws-amplify/storage';
+import {getUrl} from 'aws-amplify/storage';
 import {Appointment} from "../../models";
 import {getAppointmentStatus} from "../../functions/appointmentUItils";
 
@@ -11,17 +11,13 @@ function useGetAppointment(id) {
     const [status, setStatus] = useState();
     const [loading, setLoading] = useState(true);
 
-    const query = useCallback(() => {
+    useEffect(() => {
         id && DataStore.query(Appointment, id).then(a => {
             setAppointment(a)
             setStatus(getAppointmentStatus(a))
             setLoading(false);
         });
-    }, [id])
-
-    useEffect(() => {
-        query();
-    }, [query]);
+    }, [id]);
 
     useEffect(() => {
         appointment?.Fields?.then(field => {
@@ -38,9 +34,12 @@ function useGetAppointment(id) {
     }, [field]);
 
     useEffect(() => {
-        const subscription = DataStore.observe(Appointment, id).subscribe((model) => {
-            setAppointment(model.element);
-            setStatus(getAppointmentStatus(model.element))
+        const subscription = id && DataStore.observe(Appointment, id).subscribe((model) => {
+            if (model?.element) {
+                setAppointment(model.element);
+                setStatus(getAppointmentStatus(model.element))
+                setLoading(false)
+            }
         });
 
         return () => {
